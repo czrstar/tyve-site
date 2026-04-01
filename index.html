@@ -25,15 +25,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:      #25D366;
-      --green-dark: #128C7E;
+      --green:      #22C55E;
+      --green-dark: #16A34A;
       --green-deep: #075E54;
       --green-light:#DCF8C6;
       --green-pale: #E8FFF3;
-      --blue-dark:  #1A3A4A;
-      --blue:       #1A4A7A;
-      --blue-mid:   #0EA47A;
-      --blue-light: #34D399;
+      --blue-primary: #38BDF8;
+      --blue-hover: #0EA5E9;
+      --blue-deep:  #0C4A6E;
+      --blue-dark:  #0369A1;
+      --blue-pale:  #E0F2FE;
+      --blue-light: #BAE6FD;
       --brand-pro:  #38BDF8;
       --white:      #FFFFFF;
       --grey-50:    #F8FAF9;
@@ -61,7 +63,7 @@
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     .badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: var(--green-pale); color: var(--green-dark);
+      background: var(--blue-pale); color: var(--blue-dark);
       font-size: 13px; font-weight: 600; letter-spacing: .4px;
       padding: 4px 12px; border-radius: 999px;
     }
@@ -72,18 +74,18 @@
       padding: 14px 28px; text-decoration: none; transition: all .2s;
     }
     .btn-green {
-      background: var(--green); color: var(--white);
+      background: var(--blue-primary); color: var(--white);
     }
-    .btn-green:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,.35); }
+    .btn-green:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56,189,248,.35); }
     .btn-outline {
       background: transparent; color: var(--grey-700);
       border: 2px solid var(--grey-200);
     }
-    .btn-outline:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-pale); }
+    .btn-outline:hover { border-color: var(--blue-primary); color: var(--blue-dark); background: var(--blue-pale); }
     .btn-blue {
-      background: var(--green-dark); color: var(--white);
+      background: var(--blue-dark); color: var(--white);
     }
-    .btn-blue:hover { background: var(--green-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(18,140,126,.35); }
+    .btn-blue:hover { background: var(--blue-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,233,.35); }
 
     /* ── NAV ── */
     nav {
@@ -144,7 +146,7 @@
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      background: linear-gradient(160deg, #FFFFFF 0%, #F0FFF4 30%, #E8FFF3 60%, #F0FDFA 100%);
+      background: linear-gradient(160deg, #FFFFFF 0%, #EFF6FF 30%, #E0F2FE 60%, #F0F9FF 100%);
       display: flex; flex-direction: column; justify-content: center;
       padding: 120px 0 80px;
       position: relative; overflow: hidden;
@@ -153,14 +155,14 @@
       content: '';
       position: absolute; top: -200px; right: -100px;
       width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(37,211,102,.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(56,189,248,.12) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero::after {
       content: '';
       position: absolute; bottom: -100px; left: -100px;
       width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(18,140,126,.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(14,165,233,.06) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-grid {
@@ -176,7 +178,7 @@
       margin-bottom: 24px;
     }
     .hero h1 .highlight {
-      background: linear-gradient(90deg, var(--green), var(--green-dark));
+      background: linear-gradient(90deg, var(--blue-primary), var(--blue-dark));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -188,7 +190,7 @@
     .hero-tagline {
       font-size: clamp(15px, 2vw, 19px);
       font-weight: 800;
-      background: linear-gradient(90deg, var(--green), #38BDF8);
+      background: linear-gradient(90deg, var(--blue-primary), #7C3AED);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-top: -14px; margin-bottom: 20px;
@@ -205,7 +207,7 @@
       border: 2px solid var(--white);
       display: flex; align-items: center; justify-content: center;
       font-size: 16px;
-      margin-left: -8px; background: var(--green-pale);
+      margin-left: -8px; background: var(--blue-pale);
       box-shadow: 0 2px 8px rgba(0,0,0,.1);
     }
     .proof-avatars span:first-child { margin-left: 0; }
@@ -312,7 +314,7 @@
     }
     .section-label {
       font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--green-dark);
+      text-transform: uppercase; color: var(--blue-dark);
       margin-bottom: 12px;
     }
     .section-title {
@@ -340,7 +342,7 @@
     /* ── HOW IT WORKS ── */
     .how {
       padding: 96px 0;
-      background: linear-gradient(180deg, var(--green-pale) 0%, var(--white) 100%);
+      background: linear-gradient(180deg, var(--blue-pale) 0%, var(--white) 100%);
     }
     .how-header { text-align: center; margin-bottom: 64px; }
     .how-header .section-sub { margin: 0 auto; }
@@ -351,7 +353,7 @@
     .step { text-align: left; }
     .step-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--green); color: white;
+      background: var(--blue-primary); color: white;
       font-size: 13px; font-weight: 700;
       padding: 4px 14px; border-radius: 999px;
       margin-bottom: 16px;
@@ -395,17 +397,17 @@
 
     /* ── QUOTE ── */
     .quote-section {
-      background: linear-gradient(135deg, var(--green-deep), var(--green-dark));
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-dark));
       padding: 80px 0;
     }
     .quote-inner { max-width: 720px; margin: 0 auto; text-align: center; }
-    .quote-mark { font-size: 72px; line-height: 1; color: var(--green-light); opacity: .4; }
+    .quote-mark { font-size: 72px; line-height: 1; color: var(--blue-light); opacity: .4; }
     .quote-text {
       font-size: clamp(22px, 3vw, 32px);
       font-weight: 700; color: var(--white);
       line-height: 1.3; margin: -16px 0 24px; letter-spacing: -.3px;
     }
-    .quote-text em { color: #A7F3D0; font-style: normal; }
+    .quote-text em { color: #7DD3FC; font-style: normal; }
     .quote-attr { font-size: 14px; color: rgba(255,255,255,.6); }
 
     /* ── FOR WHO ── */
@@ -419,7 +421,7 @@
       padding: 28px 24px; text-align: center;
       border: 1px solid var(--grey-200); transition: all .2s;
     }
-    .segment-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--green); }
+    .segment-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--blue-primary); }
     .segment-icon { font-size: 40px; margin-bottom: 14px; }
     .segment-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
     .segment-card p { font-size: 13px; color: var(--grey-500); line-height: 1.5; }
@@ -427,9 +429,9 @@
     /* ── BRASIL BADGE ── */
     .brasil-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: linear-gradient(135deg, #F0FFF4, #ECFDF5);
-      border: 1px solid #A7F3D0;
-      color: var(--green-deep);
+      background: linear-gradient(135deg, #EFF6FF, #E0F2FE);
+      border: 1px solid #7DD3FC;
+      color: var(--blue-deep);
       font-size: 13px; font-weight: 600;
       padding: 6px 14px; border-radius: 999px;
       margin-top: 16px;
@@ -448,13 +450,13 @@
     }
     .plan:hover { box-shadow: var(--shadow-lg); }
     .plan.featured {
-      border-color: var(--green);
-      background: linear-gradient(180deg, #F0FFF4 0%, var(--white) 100%);
-      box-shadow: 0 8px 32px rgba(37,211,102,.12);
+      border-color: var(--blue-primary);
+      background: linear-gradient(180deg, #EFF6FF 0%, var(--white) 100%);
+      box-shadow: 0 8px 32px rgba(56,189,248,.12);
     }
     .plan-badge-top {
       position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-      background: var(--green); color: var(--white);
+      background: var(--blue-primary); color: var(--white);
       font-size: 12px; font-weight: 700; letter-spacing: .5px;
       padding: 4px 14px; border-radius: 999px;
     }
@@ -473,7 +475,7 @@
     .plan-features li::before {
       content: '\2713'; flex-shrink: 0;
       width: 20px; height: 20px; border-radius: 50%;
-      background: #DCFCE7; color: #16A34A;
+      background: var(--blue-pale); color: var(--blue-dark);
       font-size: 11px; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
     }
@@ -482,8 +484,8 @@
     /* ── ADD-ON ── */
     .addon-box {
       margin-top: 40px;
-      background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
-      border: 2px solid var(--green);
+      background: linear-gradient(135deg, #EFF6FF 0%, #E0F2FE 100%);
+      border: 2px solid var(--blue-primary);
       border-radius: 16px;
       padding: 32px 36px;
       display: flex; align-items: center; gap: 24px;
@@ -494,7 +496,7 @@
     .addon-title { font-size: 18px; font-weight: 800; color: var(--grey-900); margin-bottom: 6px; }
     .addon-desc { font-size: 14px; color: var(--grey-500); line-height: 1.6; }
     .addon-price { text-align: center; flex-shrink: 0; }
-    .addon-amount { font-size: 32px; font-weight: 900; color: var(--green-dark); }
+    .addon-amount { font-size: 32px; font-weight: 900; color: var(--blue-dark); }
     .addon-period { font-size: 16px; color: var(--grey-500); margin-left: 2px; }
     .addon-note { font-size: 12px; color: var(--grey-500); margin-top: 4px; }
     @media (max-width: 640px) { .addon-box { flex-direction: column; text-align: center; } .addon-price { width: 100%; } }
@@ -562,7 +564,7 @@
     .fd-reverse { flex-direction: row-reverse; }
     .fd-text { flex: 1; min-width: 0; }
     .fd-visual { flex: 1; min-width: 0; }
-    .fd-badge { display: inline-block; background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .fd-badge { display: inline-block; background: var(--blue-pale); color: var(--blue-dark); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
     .fd-title { font-size: 26px; font-weight: 700; color: var(--dark); line-height: 1.3; margin-bottom: 16px; }
     .fd-desc { font-size: 16px; color: #475569; line-height: 1.7; }
 
@@ -589,15 +591,15 @@
     .md-header { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
     .md-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .md-metric { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center; }
-    .md-metric.green { border-color: #bbf7d0; background: #f0fdf4; }
+    .md-metric.green { border-color: var(--blue-light); background: var(--blue-pale); }
     .md-num { display: block; font-size: 28px; font-weight: 800; color: var(--dark); }
-    .md-metric.green .md-num { color: #15803d; }
+    .md-metric.green .md-num { color: var(--blue-dark); }
     .md-lbl { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
     .md-bar-section { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; }
     .md-bar-title { font-size: 12px; color: #64748b; font-weight: 600; margin-bottom: 12px; }
     .md-bars { display: flex; align-items: flex-end; gap: 12px; height: 80px; }
     .md-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
-    .md-bar { width: 100%; background: var(--green); border-radius: 4px 4px 0 0; min-height: 8px; }
+    .md-bar { width: 100%; background: var(--blue-primary); border-radius: 4px 4px 0 0; min-height: 8px; }
     .md-bar-wrap span { font-size: 11px; color: #94a3b8; }
 
     /* MOCKUP: PLACEHOLDER (follow-up + flows) */
@@ -631,14 +633,14 @@
       font-weight: 700; letter-spacing: .3px;
     }
     .vs-table th:first-child { text-align: left; background: var(--grey-50); color: var(--grey-500); }
-    .vs-table th.col-zappro { background: var(--green-deep); color: var(--white); }
+    .vs-table th.col-zappro { background: var(--blue-deep); color: var(--white); }
     .vs-table th.col-zaia { background: var(--grey-100); color: var(--grey-700); }
     .vs-table th.col-diy { background: var(--grey-100); color: var(--grey-700); }
     .vs-table td { padding: 14px 20px; font-size: 14px; border-top: 1px solid var(--grey-100); }
     .vs-table td:first-child { font-weight: 500; color: var(--grey-700); }
     .vs-table td:not(:first-child) { text-align: center; }
     .vs-table tr:hover td { background: var(--grey-50); }
-    .check { color: #16A34A; font-size: 18px; }
+    .check { color: var(--blue-dark); font-size: 18px; }
     .cross { color: #DC2626; font-size: 18px; }
     .partial { color: var(--grey-500); font-size: 13px; }
 
@@ -646,8 +648,8 @@
     .testimonial { padding: 80px 0; background: var(--white); }
     .testimonial-inner { max-width: 700px; margin: 0 auto; text-align: center; }
     .testimonial-card {
-      background: var(--green-pale); border-radius: 20px;
-      padding: 48px 40px; border: 1px solid #A7F3D0;
+      background: var(--blue-pale); border-radius: 20px;
+      padding: 48px 40px; border: 1px solid var(--blue-light);
     }
     .stars { font-size: 22px; margin-bottom: 20px; }
     .testimonial-text {
@@ -657,7 +659,7 @@
     .testimonial-author { display: flex; align-items: center; justify-content: center; gap: 14px; }
     .author-avatar {
       width: 48px; height: 48px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      background: linear-gradient(135deg, var(--blue-primary), var(--blue-hover));
       display: flex; align-items: center; justify-content: center;
       font-size: 20px;
     }
@@ -679,7 +681,7 @@
       font-size: 16px; font-weight: 600; color: var(--grey-900);
       display: flex; justify-content: space-between; align-items: center; gap: 16px;
     }
-    .faq-icon { font-size: 20px; transition: transform .25s; flex-shrink: 0; color: var(--green-dark); }
+    .faq-icon { font-size: 20px; transition: transform .25s; flex-shrink: 0; color: var(--blue-dark); }
     .faq-item.open .faq-icon { transform: rotate(45deg); }
     .faq-answer { max-height: 0; overflow: hidden; transition: max-height .3s ease; padding: 0 24px; }
     .faq-item.open .faq-answer { max-height: 300px; }
@@ -688,7 +690,7 @@
     /* ── FINAL CTA ── */
     .final-cta {
       padding: 96px 0;
-      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-dark) 50%, #0D9488 100%);
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-dark) 50%, #0284C7 100%);
       text-align: center; position: relative; overflow: hidden;
     }
     .final-cta::before {
@@ -707,10 +709,10 @@
     .final-ctas { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
     .btn-green-lg {
       font-size: 18px !important; padding: 18px 36px !important;
-      box-shadow: 0 6px 24px rgba(37,211,102,.4);
-      background: var(--white) !important; color: var(--green-deep) !important;
+      box-shadow: 0 6px 24px rgba(56,189,248,.4);
+      background: var(--white) !important; color: var(--blue-deep) !important;
     }
-    .btn-green-lg:hover { background: #F0FFF4 !important; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,255,255,.3); }
+    .btn-green-lg:hover { background: #EFF6FF !important; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,255,255,.3); }
 
     /* ── FOOTER ── */
     footer {
@@ -1114,7 +1116,7 @@
       <!-- FEATURE 4B: AGENDAMENTO ESCALA (nativo no WhatsApp) -->
       <div class="fd-row">
         <div class="fd-text">
-          <span class="fd-badge" style="background:#dcfce7;color:#15803d;">Incluso no Escala • disponível como Add-on para Atende e Cresce</span>
+          <span class="fd-badge">Incluso no Escala • disponível como Add-on para Atende e Cresce</span>
           <h3 class="fd-title">Cliente escolhe o horário sem sair do WhatsApp</h3>
           <p class="fd-desc">No Escala, o bot consulta sua agenda em tempo real e apresenta os horários disponíveis direto na conversa — o cliente escolhe sem abrir link ou sair do app. O evento é criado automaticamente no Google Calendar, e ainda sai um lembrete no dia anterior. Esse nível também está disponível como <strong>Add-on +R$197/mês</strong> para os planos Atende e Cresce.</p>
         </div>
@@ -1181,7 +1183,7 @@
             <li>Suporte prioritário (SLA 4h)</li>
             <li>Check-in proativo D+7 (mensagem)</li>
           </ul>
-          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:13px;color:#15803d;margin-bottom:16px;line-height:1.5;">💡 Quer que o cliente agende <strong>direto no WhatsApp</strong>? Veja o <strong>Add-on Agenda</strong> abaixo — ou considere o <strong>Escala</strong> (já incluso por só R$103 a mais).</div>
+          <div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:8px;padding:10px 14px;font-size:13px;color:#0369A1;margin-bottom:16px;line-height:1.5;">💡 Quer que o cliente agende <strong>direto no WhatsApp</strong>? Veja o <strong>Add-on Agenda</strong> abaixo — ou considere o <strong>Escala</strong> (já incluso por só R$103 a mais).</div>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Cresce%20do%20ZapPro!" class="btn btn-green plan-cta" target="_blank" rel="noopener noreferrer">Quero o Cresce</a>
         </div>
         <div class="plan">
@@ -1214,7 +1216,7 @@
         </div>
         <div class="addon-price">
           <span class="addon-amount">+R$197</span><span class="addon-period">/mês</span>
-          <p class="addon-note">Para planos Atende e Cresce<br/><span style="color:#22c55e;font-weight:600;">✓ Já incluso no Escala</span></p>
+          <p class="addon-note">Para planos Atende e Cresce<br/><span style="color:#0369A1;font-weight:600;">✓ Já incluso no Escala</span></p>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20saber%20mais%20sobre%20o%20add-on%20de%20agendamento%20do%20ZapPro!" class="btn btn-green" style="font-size:14px;padding:10px 20px;margin-top:12px;" target="_blank" rel="noopener noreferrer">Quero o add-on</a>
         </div>
       </div>
