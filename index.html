@@ -336,7 +336,7 @@
     .problem-card {
       background: var(--grey-50); border-radius: var(--radius);
       padding: 28px; border: 1px solid var(--grey-200);
-      transition: all .2s;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
     }
     .problem-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
     .problem-icon { font-size: 32px; margin-bottom: 16px; }
@@ -452,7 +452,7 @@
       border-radius: 16px; border: 1.5px solid var(--grey-200);
       padding: 36px 32px; position: relative; transition: all .2s;
     }
-    .plan:hover { box-shadow: var(--shadow-lg); }
+    .plan:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
     .plan.featured {
       border-color: var(--blue-primary);
       background: linear-gradient(180deg, #EFF6FF 0%, var(--white) 100%);
@@ -1170,7 +1170,7 @@
             <li>Suporte via WhatsApp (SLA 8h)</li>
             <li>Check-in proativo D+7 pós-ativação (mensagem)</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Atende%20da%20TYVE!" class="btn btn-outline plan-cta" target="_blank" rel="noopener noreferrer">Quero começar</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Atende%20da%20TYVE!" class="btn btn-outline plan-cta" target="_blank" rel="noopener noreferrer">Começar com Atende</a>
         </div>
         <div class="plan featured">
           <div class="plan-badge-top">MAIS POPULAR</div>
@@ -1190,7 +1190,7 @@
             <li>Check-in proativo D+7 (mensagem)</li>
           </ul>
           <div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:8px;padding:10px 14px;font-size:13px;color:#0369A1;margin-bottom:16px;line-height:1.5;">💡 Quer que o cliente agende <strong>direto no WhatsApp</strong>? Veja o <strong>Add-on Agenda</strong> abaixo — ou considere o <strong>Escala</strong> (já incluso por só R$103 a mais).</div>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Cresce%20da%20TYVE!" class="btn btn-green plan-cta" target="_blank" rel="noopener noreferrer">Quero o Cresce</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Cresce%20da%20TYVE!" class="btn btn-green plan-cta" target="_blank" rel="noopener noreferrer">Começar com Cresce</a>
         </div>
         <div class="plan">
           <p class="plan-name">Escala</p>
@@ -1210,7 +1210,7 @@
             <li>Check-in proativo D+7 (ligação)</li>
             <li>Acima de 1.000? <strong>Escala Enterprise</strong> — fale com a gente</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Escala%20da%20TYVE!" class="btn btn-outline plan-cta" target="_blank" rel="noopener noreferrer">Quero o Escala</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Escala%20da%20TYVE!" class="btn btn-outline plan-cta" target="_blank" rel="noopener noreferrer">Começar com Escala</a>
         </div>
       </div>
 
@@ -1223,7 +1223,7 @@
         <div class="addon-price">
           <span class="addon-amount">+R$197</span><span class="addon-period">/mês</span>
           <p class="addon-note">Para planos Atende e Cresce<br/><span style="color:#0369A1;font-weight:600;">✓ Já incluso no Escala</span></p>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20saber%20mais%20sobre%20o%20add-on%20de%20agendamento%20da%20TYVE!" class="btn btn-green" style="font-size:14px;padding:10px 20px;margin-top:12px;" target="_blank" rel="noopener noreferrer">Quero o add-on</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20saber%20mais%20sobre%20o%20add-on%20de%20agendamento%20da%20TYVE!" class="btn btn-green" style="font-size:14px;padding:10px 20px;margin-top:12px;" target="_blank" rel="noopener noreferrer">Adicionar à minha assinatura</a>
         </div>
       </div>
 
@@ -1255,7 +1255,7 @@
             <li>Check-in proativo D+7 (ligação)</li>
             <li>Agendamento nativo no WhatsApp incluso (sem add-on)</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20TYVE%20Converte!" class="btn btn-purple plan-cta" target="_blank" rel="noopener noreferrer">Quero o Converte</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20TYVE%20Converte!" class="btn btn-purple plan-cta" target="_blank" rel="noopener noreferrer">Começar com Converte</a>
         </div>
         <div class="plan converte featured" style="border-color:#7C3AED;background:linear-gradient(180deg,#FAF5FF 0%,#fff 100%);box-shadow:0 8px 32px rgba(124,58,237,.18);">
           <div class="plan-badge-top converte-badge">MAIS VOLUME</div>
@@ -1268,7 +1268,7 @@
             <li>Volume estendido para negócios de maior tráfego</li>
             <li>Acima de 700? Fale com a gente — proposta customizada</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20TYVE%20Converte%20Pro!" class="btn btn-purple plan-cta" target="_blank" rel="noopener noreferrer">Quero o Converte Pro</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20TYVE%20Converte%20Pro!" class="btn btn-purple plan-cta" target="_blank" rel="noopener noreferrer">Começar com Converte Pro</a>
         </div>
       </div>
 
