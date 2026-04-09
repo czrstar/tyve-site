@@ -746,6 +746,11 @@
     .roi-card-label { font-size: 12px; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: .3px; }
     .roi-card-value { font-size: 32px; font-weight: 900; color: var(--grey-900); }
     .roi-card-detail { font-size: 12px; color: var(--grey-500); line-height: 1.4; }
+    .roi-bonus {
+      font-size: 14px; color: var(--grey-700, #334155); line-height: 1.6;
+      text-align: center; font-weight: 500; margin-bottom: 20px;
+      padding: 16px 24px; background: rgba(3,105,161,.06); border-radius: 10px;
+    }
     .roi-footnote {
       font-size: 11px; color: var(--grey-500); line-height: 1.5;
       text-align: center; opacity: .7;
@@ -1414,37 +1419,38 @@
         <div class="roi-header">
           <span class="roi-label">📊 Calculadora de Economia</span>
           <h2 class="roi-title">Quanto tempo sua equipe ganha com a TYVE?</h2>
-          <p class="roi-sub">Baseado em dados reais de PMEs brasileiras (CNDL/SPC Brasil, Opinion Box, Sebrae).</p>
+          <p class="roi-sub">Baseado em pesquisas reais com pequenos e médios negócios no Brasil.</p>
         </div>
         <div class="roi-calc">
           <div class="roi-input-group">
             <label class="roi-input-label">Mensagens no WhatsApp por dia</label>
             <div class="roi-slider-row">
-              <input type="range" id="roiSlider" min="20" max="300" value="80" step="10" class="roi-slider" />
+              <input type="range" id="roiSlider" min="30" max="300" value="80" step="10" class="roi-slider" />
               <span class="roi-slider-value" id="roiValue">80</span>
             </div>
             <div class="roi-slider-hints">
-              <span>20/dia</span><span>Clínica média: ~80</span><span>300/dia</span>
+              <span>30/dia</span><span>Clínica média: ~80</span><span>300/dia</span>
             </div>
           </div>
           <div class="roi-results">
             <div class="roi-card">
               <span class="roi-card-label">Tempo manual por mês</span>
-              <span class="roi-card-value" id="roiManual">53h</span>
+              <span class="roi-card-value" id="roiManual">93h</span>
               <span class="roi-card-detail">~3,5 min por mensagem × 20 dias úteis</span>
             </div>
             <div class="roi-card roi-card-highlight">
               <span class="roi-card-label">Tempo liberado com a TYVE</span>
-              <span class="roi-card-value" id="roiSaved">40h</span>
+              <span class="roi-card-value" id="roiSaved">70h</span>
               <span class="roi-card-detail">75% das interações resolvidas pela IA</span>
             </div>
             <div class="roi-card">
               <span class="roi-card-label">Economia equivalente</span>
-              <span class="roi-card-value" id="roiMoney">R$ 600</span>
-              <span class="roi-card-detail">Com base no custo médio/hora de atendente (R$ 15/h)</span>
+              <span class="roi-card-value" id="roiMoney">R$ 1.050</span>
+              <span class="roi-card-detail">Valor em horas de trabalho que a equipe ganha de volta</span>
             </div>
           </div>
-          <p class="roi-footnote">Fontes: CNDL/SPC Brasil (67% das empresas vendem via WhatsApp), Aisensy (tempo médio de resposta 3:32min), Salário.com.br (recepcionista R$ 1.500/mês). Cálculo: tempo manual − 75% automação IA = tempo liberado.</p>
+          <p class="roi-bonus">E isso sem contar: atendimento 24h (inclusive fora do horário), nenhum cliente perdido por demora, e follow-up automático que recupera quem não agendou.</p>
+          <p class="roi-footnote">Estimativa com base em pesquisas nacionais sobre atendimento via WhatsApp e salário médio de recepcionista. Cada negócio pode variar.</p>
         </div>
       </div>
     </div>
