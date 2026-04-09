@@ -1439,18 +1439,18 @@
               <span class="roi-card-detail">~3,5 min por mensagem × 20 dias úteis</span>
             </div>
             <div class="roi-card roi-card-highlight">
-              <span class="roi-card-label">Tempo liberado com a TYVE</span>
+              <span class="roi-card-label">Horas liberadas com a TYVE</span>
               <span class="roi-card-value" id="roiSaved">70h</span>
               <span class="roi-card-detail">75% das interações resolvidas pela IA</span>
             </div>
             <div class="roi-card">
-              <span class="roi-card-label">Economia equivalente</span>
-              <span class="roi-card-value" id="roiMoney">R$ 1.050</span>
-              <span class="roi-card-detail">Valor em horas de trabalho que a equipe ganha de volta</span>
+              <span class="roi-card-label">Dias de trabalho de volta</span>
+              <span class="roi-card-value" id="roiDays">9 dias</span>
+              <span class="roi-card-detail">Tempo que sua equipe ganha pra focar no que importa</span>
             </div>
           </div>
-          <p class="roi-bonus">E isso sem contar: atendimento 24h (inclusive fora do horário), nenhum cliente perdido por demora, e follow-up automático que recupera quem não agendou.</p>
-          <p class="roi-footnote">Estimativa com base em pesquisas nacionais sobre atendimento via WhatsApp e salário médio de recepcionista. Cada negócio pode variar.</p>
+          <p class="roi-bonus">São <strong id="roiSavedText">70 horas</strong> que sua equipe ganha de volta por mês — sem contar: atendimento 24h (inclusive fora do horário), nenhum cliente perdido por demora, e follow-up automático que recupera quem não agendou.</p>
+          <p class="roi-footnote">Estimativa com base em pesquisas do Sebrae sobre atendimento via WhatsApp. Cada negócio pode variar.</p>
         </div>
       </div>
     </div>
@@ -1543,14 +1543,15 @@
         const minPerMsg = 3.5;
         const workDays = 20;
         const autoRate = 0.75;
-        const hourlyRate = 15;
+        const hoursPerDay = 8;
         const manualHours = Math.round((msgs * minPerMsg * workDays) / 60);
         const savedHours = Math.round(manualHours * autoRate);
-        const savedMoney = savedHours * hourlyRate;
+        const savedDays = Math.round(savedHours / hoursPerDay);
         document.getElementById('roiValue').textContent = msgs;
         document.getElementById('roiManual').textContent = manualHours + 'h';
         document.getElementById('roiSaved').textContent = savedHours + 'h';
-        document.getElementById('roiMoney').textContent = 'R$ ' + savedMoney.toLocaleString('pt-BR');
+        document.getElementById('roiDays').textContent = savedDays + (savedDays === 1 ? ' dia' : ' dias');
+        document.getElementById('roiSavedText').textContent = savedHours + ' horas';
       };
       roiSlider.addEventListener('input', update);
       update();
