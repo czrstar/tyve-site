@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -62,7 +62,9 @@
       font-size: 20px; font-weight: 700; color: var(--grey-900);
       letter-spacing: -0.5px; text-decoration: none;
     }
-    .nav-wordmark b {
+    .nav-wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; letter-spacing: -1.5px;
       background: linear-gradient(135deg, #22C55E, #38BDF8);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -323,18 +325,14 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="/">
-      <svg width="30" height="30" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-        <defs>
-          <linearGradient id="navg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#22C55E"/>
-            <stop offset="1" stop-color="#38BDF8"/>
-          </linearGradient>
-        </defs>
-        <rect rx="52" ry="52" width="240" height="240" fill="#0B0F14"/>
-        <path d="M72 88 H176 L72 156 H176" stroke="url(#navg)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M56 118 C46 132 46 130 56 144" stroke="url(#navg)" stroke-width="14" stroke-linecap="round" opacity="0.7"/>
+      <svg width="30" height="30" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+        <defs><linearGradient id="navg" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#22C55E"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs>
+        <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+        <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#navg)"/>
+        <path d="M42 30 L100 94 L158 30" stroke="#0B0F14" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
       </svg>
-      <span class="nav-wordmark">Zap<b>Pro</b></span>
+      <span class="nav-wordmark">TYVE</span>
     </a>
     <a class="back-link" href="/">← Voltar ao site</a>
   </div>
