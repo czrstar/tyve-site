@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZapPro — Formulário de Onboarding</title>
-  <meta name="description" content="Preencha o formulário de onboarding ZapPro para configurar seu assistente WhatsApp em até 48h." />
+  <title>TYVE — Formulário de Onboarding</title>
+  <meta name="description" content="Preencha o formulário de onboarding TYVE para configurar seu assistente WhatsApp em até 48h." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -344,7 +344,7 @@
 <div class="hero">
   <div class="hero-badge">⚡ Ativação em até 48h</div>
   <h1>Configure seu<br><span>WhatsApp inteligente</span></h1>
-  <p>Preencha o formulário abaixo. Com essas informações, ativamos seu assistente ZapPro personalizado em até 48 horas.</p>
+  <p>Preencha o formulário abaixo. Com essas informações, ativamos seu assistente TYVE personalizado em até 48 horas.</p>
   <div class="steps-row">
     <div class="step-pill"><span class="step-num">1</span>Preencha o form (8 min)</div>
     <div class="step-pill"><span class="step-num">2</span>Configuramos o assistente</div>
@@ -367,8 +367,10 @@
     <div class="section-dots" id="sectionDots"></div>
   </div>
 
-  <form id="onboardingForm" name="zappro-onboarding" netlify netlify-honeypot="bot-field">
-    <input type="hidden" name="form-name" value="zappro-onboarding" />
+  <form id="onboardingForm" name="tyve-onboarding">
+    <input type="hidden" name="access_key" value="SUBSTITUIR_CHAVE_WEB3FORMS" />
+    <input type="hidden" name="subject" value="Novo onboarding TYVE" />
+    <input type="hidden" name="from_name" value="TYVE Onboarding" />
     <input type="hidden" name="bot-field" />
 
     <!-- ── SEÇÃO 1 ── -->
@@ -646,7 +648,7 @@
         </div>
         <div class="question">
           <label class="q-label">Nome do assistente virtual</label>
-          <p class="q-hint">O nome padrão ZapPro é <strong>Luma</strong>. Se quiser um nome personalizado para a sua empresa (ex: Sofia, Max, Bia), escreva abaixo. Deixe em branco para usar Luma.</p>
+          <p class="q-hint">O nome padrão TYVE é <strong>Luma</strong>. Se quiser um nome personalizado para a sua empresa (ex: Sofia, Max, Bia), escreva abaixo. Deixe em branco para usar Luma.</p>
           <input type="text" name="nome_assistente" placeholder="Deixe em branco para usar Luma" />
         </div>
         <div class="section-footer">
@@ -704,7 +706,7 @@
       </div>
       <div class="section-body">
         <div class="info-box orange">
-          <strong>⚠️ Ação necessária:</strong> Antes de ativarmos, crie um grupo no WhatsApp chamado exatamente <strong>"ZapPro Alertas"</strong>. Adicione todos que devem receber alertas (recepção, gerente, etc.). O ZapPro fornece o número do bot para adicionar ao grupo durante o setup.
+          <strong>⚠️ Ação necessária:</strong> Antes de ativarmos, crie um grupo no WhatsApp chamado exatamente <strong>"TYVE Alertas"</strong>. Adicione todos que devem receber alertas (recepção, gerente, etc.). O TYVE fornece o número do bot para adicionar ao grupo durante o setup.
         </div>
         <div class="question">
           <label class="q-label">Quantas pessoas devem receber os alertas do bot?</label>
@@ -752,6 +754,7 @@
         ⚡ Enviar formulário
       </button>
       <p class="submit-note">Após enviar, entraremos em contato pelo WhatsApp +55 16 99424-7541</p>
+      <p style="font-size:11px;color:var(--grey-500);margin-top:12px;">TYVE não é afiliado a Meta, Facebook ou WhatsApp. A integração utiliza a API oficial do WhatsApp Business.</p>
     </div>
 
   </form>
@@ -760,7 +763,7 @@
   <div class="success-screen" id="successScreen">
     <div class="success-icon">✓</div>
     <h2>Formulário enviado!</h2>
-    <p>Recebemos suas informações. Em até 48h a equipe ZapPro ativa seu assistente e entra em contato para você aprovar a V1.</p>
+    <p>Recebemos suas informações. Em até 48h a equipe TYVE ativa seu assistente e entra em contato para você aprovar a V1.</p>
     <br><br>
     <a href="/" style="color: var(--blue-dark); font-weight: 600; text-decoration: none;">← Voltar ao site</a>
   </div>
@@ -857,7 +860,8 @@
     const data = new FormData(form);
 
     try {
-      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(data).toString() });
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(data)) });
+      if (!res.ok) throw new Error('status ' + res.status);
       document.getElementById('onboardingForm').style.display = 'none';
       document.getElementById('progressWrap') && (document.getElementById('progressWrap').style.display = 'none');
       document.querySelector('.progress-wrap').style.display = 'none';
