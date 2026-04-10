@@ -427,8 +427,11 @@
         <span class="section-chevron">▾</span>
       </div>
       <div class="section-body">
+        <div class="info-box orange">
+          <strong>⚠️ Requisito:</strong> O número precisa estar no <strong>WhatsApp Business</strong> (o app com o ícone verde com um "B"). O WhatsApp comum não funciona com a integração. Se ainda não tem, é só baixar o <em>WhatsApp Business</em> na loja de aplicativos e configurar com o número da empresa — é grátis.
+        </div>
         <div class="question">
-          <label class="q-label">Qual o número do WhatsApp que será usado pelo bot? <span class="req">*</span></label>
+          <label class="q-label">Qual o número do WhatsApp Business que será usado pelo bot? <span class="req">*</span></label>
           <p class="q-hint">Formato: +55 DD 9XXXX-XXXX — pode ser o número atual da empresa.</p>
           <input type="tel" name="numero_whatsapp" required placeholder="+55 16 99999-9999" />
         </div>
@@ -674,7 +677,7 @@
           <input type="text" name="horario_equipe" required placeholder="Ex: Seg–Sex 8h–18h, Sáb 8h–12h" />
         </div>
         <div class="question">
-          <label class="q-label">Em quanto tempo a equipe costuma responder após o handoff? <span class="req">*</span></label>
+          <label class="q-label">Quando o bot encaminha um cliente para a equipe humana, em quanto tempo vocês costumam responder? <span class="req">*</span></label>
           <div class="radio-group">
             <label class="radio-item"><input type="radio" name="sla_resposta" value="30min" required /><div class="radio-box"></div><span class="radio-label">Até 30 minutos</span></label>
             <label class="radio-item"><input type="radio" name="sla_resposta" value="2h" /><div class="radio-box"></div><span class="radio-label">Até 2 horas</span></label>

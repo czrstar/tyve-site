@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TYVE — Export Logo</title>
+<meta name="robots" content="noindex,nofollow"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#0A0E17;color:#fff;padding:40px;min-height:100vh}
+h1{font-size:24px;margin-bottom:8px}
+p.sub{color:#94A3B8;margin-bottom:32px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+.card{background:#1E293B;border-radius:12px;padding:24px;text-align:center}
+.card canvas{border-radius:8px;margin-bottom:12px;max-width:100%;height:auto}
+.card h3{font-size:14px;margin-bottom:4px}
+.card p{font-size:12px;color:#94A3B8;margin-bottom:12px}
+.btn{display:inline-block;padding:10px 20px;background:#22C55E;color:#0B0F14;border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none}
+.btn:hover{background:#16A34A}
+</style>
+</head>
+<body>
+<h1>TYVE Logo Export</h1>
+<p class="sub">Clique em cada botão para baixar. Esses PNGs são renderizados pelo Chrome em alta qualidade.</p>
+<div class="grid" id="grid"></div>
+
+<script>
+const sizes = [
+  {name:'tyve_logo_2048',    size:2048, label:'Master',    desc:'2048×2048 — arquivo fonte'},
+  {name:'tyve_logo_1024',    size:1024, label:'Logo 1024', desc:'1024×1024 — uso geral'},
+  {name:'tyve_instagram_1080',size:1080, label:'Instagram', desc:'1080×1080 — foto de perfil'},
+  {name:'tyve_whatsapp_640', size:640,  label:'WhatsApp',  desc:'640×640 — foto de perfil WA Business'},
+  {name:'tyve_logo_512',     size:512,  label:'Logo 512',  desc:'512×512 — ícone / favicon'},
+];
+
+function makeSVG(s){
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 200 200" fill="none">
+    <defs><linearGradient id="g" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22C55E"/><stop offset="1" stop-color="#0284C7"/>
+    </linearGradient></defs>
+    <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+    <rect x="14" y="14" width="172" height="172" rx="48" fill="url(#g)"/>
+    <path d="M42 30 L100 94 L158 30" stroke="#0B0F14" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+  </svg>`;
+}
+
+const grid = document.getElementById('grid');
+
+sizes.forEach(item => {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const canvas = document.createElement('canvas');
+  const preview = Math.min(item.size, 200);
+  canvas.width = preview; canvas.height = preview;
+  canvas.style.width = preview + 'px';
+  canvas.style.height = preview + 'px';
+
+  const h3 = document.createElement('h3');
+  h3.textContent = item.label;
+  const p = document.createElement('p');
+  p.textContent = item.desc;
+
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = '⬇ Baixar PNG';
+
+  btn.onclick = async () => {
+    btn.textContent = 'Renderizando...';
+    btn.disabled = true;
+    const svg = makeSVG(item.size);
+    const blob = new Blob([svg], {type:'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    await new Promise((res,rej) => { img.onload=res; img.onerror=rej; img.src=url; });
+    const c = document.createElement('canvas');
+    c.width = item.size; c.height = item.size;
+    c.getContext('2d').drawImage(img, 0, 0, item.size, item.size);
+    URL.revokeObjectURL(url);
+    c.toBlob(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = item.name + '.png';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      btn.textContent = '✅ Baixado!';
+      btn.style.background = '#0284C7';
+      btn.style.color = '#fff';
+      setTimeout(() => { btn.textContent = '⬇ Baixar PNG'; btn.style.background = '#22C55E'; btn.style.color = '#0B0F14'; btn.disabled = false; }, 3000);
+    }, 'image/png');
+  };
+
+  // Render preview
+  const svg = makeSVG(preview);
+  const blob = new Blob([svg], {type:'image/svg+xml;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    canvas.getContext('2d').drawImage(img, 0, 0, preview, preview);
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+
+  card.append(canvas, h3, p, btn);
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
