@@ -859,25 +859,34 @@
     .final-cta { background: linear-gradient(135deg, #064E3B 0%, #065F46 40%, var(--blue-deep) 80%, var(--blue-dark) 100%); }
   
     /* Lang toggle */
-    .lang-toggle {
-      background: rgba(255,255,255,0.15);
-      border: 2px solid rgba(255,255,255,0.5);
-      color: #fff;
-      border-radius: 20px;
-      padding: 6px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: all 0.2s;
+    .lang-switch {
       display: flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+      border-radius: 20px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      gap: 0;
     }
-    .lang-toggle:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.7); }
-    @media(max-width:480px){ .lang-toggle { font-size:13px; padding:5px 12px; } }
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.45);
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      border-radius: 18px;
+    }
+    .lang-switch button.active {
+      background: #fff;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .lang-switch button:hover:not(.active) { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+    @media(max-width:480px){ .lang-switch button { font-size:12px; padding:5px 11px; } }
 
   </style>
 </head>
@@ -907,7 +916,10 @@
         <a href="#planos" data-i18n="nav_plans">Planos</a>
         <a href="#faq" data-i18n="nav_faq">FAQ</a>
         <a href="#planos" class="btn btn-green nav-cta" data-i18n="nav_cta">Ver planos</a>
-        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">🇧🇷 PT</button>
+        <div class="lang-switch" id="langSwitch">
+          <button id="langPT" class="active" onclick="setLang('pt')">🇧🇷 PT</button>
+          <button id="langEN" onclick="setLang('en')">🇺🇸 EN</button>
+        </div>
       </div>
     </div>
   </nav>
@@ -2115,8 +2127,12 @@
         const key = el.getAttribute('data-i18n');
         if (dict[key] !== undefined) el.innerHTML = dict[key];
       });
-      const btn = document.getElementById('langToggle');
-      if (btn) btn.innerHTML = lang === 'pt' ? '🇧🇷 PT' : '🇺🇸 EN';
+      const ptBtn = document.getElementById('langPT');
+      const enBtn = document.getElementById('langEN');
+      if (ptBtn && enBtn) {
+        ptBtn.classList.toggle('active', lang === 'pt');
+        enBtn.classList.toggle('active', lang === 'en');
+      }
       document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
       document.title = lang === 'pt'
         ? 'TYVE — WhatsApp inteligente para negócios locais'
@@ -2145,10 +2161,12 @@
       });
     }
 
+    function setLang(lang) {
+      localStorage.setItem('tyve_lang', lang);
+      applyLang(lang);
+    }
     function toggleLang() {
-      const next = window._lang === 'pt' ? 'en' : 'pt';
-      localStorage.setItem('tyve_lang', next);
-      applyLang(next);
+      setLang(window._lang === 'pt' ? 'en' : 'pt');
     }
 
     // Apply on load — always run to set flag button + all data-i18n elements correctly
