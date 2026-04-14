@@ -863,16 +863,42 @@
 
     try {
       const fields = Object.fromEntries(data);
+      // Checkboxes (multiple values) need special handling
+      const objetivos = data.getAll('objetivo[]').join(', ') || '—';
       const msg = `📋 *NOVO ONBOARDING TYVE*\n\n` +
-        `🏢 Empresa: ${fields.nome_empresa||'—'}\n` +
-        `📍 Cidade: ${fields.cidade_bairro||'—'}\n` +
-        `📱 WhatsApp: ${fields.numero_whatsapp||'—'}\n` +
-        `👤 Responsável: ${fields.responsavel||'—'}\n` +
-        `📊 Volume: ${fields.volume_mensal||'—'}\n` +
-        `📅 Agenda: ${fields.sistema_agenda||'—'}\n` +
-        `🕐 Horário: ${fields.horario_atendimento||'—'}\n` +
-        `🌐 Instagram/Site: ${fields.instagram_site||'—'}\n\n` +
-        `📝 Desc: ${(fields.descricao_empresa||'').slice(0,120)}`;
+        `🏢 *EMPRESA*\n` +
+        `Empresa: ${fields.nome_empresa||'—'}\n` +
+        `Cidade: ${fields.cidade_bairro||'—'}\n` +
+        `Desc: ${fields.descricao_empresa||'—'}\n` +
+        `Instagram/Site: ${fields.instagram_site||'—'}\n\n` +
+        `📱 *WHATSAPP*\n` +
+        `Número: ${fields.numero_whatsapp||'—'}\n` +
+        `Situação chip: ${fields.situacao_chip||'—'}\n` +
+        `Responsável: ${fields.responsavel||'—'}\n\n` +
+        `🎯 *OBJETIVOS E SERVIÇOS*\n` +
+        `Serviços prioritários: ${fields.servicos_prioritarios||'—'}\n` +
+        `Objetivos: ${objetivos}\n` +
+        `Volume mensal: ${fields.volume_mensal||'—'}\n\n` +
+        `💰 *PREÇOS E PAGAMENTO*\n` +
+        `Passa valores: ${fields.passa_valor||'—'}\n` +
+        `Formas de pagamento: ${fields.formas_pagamento||'—'}\n` +
+        `Política cancelamento: ${fields.politica_cancelamento||'—'}\n\n` +
+        `📅 *AGENDA*\n` +
+        `Sistema: ${fields.sistema_agenda||'—'} ${fields.qual_sistema ? '('+fields.qual_sistema+')' : ''}\n` +
+        `Preferência agendamento: ${fields.preferencia_agendamento||'—'}\n` +
+        `Horários prioritários: ${fields.horarios_prioritarios||'—'}\n` +
+        `Horário atendimento: ${fields.horario_atendimento||'—'}\n\n` +
+        `🤖 *BOT E PERSONA*\n` +
+        `Tom de voz: ${fields.tom_voz||'—'}\n` +
+        `Emojis: ${fields.emojis||'—'}\n` +
+        `Nome assistente: ${fields.nome_assistente||'Luma (padrão)'}\n\n` +
+        `❓ *FAQ*\n${fields.faq||'—'}\n\n` +
+        `🚨 *URGÊNCIAS*\n${fields.urgencia||'—'}\n\n` +
+        `🚫 *GUARDRAILS*\n${fields.guardrails||'(não informado)'}\n\n` +
+        `👥 *EQUIPE*\n` +
+        `Horário equipe: ${fields.horario_equipe||'—'}\n` +
+        `SLA resposta: ${fields.sla_resposta||'—'}\n` +
+        `Qtd alertas: ${fields.qtd_alertas||'—'}`;
       const res = await fetch('https://filthyant-n8n.cloudfy.live/webhook/62daf83b-0f90-4aff-9844-6a9b7202c5d2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
