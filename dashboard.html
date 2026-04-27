@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — TYVE</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0A0E17;
+      --surface:   #111827;
+      --surface2:  #1E2837;
+      --border:    rgba(255,255,255,0.08);
+      --green:     #22C55E;
+      --blue:      #38BDF8;
+      --text:      #F8FAFC;
+      --muted:     #94A3B8;
+      --radius:    14px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid var(--border); background: rgba(10,14,23,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-brand svg { width: 32px; height: 32px; }
+    .nav-brand span { font-weight: 800; font-size: 20px; letter-spacing: -1px; background: linear-gradient(135deg,#22C55E,#38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.2); color: var(--blue); }
+    .refresh-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; transition: all .2s; font-family: inherit; }
+    .refresh-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+    .page-header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .updated-at { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
+    .kpi-icon { font-size: 20px; margin-bottom: 8px; }
+    .kpi-value { font-size: 40px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+    .kpi-value.green { color: var(--green); }
+    .kpi-value.blue  { color: var(--blue); }
+    .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 24px; }
+    .chart-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+    .chart-wrap { height: 250px; position: relative; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; align-items: center; gap: 16px; }
+    .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .stat-icon.g { background: rgba(34,197,94,0.12); }
+    .stat-icon.b { background: rgba(56,189,248,0.12); }
+    .stat-num  { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .stat-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .plan-card { background: linear-gradient(135deg,rgba(34,197,94,0.08),rgba(56,189,248,0.08)); border: 1px solid rgba(56,189,248,0.2); border-radius: var(--radius); padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .plan-left h3 { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .plan-left p  { font-size: 20px; font-weight: 800; margin-top: 2px; }
+    .plan-badge { font-size: 13px; font-weight: 700; padding: 6px 18px; border-radius: 999px; background: linear-gradient(135deg,#22C55E,#38BDF8); color: #000; }
+
+    .state-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; gap: 16px; }
+    .state-screen h2 { font-size: 22px; font-weight: 700; }
+    .state-screen p  { color: var(--muted); max-width: 360px; line-height: 1.6; font-size: 15px; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--green); animation: spin .8s linear infinite; }
+
+    footer { text-align: center; padding: 28px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); }
+    footer a { color: inherit; }
+
+    @media (max-width: 600px) { nav { padding: 12px 16px; } main { padding: 24px 16px 60px; } .kpi-value { font-size: 32px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="https://tyve.com.br" target="_blank" rel="noopener">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#38BDF8"/>
+        </linearGradient>
+      </defs>
+      <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+      <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#g1)"/>
+      <line x1="42" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+      <line x1="158" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+      <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+    </svg>
+    <span>TYVE</span>
+  </a>
+  <div class="nav-right">
+    <span class="pill" id="plan-pill">–</span>
+    <button class="refresh-btn" onclick="loadData()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
+      Atualizar
+    </button>
+  </div>
+</nav>
+
+<main>
+  <div class="state-screen" id="loading">
+    <div class="spinner"></div>
+    <h2>Carregando seu painel…</h2>
+  </div>
+
+  <div class="state-screen" id="error-screen" style="display:none">
+    <div style="font-size:48px">🔒</div>
+    <h2>Acesso não autorizado</h2>
+    <p>O link que você usou é inválido ou expirou. Entre em contato com a equipe TYVE para receber seu link atualizado.</p>
+  </div>
+
+  <div id="dashboard" style="display:none">
+
+    <div class="page-header">
+      <h1 id="business-name">–</h1>
+      <p>Painel de resultados — últimos 30 dias</p>
+      <div class="updated-at" id="updated-at"></div>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-left">
+        <h3>Plano atual</h3>
+        <p id="plan-name">–</p>
+      </div>
+      <span class="plan-badge" id="plan-badge">–</span>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon">💬</div>
+        <div class="kpi-label">Contatos atendidos</div>
+        <div class="kpi-value green" id="kpi-contacts">–</div>
+        <div class="kpi-sub">este mês</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🤝</div>
+        <div class="kpi-label">Encaminhamentos</div>
+        <div class="kpi-value blue" id="kpi-handoffs">–</div>
+        <div class="kpi-sub">para sua equipe</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📲</div>
+        <div class="kpi-label">Follow-ups enviados</div>
+        <div class="kpi-value" id="kpi-followups">–</div>
+        <div class="kpi-sub">reengajamento automático</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">✅</div>
+        <div class="kpi-label">Agendamentos confirmados</div>
+        <div class="kpi-value green" id="kpi-bookings">–</div>
+        <div class="kpi-sub">via bot</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h2>Contatos únicos por dia — últimos 30 dias</h2>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon g">📅</div>
+        <div>
+          <div class="stat-num" id="stat-avg">–</div>
+          <div class="stat-desc">Média diária de contatos</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon b">⚡</div>
+        <div>
+          <div class="stat-num">&lt;15s</div>
+          <div class="stat-desc">Tempo médio de resposta</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon g">🕐</div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div class="stat-desc">Atendimento ativo</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>Painel privado &nbsp;·&nbsp; <a href="https://tyve.com.br">TYVE</a></footer>
+
+<script>
+const API = 'https://filthyant-n8n.cloudfy.live/webhook/8b29ec75-5c8b-4ec5-9c47-4cd293c03e7f';
+const REFRESH = 5 * 60 * 1000;
+let chart = null;
+
+function token() { return new URLSearchParams(location.search).get('token') || ''; }
+function fmt(n)   { return Number(n||0).toLocaleString('pt-BR'); }
+
+async function loadData() {
+  const t = token();
+  if (!t) { showError(); return; }
+  try {
+    const res = await fetch(API + '?token=' + encodeURIComponent(t));
+    if (res.status === 401) { showError(); return; }
+    render(await res.json());
+  } catch(e) { showError(); }
+}
+
+function render(d) {
+  document.getElementById('business-name').textContent = d.client_name || '–';
+  const plan = d.plan || '–';
+  document.getElementById('plan-name').textContent = plan;
+  document.getElementById('plan-badge').textContent = plan;
+  document.getElementById('plan-pill').textContent  = plan;
+
+  document.getElementById('kpi-contacts').textContent = fmt(d.contacts_this_month);
+  document.getElementById('kpi-handoffs').textContent = fmt(d.total_handoffs);
+  document.getElementById('kpi-followups').textContent = fmt((+d.followups_d1||0)+(+d.followups_d3||0));
+  document.getElementById('kpi-bookings').textContent  = fmt(d.bookings_confirmed);
+
+  const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
+  const total = trend.reduce((s,r)=>s+Number(r.contacts),0);
+  document.getElementById('stat-avg').textContent = trend.length ? (total/trend.length).toFixed(1) : '0';
+
+  const ts = d.generated_at ? new Date(d.generated_at) : new Date();
+  document.getElementById('updated-at').textContent =
+    'Atualizado em ' + ts.toLocaleDateString('pt-BR') + ' às ' +
+    ts.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+  buildChart(trend);
+
+  document.getElementById('loading').style.display     = 'none';
+  document.getElementById('error-screen').style.display= 'none';
+  document.getElementById('dashboard').style.display   = 'block';
+}
+
+function buildChart(trend) {
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: trend.map(d => { const [,m,day]=d.day.split('-'); return day+'/'+m; }),
+      datasets: [{
+        data: trend.map(d=>Number(d.contacts)),
+        backgroundColor: 'rgba(34,197,94,0.2)',
+        borderColor: '#22C55E',
+        borderWidth: 2,
+        borderRadius: 5,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor:'#1E2837', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+          titleColor:'#F8FAFC', bodyColor:'#94A3B8',
+          callbacks: { label: c => ' '+c.parsed.y+' contato'+(c.parsed.y!==1?'s':'') }
+        }
+      },
+      scales: {
+        x: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#64748B',font:{size:11},maxRotation:45} },
+        y: { beginAtZero:true, grid:{color:'rgba(255,255,255,0.06)'}, ticks:{color:'#64748B',font:{size:11},stepSize:1} }
+      }
+    }
+  });
+}
+
+function showError() {
+  document.getElementById('loading').style.display     = 'none';
+  document.getElementById('dashboard').style.display   = 'none';
+  document.getElementById('error-screen').style.display= 'flex';
+}
+
+loadData();
+setInterval(loadData, REFRESH);
+</script>
+</body>
+</html>
