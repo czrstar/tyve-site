@@ -450,6 +450,11 @@
       border: 1px solid #86EFAC;
       color: #14532D;
     }
+    .sla-badge {
+      background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+      border: 1px solid #FCD34D;
+      color: #92400E;
+    }
 
     /* ── PRICING ── */
     .pricing { padding: 96px 0; background: var(--white); }
@@ -958,6 +963,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#25D366"/><path d="M7 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <span data-i18n="hero_badge_cloud">Integrado com WhatsApp Cloud API oficial</span>
             </span>
+            <span class="sla-badge" data-i18n="hero_badge_sla">⚡ Bot responde em até 15 segundos</span>
           </div>
         </div>
 
@@ -1434,6 +1440,7 @@
         <table class="vs-table">
           <thead data-i18n="vs_thead"><tr><th></th><th class="col-tyve">TYVE</th><th class="col-zaia">App de automação</th><th class="col-diy">Montar do zero</th></tr></thead>
           <tbody data-i18n="vs_tbody">
+            <tr><td>Tempo de resposta do bot</td><td><span class="check">✓</span> &lt;15s em média</td><td><span class="partial">Segundos, se bem configurado</span></td><td><span class="partial">Variável — depende da implementação</span></td></tr>
             <tr><td>Configurado pro seu negócio, do zero</td><td><span class="check">✓</span></td><td><span class="cross">✗</span> você configura</td><td><span class="cross">✗</span> você faz tudo</td></tr>
             <tr><td>Sem virar técnico de TI</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
             <tr><td>A gente mantém. Você só usa.</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
@@ -1634,6 +1641,7 @@
         hero_proof: '<strong>Clínicas, estéticas, imobiliárias e oficinas</strong><br/>já usando a TYVE pra lotar a agenda.',
         hero_badge_br: '🇧🇷 Feito no Brasil — suporte em português',
         hero_badge_cloud: 'Integrado com WhatsApp Cloud API oficial',
+        hero_badge_sla: '⚡ Bot responde em até 15 segundos',
         wa_name: 'Luma — Clínica Sorriso',
         hero_chat: `<div class="wa-msg incoming">
                 Oi, queria saber sobre clareamento dental. Quanto custa?
@@ -1833,7 +1841,8 @@
         vs_label: 'Comparativo', vs_title: 'TYVE vs as outras opções',
         vs_sub: 'Você pode tentar fazer sozinho — ou deixar a gente resolver.',
         vs_thead: `<tr><th></th><th class="col-tyve">TYVE</th><th class="col-zaia">App de automação</th><th class="col-diy">Montar do zero</th></tr>`,
-        vs_tbody: `<tr><td>Configurado pro seu negócio, do zero</td><td><span class="check">✓</span></td><td><span class="cross">✗</span> você configura</td><td><span class="cross">✗</span> você faz tudo</td></tr>
+        vs_tbody: `<tr><td>Tempo de resposta do bot</td><td><span class="check">✓</span> &lt;15s em média</td><td><span class="partial">Segundos, se bem configurado</span></td><td><span class="partial">Variável — depende da implementação</span></td></tr>
+            <tr><td>Configurado pro seu negócio, do zero</td><td><span class="check">✓</span></td><td><span class="cross">✗</span> você configura</td><td><span class="cross">✗</span> você faz tudo</td></tr>
             <tr><td>Sem virar técnico de TI</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
             <tr><td>A gente mantém. Você só usa.</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
             <tr><td>Funcionando na primeira semana</td><td><span class="check">✓</span></td><td><span class="partial">Semanas de setup</span></td><td><span class="partial">Meses de setup</span></td></tr>
@@ -1883,6 +1892,7 @@
         hero_proof: '<strong>Clinics, beauty studios, real estate agencies and auto shops</strong><br/>already using TYVE to fill their schedules.',
         hero_badge_br: '🇧🇷 Made in Brazil — support in Portuguese &amp; English',
         hero_badge_cloud: 'Integrated with official WhatsApp Cloud API',
+        hero_badge_sla: '⚡ Bot responds in under 15 seconds',
         wa_name: 'Luma — Sorriso Clinic',
         hero_chat: `<div class="wa-msg incoming">
                 Hi, I wanted to ask about teeth whitening. How much does it cost?
@@ -2082,7 +2092,8 @@
         vs_label: 'Comparison', vs_title: 'TYVE vs the alternatives',
         vs_sub: 'You can try to do it yourself — or let us handle it.',
         vs_thead: `<tr><th></th><th class="col-tyve">TYVE</th><th class="col-zaia">Automation app</th><th class="col-diy">Build it yourself</th></tr>`,
-        vs_tbody: `<tr><td>Configured for your business, from scratch</td><td><span class="check">✓</span></td><td><span class="cross">✗</span> you configure it</td><td><span class="cross">✗</span> you do everything</td></tr>
+        vs_tbody: `<tr><td>Bot response time</td><td><span class="check">✓</span> &lt;15s average</td><td><span class="partial">Seconds, if well configured</span></td><td><span class="partial">Variable — depends on implementation</span></td></tr>
+            <tr><td>Configured for your business, from scratch</td><td><span class="check">✓</span></td><td><span class="cross">✗</span> you configure it</td><td><span class="cross">✗</span> you do everything</td></tr>
             <tr><td>No need to become an IT person</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
             <tr><td>We maintain it. You just use it.</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
             <tr><td>Running in the first week</td><td><span class="check">✓</span></td><td><span class="partial">Weeks of setup</span></td><td><span class="partial">Months of setup</span></td></tr>
