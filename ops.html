@@ -3,296 +3,633 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Interno — TYVE</title>
+  <title>Ops — TYVE</title>
   <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:       #0A0E17;
-      --surface:  #111827;
-      --surface2: #1E2837;
-      --border:   rgba(255,255,255,0.08);
-      --green:    #22C55E;
-      --blue:     #38BDF8;
-      --amber:    #F59E0B;
-      --red:      #EF4444;
-      --text:     #F8FAFC;
-      --muted:    #94A3B8;
-      --radius:   14px;
+      --bg:          #080D18;
+      --surface:     #0D1526;
+      --surface2:    #111E32;
+      --surface3:    #172540;
+      --border:      rgba(255,255,255,0.065);
+      --border-hi:   rgba(255,255,255,0.14);
+      --green:       #22C55E;
+      --green-dim:   rgba(34,197,94,0.11);
+      --blue:        #38BDF8;
+      --blue-dim:    rgba(56,189,248,0.11);
+      --indigo:      #818CF8;
+      --indigo-dim:  rgba(129,140,248,0.11);
+      --amber:       #F59E0B;
+      --amber-dim:   rgba(245,158,11,0.11);
+      --red:         #F43F5E;
+      --red-dim:     rgba(244,63,94,0.11);
+      --text:        #EFF6FF;
+      --text-2:      #CBD5E1;
+      --muted:       #4E6282;
+      --muted-hi:    #94A3B8;
+      --radius:      12px;
+      --radius-lg:   16px;
     }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    /* NAV */
-    nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid var(--border); background: rgba(10,14,23,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
-    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-brand svg { width: 28px; height: 28px; }
-    .nav-brand span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; background: linear-gradient(135deg,#22C55E,#38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .nav-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); letter-spacing: 0.5px; text-transform: uppercase; }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
-    .updated-pill { font-size: 11px; color: var(--muted); }
-    .refresh-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; transition: all .2s; font-family: inherit; }
-    .refresh-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    html { font-size: 14px; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-    main { max-width: 1200px; margin: 0 auto; padding: 36px 24px 80px; }
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
 
-    /* PASSWORD SCREEN */
-    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
-    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 380px; text-align: center; }
-    .login-icon { font-size: 40px; margin-bottom: 16px; }
-    .login-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-    .login-card p { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
-    .login-input { width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s; margin-bottom: 12px; }
-    .login-input:focus { border-color: rgba(56,189,248,0.4); }
-    .login-btn { width: 100%; padding: 12px; background: linear-gradient(135deg,#22C55E,#38BDF8); color: #000; font-weight: 700; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; transition: opacity .2s; }
-    .login-btn:hover { opacity: 0.9; }
-    .login-error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+    /* ── NAV ─────────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      height: 52px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,13,24,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-brand svg { width: 24px; height: 24px; flex-shrink: 0; }
+    .nav-brand-name {
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #22C55E 0%, #38BDF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-sep { width: 1px; height: 16px; background: var(--border-hi); }
+    .nav-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.22);
+      color: var(--amber);
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .updated-text { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .btn-sm {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500;
+      color: var(--muted-hi);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+      font-family: inherit;
+    }
+    .btn-sm:hover { color: var(--text); border-color: var(--border-hi); background: var(--surface3); }
 
-    /* LOADING */
-    .loading-wrap { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 16px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--green); animation: spin .8s linear infinite; }
+    /* ── MAIN ────────────────────────────────────────────────── */
+    main { max-width: 1300px; margin: 0 auto; padding: 24px 24px 72px; }
 
-    /* DASHBOARD */
-    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 14px; }
+    /* ── STATUS STRIP ────────────────────────────────────────── */
+    .status-strip {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      padding: 9px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+    .status-item { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 500; color: var(--muted-hi); }
+    .s-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .s-dot.green { background: var(--green); box-shadow: 0 0 5px rgba(34,197,94,0.5); }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.45} }
+    .s-dot.pulse { animation: pulse 2.2s ease-in-out infinite; }
+    .strip-spacer { flex: 1; }
+    .live-badge {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.2);
+      padding: 2px 9px; border-radius: 999px;
+    }
 
-    .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 28px; }
-    .top-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
-    .top-card-icon { font-size: 18px; margin-bottom: 8px; }
-    .top-card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px; }
-    .top-card-value { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
-    .top-card-value.green { color: var(--green); }
-    .top-card-value.blue  { color: var(--blue); }
-    .top-card-value.amber { color: var(--amber); }
-    .top-card-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+    /* ── SECTION LABEL ───────────────────────────────────────── */
+    .sec { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 11px; }
 
-    .two-col { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; margin-bottom: 28px; }
-    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+    /* ── KPI GRID ────────────────────────────────────────────── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 520px)  { .kpi-grid { grid-template-columns: 1fr; } }
 
-    .ai-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-    .ai-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-    .ai-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
-    .ai-row:last-child { border-bottom: none; }
-    .ai-row-label { font-size: 12px; color: var(--muted); font-weight: 500; }
-    .ai-row-values { text-align: right; }
-    .ai-row-brl { font-size: 16px; font-weight: 700; }
-    .ai-row-usd { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .kpi-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px 16px;
+      overflow: hidden;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .kpi-card:hover { border-color: var(--border-hi); box-shadow: 0 0 0 1px rgba(255,255,255,0.04); }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      border-radius: 16px 0 0 16px;
+    }
+    .kpi-card.c-green::before  { background: var(--green); }
+    .kpi-card.c-blue::before   { background: var(--blue); }
+    .kpi-card.c-indigo::before { background: var(--indigo); }
+    .kpi-card.c-amber::before  { background: var(--amber); }
 
-    /* CLIENT TABLE */
-    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .table-card h3 { font-size: 14px; font-weight: 700; padding: 20px 24px 0; margin-bottom: 16px; }
+    .kpi-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .kpi-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .kpi-icon.green  { background: var(--green-dim); }
+    .kpi-icon.blue   { background: var(--blue-dim); }
+    .kpi-icon.indigo { background: var(--indigo-dim); }
+    .kpi-icon.amber  { background: var(--amber-dim); }
+
+    .kpi-trend { font-size: 11px; font-weight: 600; }
+    .kpi-trend.up   { color: var(--green); }
+    .kpi-trend.dn   { color: var(--red); }
+    .kpi-trend.flat { color: var(--muted); }
+
+    .kpi-lbl { font-size: 11px; font-weight: 500; color: var(--muted-hi); margin-bottom: 4px; }
+    .kpi-val { font-size: 40px; font-weight: 800; letter-spacing: -2px; line-height: 1; font-variant-numeric: tabular-nums; }
+    .kpi-val.green  { color: var(--green); }
+    .kpi-val.blue   { color: var(--blue); }
+    .kpi-val.indigo { color: var(--indigo); }
+    .kpi-val.amber  { color: var(--amber); }
+    .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── LUMA CARD ───────────────────────────────────────────── */
+    .luma-card {
+      background: linear-gradient(135deg, rgba(56,189,248,0.045) 0%, rgba(129,140,248,0.045) 100%);
+      border: 1px solid rgba(56,189,248,0.11);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .luma-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.13), rgba(129,140,248,0.13));
+      border: 1px solid rgba(56,189,248,0.18);
+      display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+    }
+    .luma-info { flex: 1; min-width: 0; }
+    .luma-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .luma-sub   { font-size: 11px; color: var(--muted); }
+    .luma-stats { display: flex; gap: 28px; }
+    .luma-stat-val   { font-size: 32px; font-weight: 800; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; }
+    .luma-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* ── TWO-COL ─────────────────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: minmax(280px,320px) 1fr; gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 960px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── CARD BASE ───────────────────────────────────────────── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+    .card-head { display: flex; align-items: center; gap: 8px; padding: 16px 20px 14px; border-bottom: 1px solid var(--border); }
+    .card-title-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+    .card-title { font-size: 13px; font-weight: 700; color: var(--text-2); }
+    .pill { font-size: 10px; font-weight: 700; background: var(--surface2); border: 1px solid var(--border); padding: 1px 8px; border-radius: 999px; color: var(--muted-hi); }
+
+    /* ── AI COSTS ────────────────────────────────────────────── */
+    .ai-body { padding: 16px 20px 18px; }
+    .ai-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+    .ai-row:last-of-type { border-bottom: none; }
+    .ai-lbl { font-size: 12px; color: var(--muted-hi); }
+    .ai-brl { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ai-usd { font-size: 10px; color: var(--muted); margin-top: 1px; text-align: right; }
+
+    .ai-bar-wrap { margin-top: 14px; }
+    .ai-bar-hd { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .ai-bar-track { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+    .ai-bar-fill { height: 100%; border-radius: 2px; transition: width .7s cubic-bezier(.4,0,.2,1); }
+    .ai-bar-fill.safe   { background: linear-gradient(90deg, var(--green), #16a34a); }
+    .ai-bar-fill.warn   { background: linear-gradient(90deg, var(--amber), #b45309); }
+    .ai-bar-fill.danger { background: linear-gradient(90deg, var(--red), #be123c); }
+
+    .ai-rate { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .ai-rate-lbl { font-size: 11px; color: var(--muted); }
+    .ai-rate-val { font-size: 12px; font-weight: 600; color: var(--text-2); }
+
+    /* ── TABLE ───────────────────────────────────────────────── */
+    .tbl-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
-    thead th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); padding: 8px 16px; text-align: left; border-bottom: 1px solid var(--border); background: var(--surface2); }
-    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    thead th {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.7px; color: var(--muted);
+      padding: 9px 14px; text-align: left;
+      background: rgba(255,255,255,0.018);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    thead th:first-child { padding-left: 20px; }
+    thead th:last-child  { padding-right: 20px; text-align: right; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(255,255,255,0.02); }
-    tbody td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
-    .client-name { font-weight: 700; font-size: 14px; }
-    .plan-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: capitalize; }
-    .plan-escala { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
-    .plan-cresce { background: rgba(56,189,248,0.15); color: var(--blue); border: 1px solid rgba(56,189,248,0.25); }
-    .plan-atende { background: rgba(148,163,184,0.12); color: var(--muted); border: 1px solid var(--border); }
-    .plan-converte { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
-    .stat-pair { display: flex; flex-direction: column; gap: 1px; }
-    .stat-main { font-weight: 700; }
-    .stat-sub  { font-size: 11px; color: var(--muted); }
-    .nps-val { font-weight: 700; }
-    .nps-val.good { color: var(--green); }
-    .nps-val.ok   { color: var(--blue); }
-    .nps-val.bad  { color: var(--amber); }
-    .nps-val.none { color: var(--muted); }
-    .zero { color: var(--muted); }
+    tbody tr:hover { background: rgba(255,255,255,0.022); }
+    tbody td { padding: 12px 14px; font-size: 12px; vertical-align: middle; }
+    tbody td:first-child { padding-left: 20px; }
+    tbody td:last-child  { padding-right: 20px; text-align: right; }
+    .cli-name { font-weight: 700; font-size: 13px; }
+    .cli-inst { font-size: 10px; color: var(--muted); margin-top: 2px; font-family: 'SF Mono','Fira Code',monospace; letter-spacing: -0.2px; }
+    .plan-badge { font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; }
+    .p-escala   { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(34,197,94,0.2); }
+    .p-cresce   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(56,189,248,0.2); }
+    .p-atende   { background: rgba(100,116,139,0.1); color: var(--muted-hi); border: 1px solid var(--border); }
+    .p-converte { background: var(--amber-dim);  color: var(--amber);  border: 1px solid rgba(245,158,11,0.2); }
+    .stat-blk { line-height: 1; }
+    .s-main { font-weight: 700; font-size: 13px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+    .s-sub  { font-size: 10px; color: var(--muted); margin-top: 3px; }
+    .zero   { color: var(--muted); }
+    .nps-v  { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .nps-r  { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
+    .nps-good { color: var(--green); }
+    .nps-ok   { color: var(--blue); }
+    .nps-bad  { color: var(--amber); }
+    .nps-none { color: var(--muted); }
+    .empty-td { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 12px; }
 
-    /* LUMA */
-    .luma-card { background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(34,197,94,0.06)); border: 1px solid rgba(56,189,248,0.15); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .luma-left h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-    .luma-left p  { font-size: 12px; color: var(--muted); }
-    .luma-stats { display: flex; gap: 32px; }
-    .luma-stat-val   { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--blue); }
-    .luma-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    /* ── INSIGHTS ────────────────────────────────────────────── */
+    .insights { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .chip {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 13px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 12px; color: var(--text-2); line-height: 1.4;
+    }
+    .chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .chip.c-green { border-color: rgba(34,197,94,0.18); background: rgba(34,197,94,0.035); }
+    .chip.c-green .chip-dot { background: var(--green); }
+    .chip.c-amber { border-color: rgba(245,158,11,0.18); background: rgba(245,158,11,0.035); }
+    .chip.c-amber .chip-dot { background: var(--amber); }
+    .chip.c-blue  { border-color: rgba(56,189,248,0.18); background: rgba(56,189,248,0.035); }
+    .chip.c-blue  .chip-dot { background: var(--blue); }
 
-    footer { text-align: center; padding: 28px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); }
+    /* ── ANIMATIONS ──────────────────────────────────────────── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
+    .fade { animation: fadeUp .28s ease both; }
+    .fade-1 { animation: fadeUp .28s .07s ease both; }
+    .fade-2 { animation: fadeUp .28s .14s ease both; }
+    .fade-3 { animation: fadeUp .28s .21s ease both; }
+
+    /* ── LOGIN ───────────────────────────────────────────────── */
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 52px); padding: 24px; }
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px 36px;
+      width: 100%; max-width: 356px;
+    }
+    .login-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
+    .login-logo svg { width: 30px; height: 30px; }
+    .login-logo-name {
+      font-size: 18px; font-weight: 800; letter-spacing: -0.4px;
+      background: linear-gradient(135deg, #22C55E, #38BDF8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .login-h { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .login-p { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+    .login-lbl { font-size: 11px; font-weight: 600; color: var(--muted-hi); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .login-inp {
+      width: 100%; padding: 10px 14px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 9px; color: var(--text); font-size: 14px;
+      font-family: inherit; outline: none;
+      transition: border-color .15s, box-shadow .15s; margin-bottom: 12px;
+    }
+    .login-inp:focus { border-color: rgba(56,189,248,0.4); box-shadow: 0 0 0 3px rgba(56,189,248,0.07); }
+    .login-btn {
+      width: 100%; padding: 11px;
+      background: linear-gradient(135deg, #22C55E, #38BDF8);
+      color: #060d18; font-weight: 800; font-size: 13px;
+      border: none; border-radius: 9px; cursor: pointer;
+      font-family: inherit; transition: opacity .15s, transform .1s; letter-spacing: 0.1px;
+    }
+    .login-btn:hover { opacity: .91; }
+    .login-btn:active { transform: scale(.99); }
+    .login-err { font-size: 11px; color: var(--red); margin-top: 10px; display: none; text-align: center; }
+
+    /* ── SKELETON ────────────────────────────────────────────── */
+    .skel {
+      background: linear-gradient(90deg, var(--surface) 25%, var(--surface3) 50%, var(--surface) 75%);
+      background-size: 1200px 100%;
+      animation: shimmer 1.6s ease-in-out infinite;
+      border-radius: var(--radius-lg);
+    }
+    .skel-strip  { height: 38px; border-radius: var(--radius); margin-bottom: 24px; }
+    .skel-grid   { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width:900px) { .skel-grid { grid-template-columns: repeat(2,1fr); } }
+    .skel-kpi    { height: 112px; }
+    .skel-luma   { height: 74px; margin-bottom: 20px; }
+    .skel-2col   { display: grid; grid-template-columns: minmax(280px,320px) 1fr; gap: 12px; }
+    @media (max-width:960px) { .skel-2col { grid-template-columns: 1fr; } }
+    .skel-ai     { height: 260px; }
+    .skel-tbl    { height: 260px; }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 18px 24px;
+      color: var(--muted); font-size: 10px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .f-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); }
   </style>
 </head>
 <body>
 
+<!-- ── NAV ─────────────────────────────────────────────────── -->
 <nav>
-  <div style="display:flex;align-items:center;gap:12px">
+  <div class="nav-left">
     <a class="nav-brand" href="https://tyve.com.br" target="_blank">
       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="g1" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient></defs>
+        <defs><linearGradient id="gn" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient></defs>
         <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-        <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#g1)"/>
-        <line x1="42" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+        <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#gn)"/>
+        <line x1="42"  y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
         <line x1="158" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
         <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
       </svg>
-      <span>TYVE</span>
+      <span class="nav-brand-name">TYVE</span>
     </a>
-    <span class="nav-tag">Interno</span>
+    <div class="nav-sep"></div>
+    <span class="nav-tag">Ops</span>
   </div>
   <div class="nav-right" id="nav-actions" style="display:none">
-    <span class="updated-pill" id="updated-pill"></span>
-    <button class="refresh-btn" onclick="loadData()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
+    <span class="updated-text" id="updated-text"></span>
+    <button class="btn-sm" onclick="loadData()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
       Atualizar
     </button>
   </div>
 </nav>
 
-<!-- PASSWORD -->
+<!-- ── LOGIN ────────────────────────────────────────────────── -->
 <div id="login-screen">
   <div class="login-wrap">
     <div class="login-card">
-      <div class="login-icon">🔐</div>
-      <h2>Painel Interno TYVE</h2>
-      <p>Acesso restrito à equipe fundadora</p>
-      <input class="login-input" type="password" id="pwd-input" placeholder="Senha" onkeydown="if(event.key==='Enter')doLogin()" />
+      <div class="login-logo">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="gl" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient></defs>
+          <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+          <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#gl)"/>
+          <line x1="42"  y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+          <line x1="158" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+          <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+        </svg>
+        <span class="login-logo-name">TYVE</span>
+      </div>
+      <div class="login-h">Painel Operacional</div>
+      <div class="login-p">Acesso restrito à equipe fundadora</div>
+      <div class="login-lbl">Senha de acesso</div>
+      <input class="login-inp" type="password" id="pwd-input" placeholder="••••••••••••"
+             autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
       <button class="login-btn" onclick="doLogin()">Entrar</button>
-      <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+      <div class="login-err" id="login-error">Senha incorreta. Tente novamente.</div>
     </div>
   </div>
 </div>
 
-<!-- LOADING -->
+<!-- ── SKELETON LOADING ──────────────────────────────────────── -->
 <div id="loading-screen" style="display:none">
-  <div class="loading-wrap">
-    <div class="spinner"></div>
-    <p style="color:var(--muted);font-size:13px">Carregando dados…</p>
-  </div>
+  <main>
+    <div class="skel skel-strip"></div>
+    <div class="skel-grid">
+      <div class="skel skel-kpi"></div>
+      <div class="skel skel-kpi"></div>
+      <div class="skel skel-kpi"></div>
+      <div class="skel skel-kpi"></div>
+    </div>
+    <div class="skel skel-luma"></div>
+    <div class="skel-2col">
+      <div class="skel skel-ai"></div>
+      <div class="skel skel-tbl"></div>
+    </div>
+  </main>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ── DASHBOARD ─────────────────────────────────────────────── -->
 <div id="dashboard" style="display:none">
 <main>
 
-  <!-- TOP KPIs -->
-  <div class="section-title">Visão geral</div>
-  <div class="top-grid" id="top-grid">
-    <div class="top-card">
-      <div class="top-card-icon">👥</div>
-      <div class="top-card-label">Clientes ativos</div>
-      <div class="top-card-value green" id="kpi-clients">–</div>
-      <div class="top-card-sub" id="kpi-plans">–</div>
+  <!-- Status strip -->
+  <div class="status-strip fade" id="status-strip">
+    <div class="status-item"><div class="s-dot green pulse"></div>n8n</div>
+    <div class="status-item"><div class="s-dot green pulse"></div>PostgreSQL</div>
+    <div class="status-item"><div class="s-dot green pulse"></div>Evolution API</div>
+    <div class="strip-spacer"></div>
+    <span class="live-badge">● Live</span>
+  </div>
+
+  <!-- KPI cards -->
+  <div class="sec fade">Visão Geral</div>
+  <div class="kpi-grid">
+    <div class="kpi-card c-green fade">
+      <div class="kpi-head">
+        <div class="kpi-icon green">👥</div>
+        <span class="kpi-trend flat" id="tr-clients">–</span>
+      </div>
+      <div class="kpi-lbl">Clientes Ativos</div>
+      <div class="kpi-val green" id="kpi-clients">–</div>
+      <div class="kpi-sub" id="kpi-plans">–</div>
     </div>
-    <div class="top-card">
-      <div class="top-card-icon">🤝</div>
-      <div class="top-card-label">Handoffs esta semana</div>
-      <div class="top-card-value blue" id="kpi-handoffs-week">–</div>
-      <div class="top-card-sub" id="kpi-handoffs-month">– este mês</div>
+    <div class="kpi-card c-blue fade-1">
+      <div class="kpi-head">
+        <div class="kpi-icon blue">🤝</div>
+        <span class="kpi-trend flat" id="tr-handoffs">–</span>
+      </div>
+      <div class="kpi-lbl">Handoffs esta semana</div>
+      <div class="kpi-val blue" id="kpi-handoffs">–</div>
+      <div class="kpi-sub" id="kpi-handoffs-month">– este mês</div>
     </div>
-    <div class="top-card">
-      <div class="top-card-icon">📲</div>
-      <div class="top-card-label">Follow-ups esta semana</div>
-      <div class="top-card-value" id="kpi-followups-week">–</div>
-      <div class="top-card-sub">D+1 + D+3</div>
+    <div class="kpi-card c-indigo fade-2">
+      <div class="kpi-head">
+        <div class="kpi-icon indigo">📲</div>
+        <span class="kpi-trend flat" id="tr-followups">–</span>
+      </div>
+      <div class="kpi-lbl">Follow-ups esta semana</div>
+      <div class="kpi-val indigo" id="kpi-followups">–</div>
+      <div class="kpi-sub">D+1 + D+3 combinados</div>
     </div>
-    <div class="top-card">
-      <div class="top-card-icon">🤖</div>
-      <div class="top-card-label">Modo humano ativo</div>
-      <div class="top-card-value amber" id="kpi-human-mode">–</div>
-      <div class="top-card-sub">conversas pausadas agora</div>
+    <div class="kpi-card c-amber fade-3" id="kpi-hm-card">
+      <div class="kpi-head">
+        <div class="kpi-icon amber">🤖</div>
+        <span></span>
+      </div>
+      <div class="kpi-lbl">Modo Humano Ativo</div>
+      <div class="kpi-val amber" id="kpi-human">–</div>
+      <div class="kpi-sub">conversas com o time agora</div>
     </div>
   </div>
 
-  <!-- LUMA LEADS -->
-  <div class="luma-card" id="luma-card">
-    <div class="luma-left">
-      <h3>✨ Luma — Sales Bot</h3>
-      <p>Leads gerados pela Luma via WhatsApp</p>
+  <!-- Luma card -->
+  <div class="luma-card fade-1">
+    <div class="luma-icon">✨</div>
+    <div class="luma-info">
+      <div class="luma-title">Luma — Sales Bot</div>
+      <div class="luma-sub">Leads capturados via WhatsApp · instância zappro-test</div>
     </div>
     <div class="luma-stats">
       <div>
-        <div class="luma-stat-val" id="luma-week">–</div>
-        <div class="luma-stat-label">esta semana</div>
+        <div class="luma-stat-val" style="color:var(--blue)" id="luma-week">–</div>
+        <div class="luma-stat-label">Esta semana</div>
       </div>
       <div>
-        <div class="luma-stat-val" id="luma-total" style="color:var(--muted)">–</div>
-        <div class="luma-stat-label">total</div>
+        <div class="luma-stat-val" style="color:var(--indigo)" id="luma-total">–</div>
+        <div class="luma-stat-label">Total</div>
       </div>
     </div>
   </div>
 
-  <!-- AI COSTS + CLIENTS TABLE -->
+  <!-- AI costs + clients table -->
   <div class="two-col">
-    <div class="ai-card">
-      <h3>⚡ Custo de IA</h3>
-      <div class="ai-row">
-        <div class="ai-row-label">Hoje</div>
-        <div class="ai-row-values">
-          <div class="ai-row-brl" id="ai-today-brl">–</div>
-          <div class="ai-row-usd" id="ai-today-usd">–</div>
-        </div>
+
+    <!-- AI Costs -->
+    <div class="card fade">
+      <div class="card-head">
+        <div class="card-title-icon" style="background:var(--amber-dim)">⚡</div>
+        <span class="card-title">Custo de IA</span>
       </div>
-      <div class="ai-row">
-        <div class="ai-row-label">Esta semana</div>
-        <div class="ai-row-values">
-          <div class="ai-row-brl" id="ai-week-brl">–</div>
-          <div class="ai-row-usd" id="ai-week-usd">–</div>
+      <div class="ai-body">
+        <div class="ai-row">
+          <span class="ai-lbl">Hoje</span>
+          <div style="text-align:right">
+            <div class="ai-brl" id="ai-today-brl">–</div>
+            <div class="ai-usd" id="ai-today-usd">–</div>
+          </div>
         </div>
-      </div>
-      <div class="ai-row">
-        <div class="ai-row-label">Este mês</div>
-        <div class="ai-row-values">
-          <div class="ai-row-brl" id="ai-month-brl">–</div>
-          <div class="ai-row-usd" id="ai-month-usd">–</div>
+        <div class="ai-row">
+          <span class="ai-lbl">Esta semana</span>
+          <div style="text-align:right">
+            <div class="ai-brl" id="ai-week-brl">–</div>
+            <div class="ai-usd" id="ai-week-usd">–</div>
+          </div>
         </div>
-      </div>
-      <div class="ai-row">
-        <div class="ai-row-label" style="font-size:11px">Câmbio médio</div>
-        <div class="ai-row-values">
-          <div style="font-size:13px;font-weight:600" id="brl-rate">–</div>
+        <div class="ai-row">
+          <span class="ai-lbl">Este mês</span>
+          <div style="text-align:right">
+            <div class="ai-brl" id="ai-month-brl">–</div>
+            <div class="ai-usd" id="ai-month-usd">–</div>
+          </div>
+        </div>
+
+        <!-- Budget bar -->
+        <div class="ai-bar-wrap">
+          <div class="ai-bar-hd">
+            <span>Orçamento mensal</span>
+            <span id="ai-budget-txt">– / R$ 200</span>
+          </div>
+          <div class="ai-bar-track">
+            <div class="ai-bar-fill safe" id="ai-bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Exchange rate -->
+        <div class="ai-rate">
+          <span class="ai-rate-lbl">Câmbio USD → BRL</span>
+          <span class="ai-rate-val" id="brl-rate">–</span>
         </div>
       </div>
     </div>
 
-    <div class="table-card">
-      <h3>👥 Clientes</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Cliente</th>
-            <th>Plano</th>
-            <th>Handoffs<br><span style="font-weight:500;text-transform:none;letter-spacing:0">semana / total</span></th>
-            <th>D+1 / D+3<br><span style="font-weight:500;text-transform:none;letter-spacing:0">semana</span></th>
-            <th>Agend.<br><span style="font-weight:500;text-transform:none;letter-spacing:0">semana</span></th>
-            <th>NPS</th>
-          </tr>
-        </thead>
-        <tbody id="clients-tbody">
-          <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Carregando…</td></tr>
-        </tbody>
-      </table>
+    <!-- Clients table -->
+    <div class="card fade-1">
+      <div class="card-head">
+        <div class="card-title-icon" style="background:var(--blue-dim)">👥</div>
+        <span class="card-title">Clientes</span>
+        <span class="pill" id="cli-count">–</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Plano</th>
+              <th>Handoffs<br><span style="font-weight:400;font-size:9px;text-transform:none;letter-spacing:0;color:var(--muted)">semana / total</span></th>
+              <th>Follow-ups<br><span style="font-weight:400;font-size:9px;text-transform:none;letter-spacing:0;color:var(--muted)">D+1 / D+3</span></th>
+              <th>Agend.</th>
+              <th>NPS</th>
+            </tr>
+          </thead>
+          <tbody id="cli-tbody">
+            <tr><td colspan="6" class="empty-td">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+
+  <!-- Insights -->
+  <div class="sec fade-2">Observações Automáticas</div>
+  <div class="insights fade-2" id="insights"></div>
 
 </main>
 </div>
 
-<footer>Painel interno TYVE &nbsp;·&nbsp; Acesso restrito</footer>
+<footer>
+  <span>TYVE Ops</span>
+  <div class="f-dot"></div>
+  <span>Acesso restrito</span>
+  <div class="f-dot"></div>
+  <span id="footer-ts">–</span>
+</footer>
 
 <script>
-const OPS_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-dashboard';
-let savedToken = '';
+const OPS_API    = 'https://n8n.tyve.com.br/webhook/tyve-ops-dashboard';
+const AI_BUDGET  = 200; // BRL/month
+let savedToken   = '';
 
-function brl(v) { return 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-function usd(v) { return 'US$ ' + (v||0).toFixed(3); }
-function n(v)   { return Number(v||0).toLocaleString('pt-BR'); }
+// ── Formatters ────────────────────────────────────────────────
+const brl = v => 'R$ ' + (v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const usd = v => 'US$ ' + (v||0).toFixed(3);
+const n   = v => Number(v||0).toLocaleString('pt-BR');
+const dayOfMonth  = () => new Date().getDate();
+const daysInMonth = () => new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
 
+// ── Auth ──────────────────────────────────────────────────────
 async function doLogin() {
   const pwd = document.getElementById('pwd-input').value.trim();
   if (!pwd) return;
   document.getElementById('login-error').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('loading-screen').style.display = 'flex';
+  document.getElementById('login-screen').style.display  = 'none';
+  document.getElementById('loading-screen').style.display = 'block';
   savedToken = pwd;
   const ok = await loadData();
   if (!ok) {
     savedToken = '';
     document.getElementById('loading-screen').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'block';
-    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-screen').style.display   = 'block';
+    document.getElementById('login-error').style.display    = 'block';
     document.getElementById('pwd-input').value = '';
   }
 }
@@ -309,84 +646,149 @@ async function loadData() {
   } catch(e) { return false; }
 }
 
+// ── Helpers ───────────────────────────────────────────────────
 function planClass(p) {
-  if (!p) return 'plan-atende';
-  const pl = p.toLowerCase();
-  if (pl.includes('escala')) return 'plan-escala';
-  if (pl.includes('cresce')) return 'plan-cresce';
-  if (pl.includes('converte')) return 'plan-converte';
-  return 'plan-atende';
+  if (!p) return 'p-atende';
+  const l = p.toLowerCase();
+  if (l.includes('escala'))   return 'p-escala';
+  if (l.includes('cresce'))   return 'p-cresce';
+  if (l.includes('converte')) return 'p-converte';
+  return 'p-atende';
 }
-
 function npsClass(v) {
-  if (v === null || v === undefined) return 'none';
-  if (v >= 8.5) return 'good';
-  if (v >= 7) return 'ok';
-  return 'bad';
+  if (v === null || v === undefined || isNaN(v)) return 'nps-none';
+  if (v >= 8.5) return 'nps-good';
+  if (v >= 7)   return 'nps-ok';
+  return 'nps-bad';
 }
+function trend(cur, ref) {
+  if (!ref || ref === 0) return '<span class="kpi-trend flat">–</span>';
+  const r = cur / ref;
+  if (r > 1.15) return `<span class="kpi-trend up">▲ ${Math.round((r-1)*100)}%</span>`;
+  if (r < 0.85) return `<span class="kpi-trend dn">▼ ${Math.round((1-r)*100)}%</span>`;
+  return '<span class="kpi-trend flat">≈ estável</span>';
+}
+function setText(id, val)  { const el=document.getElementById(id); if(el) el.textContent = val; }
+function setHTML(id, html) { const el=document.getElementById(id); if(el) el.innerHTML = html; }
 
+// ── Render ────────────────────────────────────────────────────
 function render(d) {
-  // Filter out placeholder clients
-  const clients = (d.clients || []).filter(c => c.instance !== 'INSTANCE_PLACEHOLDER' && c.instance !== 'zappro-test');
+  const clients = (d.clients||[]).filter(c =>
+    c.instance !== 'INSTANCE_PLACEHOLDER' && c.instance !== 'zappro-test'
+  );
 
-  // Top KPIs
-  document.getElementById('kpi-clients').textContent = clients.length;
-  const planSummary = clients.map(c => c.plan).filter(Boolean)
-    .reduce((acc, p) => { acc[p] = (acc[p]||0)+1; return acc; }, {});
-  document.getElementById('kpi-plans').textContent = Object.entries(planSummary).map(([p,c]) => `${c}x ${p}`).join(' · ') || '–';
+  // ── KPI: Clients
+  setText('kpi-clients', clients.length);
+  const ps = clients.map(c=>c.plan).filter(Boolean)
+    .reduce((a,p)=>{a[p]=(a[p]||0)+1;return a;},{});
+  setText('kpi-plans', Object.entries(ps).map(([p,c])=>`${c}× ${p}`).join(' · ')||'Sem clientes');
+  setHTML('tr-clients', '<span class="kpi-trend flat">–</span>');
 
-  const totalHandoffsWeek  = clients.reduce((s,c) => s + (c.handoffs_week||0), 0);
-  const totalHandoffsMonth = clients.reduce((s,c) => s + (c.handoffs_month||0), 0);
-  document.getElementById('kpi-handoffs-week').textContent = n(totalHandoffsWeek);
-  document.getElementById('kpi-handoffs-month').textContent = n(totalHandoffsMonth) + ' este mês';
+  // ── KPI: Handoffs
+  const hw  = clients.reduce((s,c)=>s+(c.handoffs_week||0), 0);
+  const hm_ = clients.reduce((s,c)=>s+(c.handoffs_month||0),0);
+  setText('kpi-handoffs', n(hw));
+  setText('kpi-handoffs-month', n(hm_) + ' este mês');
+  const hRef = hm_ / Math.max(dayOfMonth()/7, 1);
+  setHTML('tr-handoffs', trend(hw, hRef));
 
-  const totalFollowups = clients.reduce((s,c) => s + (c.d1_week||0) + (c.d3_week||0), 0);
-  document.getElementById('kpi-followups-week').textContent = n(totalFollowups);
+  // ── KPI: Follow-ups
+  const fw = clients.reduce((s,c)=>s+(c.d1_week||0)+(c.d3_week||0), 0);
+  setText('kpi-followups', n(fw));
+  setHTML('tr-followups', '<span class="kpi-trend flat">–</span>');
 
-  const hm = parseInt(d.human_mode_active) || 0;
-  const hmEl = document.getElementById('kpi-human-mode');
-  hmEl.textContent = n(hm);
-  hmEl.className = 'top-card-value ' + (hm > 0 ? 'amber' : 'green');
+  // ── KPI: Human mode
+  const hum = parseInt(d.human_mode_active)||0;
+  setText('kpi-human', n(hum));
+  const hmCard = document.getElementById('kpi-hm-card');
+  const hmVal  = document.getElementById('kpi-human');
+  if (hum === 0) {
+    hmCard.classList.replace('c-amber','c-green');
+    hmVal.className = 'kpi-val green';
+  } else {
+    hmCard.classList.replace('c-green','c-amber');
+    hmVal.className = 'kpi-val amber';
+  }
 
-  // Luma
-  document.getElementById('luma-week').textContent  = n(d.luma_leads_week);
-  document.getElementById('luma-total').textContent = n(d.luma_leads_total);
+  // ── Luma
+  setText('luma-week',  n(d.luma_leads_week));
+  setText('luma-total', n(d.luma_leads_total));
 
-  // AI Costs
-  document.getElementById('ai-today-brl').textContent  = brl(d.ai_today_brl);
-  document.getElementById('ai-today-usd').textContent  = usd(d.ai_today_usd);
-  document.getElementById('ai-week-brl').textContent   = brl(d.ai_week_brl);
-  document.getElementById('ai-week-usd').textContent   = usd(d.ai_week_usd);
-  document.getElementById('ai-month-brl').textContent  = brl(d.ai_month_brl);
-  document.getElementById('ai-month-usd').textContent  = usd(d.ai_month_usd);
-  document.getElementById('brl-rate').textContent = d.brl_rate ? 'R$ ' + parseFloat(d.brl_rate).toFixed(2) : '–';
+  // ── AI Costs
+  setText('ai-today-brl', brl(d.ai_today_brl));
+  setText('ai-today-usd', usd(d.ai_today_usd));
+  setText('ai-week-brl',  brl(d.ai_week_brl));
+  setText('ai-week-usd',  usd(d.ai_week_usd));
+  setText('ai-month-brl', brl(d.ai_month_brl));
+  setText('ai-month-usd', usd(d.ai_month_usd));
+  setText('brl-rate', d.brl_rate ? 'R$ '+parseFloat(d.brl_rate).toFixed(2) : '–');
 
-  // Clients table
-  const tbody = document.getElementById('clients-tbody');
+  // Budget bar
+  const mo = parseFloat(d.ai_month_brl)||0;
+  const pct = Math.min((mo/AI_BUDGET)*100, 100);
+  const bar = document.getElementById('ai-bar');
+  if (bar) {
+    setTimeout(()=>{ bar.style.width = pct.toFixed(1)+'%'; }, 60);
+    bar.className = 'ai-bar-fill ' + (pct>=80?'danger':pct>=55?'warn':'safe');
+  }
+  setText('ai-budget-txt', brl(mo)+' / R$ 200');
+
+  // ── Clients table
+  setText('cli-count', clients.length);
+  const tbody = document.getElementById('cli-tbody');
+  if (!tbody) return;
   if (clients.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nenhum cliente cadastrado ainda</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-td">Nenhum cliente cadastrado ainda</td></tr>';
   } else {
     tbody.innerHTML = clients.map(c => {
-      const npsVal = c.nps_avg !== null && c.nps_avg !== undefined ? parseFloat(c.nps_avg).toFixed(1) : null;
-      const npsDisplay = npsVal ? `${npsVal} <span style="font-size:10px;color:var(--muted)">(${c.nps_responses})</span>` : '<span class="zero">–</span>';
-      const cls = npsClass(npsVal ? parseFloat(npsVal) : null);
+      const nv = (c.nps_avg!==null && c.nps_avg!==undefined) ? parseFloat(c.nps_avg) : null;
+      const npsHTML = nv!==null
+        ? `<span class="nps-v ${npsClass(nv)}">${nv.toFixed(1)}</span><span class="nps-r">${c.nps_responses} resp.</span>`
+        : '<span class="nps-none" style="color:var(--muted)">–</span>';
+      const d1w=c.d1_week||0, d3w=c.d3_week||0, d1t=c.d1_total||0, d3t=c.d3_total||0;
       return `<tr>
-        <td><div class="client-name">${c.client_name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${c.instance}</div></td>
-        <td><span class="plan-badge ${planClass(c.plan)}">${c.plan || '–'}</span></td>
-        <td><div class="stat-pair"><span class="stat-main">${c.handoffs_week||0}</span><span class="stat-sub">${c.total_handoffs||0} total</span></div></td>
-        <td><div class="stat-pair"><span class="stat-main">${c.d1_week||0} / ${c.d3_week||0}</span><span class="stat-sub">${c.d1_total||0} / ${c.d3_total||0} total</span></div></td>
-        <td><span class="${(c.bookings_week||0) > 0 ? 'stat-main' : 'zero'}">${c.bookings_week||0}</span></td>
-        <td><span class="nps-val ${cls}">${npsDisplay}</span></td>
+        <td>
+          <div class="cli-name">${c.client_name}</div>
+          <div class="cli-inst">${c.instance}</div>
+        </td>
+        <td><span class="plan-badge ${planClass(c.plan)}">${c.plan||'–'}</span></td>
+        <td><div class="stat-blk"><span class="s-main">${c.handoffs_week||0}</span><div class="s-sub">${c.total_handoffs||0} total</div></div></td>
+        <td><div class="stat-blk"><span class="s-main">${d1w} / ${d3w}</span><div class="s-sub">${d1t} / ${d3t} total</div></div></td>
+        <td><span class="${(c.bookings_week||0)>0?'s-main':'zero'}">${c.bookings_week||0}</span></td>
+        <td>${npsHTML}</td>
       </tr>`;
     }).join('');
   }
 
-  // Updated
-  const ts = new Date(d.generated_at);
-  document.getElementById('updated-pill').textContent =
-    'Atualizado ' + ts.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  // ── Insights
+  const chips = [];
+  if (hum === 0)
+    chips.push({t:'c-green', msg:'Nenhuma conversa em modo humano — bot operando para todos os clientes.'});
+  else
+    chips.push({t:'c-amber', msg:`${n(hum)} conversa${hum>1?'s':''} pausada${hum>1?'s':''} com o time. Verifique se há resposta pendente.`});
 
-  // Show dashboard
+  if (mo > 0 && clients.length > 0) {
+    const proj = (mo / Math.max(dayOfMonth(),1)) * daysInMonth();
+    chips.push({t:'c-blue', msg:`Projeção de custo IA este mês: ${brl(proj)} · ${brl(mo/clients.length)}/cliente até agora.`});
+  }
+  if (hw > 0)
+    chips.push({t:'c-green', msg:`${n(hw)} handoff${hw>1?'s':''} esta semana — o bot está qualificando e encaminhando conversas.`});
+  const lt = parseInt(d.luma_leads_total)||0;
+  if (lt > 0)
+    chips.push({t:'c-blue', msg:`Luma acumulou ${n(lt)} lead${lt>1?'s':''} no total desde o lançamento.`});
+  if (clients.length === 0)
+    chips.push({t:'c-blue', msg:'Nenhum cliente real cadastrado ainda — pronto para o primeiro onboarding.'});
+
+  setHTML('insights', chips.map(c=>`<div class="chip ${c.t}"><div class="chip-dot"></div>${c.msg}</div>`).join(''));
+
+  // ── Timestamp
+  const ts = new Date(d.generated_at);
+  const tf = ts.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const df = ts.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+  setText('updated-text', 'Atualizado às ' + tf);
+  setText('footer-ts', df + ' · ' + tf);
+
+  // ── Show
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('login-screen').style.display   = 'none';
   document.getElementById('dashboard').style.display      = 'block';
