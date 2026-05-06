@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Interno — TYVE</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0A0E17;
+      --surface:  #111827;
+      --surface2: #1E2837;
+      --border:   rgba(255,255,255,0.08);
+      --green:    #22C55E;
+      --blue:     #38BDF8;
+      --amber:    #F59E0B;
+      --red:      #EF4444;
+      --text:     #F8FAFC;
+      --muted:    #94A3B8;
+      --radius:   14px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid var(--border); background: rgba(10,14,23,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-brand svg { width: 28px; height: 28px; }
+    .nav-brand span { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; background: linear-gradient(135deg,#22C55E,#38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); letter-spacing: 0.5px; text-transform: uppercase; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .updated-pill { font-size: 11px; color: var(--muted); }
+    .refresh-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; transition: all .2s; font-family: inherit; }
+    .refresh-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 36px 24px 80px; }
+
+    /* PASSWORD SCREEN */
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 380px; text-align: center; }
+    .login-icon { font-size: 40px; margin-bottom: 16px; }
+    .login-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .login-card p { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+    .login-input { width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s; margin-bottom: 12px; }
+    .login-input:focus { border-color: rgba(56,189,248,0.4); }
+    .login-btn { width: 100%; padding: 12px; background: linear-gradient(135deg,#22C55E,#38BDF8); color: #000; font-weight: 700; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; transition: opacity .2s; }
+    .login-btn:hover { opacity: 0.9; }
+    .login-error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+
+    /* LOADING */
+    .loading-wrap { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--green); animation: spin .8s linear infinite; }
+
+    /* DASHBOARD */
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 14px; }
+
+    .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 28px; }
+    .top-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
+    .top-card-icon { font-size: 18px; margin-bottom: 8px; }
+    .top-card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px; }
+    .top-card-value { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+    .top-card-value.green { color: var(--green); }
+    .top-card-value.blue  { color: var(--blue); }
+    .top-card-value.amber { color: var(--amber); }
+    .top-card-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; margin-bottom: 28px; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+    .ai-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .ai-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .ai-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .ai-row:last-child { border-bottom: none; }
+    .ai-row-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .ai-row-values { text-align: right; }
+    .ai-row-brl { font-size: 16px; font-weight: 700; }
+    .ai-row-usd { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    /* CLIENT TABLE */
+    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .table-card h3 { font-size: 14px; font-weight: 700; padding: 20px 24px 0; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); padding: 8px 16px; text-align: left; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    tbody td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
+    .client-name { font-weight: 700; font-size: 14px; }
+    .plan-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: capitalize; }
+    .plan-escala { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+    .plan-cresce { background: rgba(56,189,248,0.15); color: var(--blue); border: 1px solid rgba(56,189,248,0.25); }
+    .plan-atende { background: rgba(148,163,184,0.12); color: var(--muted); border: 1px solid var(--border); }
+    .plan-converte { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+    .stat-pair { display: flex; flex-direction: column; gap: 1px; }
+    .stat-main { font-weight: 700; }
+    .stat-sub  { font-size: 11px; color: var(--muted); }
+    .nps-val { font-weight: 700; }
+    .nps-val.good { color: var(--green); }
+    .nps-val.ok   { color: var(--blue); }
+    .nps-val.bad  { color: var(--amber); }
+    .nps-val.none { color: var(--muted); }
+    .zero { color: var(--muted); }
+
+    /* LUMA */
+    .luma-card { background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(34,197,94,0.06)); border: 1px solid rgba(56,189,248,0.15); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .luma-left h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .luma-left p  { font-size: 12px; color: var(--muted); }
+    .luma-stats { display: flex; gap: 32px; }
+    .luma-stat-val   { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--blue); }
+    .luma-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    footer { text-align: center; padding: 28px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-brand" href="https://tyve.com.br" target="_blank">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g1" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient></defs>
+        <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+        <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#g1)"/>
+        <line x1="42" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+        <line x1="158" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+        <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+      </svg>
+      <span>TYVE</span>
+    </a>
+    <span class="nav-tag">Interno</span>
+  </div>
+  <div class="nav-right" id="nav-actions" style="display:none">
+    <span class="updated-pill" id="updated-pill"></span>
+    <button class="refresh-btn" onclick="loadData()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
+      Atualizar
+    </button>
+  </div>
+</nav>
+
+<!-- PASSWORD -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-icon">🔐</div>
+      <h2>Painel Interno TYVE</h2>
+      <p>Acesso restrito à equipe fundadora</p>
+      <input class="login-input" type="password" id="pwd-input" placeholder="Senha" onkeydown="if(event.key==='Enter')doLogin()" />
+      <button class="login-btn" onclick="doLogin()">Entrar</button>
+      <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading-screen" style="display:none">
+  <div class="loading-wrap">
+    <div class="spinner"></div>
+    <p style="color:var(--muted);font-size:13px">Carregando dados…</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+<main>
+
+  <!-- TOP KPIs -->
+  <div class="section-title">Visão geral</div>
+  <div class="top-grid" id="top-grid">
+    <div class="top-card">
+      <div class="top-card-icon">👥</div>
+      <div class="top-card-label">Clientes ativos</div>
+      <div class="top-card-value green" id="kpi-clients">–</div>
+      <div class="top-card-sub" id="kpi-plans">–</div>
+    </div>
+    <div class="top-card">
+      <div class="top-card-icon">🤝</div>
+      <div class="top-card-label">Handoffs esta semana</div>
+      <div class="top-card-value blue" id="kpi-handoffs-week">–</div>
+      <div class="top-card-sub" id="kpi-handoffs-month">– este mês</div>
+    </div>
+    <div class="top-card">
+      <div class="top-card-icon">📲</div>
+      <div class="top-card-label">Follow-ups esta semana</div>
+      <div class="top-card-value" id="kpi-followups-week">–</div>
+      <div class="top-card-sub">D+1 + D+3</div>
+    </div>
+    <div class="top-card">
+      <div class="top-card-icon">🤖</div>
+      <div class="top-card-label">Modo humano ativo</div>
+      <div class="top-card-value amber" id="kpi-human-mode">–</div>
+      <div class="top-card-sub">conversas pausadas agora</div>
+    </div>
+  </div>
+
+  <!-- LUMA LEADS -->
+  <div class="luma-card" id="luma-card">
+    <div class="luma-left">
+      <h3>✨ Luma — Sales Bot</h3>
+      <p>Leads gerados pela Luma via WhatsApp</p>
+    </div>
+    <div class="luma-stats">
+      <div>
+        <div class="luma-stat-val" id="luma-week">–</div>
+        <div class="luma-stat-label">esta semana</div>
+      </div>
+      <div>
+        <div class="luma-stat-val" id="luma-total" style="color:var(--muted)">–</div>
+        <div class="luma-stat-label">total</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI COSTS + CLIENTS TABLE -->
+  <div class="two-col">
+    <div class="ai-card">
+      <h3>⚡ Custo de IA</h3>
+      <div class="ai-row">
+        <div class="ai-row-label">Hoje</div>
+        <div class="ai-row-values">
+          <div class="ai-row-brl" id="ai-today-brl">–</div>
+          <div class="ai-row-usd" id="ai-today-usd">–</div>
+        </div>
+      </div>
+      <div class="ai-row">
+        <div class="ai-row-label">Esta semana</div>
+        <div class="ai-row-values">
+          <div class="ai-row-brl" id="ai-week-brl">–</div>
+          <div class="ai-row-usd" id="ai-week-usd">–</div>
+        </div>
+      </div>
+      <div class="ai-row">
+        <div class="ai-row-label">Este mês</div>
+        <div class="ai-row-values">
+          <div class="ai-row-brl" id="ai-month-brl">–</div>
+          <div class="ai-row-usd" id="ai-month-usd">–</div>
+        </div>
+      </div>
+      <div class="ai-row">
+        <div class="ai-row-label" style="font-size:11px">Câmbio médio</div>
+        <div class="ai-row-values">
+          <div style="font-size:13px;font-weight:600" id="brl-rate">–</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h3>👥 Clientes</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Plano</th>
+            <th>Handoffs<br><span style="font-weight:500;text-transform:none;letter-spacing:0">semana / total</span></th>
+            <th>D+1 / D+3<br><span style="font-weight:500;text-transform:none;letter-spacing:0">semana</span></th>
+            <th>Agend.<br><span style="font-weight:500;text-transform:none;letter-spacing:0">semana</span></th>
+            <th>NPS</th>
+          </tr>
+        </thead>
+        <tbody id="clients-tbody">
+          <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Carregando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<footer>Painel interno TYVE &nbsp;·&nbsp; Acesso restrito</footer>
+
+<script>
+const OPS_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-dashboard';
+let savedToken = '';
+
+function brl(v) { return 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function usd(v) { return 'US$ ' + (v||0).toFixed(3); }
+function n(v)   { return Number(v||0).toLocaleString('pt-BR'); }
+
+async function doLogin() {
+  const pwd = document.getElementById('pwd-input').value.trim();
+  if (!pwd) return;
+  document.getElementById('login-error').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('loading-screen').style.display = 'flex';
+  savedToken = pwd;
+  const ok = await loadData();
+  if (!ok) {
+    savedToken = '';
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'block';
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+
+async function loadData() {
+  if (!savedToken) return false;
+  try {
+    const res = await fetch(OPS_API + '?token=' + encodeURIComponent(savedToken));
+    if (res.status === 401) return false;
+    const d = await res.json();
+    if (!d || d.error) return false;
+    render(d);
+    return true;
+  } catch(e) { return false; }
+}
+
+function planClass(p) {
+  if (!p) return 'plan-atende';
+  const pl = p.toLowerCase();
+  if (pl.includes('escala')) return 'plan-escala';
+  if (pl.includes('cresce')) return 'plan-cresce';
+  if (pl.includes('converte')) return 'plan-converte';
+  return 'plan-atende';
+}
+
+function npsClass(v) {
+  if (v === null || v === undefined) return 'none';
+  if (v >= 8.5) return 'good';
+  if (v >= 7) return 'ok';
+  return 'bad';
+}
+
+function render(d) {
+  // Filter out placeholder clients
+  const clients = (d.clients || []).filter(c => c.instance !== 'INSTANCE_PLACEHOLDER' && c.instance !== 'zappro-test');
+
+  // Top KPIs
+  document.getElementById('kpi-clients').textContent = clients.length;
+  const planSummary = clients.map(c => c.plan).filter(Boolean)
+    .reduce((acc, p) => { acc[p] = (acc[p]||0)+1; return acc; }, {});
+  document.getElementById('kpi-plans').textContent = Object.entries(planSummary).map(([p,c]) => `${c}x ${p}`).join(' · ') || '–';
+
+  const totalHandoffsWeek  = clients.reduce((s,c) => s + (c.handoffs_week||0), 0);
+  const totalHandoffsMonth = clients.reduce((s,c) => s + (c.handoffs_month||0), 0);
+  document.getElementById('kpi-handoffs-week').textContent = n(totalHandoffsWeek);
+  document.getElementById('kpi-handoffs-month').textContent = n(totalHandoffsMonth) + ' este mês';
+
+  const totalFollowups = clients.reduce((s,c) => s + (c.d1_week||0) + (c.d3_week||0), 0);
+  document.getElementById('kpi-followups-week').textContent = n(totalFollowups);
+
+  const hm = parseInt(d.human_mode_active) || 0;
+  const hmEl = document.getElementById('kpi-human-mode');
+  hmEl.textContent = n(hm);
+  hmEl.className = 'top-card-value ' + (hm > 0 ? 'amber' : 'green');
+
+  // Luma
+  document.getElementById('luma-week').textContent  = n(d.luma_leads_week);
+  document.getElementById('luma-total').textContent = n(d.luma_leads_total);
+
+  // AI Costs
+  document.getElementById('ai-today-brl').textContent  = brl(d.ai_today_brl);
+  document.getElementById('ai-today-usd').textContent  = usd(d.ai_today_usd);
+  document.getElementById('ai-week-brl').textContent   = brl(d.ai_week_brl);
+  document.getElementById('ai-week-usd').textContent   = usd(d.ai_week_usd);
+  document.getElementById('ai-month-brl').textContent  = brl(d.ai_month_brl);
+  document.getElementById('ai-month-usd').textContent  = usd(d.ai_month_usd);
+  document.getElementById('brl-rate').textContent = d.brl_rate ? 'R$ ' + parseFloat(d.brl_rate).toFixed(2) : '–';
+
+  // Clients table
+  const tbody = document.getElementById('clients-tbody');
+  if (clients.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nenhum cliente cadastrado ainda</td></tr>';
+  } else {
+    tbody.innerHTML = clients.map(c => {
+      const npsVal = c.nps_avg !== null && c.nps_avg !== undefined ? parseFloat(c.nps_avg).toFixed(1) : null;
+      const npsDisplay = npsVal ? `${npsVal} <span style="font-size:10px;color:var(--muted)">(${c.nps_responses})</span>` : '<span class="zero">–</span>';
+      const cls = npsClass(npsVal ? parseFloat(npsVal) : null);
+      return `<tr>
+        <td><div class="client-name">${c.client_name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${c.instance}</div></td>
+        <td><span class="plan-badge ${planClass(c.plan)}">${c.plan || '–'}</span></td>
+        <td><div class="stat-pair"><span class="stat-main">${c.handoffs_week||0}</span><span class="stat-sub">${c.total_handoffs||0} total</span></div></td>
+        <td><div class="stat-pair"><span class="stat-main">${c.d1_week||0} / ${c.d3_week||0}</span><span class="stat-sub">${c.d1_total||0} / ${c.d3_total||0} total</span></div></td>
+        <td><span class="${(c.bookings_week||0) > 0 ? 'stat-main' : 'zero'}">${c.bookings_week||0}</span></td>
+        <td><span class="nps-val ${cls}">${npsDisplay}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Updated
+  const ts = new Date(d.generated_at);
+  document.getElementById('updated-pill').textContent =
+    'Atualizado ' + ts.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+
+  // Show dashboard
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display   = 'none';
+  document.getElementById('dashboard').style.display      = 'block';
+  document.getElementById('nav-actions').style.display    = 'flex';
+}
+</script>
+</body>
+</html>
