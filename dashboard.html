@@ -95,6 +95,18 @@
     .state-screen h2 { font-size: 22px; font-weight: 700; }
     .state-screen p  { color: var(--muted); max-width: 360px; line-height: 1.6; font-size: 15px; }
 
+    .bot-control-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .bot-status-info { display: flex; align-items: center; gap: 12px; }
+    .bot-status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .bot-status-dot.active { background: var(--green); box-shadow: 0 0 8px rgba(34,197,94,0.5); }
+    .bot-status-dot.human  { background: #F59E0B; box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+    .bot-status-label { font-size: 14px; font-weight: 600; }
+    .bot-status-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .unlock-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #F59E0B; font-size: 13px; font-weight: 700; border-radius: 8px; cursor: pointer; font-family: inherit; transition: all .2s; }
+    .unlock-btn:hover { background: rgba(245,158,11,0.22); border-color: rgba(245,158,11,0.5); }
+    .unlock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .unlock-btn.success { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.3); color: var(--green); }
+
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--green); animation: spin .8s linear infinite; }
 
@@ -165,6 +177,19 @@
       <h1 id="business-name">–</h1>
       <p>Painel de resultados — últimos 30 dias</p>
       <div class="updated-at" id="updated-at"></div>
+    </div>
+
+    <div class="bot-control-card" id="bot-control">
+      <div class="bot-status-info">
+        <div class="bot-status-dot active" id="bot-dot"></div>
+        <div>
+          <div class="bot-status-label" id="bot-status-label">Bot ativo</div>
+          <div class="bot-status-sub" id="bot-status-sub">Respondendo automaticamente</div>
+        </div>
+      </div>
+      <button class="unlock-btn" id="unlock-btn" onclick="unlockBot()" style="display:none">
+        🤖 Liberar bot
+      </button>
     </div>
 
     <div class="plan-card">
@@ -273,6 +298,7 @@
 
 <script>
 const API = 'https://n8n.tyve.com.br/webhook/8b29ec75-5c8b-4ec5-9c47-4cd293c03e7f';
+const UNLOCK_API = 'https://n8n.tyve.com.br/webhook/tyve-unlock-bot';
 const REFRESH = 5 * 60 * 1000;
 let chart = null;
 
@@ -291,6 +317,58 @@ async function loadData() {
     if (!data || data.error || data.contacts_this_month === undefined) { showError(); return; }
     render(data);
   } catch(e) { showError(); }
+}
+
+function updateBotStatus(d) {
+  const inHumanMode = d.human_mode_active === true || d.human_mode_active === 1;
+  const dot   = document.getElementById('bot-dot');
+  const label = document.getElementById('bot-status-label');
+  const sub   = document.getElementById('bot-status-sub');
+  const btn   = document.getElementById('unlock-btn');
+
+  if (inHumanMode) {
+    dot.className = 'bot-status-dot human';
+    label.textContent = 'Atendimento humano ativo';
+    sub.textContent = 'Bot pausado — sua equipe está no controle';
+    btn.style.display = 'inline-flex';
+    btn.disabled = false;
+    btn.className = 'unlock-btn';
+    btn.innerHTML = '🤖 Liberar bot';
+  } else {
+    dot.className = 'bot-status-dot active';
+    label.textContent = 'Bot ativo';
+    sub.textContent = 'Respondendo automaticamente';
+    btn.style.display = 'none';
+  }
+}
+
+async function unlockBot() {
+  const btn = document.getElementById('unlock-btn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Liberando…';
+  try {
+    const res = await fetch(UNLOCK_API, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({token: token()})
+    });
+    const data = await res.json();
+    if (data.success) {
+      btn.className = 'unlock-btn success';
+      btn.innerHTML = '✅ Bot liberado';
+      document.getElementById('bot-dot').className = 'bot-status-dot active';
+      document.getElementById('bot-status-label').textContent = 'Bot ativo';
+      document.getElementById('bot-status-sub').textContent = 'Respondendo automaticamente';
+      setTimeout(() => { btn.style.display = 'none'; }, 2000);
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '🤖 Liberar bot';
+      alert('Erro ao liberar bot. Tente novamente.');
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '🤖 Liberar bot';
+  }
 }
 
 function render(d) {
@@ -316,6 +394,7 @@ function render(d) {
 
   buildChart(trend);
   renderNPS(d);
+  updateBotStatus(d);
 
   document.getElementById('loading').style.display     = 'none';
   document.getElementById('error-screen').style.display= 'none';
