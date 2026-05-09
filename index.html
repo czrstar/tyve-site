@@ -25,17 +25,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:      #22C55E;
-      --green-dark: #16A34A;
+      --green:      #f84100;
+      --green-dark: #d63600;
       --green-deep: #075E54;
       --green-light:#DCF8C6;
       --green-pale: #E8FFF3;
-      --blue-primary: #0369A1;
+      --blue-primary: #00e8df;
       --blue-hover: #02537d;
-      --blue-deep:  #0C4A6E;
-      --blue-dark:  #0369A1;
-      --blue-pale:  #E0F2FE;
-      --blue-light: #BAE6FD;
+      --blue-deep:  #006b68;
+      --blue-dark:  #00e8df;
+      --blue-pale:  #e0fffe;
+      --blue-light: #b3fffe;
 
       --white:      #FFFFFF;
       --grey-50:    #F8FAF9;
@@ -63,8 +63,8 @@
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     .badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(3,105,161,.15); color: var(--blue-light);
-      border: 1px solid rgba(3,105,161,.25);
+      background: rgba(0,232,223,.15); color: var(--blue-light);
+      border: 1px solid rgba(0,232,223,.25);
       font-size: 13px; font-weight: 600; letter-spacing: .4px;
       padding: 4px 12px; border-radius: 999px;
     }
@@ -75,18 +75,18 @@
       padding: 14px 28px; text-decoration: none; transition: all .2s;
     }
     .btn-green {
-      background: #0369A1; color: #ffffff;
+      background: #00e8df; color: #ffffff;
     }
-    .btn-green:hover { background: #0C4A6E; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(3,105,161,.45); }
+    .btn-green:hover { background: #006b68; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,232,223,.45); }
     .btn-outline {
       background: transparent; color: rgba(255,255,255,.8);
       border: 2px solid rgba(255,255,255,.2);
     }
-    .btn-outline:hover { border-color: var(--blue-primary); color: var(--white); background: rgba(3,105,161,.1); }
+    .btn-outline:hover { border-color: var(--blue-primary); color: var(--white); background: rgba(0,232,223,.1); }
     .btn-blue {
       background: var(--blue-dark); color: var(--white);
     }
-    .btn-blue:hover { background: var(--blue-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,233,.35); }
+    .btn-blue:hover { background: var(--blue-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,232,223,.35); }
 
     /* ── NAV ── */
     nav {
@@ -111,7 +111,7 @@
       font-weight: 800;
       font-size: 28px;
       letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -159,14 +159,14 @@
       content: '';
       position: absolute; top: -200px; right: -100px;
       width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(3,105,161,.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0,232,223,.12) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero::after {
       content: '';
       position: absolute; bottom: -100px; left: -100px;
       width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(14,165,233,.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0,232,223,.06) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-grid {
@@ -182,7 +182,7 @@
       margin-bottom: 24px;
     }
     .hero h1 .highlight {
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -194,7 +194,7 @@
     .hero-tagline {
       font-size: clamp(15px, 2vw, 19px);
       font-weight: 800;
-      background: linear-gradient(90deg, #0369A1 0%, #22C55E 40%);
+      background: linear-gradient(90deg, #00e8df 0%, #f84100 40%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-top: -14px; margin-bottom: 20px;
@@ -211,7 +211,7 @@
       border: 2px solid rgba(255,255,255,.15);
       display: flex; align-items: center; justify-content: center;
       font-size: 16px;
-      margin-left: -8px; background: rgba(3,105,161,.15);
+      margin-left: -8px; background: rgba(0,232,223,.15);
       box-shadow: 0 2px 8px rgba(0,0,0,.3);
     }
     .proof-avatars span:first-child { margin-left: 0; }
@@ -401,7 +401,7 @@
 
     /* ── QUOTE ── */
     .quote-section {
-      background: linear-gradient(135deg, #064E3B, var(--blue-deep));
+      background: linear-gradient(135deg, #1a0800, var(--blue-deep));
       padding: 80px 0;
     }
     .quote-inner { max-width: 720px; margin: 0 auto; text-align: center; }
@@ -411,7 +411,7 @@
       font-weight: 700; color: var(--white);
       line-height: 1.3; margin: -16px 0 24px; letter-spacing: -.3px;
     }
-    .quote-text em { color: #7DD3FC; font-style: normal; }
+    .quote-text em { color: #00e8df; font-style: normal; }
     .quote-attr { font-size: 14px; color: rgba(255,255,255,.6); }
 
     /* ── FOR WHO ── */
@@ -441,12 +441,12 @@
       padding: 6px 14px; border-radius: 999px;
     }
     .brasil-badge {
-      background: linear-gradient(135deg, #EFF6FF, #E0F2FE);
-      border: 1px solid #7DD3FC;
+      background: linear-gradient(135deg, #fff3ee, #e0fffe);
+      border: 1px solid #00e8df;
       color: var(--blue-deep);
     }
     .cloud-badge {
-      background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+      background: linear-gradient(135deg, #F0FDF4, #ffd4c2);
       border: 1px solid #86EFAC;
       color: #14532D;
     }
@@ -466,8 +466,8 @@
     .plan:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
     .plan.featured {
       border-color: var(--blue-primary);
-      background: linear-gradient(180deg, #EFF6FF 0%, var(--white) 100%);
-      box-shadow: 0 8px 32px rgba(3,105,161,.12);
+      background: linear-gradient(180deg, #fff3ee 0%, var(--white) 100%);
+      box-shadow: 0 8px 32px rgba(0,232,223,.12);
     }
     .plan-badge-top {
       position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
@@ -490,7 +490,7 @@
     .plan-features li::before {
       content: '\2713'; flex-shrink: 0;
       width: 20px; height: 20px; border-radius: 50%;
-      background: #DCFCE7; color: #16A34A;
+      background: #ffd4c2; color: #d63600;
       font-size: 11px; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
     }
@@ -499,7 +499,7 @@
     /* ── ADD-ON ── */
     .addon-box {
       margin-top: 40px;
-      background: linear-gradient(135deg, #EFF6FF 0%, #E0F2FE 100%);
+      background: linear-gradient(135deg, #fff3ee 0%, #e0fffe 100%);
       border: 2px solid var(--blue-primary);
       border-radius: 16px;
       padding: 32px 36px;
@@ -655,7 +655,7 @@
     .vs-table td:first-child { font-weight: 500; color: var(--grey-700); }
     .vs-table td:not(:first-child) { text-align: center; }
     .vs-table tr:hover td { background: var(--grey-50); }
-    .check { color: #16A34A; font-size: 18px; }
+    .check { color: #d63600; font-size: 18px; }
     .cross { color: #DC2626; font-size: 18px; }
     .partial { color: var(--grey-500); font-size: 13px; }
 
@@ -716,7 +716,7 @@
     .roi-slider {
       flex: 1; -webkit-appearance: none; appearance: none;
       height: 8px; border-radius: 4px;
-      background: linear-gradient(90deg, #22C55E, var(--blue-primary));
+      background: linear-gradient(90deg, #f84100, var(--blue-primary));
       outline: none;
     }
     .roi-slider::-webkit-slider-thumb {
@@ -760,7 +760,7 @@
     .roi-bonus {
       font-size: 14px; color: var(--grey-700, #334155); line-height: 1.6;
       text-align: center; font-weight: 500; margin-bottom: 20px;
-      padding: 16px 24px; background: rgba(3,105,161,.06); border-radius: 10px;
+      padding: 16px 24px; background: rgba(0,232,223,.06); border-radius: 10px;
     }
     .roi-footnote {
       font-size: 11px; color: var(--grey-500); line-height: 1.5;
@@ -785,7 +785,7 @@
     /* ── FINAL CTA ── */
     .final-cta {
       padding: 96px 0;
-      background: linear-gradient(135deg, #064E3B 0%, var(--blue-deep) 50%, var(--blue-dark) 100%);
+      background: linear-gradient(135deg, #1a0800 0%, var(--blue-deep) 50%, var(--blue-dark) 100%);
       text-align: center; position: relative; overflow: hidden;
     }
     .final-cta::before {
@@ -804,10 +804,10 @@
     .final-ctas { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
     .btn-green-lg {
       font-size: 18px !important; padding: 18px 36px !important;
-      box-shadow: 0 6px 24px rgba(3,105,161,.4);
+      box-shadow: 0 6px 24px rgba(0,232,223,.4);
       background: var(--white) !important; color: var(--blue-deep) !important;
     }
-    .btn-green-lg:hover { background: #EFF6FF !important; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,255,255,.3); }
+    .btn-green-lg:hover { background: #fff3ee !important; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,255,255,.3); }
 
     /* ── FOOTER ── */
     footer {
@@ -859,8 +859,8 @@
     }
 
     /* ── OVERRIDES ── */
-    .how { background: linear-gradient(180deg, #DBEAFE 0%, #EFF6FF 100%); }
-    .final-cta { background: linear-gradient(135deg, #064E3B 0%, #065F46 40%, var(--blue-deep) 80%, var(--blue-dark) 100%); }
+    .how { background: linear-gradient(180deg, #DBEAFE 0%, #fff3ee 100%); }
+    .final-cta { background: linear-gradient(135deg, #1a0800 0%, #1a1000 40%, var(--blue-deep) 80%, var(--blue-dark) 100%); }
   
     /* Lang toggle */
     .lang-switch {
@@ -893,6 +893,213 @@
     @media(max-width:480px){ .lang-switch button { font-size:12px; padding:5px 11px; } }
 
   </style>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* === BRAND OVERRIDE === */
+    :root {
+      --green:       #f84100 !important;
+      --green-dark:  #d63600 !important;
+      --green-deep:  #8a2200 !important;
+      --green-light: #ffd4c2 !important;
+      --green-pale:  #fff3ee !important;
+      --blue-primary: #00e8df !important;
+      --blue-hover:  #00b8b0 !important;
+      --blue-deep:   #006b68 !important;
+      --blue-dark:   #00e8df !important;
+      --blue-pale:   #e0fffe !important;
+      --blue-light:  #b3fffe !important;
+    }
+
+    /* Wordmark gradient */
+    .nav-wordmark {
+      background: linear-gradient(135deg, #f84100, #00e8df) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      font-family: 'Nunito', 'Poppins', sans-serif !important;
+      font-weight: 900 !important;
+    }
+
+    /* Body font */
+    body { font-family: 'Nunito', 'Poppins', system-ui, sans-serif !important; }
+
+    /* Hero h1 highlight */
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, #f84100, #00e8df) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+
+    /* Hero tagline */
+    .hero-tagline {
+      background: linear-gradient(90deg, #f84100 0%, #00e8df 60%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+
+    /* Hero background orbs — brand gradient */
+    .hero::before {
+      background: radial-gradient(circle, rgba(248,65,0,.18) 0%, transparent 70%) !important;
+    }
+    .hero::after {
+      background: radial-gradient(circle, rgba(0,232,223,.10) 0%, transparent 70%) !important;
+    }
+
+    /* Hero background: add brand gradient overlay */
+    .hero {
+      background: linear-gradient(140deg, #0A0E17 0%, #0F172A 50%, #101f1f 100%) !important;
+    }
+
+    /* Primary button */
+    .btn-green {
+      background: #f84100 !important;
+      color: #ffffff !important;
+    }
+    .btn-green:hover {
+      background: #d63600 !important;
+      box-shadow: 0 6px 20px rgba(248,65,0,.45) !important;
+    }
+
+    /* Blue buttons */
+    .btn-blue {
+      background: #00e8df !important;
+      color: #0F172A !important;
+    }
+    .btn-blue:hover {
+      background: #00b8b0 !important;
+      box-shadow: 0 6px 20px rgba(0,232,223,.35) !important;
+    }
+
+    /* Section labels */
+    .section-label { color: #f84100 !important; }
+
+    /* Steps badge */
+    .step-badge { background: #f84100 !important; }
+
+    /* Quote section */
+    .quote-section {
+      background: linear-gradient(135deg, #1a0800, #006b68) !important;
+    }
+    .quote-text em { color: #00e8df !important; }
+    .quote-mark { color: #f84100 !important; }
+
+    /* Plan featured */
+    .plan.featured {
+      border-color: #f84100 !important;
+      background: linear-gradient(180deg, #fff3ee 0%, #fff 100%) !important;
+      box-shadow: 0 8px 32px rgba(248,65,0,.12) !important;
+    }
+    .plan-badge-top { background: #f84100 !important; }
+
+    /* Plan features checkmarks */
+    .plan-features li::before {
+      background: #fff3ee !important;
+      color: #f84100 !important;
+    }
+
+    /* Addon box */
+    .addon-box {
+      background: linear-gradient(135deg, #fff3ee 0%, #e0fffe 100%) !important;
+      border-color: #f84100 !important;
+    }
+    .addon-amount { color: #f84100 !important; }
+
+    /* ROI slider */
+    .roi-slider {
+      background: linear-gradient(90deg, #f84100, #00e8df) !important;
+    }
+    .roi-slider::-webkit-slider-thumb {
+      border-color: #f84100 !important;
+    }
+    .roi-slider-value { color: #f84100 !important; }
+    .roi-card-highlight { background: #f84100 !important; border-color: #f84100 !important; }
+
+    /* VS table tyve column */
+    .vs-table th.col-tyve { background: #f84100 !important; }
+
+    /* Testimonial card */
+    .testimonial-card {
+      background: #fff3ee !important;
+      border-color: #ffd4c2 !important;
+    }
+
+    /* Author avatar */
+    .author-avatar {
+      background: linear-gradient(135deg, #f84100, #00e8df) !important;
+    }
+
+    /* Segment card hover */
+    .segment-card:hover { border-color: #f84100 !important; }
+    .segment-link { color: #f84100 !important; }
+
+    /* FAQ icon */
+    .faq-icon { color: #f84100 !important; }
+
+    /* Nav CTA */
+    .nav-cta { background: #f84100 !important; color: #fff !important; }
+
+    /* Brasil badge / cloud badge updated palette */
+    .brasil-badge {
+      background: linear-gradient(135deg, #fff3ee, #ffe8dc) !important;
+      border-color: #ffa585 !important;
+      color: #8a2200 !important;
+    }
+    .cloud-badge {
+      background: linear-gradient(135deg, #e0fffe, #b3fffe) !important;
+      border-color: #00e8df !important;
+      color: #006b68 !important;
+    }
+
+    /* Badge top-right */
+    .badge {
+      background: rgba(248,65,0,.15) !important;
+      color: #ffd4c2 !important;
+      border-color: rgba(248,65,0,.25) !important;
+    }
+
+    /* How section bg */
+    .how {
+      background: linear-gradient(180deg, #e0fffe 0%, #ffffff 100%) !important;
+    }
+
+    /* Handoff mockup logo */
+    .mh-logo { background: #f84100 !important; }
+    .mh-cta { background: #f84100 !important; }
+
+    /* WA header */
+    .wa-header { background: #8a2200 !important; }
+    .wa-avatar { background: #d63600 !important; }
+
+    /* Mini chat out bubbles */
+    .mini-msg.out { background: #ffd4c2 !important; }
+    .wa-msg.outgoing { background: #ffd4c2 !important; }
+
+    /* ROI bonus bg */
+    .roi-bonus { background: rgba(248,65,0,.06) !important; }
+
+    /* Dashboard bars */
+    .md-bar { background: #f84100 !important; }
+    .md-metric.green { border-color: #ffd4c2 !important; background: #fff3ee !important; }
+    .md-metric.green .md-num { color: #d63600 !important; }
+
+    /* Problem card hover */
+    .problem-card:hover { border-color: #f84100 !important; }
+
+    /* Flows mockup */
+    .mp-flows-opt.selected { border-color: #f84100 !important; background: #fff3ee !important; color: #8a2200 !important; }
+    .mp-flows-btn { background: #f84100 !important; }
+    .client-bubble { background: #ffd4c2 !important; }
+
+    /* HERO LIGHTNING BADGE */
+    .hero-badge .badge::before { content: '⚡ '; }
+    nav { top: 40px !important; }
+    .hero { padding-top: 160px !important; }
+  </style>
+
 </head>
 <body>
 
@@ -901,13 +1108,10 @@
     <div class="container nav-inner">
       <a href="#hero" class="nav-logo">
         <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-          <defs><linearGradient id="navg" x1="40" y1="0" x2="160" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#0284C7"/></linearGradient><clipPath id="navsq"><rect width="200" height="200" rx="48"/></clipPath></defs>
+          <defs><linearGradient id="navg" x1="100" y1="15" x2="100" y2="185" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f84100"/><stop offset="100%" stop-color="#00e8df"/></linearGradient><clipPath id="navsq"><rect width="200" height="200" rx="44"/></clipPath></defs>
           <g clip-path="url(#navsq)">
-          <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-          <rect x="12" y="12" width="176" height="176" rx="45" fill="url(#navg)"/>
-          <line x1="42" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <line x1="158" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+          <rect width="200" height="200" fill="#0B0F14"/>
+          <polygon points="116,18 66,108 100,108 84,182 150,88 114,88 140,18" fill="url(#navg)"/>
           </g>
         </svg>
         <span class="nav-wordmark">TYVE</span>
@@ -1287,7 +1491,7 @@
     <div class="container">
       <div class="pricing-header">
         <p class="section-label" data-i18n="pricing_label">Planos</p>
-        <h2 class="section-title" style="background:linear-gradient(90deg,#0C4A6E,#22C55E 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="pricing_title">Investimento direto. Resultado real.</h2>
+        <h2 class="section-title" style="background:linear-gradient(90deg,#006b68,#f84100 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="pricing_title">Investimento direto. Resultado real.</h2>
         <p class="section-sub" style="margin: 0 auto;" data-i18n="pricing_sub">Sem taxa de setup. Compromisso mínimo de 3 meses — tempo pra ver resultado de verdade. Depois disso, é mês a mês.</p>
       </div>
       <div class="pricing-grid">
@@ -1325,7 +1529,7 @@
             <li>Suporte prioritário (SLA 4h)</li>
             <li>Check-in proativo D+7 (mensagem)</li>
           </ul>
-          <div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:8px;padding:10px 14px;font-size:13px;color:#0369A1;margin-bottom:16px;line-height:1.5;" data-i18n="cresce_upsell">💡 Quer que o cliente agende <strong>direto no WhatsApp</strong>? Veja o <strong>Add-on Agenda</strong> abaixo — ou considere o <strong>Escala</strong> (já incluso por só R$103 a mais).</div>
+          <div style="background:#fff3ee;border:1px solid #b3fffe;border-radius:8px;padding:10px 14px;font-size:13px;color:#00e8df;margin-bottom:16px;line-height:1.5;" data-i18n="cresce_upsell">💡 Quer que o cliente agende <strong>direto no WhatsApp</strong>? Veja o <strong>Add-on Agenda</strong> abaixo — ou considere o <strong>Escala</strong> (já incluso por só R$103 a mais).</div>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Cresce%20da%20TYVE!" class="btn btn-green plan-cta" target="_blank" rel="noopener noreferrer" data-i18n="cta_cresce">Começar com Cresce</a>
         </div>
         <div class="plan">
@@ -1358,7 +1562,7 @@
         </div>
         <div class="addon-price">
           <span class="addon-amount" data-brl="197">+R$197</span><span class="addon-period" data-i18n-period>/mês</span>
-          <p class="addon-note" data-i18n="addon_note">Para planos Atende e Cresce<br/><span style="color:#0369A1;font-weight:600;">✓ Já incluso no Escala</span></p>
+          <p class="addon-note" data-i18n="addon_note">Para planos Atende e Cresce<br/><span style="color:#00e8df;font-weight:600;">✓ Já incluso no Escala</span></p>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20saber%20mais%20sobre%20o%20add-on%20de%20agendamento%20da%20TYVE!" class="btn btn-green" style="font-size:14px;padding:10px 20px;margin-top:12px;" target="_blank" rel="noopener noreferrer" data-i18n="cta_addon">Adicionar à minha assinatura</a>
         </div>
       </div>
@@ -1543,7 +1747,7 @@
             <span data-i18n="final_cta_btn">Agendar demo grátis</span>
           </a>
         </div>
-        <p style="font-size:15px;margin-top:20px;font-weight:700;background:linear-gradient(90deg,#22C55E,#0369A1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="final_tagline">Zapt vupt. Sem enrolação.</p>
+        <p style="font-size:15px;margin-top:20px;font-weight:700;background:linear-gradient(90deg,#f84100,#00e8df);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="final_tagline">Zapt vupt. Sem enrolação.</p>
       </div>
     </div>
   </section>
@@ -1554,16 +1758,13 @@
       <div class="footer-inner">
         <span class="footer-logo">
           <svg width="22" height="22" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-            <defs><linearGradient id="ftg" x1="40" y1="0" x2="160" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#0284C7"/></linearGradient><clipPath id="ftsq"><rect width="200" height="200" rx="48"/></clipPath></defs>
+            <defs><linearGradient id="ftg" x1="100" y1="15" x2="100" y2="185" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f84100"/><stop offset="100%" stop-color="#00e8df"/></linearGradient><clipPath id="ftsq"><rect width="200" height="200" rx="44"/></clipPath></defs>
             <g clip-path="url(#ftsq)">
-            <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-            <rect x="12" y="12" width="176" height="176" rx="45" fill="url(#ftg)"/>
-            <line x1="42" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-            <line x1="158" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-            <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
+            <rect width="200" height="200" fill="#0B0F14"/>
+            <polygon points="116,18 66,108 100,108 84,182 150,88 114,88 140,18" fill="url(#ftg)"/>
             </g>
           </svg>
-          <span style="white-space:nowrap;font-family:'Inter',sans-serif;font-weight:800;background:linear-gradient(135deg,#22C55E,#0369A1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TYVE</span>
+          <span style="white-space:nowrap;font-family:'Nunito',sans-serif;font-weight:900;background:linear-gradient(135deg,#f84100,#00e8df);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TYVE</span>
           <span style="display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,0.35);letter-spacing:0.5px;margin-top:2px;">Resolve. Zapt vupt.</span>
         </span>
         <span data-i18n="footer_domain">tyve.com.br</span>
@@ -1775,7 +1976,7 @@
         cta_converte_pro: 'Começar com Converte Pro', cta_addon: 'Adicionar à minha assinatura',
         addon_title: 'Add-on: Agendamento automático via WhatsApp',
         addon_desc: 'O cliente escolhe o horário <strong>direto no WhatsApp</strong>, sem abrir nenhum link ou site separado. O bot consulta sua agenda em tempo real, cria o evento automaticamente e ainda manda um <strong>lembrete D-1</strong> pra confirmar. Integração com Google Calendar.',
-        addon_note: 'Para planos Atende e Cresce<br/><span style="color:#0369A1;font-weight:600;">✓ Já incluso no Escala</span>',
+        addon_note: 'Para planos Atende e Cresce<br/><span style="color:#00e8df;font-weight:600;">✓ Já incluso no Escala</span>',
         atende_features: `<li>1 número WhatsApp</li>
             <li>Fluxo de atendimento configurado pro seu negócio</li>
             <li>Respostas automáticas 24h/7d</li>
@@ -2025,7 +2226,7 @@
         cta_converte_pro: 'Get started with Converte Pro', cta_addon: 'Add to my subscription',
         addon_title: 'Add-on: Automatic WhatsApp Scheduling',
         addon_desc: 'The client picks a time <strong>directly on WhatsApp</strong>, without opening any link or external site. The bot checks your calendar in real time, creates the event automatically, and sends a <strong>day-before reminder</strong> to confirm. Google Calendar integration.',
-        addon_note: 'For Atende and Cresce plans<br/><span style="color:#0369A1;font-weight:600;">✓ Already included in Escala</span>',
+        addon_note: 'For Atende and Cresce plans<br/><span style="color:#00e8df;font-weight:600;">✓ Already included in Escala</span>',
         atende_features: `<li>1 WhatsApp number</li>
             <li>Reception flow customized for your business</li>
             <li>Automatic replies 24/7</li>
