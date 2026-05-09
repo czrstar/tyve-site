@@ -18,12 +18,12 @@
       --white:        #ffffff;
       --black:        #000000;
       --black-950:    #0A0E17;
-      --blue-primary: #0369A1;
-      --blue-dark:    #0C4A6E;
-      --blue-light:   #0284C7;
-      --blue-pale:    #E0F2FE;
-      --green:        #22C55E;
-      --green-dark:   #16A34A;
+      --blue-primary: #00e8df;
+      --blue-dark:    #004a47;
+      --blue-light:   #00e8df;
+      --blue-pale:    #e0fffe;
+      --green:        #f84100;
+      --green-dark:   #d13600;
       --grey-400:     #9CA3AF;
       --grey-500:     #475569;
       --grey-600:     #374151;
@@ -852,7 +852,7 @@
       z-index: 999;
       width: 56px;
       height: 56px;
-      background: linear-gradient(135deg, var(--green) 0%, #16A34A 100%);
+      background: linear-gradient(135deg, var(--green) 0%, #d13600 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -912,16 +912,14 @@
 <nav>
   <div>
     <a href="#hero" class="nav-logo">
-      <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-        <defs><linearGradient id="navg" x1="40" y1="0" x2="160" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#0284C7"/></linearGradient><clipPath id="navsq"><rect width="200" height="200" rx="48"/></clipPath></defs>
-        <g clip-path="url(#navsq)">
-        <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-        <rect x="12" y="12" width="176" height="176" rx="45" fill="url(#navg)"/>
-        <line x1="42" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        <line x1="158" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        </g>
-      </svg>
+      <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+          <rect x="14" y="14" width="172" height="172" rx="40" fill="url(#gNM_odontolo)"/>
+          <polygon points="116,18 66,108 100,108 84,182 150,88 114,88 140,18" fill="#0B0F14"/>
+          <defs><linearGradient id="gNM_odontolo" x1="40" y1="20" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f84100"/><stop offset="1" stop-color="#00e8df"/>
+          </linearGradient></defs>
+        </svg>
       <span class="nav-wordmark">TYVE</span>
     </a>
     <div class="nav-right">

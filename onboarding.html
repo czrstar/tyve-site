@@ -13,14 +13,14 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:        #22C55E;
-      --green-dark:   #16A34A;
-      --blue-primary: #0369A1;
-      --blue-hover:   #0EA5E9;
-      --blue-deep:    #0C4A6E;
-      --blue-dark:    #0369A1;
-      --blue-pale:    #E0F2FE;
-      --blue-light:   #BAE6FD;
+      --green:        #f84100;
+      --green-dark:   #d13600;
+      --blue-primary: #00e8df;
+      --blue-hover:   #00c4bc;
+      --blue-deep:    #004a47;
+      --blue-dark:    #00e8df;
+      --blue-pale:    #e0fffe;
+      --blue-light:   #b3faf7;
       --white:        #FFFFFF;
       --grey-50:      #F8FAFC;
       --grey-100:     #F1F5F9;
@@ -66,7 +66,7 @@
       white-space: nowrap;
       font-family: 'Inter', sans-serif;
       font-weight: 800; font-size: 28px; letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -96,7 +96,7 @@
       color: var(--white); line-height: 1.2; margin-bottom: 16px;
     }
     .hero h1 span {
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -326,16 +326,14 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="/">
-      <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-        <defs><linearGradient id="navg" x1="40" y1="0" x2="160" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#0284C7"/></linearGradient><clipPath id="navsq"><rect width="200" height="200" rx="48"/></clipPath></defs>
-        <g clip-path="url(#navsq)">
-        <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-        <rect x="12" y="12" width="176" height="176" rx="45" fill="url(#navg)"/>
-        <line x1="42" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        <line x1="158" y1="12" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        </g>
-      </svg>
+      <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" rx="48" fill="#0B0F14"/>
+          <rect x="14" y="14" width="172" height="172" rx="40" fill="url(#gNM_onboardi)"/>
+          <polygon points="116,18 66,108 100,108 84,182 150,88 114,88 140,18" fill="#0B0F14"/>
+          <defs><linearGradient id="gNM_onboardi" x1="40" y1="20" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f84100"/><stop offset="1" stop-color="#00e8df"/>
+          </linearGradient></defs>
+        </svg>
       <span class="nav-wordmark">TYVE</span>
     </a>
     <a class="back-link" href="/">← Voltar ao site</a>

@@ -13,14 +13,14 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:        #22C55E;
-      --green-dark:   #16A34A;
-      --blue-primary: #0369A1;
-      --blue-hover:   #0EA5E9;
-      --blue-deep:    #0C4A6E;
-      --blue-dark:    #0369A1;
-      --blue-pale:    #E0F2FE;
-      --blue-light:   #BAE6FD;
+      --green:        #f84100;
+      --green-dark:   #d13600;
+      --blue-primary: #00e8df;
+      --blue-hover:   #00c4bc;
+      --blue-deep:    #004a47;
+      --blue-dark:    #00e8df;
+      --blue-pale:    #e0fffe;
+      --blue-light:   #b3faf7;
       --white:        #FFFFFF;
       --grey-50:      #F8FAFC;
       --grey-100:     #F1F5F9;
@@ -66,7 +66,7 @@
       white-space: nowrap;
       font-family: 'Inter', sans-serif;
       font-weight: 800; font-size: 28px; letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -96,7 +96,7 @@
       color: var(--white); line-height: 1.2; margin-bottom: 16px;
     }
     .hero h1 span {
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -156,7 +156,7 @@
       border: 2px solid var(--grey-200);
     }
     .check-done {
-      background: #DCFCE7; color: #16A34A;
+      background: #DCFCE7; color: #d13600;
       border: 2px solid #BBF7D0;
     }
 
@@ -168,7 +168,7 @@
       font-family: 'Poppins', sans-serif;
       font-size: 16px; font-weight: 700;
       color: var(--white);
-      background: linear-gradient(135deg, #22C55E, #0369A1);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       border: none; border-radius: var(--radius);
       cursor: pointer;
       transition: transform .15s, box-shadow .15s;
@@ -283,12 +283,10 @@
       <a href="/" class="nav-logo" aria-label="TYVE - Voltar ao site">
         <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-          <rect x="14" y="14" width="172" height="172" rx="52" fill="url(#gES)"/>
-          <path d="M42,30 L100,94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <path d="M158,30 L100,94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <path d="M100,94 L100,170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <defs><linearGradient id="gES" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#22C55E"/><stop offset="1" stop-color="#0284C7"/>
+          <rect x="14" y="14" width="172" height="172" rx="40" fill="url(#gNM_embedded)"/>
+          <polygon points="116,18 66,108 100,108 84,182 150,88 114,88 140,18" fill="#0B0F14"/>
+          <defs><linearGradient id="gNM_embedded" x1="40" y1="20" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f84100"/><stop offset="1" stop-color="#00e8df"/>
           </linearGradient></defs>
         </svg>
         <span class="nav-wordmark">TYVE</span>
@@ -383,7 +381,7 @@
 
     <!-- Card 3: Success (hidden initially) -->
     <div class="card" id="card-success" style="display:none;">
-      <h2 style="color:#16A34A;">WhatsApp conectado com sucesso!</h2>
+      <h2 style="color:#d13600;">WhatsApp conectado com sucesso!</h2>
       <p>O n&uacute;mero foi ativado na Cloud API com Coexistence. O celular continua funcionando normalmente.</p>
 
       <div id="result-details" style="background:var(--grey-50); border-radius:var(--radius); padding:20px; font-size:14px; line-height:1.8; color:var(--grey-700);">
@@ -550,9 +548,7 @@
         config_id: CONFIG.configId,
         response_type: "code",
         override_default_response_type: true,
-        extras: {
-          featureType: "whatsapp_business_app_onboarding",
-          sessionInfoVersion: 3
+        extras: {          sessionInfoVersion: 3
         }
       });
     }
