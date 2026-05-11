@@ -890,7 +890,7 @@
         `Horário equipe: ${fields.horario_equipe||'—'}\n` +
         `SLA resposta: ${fields.sla_resposta||'—'}\n` +
         `Qtd alertas: ${fields.qtd_alertas||'—'}`;
-      const res = await fetch('https://filthyant-n8n.cloudfy.live/webhook/62daf83b-0f90-4aff-9844-6a9b7202c5d2', {
+      const res = await fetch('https://n8n.tyve.com.br/webhook/c9d4e7a2-3f1b-4a8c-b5d6-9e0f2a1b3c4d', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg })
