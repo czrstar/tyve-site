@@ -208,10 +208,17 @@
   .plan-features { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; flex: 1; }
   .plan-features li { font-size: 13px; color: var(--txt-mid); line-height: 1.5; padding-left: 20px; position: relative; }
   .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+  /* "Tudo do X" highlight item */
+  .plan-features li.feature-all {
+    padding-left: 0; color: var(--orange); font-weight: 700; font-size: 13px;
+    background: rgba(248,65,0,.08); border: 1.5px solid var(--orange);
+    border-radius: 8px; padding: 6px 12px; text-align: center;
+  }
+  .plan-features li.feature-all::before { content: none; }
   /* Green CTA per João */
   .btn-plan {
     display: block; width: 100%; padding: 13px;
-    background: var(--teal); color: var(--dark);
+    background: #25D366; color: #fff;
     font-family: var(--font); font-size: 14px; font-weight: 700;
     border-radius: 100px; text-align: center; text-decoration: none; border: none; cursor: pointer;
     transition: opacity .2s; margin-top: auto;
@@ -622,7 +629,7 @@
         <p class="plan-tagline">Até 500 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li>Tudo do Atende</li>
+          <li class="feature-all">Tudo do Atende</li>
           <li>Follow-up automático D+1</li>
           <li>1 ajuste por semana</li>
           <li>Resumo semanal por email</li>
@@ -639,7 +646,7 @@
         <p class="plan-tagline">Até 1.000 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li>Tudo do Cresce</li>
+          <li class="feature-all">Tudo do Cresce</li>
           <li>Follow-up D+1 e D+3</li>
           <li>Painel de resultados com link</li>
           <li>Agendamento nativo no WhatsApp</li>
@@ -875,7 +882,7 @@
     <div class="roi-inner">
       <div class="roi-header">
         <div class="sec-label">Calculadora de economia</div>
-        <h2 class="section-title section-title-dark">Quanto tempo sua equipe ganha com a TYVE?</h2>
+        <h2 class="section-title section-title-dark">Quanto tempo sua equipe<br>ganha com a Tyve?</h2>
         <p class="roi-sub">Baseado em pesquisas do Sebrae e dados reais de negócios como o seu.</p>
       </div>
       <div class="roi-calc">
@@ -936,11 +943,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-logo-row">
-      <svg width="22" height="22" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="ftg" x1="100" y1="15" x2="100" y2="185" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f84100"/><stop offset="100%" stop-color="#00e8df"/></linearGradient><clipPath id="ftsq"><rect width="200" height="200" rx="44"/></clipPath></defs>
-        <g clip-path="url(#ftsq)"><rect width="200" height="200" fill="#0B0F14"/><polygon points="116,18 66,108 100,108 84,182 150,88 114,88 140,18" fill="url(#ftg)"/></g>
-      </svg>
-      <span class="footer-wordmark">TYVE</span>
+      <img src="/assets/logo-tyve.svg" alt="TYVE" style="height:28px; filter:brightness(0) invert(1);" />
     </div>
     <div class="footer-links">
       <a href="/termos.html">Termos de Serviço</a>
