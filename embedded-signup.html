@@ -6,10 +6,12 @@
   <title>TYVE — Conectar WhatsApp (Embedded Signup)</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
   <style>
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -35,7 +37,7 @@
 
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Nunito', system-ui, sans-serif;
+      font-family: 'Grift', 'DM Sans', system-ui, sans-serif;
       color: var(--grey-900);
       background: var(--grey-50);
       line-height: 1.6;
@@ -48,34 +50,20 @@
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 14px 0;
-      background: rgba(255,255,255,.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,.06);
+      height: 64px; background: #f84100;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 48px;
     }
-    .nav-inner {
-      max-width: 800px; margin: 0 auto; padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 28px; font-weight: 800; color: var(--grey-900);
-      letter-spacing: -0.5px; text-decoration: none;
-    }
-    .nav-wordmark {
-      white-space: nowrap;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800; font-size: 28px; letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #f84100, #00e8df);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .nav-inner { display: contents; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 30px; display: block; }
+    .nav-wordmark { display: none; }
     .back-link {
-      font-size: 13px; font-weight: 500; color: var(--grey-500);
+      font-size: 13px; font-weight: 500; color: white; opacity: .9;
       text-decoration: none; display: flex; align-items: center; gap: 5px;
-      transition: color .2s;
+      transition: opacity .2s;
     }
-    .back-link:hover { color: var(--blue-dark); }
+    .back-link:hover { opacity: 1; }
+    @media (max-width: 600px) { nav { padding: 0 20px; } }
 
     /* ── HERO ── */
     .hero {
@@ -281,8 +269,7 @@
   <nav>
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="TYVE - Voltar ao site">
-        <img src="/tyve-bolt-new.png.png" alt="" height="36" style="display:block;height:36px;width:auto;flex-shrink:0;">
-      <span class="nav-wordmark">tyve.</span>
+        <img src="/assets/logo-tyve.svg" alt="TYVE" />
       </a>
       <a href="/" class="back-link">&larr; Voltar ao site</a>
     </div>

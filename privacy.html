@@ -6,99 +6,132 @@
   <title>Política de Privacidade — TYVE</title>
   <meta name="description" content="Política de Privacidade da TYVE — Como tratamos os dados dos nossos clientes e usuários." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
   <style>
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Nunito', system-ui, sans-serif; color: #0F172A; background: #FFFFFF; line-height: 1.8; }
-    .container { max-width: 800px; margin: 0 auto; padding: 60px 24px; }
-    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .date { font-size: 14px; color: #64748B; margin-bottom: 40px; }
-    h2 { font-size: 20px; font-weight: 600; margin-top: 36px; margin-bottom: 12px; color: #075E54; }
-    p { margin-bottom: 16px; font-size: 15px; }
-    ul { margin: 0 0 16px 24px; font-size: 15px; }
+    :root { --orange:#f84100; --dark:#111e1d; --font:'Grift','DM Sans',sans-serif; }
+    body { font-family: var(--font); color: var(--dark); background: #fff; line-height: 1.8; }
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 200; height: 64px;
+      background: var(--orange);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 48px;
+    }
+    nav a.logo img { height: 30px; display: block; }
+    nav a.back { color: white; font-size: 13px; font-weight: 500; text-decoration: none; opacity: .9; }
+    nav a.back:hover { opacity: 1; }
+    @media (max-width: 600px) { nav { padding: 0 20px; } }
+    .container { max-width: 800px; margin: 0 auto; padding: 96px 24px 80px; }
+    h1 { font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+    .date { font-size: 13px; color: #888; margin-bottom: 40px; }
+    h2 { font-size: 18px; font-weight: 700; margin-top: 40px; margin-bottom: 10px; color: var(--orange); }
+    p { margin-bottom: 14px; font-size: 15px; }
+    ul { margin: 0 0 16px 22px; font-size: 15px; }
     li { margin-bottom: 8px; }
-    a { color: #128C7E; }
-    .back { display: inline-block; margin-bottom: 32px; font-size: 14px; color: #128C7E; text-decoration: none; }
-    .back:hover { text-decoration: underline; }
-    .highlight { background: #F0FDF4; border-left: 4px solid #128C7E; padding: 16px 20px; border-radius: 4px; margin-bottom: 24px; font-size: 14px; }
+    a { color: var(--orange); }
+    .highlight {
+      background: rgba(248,65,0,.06); border-left: 4px solid var(--orange);
+      padding: 16px 20px; border-radius: 6px; margin-bottom: 28px; font-size: 14px; line-height: 1.7;
+    }
+    footer { background: #0B0F14; padding: 40px 0; text-align: center; margin-top: 80px; }
+    footer img { height: 24px; filter: brightness(0) invert(1); margin-bottom: 16px; display: block; margin: 0 auto 16px; }
+    .ft-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 12px; }
+    .ft-links a { color: rgba(255,255,255,.4); font-size: 13px; text-decoration: none; }
+    .ft-copy { color: rgba(255,255,255,.2); font-size: 11px; padding: 0 24px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <a href="/" class="back">&larr; Voltar ao site</a>
-    <h1>Política de Privacidade</h1>
-    <p class="date">Última atualização: 08 de maio de 2026</p>
 
-    <div class="highlight">
-      A TYVE é uma plataforma de automação de atendimento via WhatsApp para pequenas empresas. Esta política explica como coletamos, usamos e protegemos os dados dos nossos clientes e de seus usuários finais.
-    </div>
+<nav>
+  <a href="/" class="logo"><img src="/assets/logo-tyve.svg" alt="TYVE" /></a>
+  <a href="/" class="back">← Voltar ao site</a>
+</nav>
 
-    <h2>1. Quem somos</h2>
-    <p>TYVE é uma plataforma de tecnologia (SaaS) que fornece atendimento automatizado via WhatsApp Business para negócios locais no Brasil. Operamos como Tech Provider autorizado da Meta Platforms, utilizando a API oficial do WhatsApp Business (Cloud API).</p>
-    <p><strong>A TYVE não é afiliada, endossada ou operada pela Meta Platforms, Inc., Facebook, Inc. ou WhatsApp LLC.</strong></p>
-    <p>Contato: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a> | Site: <a href="https://tyve.com.br">tyve.com.br</a></p>
-
-    <h2>2. Dados que coletamos</h2>
-    <p>Coletamos e processamos os seguintes tipos de dados:</p>
-    <ul>
-      <li><strong>Dados do cliente (negócio contratante):</strong> nome da empresa, número de WhatsApp Business, token de acesso à API do WhatsApp, e informações de plano e faturamento.</li>
-      <li><strong>Dados de usuários finais (clientes do negócio):</strong> número de telefone WhatsApp, mensagens enviadas ao número do cliente, e dados fornecidos voluntariamente durante a conversa (nome, tipo de solicitação).</li>
-      <li><strong>Dados de uso da plataforma:</strong> logs de execução, métricas de atendimento (volume de mensagens, NPS, handoffs), e dados de desempenho do sistema.</li>
-    </ul>
-
-    <h2>3. Como usamos os dados</h2>
-    <p>Utilizamos os dados exclusivamente para:</p>
-    <ul>
-      <li>Prestar o serviço de atendimento automatizado contratado pelo cliente;</li>
-      <li>Processar mensagens recebidas via webhook da Meta e enviar respostas automatizadas via Graph API;</li>
-      <li>Gerar relatórios de desempenho para o cliente contratante;</li>
-      <li>Monitorar a qualidade e a continuidade do serviço;</li>
-      <li>Cumprir obrigações legais e contratuais.</li>
-    </ul>
-    <p>Não utilizamos dados de usuários finais para fins de marketing, publicidade ou treinamento de modelos de inteligência artificial.</p>
-
-    <h2>4. Acesso autorizado via Meta (Embedded Signup)</h2>
-    <p>Nossos clientes autorizam o acesso às suas contas WhatsApp Business por meio do fluxo oficial de Embedded Signup da Meta. Cada cliente concede permissão explícita para que a TYVE acesse e gerencie seu número WhatsApp Business em seu nome. Esse acesso pode ser revogado a qualquer momento pelo cliente diretamente no painel da Meta.</p>
-
-    <h2>5. Compartilhamento de dados</h2>
-    <p>Não vendemos, alugamos ou compartilhamos dados pessoais com terceiros, exceto:</p>
-    <ul>
-      <li><strong>Meta Platforms:</strong> as mensagens transitam pela infraestrutura da Meta (WhatsApp Cloud API) conforme os termos de uso da plataforma;</li>
-      <li><strong>Provedores de infraestrutura:</strong> utilizamos DigitalOcean (servidores) e OpenRouter (processamento de linguagem natural) com acordos de confidencialidade;</li>
-      <li><strong>Obrigação legal:</strong> quando exigido por lei ou autoridade competente.</li>
-    </ul>
-
-    <h2>6. Armazenamento e segurança</h2>
-    <p>Os dados são armazenados em servidores privados na DigitalOcean (região NYC1), em banco de dados PostgreSQL com acesso restrito. Tokens de acesso são armazenados de forma segura e nunca expostos publicamente. Realizamos backups diários com retenção de 30 dias.</p>
-
-    <h2>7. Retenção de dados</h2>
-    <p>Mantemos os dados pelo período necessário à prestação do serviço contratado. Após o encerramento do contrato, os dados são eliminados em até 90 dias, salvo obrigação legal de retenção.</p>
-
-    <h2>8. Direitos do titular (LGPD)</h2>
-    <p>Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito a:</p>
-    <ul>
-      <li>Confirmar a existência de tratamento dos seus dados;</li>
-      <li>Acessar os dados que possuímos sobre você;</li>
-      <li>Solicitar correção de dados incompletos ou incorretos;</li>
-      <li>Solicitar a eliminação dos seus dados;</li>
-      <li>Revogar o consentimento a qualquer momento.</li>
-    </ul>
-    <p>Para exercer seus direitos, entre em contato: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a></p>
-
-    <h2>9. Cookies</h2>
-    <p>O site tyve.com.br utiliza apenas cookies técnicos essenciais para funcionamento. Não utilizamos cookies de rastreamento ou publicidade.</p>
-
-    <h2>10. Alterações nesta política</h2>
-    <p>Podemos atualizar esta política periodicamente. A versão mais recente estará sempre disponível em <a href="https://tyve.com.br/privacy">tyve.com.br/privacy</a>. Alterações significativas serão comunicadas aos clientes por e-mail ou WhatsApp.</p>
-
-    <h2>11. Contato</h2>
-    <p>Dúvidas sobre esta política ou sobre o tratamento dos seus dados:</p>
-    <ul>
-      <li>E-mail: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a></li>
-      <li>Site: <a href="https://tyve.com.br">tyve.com.br</a></li>
-    </ul>
+<div class="container">
+  <h1>Política de Privacidade</h1>
+  <p class="date">Última atualização: 08 de maio de 2026</p>
+  <div class="highlight">
+    A TYVE é uma plataforma de automação de atendimento via WhatsApp para pequenas empresas. Esta política explica como coletamos, usamos e protegemos os dados dos nossos clientes e de seus usuários finais.
   </div>
+
+  <h2>1. Quem somos</h2>
+  <p>TYVE é uma plataforma de tecnologia (SaaS) que fornece atendimento automatizado via WhatsApp Business para negócios locais no Brasil. Operamos como Tech Provider autorizado da Meta Platforms, utilizando a API oficial do WhatsApp Business (Cloud API).</p>
+  <p><strong>A TYVE não é afiliada, endossada ou operada pela Meta Platforms, Inc., Facebook, Inc. ou WhatsApp LLC.</strong></p>
+  <p>Contato: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a> | Site: <a href="https://tyve.com.br">tyve.com.br</a></p>
+
+  <h2>2. Dados que coletamos</h2>
+  <p>Coletamos e processamos os seguintes tipos de dados:</p>
+  <ul>
+    <li><strong>Dados do cliente (negócio contratante):</strong> nome da empresa, número de WhatsApp Business, token de acesso à API do WhatsApp, e informações de plano e faturamento.</li>
+    <li><strong>Dados de usuários finais (clientes do negócio):</strong> número de telefone WhatsApp, mensagens enviadas ao número do cliente, e dados fornecidos voluntariamente durante a conversa (nome, tipo de solicitação).</li>
+    <li><strong>Dados de uso da plataforma:</strong> logs de execução, métricas de atendimento (volume de mensagens, NPS, handoffs), e dados de desempenho do sistema.</li>
+  </ul>
+
+  <h2>3. Como usamos os dados</h2>
+  <p>Utilizamos os dados exclusivamente para:</p>
+  <ul>
+    <li>Prestar o serviço de atendimento automatizado contratado pelo cliente;</li>
+    <li>Processar mensagens recebidas via webhook da Meta e enviar respostas automatizadas via Graph API;</li>
+    <li>Gerar relatórios de desempenho para o cliente contratante;</li>
+    <li>Monitorar a qualidade e a continuidade do serviço;</li>
+    <li>Cumprir obrigações legais e contratuais.</li>
+  </ul>
+  <p>Não utilizamos dados de usuários finais para fins de marketing, publicidade ou treinamento de modelos de inteligência artificial.</p>
+
+  <h2>4. Acesso autorizado via Meta (Embedded Signup)</h2>
+  <p>Nossos clientes autorizam o acesso às suas contas WhatsApp Business por meio do fluxo oficial de Embedded Signup da Meta. Cada cliente concede permissão explícita para que a TYVE acesse e gerencie seu número WhatsApp Business em seu nome. Esse acesso pode ser revogado a qualquer momento pelo cliente diretamente no painel da Meta.</p>
+
+  <h2>5. Compartilhamento de dados</h2>
+  <p>Não vendemos, alugamos ou compartilhamos dados pessoais com terceiros, exceto:</p>
+  <ul>
+    <li><strong>Meta Platforms:</strong> as mensagens transitam pela infraestrutura da Meta (WhatsApp Cloud API) conforme os termos de uso da plataforma;</li>
+    <li><strong>Provedores de infraestrutura:</strong> utilizamos DigitalOcean (servidores) e OpenRouter (processamento de linguagem natural) com acordos de confidencialidade;</li>
+    <li><strong>Obrigação legal:</strong> quando exigido por lei ou autoridade competente.</li>
+  </ul>
+
+  <h2>6. Armazenamento e segurança</h2>
+  <p>Os dados são armazenados em servidores privados na DigitalOcean (região NYC1), em banco de dados PostgreSQL com acesso restrito. Tokens de acesso são armazenados de forma segura e nunca expostos publicamente. Realizamos backups diários com retenção de 30 dias.</p>
+
+  <h2>7. Retenção de dados</h2>
+  <p>Mantemos os dados pelo período necessário à prestação do serviço contratado. Após o encerramento do contrato, os dados são eliminados em até 90 dias, salvo obrigação legal de retenção.</p>
+
+  <h2>8. Direitos do titular (LGPD)</h2>
+  <p>Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito a:</p>
+  <ul>
+    <li>Confirmar a existência de tratamento dos seus dados;</li>
+    <li>Acessar os dados que possuímos sobre você;</li>
+    <li>Solicitar correção de dados incompletos ou incorretos;</li>
+    <li>Solicitar a eliminação dos seus dados;</li>
+    <li>Revogar o consentimento a qualquer momento.</li>
+  </ul>
+  <p>Para exercer seus direitos, entre em contato: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a></p>
+
+  <h2>9. Cookies</h2>
+  <p>O site tyve.com.br utiliza apenas cookies técnicos essenciais para funcionamento. Não utilizamos cookies de rastreamento ou publicidade.</p>
+
+  <h2>10. Alterações nesta política</h2>
+  <p>Podemos atualizar esta política periodicamente. A versão mais recente estará sempre disponível em <a href="https://tyve.com.br/privacy">tyve.com.br/privacy</a>. Alterações significativas serão comunicadas aos clientes por e-mail ou WhatsApp.</p>
+
+  <h2>11. Contato</h2>
+  <p>Dúvidas sobre esta política ou sobre o tratamento dos seus dados:</p>
+  <ul>
+    <li>E-mail: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a></li>
+    <li>Site: <a href="https://tyve.com.br">tyve.com.br</a></li>
+  </ul>
+</div>
+
+<footer>
+  <img src="/assets/logo-tyve.svg" alt="TYVE" />
+  <div class="ft-links">
+    <a href="/termos.html">Termos de Serviço</a>
+    <a href="/privacy">Privacidade</a>
+    <a href="https://wa.me/5516994247541" target="_blank">WhatsApp</a>
+  </div>
+  <p class="ft-copy">© 2026 TYVE. Todos os direitos reservados. TYVE não é afiliada a Meta, Facebook ou WhatsApp.</p>
+</footer>
+
 </body>
 </html>

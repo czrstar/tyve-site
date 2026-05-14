@@ -12,7 +12,13 @@
   <meta name="twitter:title" content="TYVE para Odontologia">
   <meta name="twitter:description" content="Sua clínica perde pacientes enquanto você atende. Deixa a TYVE responder.">
 
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
   <style>
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --white:        #ffffff;
@@ -35,7 +41,7 @@
 
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Grift', 'DM Sans', sans-serif;
       color: var(--grey-900);
       background: var(--white);
       line-height: 1.6;
@@ -49,36 +55,22 @@
     /* === NAVBAR === */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.95);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      backdrop-filter: blur(10px);
-      padding: 16px 24px;
+      background: #f84100;
+      border-bottom: none;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
     }
 
     nav > div {
-      max-width: 1200px; margin: 0 auto;
+      max-width: 1200px; margin: 0 auto; width: 100%;
       display: flex; justify-content: space-between; align-items: center;
     }
 
     .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 28px; font-weight: 700;
-      color: var(--blue-primary);
+      display: flex; align-items: center;
       text-decoration: none;
-      font-family: 'Nunito', sans-serif;
-      letter-spacing: -1.5px;
-    }
-
-    .nav-logo svg {
-      width: 36px; height: 36px;
-      flex-shrink: 0;
-    }
-
-    .nav-wordmark {
-      background: linear-gradient(135deg, #f84100, #00e8df);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
     .nav-right {
@@ -86,12 +78,12 @@
     }
 
     .nav-cta {
-      background: var(--blue-primary);
+      background: rgba(255,255,255,0.15);
       color: var(--white);
-      border: none;
-      padding: 10px 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 18px;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
@@ -100,8 +92,7 @@
     }
 
     .nav-cta:hover {
-      background: var(--blue-dark);
-      transform: translateY(-2px);
+      background: rgba(255,255,255,0.25);
     }
 
     /* === HERO === */
@@ -912,8 +903,7 @@
 <nav>
   <div>
     <a href="#hero" class="nav-logo">
-      <img src="/tyve-bolt.png" alt="" height="36" style="display:block;height:36px;width:auto;flex-shrink:0;">
-      <span class="nav-wordmark">tyve.</span>
+      <img src="/assets/logo-tyve.svg" alt="TYVE" style="height:28px;display:block;filter:brightness(0) invert(1);flex-shrink:0;">
     </a>
     <div class="nav-right">
       <a href="https://tyve.com.br" class="nav-cta" style="margin-right: 8px;">← Home</a>
