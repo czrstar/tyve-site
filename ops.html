@@ -16,12 +16,12 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #080D18;
-      --surface:     #0D1526;
-      --surface2:    #111E32;
-      --surface3:    #172540;
-      --border:      rgba(255,255,255,0.065);
-      --border-hi:   rgba(255,255,255,0.14);
+      --bg:          #0f1923;
+      --surface:     #172030;
+      --surface2:    #1e2c3f;
+      --surface3:    #243448;
+      --border:      rgba(255,255,255,0.09);
+      --border-hi:   rgba(255,255,255,0.18);
       --green:       #f84100;
       --green-dim:   rgba(34,197,94,0.11);
       --blue:        #00e8df;
@@ -109,6 +109,9 @@
       font-family: inherit;
     }
     .btn-sm:hover { color: var(--text); border-color: var(--border-hi); background: var(--surface3); }
+    .btn-sm:disabled { opacity: .5; cursor: not-allowed; }
+    @keyframes spin-icon { to { transform: rotate(360deg); } }
+    .btn-sm.loading svg { animation: spin-icon .7s linear infinite; }
 
     /* ── MAIN ────────────────────────────────────────────────── */
     main { max-width: 1300px; margin: 0 auto; padding: 24px 24px 72px; }
@@ -315,13 +318,7 @@
       border-radius: 20px; padding: 40px 36px;
       width: 100%; max-width: 356px;
     }
-    .login-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
-    .login-logo svg { width: 30px; height: 30px; }
-    .login-logo-name {
-      font-size: 18px; font-weight: 800; letter-spacing: -0.4px;
-      background: linear-gradient(135deg, #f84100, #38BDF8);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
+    .login-logo { display: flex; align-items: center; margin-bottom: 28px; }
     .login-h { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
     .login-p { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
     .login-lbl { font-size: 11px; font-weight: 600; color: var(--muted-hi); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -335,7 +332,7 @@
     .login-inp:focus { border-color: rgba(56,189,248,0.4); box-shadow: 0 0 0 3px rgba(56,189,248,0.07); }
     .login-btn {
       width: 100%; padding: 11px;
-      background: linear-gradient(135deg, #f84100, #38BDF8);
+      background: linear-gradient(135deg, #f84100, #00e8df);
       color: #060d18; font-weight: 800; font-size: 13px;
       border: none; border-radius: 9px; cursor: pointer;
       font-family: inherit; transition: opacity .15s, transform .1s; letter-spacing: 0.1px;
@@ -399,7 +396,7 @@
   </div>
   <div class="nav-right" id="nav-actions" style="display:none">
     <span class="updated-text" id="updated-text"></span>
-    <button class="btn-sm" onclick="loadData()">
+    <button class="btn-sm" id="refresh-btn" onclick="doRefresh()">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
       Atualizar
     </button>
@@ -411,15 +408,7 @@
   <div class="login-wrap">
     <div class="login-card">
       <div class="login-logo">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="gl" x1="40" y1="30" x2="160" y2="170" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f84100"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient></defs>
-          <rect width="200" height="200" rx="48" fill="#0B0F14"/>
-          <rect x="18" y="18" width="164" height="164" rx="52" fill="url(#gl)"/>
-          <line x1="42"  y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <line x1="158" y1="30" x2="100" y2="94" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-          <line x1="100" y1="94" x2="100" y2="170" stroke="#0B0F14" stroke-width="26" stroke-linecap="round"/>
-        </svg>
-        <span class="login-logo-name">TYVE</span>
+        <img src="/assets/logo-tyve.svg" alt="TYVE" style="height:28px;display:block;filter:brightness(0) invert(1);">
       </div>
       <div class="login-h">Painel Operacional</div>
       <div class="login-p">Acesso restrito à equipe fundadora</div>
@@ -658,6 +647,16 @@ async function loadData() {
   } catch(e) { return false; }
 }
 
+async function doRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  if (!btn || btn.disabled) return;
+  btn.disabled = true;
+  btn.classList.add('loading');
+  await loadData();
+  // reset handled inside render(); fallback in case of error:
+  if (btn.disabled) { btn.disabled = false; btn.classList.remove('loading'); }
+}
+
 // ── Helpers ───────────────────────────────────────────────────
 function planClass(p) {
   if (!p) return 'p-atende';
@@ -792,6 +791,10 @@ function render(d) {
     chips.push({t:'c-blue', msg:'Nenhum cliente real cadastrado ainda — pronto para o primeiro onboarding.'});
 
   setHTML('insights', chips.map(c=>`<div class="chip ${c.t}"><div class="chip-dot"></div>${c.msg}</div>`).join(''));
+
+  // ── Refresh button — reset state
+  const rb = document.getElementById('refresh-btn');
+  if (rb) { rb.disabled = false; rb.classList.remove('loading'); }
 
   // ── Timestamp
   const ts = new Date(d.generated_at);
