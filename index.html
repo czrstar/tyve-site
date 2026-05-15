@@ -112,12 +112,11 @@
 
   /* ─── SHOWCASE (03) — dark top / beige bottom ────────── */
   .showcase { position: relative; background: var(--dark); overflow: hidden; }
-  .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; background: var(--beige); }
+  .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; background: var(--beige); border-radius: 0; }
   .showcase-inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; display: flex; align-items: flex-end; padding: 0; }
-  .showcase-photo { flex: 0 0 52%; display: flex; align-items: flex-end; overflow: hidden; position: relative; }
-  .showcase-photo::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to bottom, transparent 0%, var(--beige) 80%); z-index: 1; pointer-events: none; }
-  .showcase-photo img { width: 100%; display: block; max-height: 680px; object-fit: contain; object-position: bottom left; }
-  .showcase-phone { flex: 0 0 48%; display: flex; justify-content: center; align-items: center; padding: 60px 48px 60px 48px; }
+  .showcase-photo { flex: 0 0 52%; display: flex; align-items: flex-end; overflow: visible; position: relative; }
+  .showcase-photo img { width: 100%; display: block; max-height: 720px; object-fit: contain; object-position: bottom left; }
+  .showcase-phone { flex: 0 0 48%; display: flex; justify-content: center; align-items: center; padding: 60px 48px; }
   .phone-mockup {
     width: 290px; background: white; border-radius: 20px; overflow: hidden;
     box-shadow: 0 24px 64px rgba(0,0,0,.22); font-size: 12.5px;
@@ -490,7 +489,7 @@
   <div class="showcase-bg"></div>
   <div class="showcase-inner">
     <div class="showcase-photo">
-      <img src="/assets/Foto-Luma.png" alt="Luma — Assistente inteligente TYVE" />
+      <img src="/assets/Luma-Sem-fundo.png" alt="Luma — Assistente inteligente TYVE" />
     </div>
     <div class="showcase-phone">
       <div class="phone-mockup">
