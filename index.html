@@ -112,11 +112,11 @@
 
   /* ─── SHOWCASE (03) — dark top / beige bottom ────────── */
   .showcase { position: relative; background: var(--dark); overflow: hidden; }
-  .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; background: var(--beige); border-radius: 32px 32px 0 0; }
-  .showcase-inner { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-end; padding: 0 48px; }
-  .showcase-photo { flex: 0 0 52%; display: flex; align-items: flex-end; }
-  .showcase-photo img { width: 100%; display: block; max-height: 680px; object-fit: contain; object-position: bottom center; }
-  .showcase-phone { flex: 0 0 48%; display: flex; justify-content: center; align-items: center; padding: 60px 24px 80px 0; }
+  .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; background: var(--beige); }
+  .showcase-inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; display: flex; align-items: flex-end; padding: 0; }
+  .showcase-photo { flex: 0 0 52%; display: flex; align-items: flex-end; overflow: hidden; }
+  .showcase-photo img { width: 100%; display: block; max-height: 680px; object-fit: contain; object-position: bottom left; }
+  .showcase-phone { flex: 0 0 48%; display: flex; justify-content: center; align-items: center; padding: 60px 48px 60px 48px; }
   .phone-mockup {
     width: 290px; background: white; border-radius: 20px; overflow: hidden;
     box-shadow: 0 24px 64px rgba(0,0,0,.22); font-size: 12.5px;
@@ -436,9 +436,9 @@
     .nav-hamburger { display: flex; }
     .showcase-inner { flex-direction: column; align-items: center; padding: 0 24px; }
     .showcase-photo { flex: none; width: 100%; max-width: 360px; }
-    .showcase-photo img { max-height: 400px; }
+    .showcase-photo img { max-height: 400px; object-position: bottom center; }
     .showcase-phone { flex: none; width: 100%; padding: 0 0 56px; justify-content: center; }
-    .showcase-bg { height: 60%; border-radius: 24px 24px 0 0; }
+    .showcase-bg { height: 60%; }
   }
   @media (max-width: 480px) {
     .phone-mockup { width: 260px; }
