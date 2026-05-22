@@ -117,12 +117,13 @@
   /* ─── SHOWCASE (03) — dark top / beige bottom ────────── */
   .showcase { position: relative; background: var(--dark); overflow: hidden; }
   .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 510px; background: var(--beige); border-radius: 0; }
-  .showcase-inner { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-end; padding: 0; }
-  .showcase-photo { flex: 0 0 52%; display: flex; align-items: flex-end; overflow: visible; position: relative; }
+  .showcase-inner { position: relative; z-index: 2; width: 100%; margin: 0 auto; display: flex; align-items: flex-end; padding: 0; }
+  .showcase-photo { flex: 1 1 clamp(220px, 45vw, 580px); min-width: 0; display: flex; align-items: flex-end; overflow: visible; position: relative; }
   .showcase-photo img { width: 100%; display: block; max-height: 720px; object-fit: contain; object-position: bottom left; }
-  .showcase-phone { flex: 0 0 48%; display: flex; justify-content: center; align-items: center; padding: 60px 24px; }
+  .showcase-phone { flex: 0 0 auto; display: flex; justify-content: center; align-items: center; padding: clamp(24px, 5vw, 60px) clamp(16px, 3vw, 40px); }
+  .phone-mockup { width: clamp(220px, 22vw, 290px); }
   .phone-mockup {
-    width: 290px; background: white; border-radius: 20px; overflow: hidden;
+    background: white; border-radius: 20px; overflow: hidden;
     box-shadow: 0 24px 64px rgba(0,0,0,.22); font-size: 12.5px;
     border: 2px solid rgba(248,65,0,.35);
   }
@@ -439,9 +440,10 @@
     .nav-links { display: none; }
     .nav-hamburger { display: flex; }
     .showcase-inner { flex-direction: column; align-items: center; padding: 0 24px; }
-    .showcase-photo { flex: none; width: 100%; max-width: 360px; }
-    .showcase-photo img { max-height: 400px; object-position: bottom center; }
-    .showcase-phone { flex: none; width: 100%; padding: 0 0 56px; justify-content: center; }
+    .showcase-photo { flex: none; width: 100%; max-width: 320px; }
+    .showcase-photo img { max-height: 360px; object-position: bottom center; }
+    .showcase-phone { flex: none; width: 100%; padding: 0 0 48px; justify-content: center; }
+    .phone-mockup { width: clamp(240px, 80vw, 300px); }
     .showcase-bg { height: 60%; }
   }
   @media (max-width: 480px) {
