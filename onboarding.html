@@ -415,7 +415,7 @@
           <strong>⚠️ Requisito:</strong> O número precisa estar no <strong>WhatsApp Business</strong> (o app com o ícone verde com um "B"). O WhatsApp comum não funciona com a integração. Se ainda não tem, é só baixar o <em>WhatsApp Business</em> na loja de aplicativos e configurar com o número da empresa — é grátis.
         </div>
         <div class="question">
-          <label class="q-label">Qual o número do WhatsApp Business que será usado pelo bot? <span class="req">*</span></label>
+          <label class="q-label">Qual o número do WhatsApp Business que será usado pelo agente? <span class="req">*</span></label>
           <p class="q-hint">Formato: +55 DD 9XXXX-XXXX — pode ser o número atual da empresa.</p>
           <input type="tel" name="numero_whatsapp" required placeholder="+55 16 99999-9999" />
         </div>
@@ -430,7 +430,7 @@
             <label class="radio-item">
               <input type="radio" name="situacao_chip" value="chip_ativo" />
               <div class="radio-box"></div>
-              <span class="radio-label">Chip ativo no celular da empresa — continuo usando o WhatsApp normalmente no celular, o bot funciona ao mesmo tempo</span>
+              <span class="radio-label">Chip ativo no celular da empresa — continuo usando o WhatsApp normalmente no celular, o agente funciona ao mesmo tempo</span>
             </label>
             <label class="radio-item">
               <input type="radio" name="situacao_chip" value="sem_chip" />
@@ -551,7 +551,7 @@
           <input type="text" name="qual_sistema" placeholder="Ex: Doctoralia, iClinic, Simples Dental, Agendô..." />
         </div>
         <div class="question">
-          <label class="q-label">No piloto, o bot deve: <span class="req">*</span></label>
+          <label class="q-label">No piloto, o agente deve: <span class="req">*</span></label>
           <div class="radio-group">
             <label class="radio-item"><input type="radio" name="preferencia_agendamento" value="coletar_encaminhar" required /><div class="radio-box"></div><span class="radio-label">Coletar preferência (dia/período) e encaminhar para a equipe confirmar</span></label>
             <label class="radio-item"><input type="radio" name="preferencia_agendamento" value="automatico" /><div class="radio-box"></div><span class="radio-label">Agendar automaticamente via Google Calendar (plano Escala)</span></label>
@@ -587,13 +587,13 @@
         </div>
         <div class="question">
           <label class="q-label">Situações de urgência — o que exige atendimento humano IMEDIATO? <span class="req">*</span></label>
-          <p class="q-hint">O bot vai disparar um alerta automático para a equipe nesses casos.</p>
+          <p class="q-hint">O agente vai disparar um alerta automático para a equipe nesses casos.</p>
           <textarea name="urgencia" required rows="3" placeholder="Ex: dor aguda, sangramento, cliente muito insatisfeito, reclamação grave..."></textarea>
         </div>
         <div class="question">
           <label class="q-label">O que o assistente NÃO deve responder?</label>
           <p class="q-hint">Ex: diagnóstico médico, garantia de resultado, crítica de concorrentes, valores de contrato.</p>
-          <textarea name="guardrails" rows="3" placeholder="Liste temas ou situações que o bot deve evitar..."></textarea>
+          <textarea name="guardrails" rows="3" placeholder="Liste temas ou situações que o agente deve evitar..."></textarea>
         </div>
         <div class="section-footer">
           <button type="button" class="btn-next" onclick="nextSection(6)">Próxima seção →</button>
@@ -647,7 +647,7 @@
           <div class="section-num">8</div>
           <div>
             <div class="section-title">Horário de resposta da equipe</div>
-            <div class="section-subtitle">O bot roda 24/7 — mas a equipe tem horário</div>
+            <div class="section-subtitle">O agente roda 24/7 — mas a equipe tem horário</div>
           </div>
         </div>
         <span class="section-chevron">▾</span>
@@ -661,7 +661,7 @@
           <input type="text" name="horario_equipe" required placeholder="Ex: Seg–Sex 8h–18h, Sáb 8h–12h" />
         </div>
         <div class="question">
-          <label class="q-label">Quando o bot encaminha um cliente para a equipe humana, em quanto tempo vocês costumam responder? <span class="req">*</span></label>
+          <label class="q-label">Quando o agente encaminha um cliente para a equipe humana, em quanto tempo vocês costumam responder? <span class="req">*</span></label>
           <div class="radio-group">
             <label class="radio-item"><input type="radio" name="sla_resposta" value="30min" required /><div class="radio-box"></div><span class="radio-label">Até 30 minutos</span></label>
             <label class="radio-item"><input type="radio" name="sla_resposta" value="2h" /><div class="radio-box"></div><span class="radio-label">Até 2 horas</span></label>
@@ -689,10 +689,10 @@
       </div>
       <div class="section-body">
         <div class="info-box orange">
-          <strong>⚠️ Ação necessária:</strong> Antes de ativarmos, crie um grupo no WhatsApp chamado exatamente <strong>"TYVE Alertas"</strong>. Adicione todos que devem receber alertas (recepção, gerente, etc.). A TYVE fornece o número do bot para adicionar ao grupo durante o setup.
+          <strong>⚠️ Ação necessária:</strong> Antes de ativarmos, crie um grupo no WhatsApp chamado exatamente <strong>"TYVE Alertas"</strong>. Adicione todos que devem receber alertas (recepção, gerente, etc.). A TYVE fornece o número do agente para adicionar ao grupo durante o setup.
         </div>
         <div class="question">
-          <label class="q-label">Quantas pessoas devem receber os alertas do bot?</label>
+          <label class="q-label">Quantas pessoas devem receber os alertas do agente?</label>
           <input type="text" name="qtd_alertas" placeholder="Ex: 3 pessoas" />
         </div>
         <div class="question">
@@ -869,7 +869,7 @@
         `Preferência agendamento: ${fields.preferencia_agendamento||'—'}\n` +
         `Horários prioritários: ${fields.horarios_prioritarios||'—'}\n` +
         `Horário atendimento: ${fields.horario_atendimento||'—'}\n\n` +
-        `🤖 *BOT E PERSONA*\n` +
+        `🤖 *AGENTE E PERSONA*\n` +
         `Tom de voz: ${fields.tom_voz||'—'}\n` +
         `Emojis: ${fields.emojis||'—'}\n` +
         `Nome assistente: ${fields.nome_assistente||'Luma (padrão)'}\n\n` +

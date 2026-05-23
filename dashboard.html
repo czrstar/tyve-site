@@ -195,12 +195,12 @@
       <div class="bot-status-info">
         <div class="bot-status-dot active" id="bot-dot"></div>
         <div>
-          <div class="bot-status-label" id="bot-status-label">Bot ativo</div>
+          <div class="bot-status-label" id="bot-status-label">Agente ativo</div>
           <div class="bot-status-sub" id="bot-status-sub">Respondendo automaticamente</div>
         </div>
       </div>
       <button class="unlock-btn" id="unlock-btn" onclick="unlockBot()" style="display:none">
-        🤖 Liberar bot
+        🤖 Liberar agente
       </button>
     </div>
 
@@ -235,7 +235,7 @@
         <div class="kpi-icon">✅</div>
         <div class="kpi-label">Agendamentos confirmados</div>
         <div class="kpi-value green" id="kpi-bookings">–</div>
-        <div class="kpi-sub">via bot</div>
+        <div class="kpi-sub">via agente</div>
       </div>
     </div>
 
@@ -341,14 +341,14 @@ function updateBotStatus(d) {
   if (inHumanMode) {
     dot.className = 'bot-status-dot human';
     label.textContent = 'Atendimento humano ativo';
-    sub.textContent = 'Bot pausado — sua equipe está no controle';
+    sub.textContent = 'Agente pausado — sua equipe está no controle';
     btn.style.display = 'inline-flex';
     btn.disabled = false;
     btn.className = 'unlock-btn';
-    btn.innerHTML = '🤖 Liberar bot';
+    btn.innerHTML = '🤖 Liberar agente';
   } else {
     dot.className = 'bot-status-dot active';
-    label.textContent = 'Bot ativo';
+    label.textContent = 'Agente ativo';
     sub.textContent = 'Respondendo automaticamente';
     btn.style.display = 'none';
   }
@@ -367,19 +367,19 @@ async function unlockBot() {
     const data = await res.json();
     if (data.success) {
       btn.className = 'unlock-btn success';
-      btn.innerHTML = '✅ Bot liberado';
+      btn.innerHTML = '✅ Agente liberado';
       document.getElementById('bot-dot').className = 'bot-status-dot active';
-      document.getElementById('bot-status-label').textContent = 'Bot ativo';
+      document.getElementById('bot-status-label').textContent = 'Agente ativo';
       document.getElementById('bot-status-sub').textContent = 'Respondendo automaticamente';
       setTimeout(() => { btn.style.display = 'none'; }, 2000);
     } else {
       btn.disabled = false;
-      btn.innerHTML = '🤖 Liberar bot';
-      alert('Erro ao liberar bot. Tente novamente.');
+      btn.innerHTML = '🤖 Liberar agente';
+      alert('Erro ao liberar agente. Tente novamente.');
     }
   } catch(e) {
     btn.disabled = false;
-    btn.innerHTML = '🤖 Liberar bot';
+    btn.innerHTML = '🤖 Liberar agente';
   }
 }
 

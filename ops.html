@@ -777,7 +777,7 @@ function render(d) {
   // ── Insights
   const chips = [];
   if (hum === 0)
-    chips.push({t:'c-green', msg:'Nenhuma conversa em modo humano — bot operando para todos os clientes.'});
+    chips.push({t:'c-green', msg:'Nenhuma conversa em modo humano — agente operando para todos os clientes.'});
   else
     chips.push({t:'c-amber', msg:`${n(hum)} conversa${hum>1?'s':''} pausada${hum>1?'s':''} com o time. Verifique se há resposta pendente.`});
 
@@ -786,7 +786,7 @@ function render(d) {
     chips.push({t:'c-blue', msg:`Projeção de custo IA este mês: ${brl(proj)} · ${brl(mo/clients.length)}/cliente até agora.`});
   }
   if (hw > 0)
-    chips.push({t:'c-green', msg:`${n(hw)} handoff${hw>1?'s':''} esta semana — o bot está qualificando e encaminhando conversas.`});
+    chips.push({t:'c-green', msg:`${n(hw)} handoff${hw>1?'s':''} esta semana — o agente está qualificando e encaminhando conversas.`});
   const lt = parseInt(d.luma_leads_total)||0;
   if (lt > 0)
     chips.push({t:'c-blue', msg:`Luma acumulou ${n(lt)} lead${lt>1?'s':''} no total desde o lançamento.`});
