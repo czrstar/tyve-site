@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TYVE — Formulário de Onboarding</title>
-  <meta name="description" content="Preencha o formulário de onboarding TYVE para configurar seu assistente WhatsApp em até 48h." />
+  <title>Tyve — Formulário de Onboarding</title>
+  <meta name="description" content="Preencha o formulário de onboarding Tyve para configurar seu assistente WhatsApp em até 48h." />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
@@ -317,7 +317,7 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="/">
-      <img src="/assets/logo-tyve.svg" alt="TYVE" />
+      <img src="/assets/logo-tyve.svg" alt="Tyve" />
     </a>
     <a class="back-link" href="/">← Voltar ao site</a>
   </div>
@@ -327,7 +327,7 @@
 <div class="hero">
   <div class="hero-badge">⚡ Ativação em até 48h</div>
   <h1>Conte sobre<br><span>seu negócio</span></h1>
-  <p>Preencha o formulário abaixo. Com essas informações, ativamos seu assistente TYVE personalizado em até 48 horas.</p>
+  <p>Preencha o formulário abaixo. Com essas informações, ativamos seu assistente Tyve personalizado em até 48 horas.</p>
   <p style="font-size:13px;opacity:.7;margin-top:6px;">Dica: use o botão "Próxima seção →" para avançar entre as etapas.</p>
   <div class="steps-row">
     <div class="step-pill"><span class="step-num">1</span>Preencha o form (8 min)</div>
@@ -631,7 +631,7 @@
         </div>
         <div class="question">
           <label class="q-label">Nome do assistente virtual</label>
-          <p class="q-hint">O nome padrão TYVE é <strong>Luma</strong>. Se quiser um nome personalizado para a sua empresa (ex: Sofia, Max, Bia), escreva abaixo. Deixe em branco para usar Luma.</p>
+          <p class="q-hint">O nome padrão Tyve é <strong>Luma</strong>. Se quiser um nome personalizado para a sua empresa (ex: Sofia, Max, Bia), escreva abaixo. Deixe em branco para usar Luma.</p>
           <input type="text" name="nome_assistente" placeholder="Deixe em branco para usar Luma" />
         </div>
         <div class="section-footer">
@@ -689,7 +689,7 @@
       </div>
       <div class="section-body">
         <div class="info-box orange">
-          <strong>⚠️ Ação necessária:</strong> Antes de ativarmos, crie um grupo no WhatsApp chamado exatamente <strong>"TYVE Alertas"</strong>. Adicione todos que devem receber alertas (recepção, gerente, etc.). A TYVE fornece o número do agente para adicionar ao grupo durante o setup.
+          <strong>⚠️ Ação necessária:</strong> Antes de ativarmos, crie um grupo no WhatsApp chamado exatamente <strong>"Tyve Alertas"</strong>. Adicione todos que devem receber alertas (recepção, gerente, etc.). A Tyve fornece o número do agente para adicionar ao grupo durante o setup.
         </div>
         <div class="question">
           <label class="q-label">Quantas pessoas devem receber os alertas do agente?</label>
@@ -737,7 +737,7 @@
         ⚡ Enviar formulário
       </button>
       <p class="submit-note">Após enviar, entraremos em contato pelo WhatsApp +55 16 99424-7541</p>
-      <p style="font-size:11px;color:var(--grey-500);margin-top:12px;">TYVE não é afiliado a Meta, Facebook ou WhatsApp. A integração utiliza a API oficial do WhatsApp Business.</p>
+      <p style="font-size:11px;color:var(--grey-500);margin-top:12px;">Tyve não é afiliado a Meta, Facebook ou WhatsApp. A integração utiliza a API oficial do WhatsApp Business.</p>
     </div>
 
   </form>
@@ -746,7 +746,7 @@
   <div class="success-screen" id="successScreen">
     <div class="success-icon">✓</div>
     <h2>Formulário enviado!</h2>
-    <p>Recebemos suas informações. Em até 48h a equipe TYVE ativa seu assistente e entra em contato pelo WhatsApp para você aprovar a V1.</p>
+    <p>Recebemos suas informações. Em até 48h a equipe Tyve ativa seu assistente e entra em contato pelo WhatsApp para você aprovar a V1.</p>
     <br><br>
     <a href="/" style="color: var(--blue-dark); font-weight: 600; text-decoration: none;">← Voltar ao site</a>
   </div>
@@ -846,7 +846,7 @@
       const fields = Object.fromEntries(data);
       // Checkboxes (multiple values) need special handling
       const objetivos = data.getAll('objetivo[]').join(', ') || '—';
-      const msg = `📋 *NOVO ONBOARDING TYVE*\n\n` +
+      const msg = `📋 *NOVO ONBOARDING Tyve*\n\n` +
         `🏢 *EMPRESA*\n` +
         `Empresa: ${fields.nome_empresa||'—'}\n` +
         `Cidade: ${fields.cidade_bairro||'—'}\n` +
