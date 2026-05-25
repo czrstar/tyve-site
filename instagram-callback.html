@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tyve — Conectando Instagram...</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --orange: #f84100; --teal: #00e8df; --dark: #111e1d; --font: 'Grift', 'DM Sans', sans-serif; }
+    @font-face { font-family: 'Grift'; src: url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+
+    body { font-family: var(--font); background: var(--dark); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    nav { background: var(--orange); height: 64px; display: flex; align-items: center; padding: 0 24px; }
+    nav img { height: 28px; }
+
+    .page { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 24px; }
+    .card { background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.1); border-radius: 24px; padding: 48px 40px; max-width: 480px; width: 100%; text-align: center; }
+
+    .icon { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .icon-loading { background: rgba(248,65,0,.15); border: 1.5px solid rgba(248,65,0,.3); animation: pulse 1.5s infinite; }
+    .icon-success { background: rgba(0,232,223,.12); border: 1.5px solid var(--teal); }
+    .icon-error { background: rgba(239,68,68,.12); border: 1.5px solid rgba(239,68,68,.4); }
+
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+
+    h1 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+    .msg { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.6; }
+    .details { margin-top: 8px; font-size: 13px; color: rgba(255,255,255,.35); }
+
+    .btn { display: inline-block; margin-top: 28px; padding: 14px 28px; border-radius: 10px; background: var(--orange); color: #fff; font-family: var(--font); font-size: 15px; font-weight: 700; text-decoration: none; }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: rgba(255,255,255,.2); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <img src="/assets/logo-tyve.svg" alt="Tyve" />
+</nav>
+
+<div class="page">
+  <div class="card" id="card">
+    <div class="icon icon-loading" id="icon">⚡</div>
+    <h1 id="title">Conectando sua conta...</h1>
+    <p class="msg" id="msg">Aguarde enquanto finalizamos a conexão com o Instagram.</p>
+    <p class="details" id="details"></p>
+  </div>
+</div>
+
+<footer>Tyve &copy; 2026</footer>
+
+<script>
+  var N8N_TOKEN_EXCHANGE_URL = 'https://n8n.tyve.com.br/webhook/instagram-token-exchange';
+
+  function setIcon(type, emoji) {
+    var el = document.getElementById('icon');
+    el.className = 'icon icon-' + type;
+    el.textContent = emoji;
+  }
+
+  function setContent(title, msg, details) {
+    document.getElementById('title').textContent = title;
+    document.getElementById('msg').textContent = msg;
+    if (details) document.getElementById('details').textContent = details;
+  }
+
+  function showSuccess(username) {
+    setIcon('success', '✅');
+    setContent(
+      'Instagram conectado!',
+      username ? '@' + username + ' está conectado. O agente Tyve já pode responder suas DMs.' : 'Sua conta Instagram foi conectada com sucesso.',
+      'A ativação pode levar até 5 minutos.'
+    );
+    var card = document.getElementById('card');
+    var btn = document.createElement('a');
+    btn.href = 'https://wa.me/5516994247541';
+    btn.className = 'btn';
+    btn.textContent = 'Falar com a equipe Tyve';
+    card.appendChild(btn);
+  }
+
+  function showError(msg) {
+    setIcon('error', '❌');
+    setContent('Erro na conexão', msg, 'Tente novamente ou entre em contato com a Tyve.');
+    var card = document.getElementById('card');
+    var btn = document.createElement('a');
+    btn.href = '/instagram-connect';
+    btn.className = 'btn';
+    btn.textContent = 'Tentar novamente';
+    card.appendChild(btn);
+  }
+
+  async function handleCallback() {
+    var params = new URLSearchParams(window.location.search);
+
+    // Error case — user denied
+    if (params.get('error')) {
+      showError('Autorização negada pelo Instagram. Por favor, tente novamente e autorize o acesso às mensagens.');
+      return;
+    }
+
+    // Extract code — strip trailing #_ if present
+    var code = params.get('code');
+    if (!code) {
+      showError('Código de autorização não encontrado. Por favor, tente o processo novamente.');
+      return;
+    }
+    code = code.replace(/#_$/, '');
+
+    // Extract instance_slug from state
+    var state = params.get('state') || 'default';
+    var instanceSlug = decodeURIComponent(state);
+
+    try {
+      var resp = await fetch(N8N_TOKEN_EXCHANGE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code, instance_slug: instanceSlug })
+      });
+
+      if (!resp.ok) {
+        throw new Error('HTTP ' + resp.status);
+      }
+
+      var data = await resp.json();
+
+      if (data.success) {
+        showSuccess(data.ig_username);
+      } else {
+        showError(data.error || 'Erro ao processar a conexão. Por favor, tente novamente.');
+      }
+    } catch (err) {
+      showError('Não foi possível completar a conexão. Verifique sua conexão e tente novamente.');
+      console.error(err);
+    }
+  }
+
+  handleCallback();
+</script>
+
+</body>
+</html>
