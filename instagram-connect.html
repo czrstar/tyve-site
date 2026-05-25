@@ -29,7 +29,18 @@
     .page {
       flex: 1; display: flex; align-items: center; justify-content: center;
       padding: 48px 24px;
+      position: relative; overflow: hidden;
     }
+    .page::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('/assets/raios-tyve.svg') repeat-x center center;
+      background-size: auto 55%;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card { position: relative; z-index: 1; }
 
     .card {
       background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.1);
