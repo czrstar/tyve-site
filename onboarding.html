@@ -388,6 +388,11 @@
           <input type="text" name="responsavel" required placeholder="Ex: Ana Paula — +55 16 99999-9999" />
         </div>
         <div class="question">
+          <label class="q-label">E-mail para relatórios semanais <span class="req">*</span></label>
+          <p class="q-hint">Você receberá relatórios automáticos de desempenho toda semana neste e-mail.</p>
+          <input type="email" name="client_email" required placeholder="Ex: contato@suaempresa.com.br" />
+        </div>
+        <div class="question">
           <label class="q-label">Descrição da empresa <span class="req">*</span></label>
           <p class="q-hint">2–3 frases sobre o que fazem e para quem. Esta descrição é usada para contextualizar o assistente.<br>Ex: "Clínica odontológica em Franca especializada em estética e implantes. Atendemos adultos e crianças desde 2015."</p>
           <textarea name="descricao_empresa" required rows="3" placeholder="Descreva sua empresa em 2–3 frases..."></textarea>
@@ -844,46 +849,39 @@
 
     try {
       const fields = Object.fromEntries(data);
-      // Checkboxes (multiple values) need special handling
-      const objetivos = data.getAll('objetivo[]').join(', ') || '—';
-      const msg = `📋 *NOVO ONBOARDING Tyve*\n\n` +
-        `🏢 *EMPRESA*\n` +
-        `Empresa: ${fields.nome_empresa||'—'}\n` +
-        `Cidade: ${fields.cidade_bairro||'—'}\n` +
-        `Desc: ${fields.descricao_empresa||'—'}\n` +
-        `Instagram/Site: ${fields.instagram_site||'—'}\n\n` +
-        `📱 *WHATSAPP*\n` +
-        `Número: ${fields.numero_whatsapp||'—'}\n` +
-        `Situação chip: ${fields.situacao_chip||'—'}\n` +
-        `Responsável: ${fields.responsavel||'—'}\n\n` +
-        `🎯 *OBJETIVOS E SERVIÇOS*\n` +
-        `Serviços prioritários: ${fields.servicos_prioritarios||'—'}\n` +
-        `Objetivos: ${objetivos}\n` +
-        `Volume mensal: ${fields.volume_mensal||'—'}\n\n` +
-        `💰 *PREÇOS E PAGAMENTO*\n` +
-        `Passa valores: ${fields.passa_valor||'—'}\n` +
-        `Formas de pagamento: ${fields.formas_pagamento||'—'}\n` +
-        `Política cancelamento: ${fields.politica_cancelamento||'—'}\n\n` +
-        `📅 *AGENDA*\n` +
-        `Sistema: ${fields.sistema_agenda||'—'} ${fields.qual_sistema ? '('+fields.qual_sistema+')' : ''}\n` +
-        `Preferência agendamento: ${fields.preferencia_agendamento||'—'}\n` +
-        `Horários prioritários: ${fields.horarios_prioritarios||'—'}\n` +
-        `Horário atendimento: ${fields.horario_atendimento||'—'}\n\n` +
-        `🤖 *AGENTE E PERSONA*\n` +
-        `Tom de voz: ${fields.tom_voz||'—'}\n` +
-        `Emojis: ${fields.emojis||'—'}\n` +
-        `Nome assistente: ${fields.nome_assistente||'Luma (padrão)'}\n\n` +
-        `❓ *FAQ*\n${fields.faq||'—'}\n\n` +
-        `🚨 *URGÊNCIAS*\n${fields.urgencia||'—'}\n\n` +
-        `🚫 *GUARDRAILS*\n${fields.guardrails||'(não informado)'}\n\n` +
-        `👥 *EQUIPE*\n` +
-        `Horário equipe: ${fields.horario_equipe||'—'}\n` +
-        `SLA resposta: ${fields.sla_resposta||'—'}\n` +
-        `Qtd alertas: ${fields.qtd_alertas||'—'}`;
-      const res = await fetch('https://n8n.tyve.com.br/webhook/c9d4e7a2-3f1b-4a8c-b5d6-9e0f2a1b3c4d', {
+      const payload = {
+        nome_empresa:          fields.nome_empresa || '',
+        cidade_bairro:         fields.cidade_bairro || '',
+        numero_whatsapp:       (fields.numero_whatsapp || '').replace(/[^0-9]/g, ''),
+        responsavel:           fields.responsavel || '',
+        client_email:          fields.client_email || '',
+        horario_atendimento:   fields.horario_atendimento || '',
+        descricao_empresa:     fields.descricao_empresa || '',
+        instagram_site:        fields.instagram_site || '',
+        servicos_prioritarios: fields.servicos_prioritarios || '',
+        formas_pagamento:      fields.formas_pagamento || '',
+        politica_cancelamento: fields.politica_cancelamento || '',
+        sistema_agenda:        fields.sistema_agenda || 'nao',
+        qual_sistema:          fields.qual_sistema || '',
+        horarios_prioritarios: fields.horarios_prioritarios || '',
+        faq:                   fields.faq || '',
+        urgencia:              fields.urgencia || '',
+        guardrails:            fields.guardrails || '',
+        tom_voz:               fields.tom_voz || 'profissional',
+        emojis:                fields.emojis || 'sim',
+        nome_assistente:       fields.nome_assistente || 'Luma',
+        horario_equipe:        fields.horario_equipe || '',
+        sla_resposta:          fields.sla_resposta || '4h',
+        qtd_alertas:           fields.qtd_alertas || '',
+        responsavel_grupo:     fields.responsavel_grupo || '',
+        exemplos_mensagens:    fields.exemplos_mensagens || '',
+        situacao_chip:         fields.situacao_chip || '',
+        submitted_at:          new Date().toISOString()
+      };
+      const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-onboarding-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg })
+        body: JSON.stringify(payload)
       });
       if (!res.ok) throw new Error('status ' + res.status);
       document.getElementById('onboardingForm').style.display = 'none';
