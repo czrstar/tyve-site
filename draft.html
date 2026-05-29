@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Draft do Prompt — Tyve</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0A0E17;
+      --surface:  #111827;
+      --surface2: #1E2837;
+      --border:   rgba(255,255,255,0.08);
+      --orange:   #f84100;
+      --teal:     #00e8df;
+      --text:     #F1F5F9;
+      --muted:    #94A3B8;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Grift','DM Sans',sans-serif; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px; background: var(--surface);
+      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 28px; }
+    .logo-text { font-size: 16px; font-weight: 700; color: var(--text); }
+    .nav-badge { font-size: 12px; color: var(--muted); background: var(--surface2);
+      padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
+
+    main { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px; }
+
+    /* State screens */
+    .state { display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh; gap: 12px; text-align: center; }
+    .state h2 { font-size: 20px; font-weight: 700; }
+    .state p  { color: var(--muted); font-size: 14px; }
+    .spinner  { width: 36px; height: 36px; border: 3px solid var(--border);
+      border-top-color: var(--orange); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Header */
+    .draft-header { margin-bottom: 24px; }
+    .draft-header h1 { font-size: 22px; font-weight: 700; }
+    .draft-header .subtitle { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .slug-tag { display: inline-block; font-size: 11px; font-family: monospace;
+      background: var(--surface2); color: var(--teal); padding: 3px 8px;
+      border-radius: 4px; border: 1px solid var(--border); margin-top: 6px; }
+
+    /* Instructions */
+    .instructions {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--orange); border-radius: 8px;
+      padding: 14px 16px; margin-bottom: 20px;
+    }
+    .instructions p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .instructions strong { color: var(--text); }
+
+    /* Actions */
+    .actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; border: none; transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn-primary { background: var(--orange); color: #000; }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .copy-feedback { font-size: 13px; color: var(--teal); align-self: center;
+      opacity: 0; transition: opacity .3s; }
+    .copy-feedback.show { opacity: 1; }
+
+    /* Stats row */
+    .stats-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+    .stat-chip { font-size: 12px; color: var(--muted); background: var(--surface2);
+      padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
+    .stat-chip span { color: var(--text); font-weight: 600; }
+
+    /* Draft box */
+    .draft-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px; overflow: auto;
+    }
+    .draft-box pre {
+      white-space: pre-wrap; word-break: break-word;
+      font-family: 'Courier New', monospace; font-size: 13px;
+      line-height: 1.65; color: var(--text);
+    }
+
+    /* [A CONFIRMAR] highlight */
+    .confirm-tag {
+      background: rgba(251,191,36,0.18); color: #fbbf24;
+      padding: 1px 4px; border-radius: 3px; font-weight: 600;
+    }
+
+    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px 0; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <img src="/assets/logo-tyve.svg" alt="Tyve" />
+    <span class="logo-text">Tyve</span>
+  </div>
+  <span class="nav-badge">Uso interno — Renato</span>
+</nav>
+
+<main>
+  <div class="state" id="loading">
+    <div class="spinner"></div>
+    <h2>Carregando draft…</h2>
+  </div>
+
+  <div class="state" id="error-screen" style="display:none">
+    <div style="font-size:48px">❌</div>
+    <h2>Draft não encontrado</h2>
+    <p>O slug informado não tem um draft de prompt gerado ainda.<br>Execute o Auto-Setup para gerar.</p>
+    <code id="error-slug" style="font-size:12px;color:var(--muted);margin-top:8px;"></code>
+  </div>
+
+  <div id="draft-content" style="display:none">
+    <div class="draft-header">
+      <h1 id="draft-title">📝 Draft do Prompt</h1>
+      <p class="subtitle">Revise → cole em <strong>AGENTE DE I.A.</strong> + <strong>AGENTE_FALLBACK</strong> → Publish</p>
+      <span class="slug-tag" id="slug-display"></span>
+    </div>
+
+    <div class="instructions">
+      <p>
+        ✅ Campos <strong style="color:#fbbf24">[A CONFIRMAR]</strong> precisam ser preenchidos manualmente.<br>
+        Após colar e ajustar, clique <strong>Publish</strong> no canto superior direito do n8n.
+        Repita o processo para <strong>AGENTE_FALLBACK</strong> (mesma regra: AGENTE e FALLBACK sempre sincronizados).
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="copyAll()">📋 Copiar Tudo</button>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimir</button>
+      <span class="copy-feedback" id="copy-feedback">✅ Copiado!</span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-chip">Caracteres: <span id="char-count">–</span></div>
+      <div class="stat-chip">Campos [A CONFIRMAR]: <span id="confirm-count">–</span></div>
+      <div class="stat-chip">Slug: <span id="stat-slug">–</span></div>
+    </div>
+
+    <div class="draft-box">
+      <pre id="draft-pre"></pre>
+    </div>
+  </div>
+</main>
+
+<footer>Painel interno &nbsp;·&nbsp; <a href="https://tyve.com.br">Tyve</a></footer>
+
+<script>
+const API = 'https://n8n.tyve.com.br/webhook/tyve-draft-prompt';
+
+function slug() {
+  return new URLSearchParams(location.search).get('slug') || '';
+}
+
+function highlightDraft(text) {
+  // Highlight [A CONFIRMAR] tags
+  return text.replace(/\[A CONFIRMAR[^\]]*\]/g, m =>
+    `<span class="confirm-tag">${m}</span>`
+  );
+}
+
+async function loadDraft() {
+  const s = slug();
+  if (!s) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error-screen').style.display = 'flex';
+    document.getElementById('error-slug').textContent = 'Parâmetro ?slug= não informado na URL';
+    return;
+  }
+
+  try {
+    const res = await fetch(API + '?slug=' + encodeURIComponent(s));
+    const data = await res.json();
+
+    document.getElementById('loading').style.display = 'none';
+
+    if (data.error || !data.draft_prompt) {
+      document.getElementById('error-screen').style.display = 'flex';
+      document.getElementById('error-slug').textContent = 'Slug: ' + s;
+      return;
+    }
+
+    // Render
+    const draft = data.draft_prompt;
+    const nome  = data.nome_empresa || s;
+    const confirmCount = (draft.match(/\[A CONFIRMAR/g) || []).length;
+
+    document.getElementById('draft-title').textContent = '📝 Draft — ' + nome;
+    document.getElementById('slug-display').textContent  = s;
+    document.getElementById('stat-slug').textContent     = s;
+    document.getElementById('char-count').textContent    = draft.length.toLocaleString('pt-BR');
+    document.getElementById('confirm-count').textContent = confirmCount;
+    document.getElementById('draft-pre').innerHTML       = highlightDraft(escapeHtml(draft));
+    document.getElementById('draft-content').style.display = 'block';
+
+  } catch(e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error-screen').style.display = 'flex';
+  }
+}
+
+function escapeHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function copyAll() {
+  const pre = document.getElementById('draft-pre');
+  const text = pre.innerText; // plain text, no HTML
+  try {
+    await navigator.clipboard.writeText(text);
+    const fb = document.getElementById('copy-feedback');
+    fb.classList.add('show');
+    setTimeout(() => fb.classList.remove('show'), 2500);
+  } catch(e) {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const fb = document.getElementById('copy-feedback');
+    fb.classList.add('show');
+    setTimeout(() => fb.classList.remove('show'), 2500);
+  }
+}
+
+loadDraft();
+</script>
+</body>
+</html>
