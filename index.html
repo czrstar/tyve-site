@@ -77,7 +77,8 @@
   .nav-links a:hover { opacity: 1; }
   .nav-links .btn-planos { background: var(--dark); color: white; padding: 9px 22px; border-radius: 100px; font-weight: 600; opacity: 1; }
   .nav-links .btn-demo { border: 1.5px solid rgba(255,255,255,.7); padding: 8px 18px; border-radius: 100px; font-size: 13px; opacity: 1; }
-  .nav-flags { display: flex; gap: 6px; font-size: 22px; cursor: pointer; }
+  .nav-flags { display: flex; gap: 6px; font-size: 22px; }
+  .nav-flags span { cursor: pointer; transition: opacity .2s; }
   .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
   .nav-hamburger span { display: block; width: 24px; height: 2px; background: white; border-radius: 2px; }
 
@@ -214,14 +215,12 @@
   .plan-features { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; flex: 1; }
   .plan-features li { font-size: 13px; color: var(--txt-mid); line-height: 1.5; padding-left: 20px; position: relative; }
   .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
-  /* "Tudo do X" highlight item */
   .plan-features li.feature-all {
     padding-left: 0; color: var(--orange); font-weight: 700; font-size: 13px;
     background: rgba(248,65,0,.08); border: 1.5px solid var(--orange);
     border-radius: 8px; padding: 6px 12px; text-align: center;
   }
   .plan-features li.feature-all::before { content: none; }
-  /* Green CTA per João */
   .btn-plan {
     display: block; width: 100%; padding: 13px;
     background: #25D366; color: #fff;
@@ -339,14 +338,12 @@
 
   /* ─── AGENTE vs BOT (09b) — DARK ─────────────────────── */
   .avb-section { padding: 88px 0; background: var(--dark); position: relative; overflow: hidden; }
-  /* Raios pequenos no fundo da seção inteira — cards com fundo opaco bloqueiam, exterior aparece naturalmente */
   .avb-section::before { content: ''; position: absolute; inset: 0; background-image: url('/assets/raios-tyve.svg'); background-size: auto 65%; background-repeat: repeat-x; background-position: center 72%; opacity: .10; pointer-events: none; z-index: 0; }
   .avb-intro { text-align: center; margin-bottom: 56px; position: relative; z-index: 1; }
   .avb-sec-label { display: inline-block; border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.55); border-radius: 100px; padding: 5px 18px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 20px; }
   .avb-subtitle { color: rgba(255,255,255,.5); font-size: 16px; max-width: 560px; margin: 16px auto 0; line-height: 1.65; }
   .avb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; z-index: 1; }
   .avb-card { border-radius: 20px; padding: 36px 32px; }
-  /* Fundo sólido nas cards — cobre os raios atrás, mantém interior limpo */
   .avb-bot { background: #16161a; border: 1.5px solid rgba(255,255,255,.09); }
   .avb-agent { background: #1d0a04; border: 1.5px solid rgba(248,65,0,.4); position: relative; overflow: hidden; }
   .avb-agent::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(248,65,0,.18), transparent 70%); pointer-events: none; }
@@ -448,7 +445,7 @@
   }
   .btn-cta-teal:hover { opacity: .9; }
 
-  /* ─── FOOTER (15) — verde escuro ───────────────────────── */
+  /* ─── FOOTER (15) ───────────────────────────────────────── */
   footer { background: #0d1f1a; padding: 44px 0; }
   .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
   .footer-logo-row { display: flex; align-items: center; gap: 10px; }
@@ -496,14 +493,17 @@
     <img src="/assets/logo-tyve.svg" alt="Tyve" />
   </a>
   <ul class="nav-links">
-    <li><a href="#como-funciona">Como funciona</a></li>
-    <li><a href="#segmentos">Segmentos</a></li>
+    <li><a href="#como-funciona" data-i18n="nav_how">Como funciona</a></li>
+    <li><a href="#segmentos" data-i18n="nav_segments">Segmentos</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#planos" class="btn-planos">Planos e Preços</a></li>
-    <li><a href="#na-pratica" class="btn-demo">⚡ Ver demo ao vivo</a></li>
+    <li><a href="#planos" class="btn-planos" data-i18n="nav_plans">Planos e Preços</a></li>
+    <li><a href="#na-pratica" class="btn-demo" data-i18n="nav_demo">⚡ Ver demo ao vivo</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:16px;">
-    <div class="nav-flags"><span title="Português">🇧🇷</span><span title="English" style="opacity:.6;">🇺🇸</span></div>
+    <div class="nav-flags">
+      <span title="Português" onclick="setLang('pt')">🇧🇷</span>
+      <span title="English" onclick="setLang('en')" style="opacity:.5;">🇺🇸</span>
+    </div>
     <div class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></div>
   </div>
 </nav>
@@ -516,12 +516,12 @@
       <span class="badge-wa">
         <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.38 1.26 4.8L2.05 22l5.43-1.42c1.37.73 2.92 1.14 4.56 1.14 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.52 14.15c-.23.64-1.35 1.23-1.84 1.29-.49.07-1.06.09-1.71-.11-.39-.12-.9-.28-1.55-.56-2.73-1.18-4.51-3.93-4.65-4.11-.13-.18-1.09-1.45-1.09-2.76 0-1.31.69-1.95.93-2.22.24-.27.53-.34.7-.34l.51.008c.16.007.38-.06.59.45.22.52.74 1.81.81 1.94.07.13.11.28.02.45-.09.18-.14.28-.27.43-.13.16-.27.35-.39.47-.13.13-.27.26-.11.52.15.25.68 1.12 1.46 1.82 1 .89 1.84 1.17 2.1 1.3.25.12.4.1.55-.07.15-.17.64-.74.81-1 .17-.25.34-.21.57-.13.23.08 1.47.69 1.72.82.25.13.42.19.48.3.06.11.06.64-.17 1.28z"/></svg>
       </span>
-      WhatsApp Cloud API oficial
+      <span data-i18n="hero_badge">WhatsApp Cloud API oficial</span>
     </div>
-    <h1>Seu WhatsApp vira seu<br/>melhor atendente. <span class="accent">24h por dia!</span></h1>
-    <p class="hero-sub">Responde, qualifica e encaminha. Sem complicação.</p>
-    <p class="hero-br">🇧🇷 Feito no Brasil, suporte em português</p>
-    <a href="#planos" class="btn-cta">Começar agora</a>
+    <h1 data-i18n-html="hero_h1">Seu WhatsApp vira seu<br/>melhor atendente. <span class="accent">24h por dia!</span></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Responde, qualifica e encaminha. Sem complicação.</p>
+    <p class="hero-br" data-i18n="hero_br">🇧🇷 Feito no Brasil, suporte em português</p>
+    <a href="#planos" class="btn-cta" data-i18n="hero_cta">Começar agora</a>
   </div>
 </section>
 
@@ -537,14 +537,14 @@
       <div class="phone-mockup">
         <div class="chat-header">
           <div class="chat-avatar"><img src="/assets/luma-oficial.png" alt="Luma" onerror="this.style.display='none'" /></div>
-          <div class="chat-info"><strong>Luma — Clínica Sorriso</strong><span class="online">online</span></div>
+          <div class="chat-info"><strong data-i18n="showcase_name">Luma — Clínica Sorriso</strong><span class="online" data-i18n="showcase_online">online</span></div>
         </div>
         <div class="chat-messages">
-          <div class="msg msg-user">Oi, queria saber sobre clareamento dental. Quanto custa?<div class="msg-time">21:42</div></div>
-          <div class="msg msg-bot">Olá! Que bom que você se interessou pelo clareamento! 😊 Na Clínica Sorriso trabalhamos com duas opções: o clareamento a laser (sessão única, R$800) e o caseiro com moldeira (R$450). Posso te ajudar a escolher?<div class="msg-time">21:42</div></div>
-          <div class="msg msg-user">O a laser demora quanto tempo?<div class="msg-time">21:43</div></div>
-          <div class="msg msg-bot">Cerca de 1 hora! Você sai do consultório no mesmo dia com os dentes mais claros. Quer agendar uma avaliação? Temos horários ainda esta semana 🗓️<div class="msg-time">21:43</div></div>
-          <div class="msg msg-user">Quinta de tarde tem?<div class="msg-time">21:44</div></div>
+          <div class="msg msg-user"><span data-i18n="chat_m1_user">Oi, queria saber sobre clareamento dental. Quanto custa?</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m1_bot">Olá! Que bom que você se interessou pelo clareamento! 😊 Na Clínica Sorriso trabalhamos com duas opções: o clareamento a laser (sessão única, R$800) e o caseiro com moldeira (R$450). Posso te ajudar a escolher?</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-user"><span data-i18n="chat_m2_user">O a laser demora quanto tempo?</span><div class="msg-time">21:43</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m2_bot">Cerca de 1 hora! Você sai do consultório no mesmo dia com os dentes mais claros. Quer agendar uma avaliação? Temos horários ainda esta semana 🗓️</span><div class="msg-time">21:43</div></div>
+          <div class="msg msg-user"><span data-i18n="chat_m3_user">Quinta de tarde tem?</span><div class="msg-time">21:44</div></div>
           <div class="typing"><span></span><span></span><span></span></div>
         </div>
       </div>
@@ -557,14 +557,14 @@
 <section class="problem">
   <div class="container">
     <div class="problem-header">
-      <div class="sec-label">O problema</div>
-      <h2 class="section-title section-title-light">Quantos clientes você perdeu<br/>enquanto não estava no WhatsApp?</h2>
+      <div class="sec-label" data-i18n="prob_label">O problema</div>
+      <h2 class="section-title section-title-light" data-i18n-html="prob_h2">Quantos clientes você perdeu<br/>enquanto não estava no WhatsApp?</h2>
     </div>
     <div class="problem-grid">
-      <div class="problem-card"><div class="problem-icon">😴</div><h3>Mensagem às 22h sem resposta</h3><p>Seu cliente manda mensagem à noite. De manhã já agendou na clínica do lado.</p></div>
-      <div class="problem-card"><div class="problem-icon">⏳</div><h3>Equipe afogada de mensagem</h3><p>Todo dia ficam mensagens sem retorno. Cada uma delas é uma venda que não aconteceu.</p></div>
-      <div class="problem-card"><div class="problem-icon">🔁</div><h3>As mesmas perguntas, todo dia</h3><p>Preço, horário, localização, convênio. A equipe responde 30 vezes a mesma coisa.</p></div>
-      <div class="problem-card"><div class="problem-icon">🤷</div><h3>Lead chega sem contexto nenhum</h3><p>Você ou sua equipe pergunta tudo de novo. O cliente repete. Todo mundo se frustra.</p></div>
+      <div class="problem-card"><div class="problem-icon">😴</div><h3 data-i18n="prob_c1h">Mensagem às 22h sem resposta</h3><p data-i18n="prob_c1p">Seu cliente manda mensagem à noite. De manhã já agendou na clínica do lado.</p></div>
+      <div class="problem-card"><div class="problem-icon">⏳</div><h3 data-i18n="prob_c2h">Equipe afogada de mensagem</h3><p data-i18n="prob_c2p">Todo dia ficam mensagens sem retorno. Cada uma delas é uma venda que não aconteceu.</p></div>
+      <div class="problem-card"><div class="problem-icon">🔁</div><h3 data-i18n="prob_c3h">As mesmas perguntas, todo dia</h3><p data-i18n="prob_c3p">Preço, horário, localização, convênio. A equipe responde 30 vezes a mesma coisa.</p></div>
+      <div class="problem-card"><div class="problem-icon">🤷</div><h3 data-i18n="prob_c4h">Lead chega sem contexto nenhum</h3><p data-i18n="prob_c4p">Você ou sua equipe pergunta tudo de novo. O cliente repete. Todo mundo se frustra.</p></div>
     </div>
   </div>
 </section>
@@ -574,34 +574,34 @@
 <section class="how" id="como-funciona">
   <div class="container">
     <div class="how-header">
-      <div class="sec-label">Como funciona</div>
-      <h2 class="section-title section-title-dark">Você não precisa fazer nada.<br/>A gente cuida de tudo.</h2>
+      <div class="sec-label" data-i18n="how_label">Como funciona</div>
+      <h2 class="section-title section-title-dark" data-i18n-html="how_h2">Você não precisa fazer nada.<br/>A gente cuida de tudo.</h2>
     </div>
     <div class="steps">
       <div class="step">
-        <span class="step-badge">Passo 1</span>
-        <h3>Configuramos tudo para você</h3>
+        <span class="step-badge" data-i18n="how_s1badge">Passo 1</span>
+        <h3 data-i18n="how_s1h">Configuramos tudo para você</h3>
         <div class="mini-chat">
-          <div class="mini-msg in">Minha clínica atende ortopedia e fisio</div>
-          <div class="mini-msg out">Perfeito! Vou configurar triagem por especialidade, horários e convênios aceitos ✅</div>
+          <div class="mini-msg in" data-i18n="how_s1m1">Minha clínica atende ortopedia e fisio</div>
+          <div class="mini-msg out" data-i18n="how_s1m2">Perfeito! Vou configurar triagem por especialidade, horários e convênios aceitos ✅</div>
         </div>
       </div>
       <div class="step">
-        <span class="step-badge">Passo 2</span>
-        <h3>O agente atende 24h, todo dia</h3>
+        <span class="step-badge" data-i18n="how_s2badge">Passo 2</span>
+        <h3 data-i18n="how_s2h">O agente atende 24h, todo dia</h3>
         <div class="mini-chat">
-          <div class="mini-msg in">Boa noite, aceita Unimed?</div>
-          <div class="mini-msg out">Boa noite! Sim, aceitamos Unimed 😊 Posso agendar uma consulta pra você?</div>
-          <div class="mini-msg in">Sim! Amanhã de manhã tem?</div>
-          <div class="mini-msg out">Tem sim! Dr. Silva às 9h30. Confirmo?</div>
+          <div class="mini-msg in" data-i18n="how_s2m1">Boa noite, aceita Unimed?</div>
+          <div class="mini-msg out" data-i18n="how_s2m2">Boa noite! Sim, aceitamos Unimed 😊 Posso agendar uma consulta pra você?</div>
+          <div class="mini-msg in" data-i18n="how_s2m3">Sim! Amanhã de manhã tem?</div>
+          <div class="mini-msg out" data-i18n="how_s2m4">Tem sim! Dr. Silva às 9h30. Confirmo?</div>
         </div>
       </div>
       <div class="step">
-        <span class="step-badge">Passo 3</span>
-        <h3>Você recebe leads prontos</h3>
+        <span class="step-badge" data-i18n="how_s3badge">Passo 3</span>
+        <h3 data-i18n="how_s3h">Você recebe leads prontos</h3>
         <div class="mini-chat">
-          <div class="mini-msg notif">🔔 Handoff — Clínica Sorriso</div>
-          <div class="mini-msg out">Paciente: Maria, 34a. Interesse: implante. Convênio: Bradesco. Quer parcelamento.</div>
+          <div class="mini-msg notif" data-i18n="how_s3m1">🔔 Handoff — Clínica Sorriso</div>
+          <div class="mini-msg out" data-i18n="how_s3m2">Paciente: Maria, 34a. Interesse: implante. Convênio: Bradesco. Quer parcelamento.</div>
         </div>
       </div>
     </div>
@@ -612,10 +612,7 @@
 <!-- ══ 06 TARJA FRASE — orange ══ -->
 <section class="tarja">
   <div class="container">
-    <p class="tarja-text">
-      Existem ferramentas para quem quer aprender a fazer.<br/>
-      Tyve é para quem quer que funcione.
-    </p>
+    <p class="tarja-text" data-i18n-html="tarja_text">Existem ferramentas para quem quer aprender a fazer.<br/>Tyve é para quem quer que funcione.</p>
   </div>
 </section>
 
@@ -624,16 +621,16 @@
 <section class="for-who" id="segmentos">
   <div class="container">
     <div class="for-who-header">
-      <div class="sec-label">Para quem é</div>
-      <h2 class="section-title section-title-dark">Pra quem tem negócio local<br/>e WhatsApp que não para de tocar</h2>
+      <div class="sec-label" data-i18n="fw_label">Para quem é</div>
+      <h2 class="section-title section-title-dark" data-i18n-html="fw_h2">Pra quem tem negócio local<br/>e WhatsApp que não para de tocar</h2>
     </div>
     <div class="for-who-grid">
-      <a href="/odontologia" class="segment-card"><div class="segment-icon">🦷</div><h3>Clínicas e Consultórios</h3><span class="segment-link">Saiba mais →</span></a>
-      <div class="segment-card"><div class="segment-icon">💆</div><h3>Estética e Beleza</h3></div>
-      <div class="segment-card"><div class="segment-icon">🏠</div><h3>Imobiliárias</h3></div>
-      <div class="segment-card"><div class="segment-icon">🚗</div><h3>Oficinas e Auto</h3></div>
-      <div class="segment-card"><div class="segment-icon">⚖️</div><h3>Advogados e Contadores</h3></div>
-      <div class="segment-card"><div class="segment-icon">🏋️</div><h3>Academias e Escolas</h3></div>
+      <a href="/odontologia" class="segment-card"><div class="segment-icon">🦷</div><h3 data-i18n="fw_c1">Clínicas e Consultórios</h3><span class="segment-link" data-i18n="fw_more">Saiba mais →</span></a>
+      <div class="segment-card"><div class="segment-icon">💆</div><h3 data-i18n="fw_c2">Estética e Beleza</h3></div>
+      <div class="segment-card"><div class="segment-icon">🏠</div><h3 data-i18n="fw_c3">Imobiliárias</h3></div>
+      <div class="segment-card"><div class="segment-icon">🚗</div><h3 data-i18n="fw_c4">Oficinas e Auto</h3></div>
+      <div class="segment-card"><div class="segment-icon">⚖️</div><h3 data-i18n="fw_c5">Advogados e Contadores</h3></div>
+      <div class="segment-card"><div class="segment-icon">🏋️</div><h3 data-i18n="fw_c6">Academias e Escolas</h3></div>
     </div>
   </div>
 </section>
@@ -643,129 +640,129 @@
 <section class="pricing" id="planos">
   <div class="container">
     <div class="pricing-header">
-      <div class="sec-label">Planos</div>
-      <h2 class="section-title section-title-dark">Investimento direto. Resultado real.</h2>
+      <div class="sec-label" data-i18n="plans_label">Planos</div>
+      <h2 class="section-title section-title-dark" data-i18n="plans_h2">Investimento direto. Resultado real.</h2>
     </div>
 
     <div class="pricing-grid">
       <div class="plan">
         <p class="plan-name">Atende</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">497</span><span class="plan-period">/mês</span></div>
-        <p class="plan-tagline">Até 200 contatos atendidos/mês</p>
+        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-tagline" data-i18n="atende_tagline">Até 200 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li>1 número WhatsApp</li>
-          <li>Fluxo configurado pro seu negócio</li>
-          <li>Respostas automáticas 24h/7d</li>
-          <li>Entende mensagens de texto e de voz 🎙️</li>
-          <li>Triagem e qualificação de leads</li>
-          <li>Alerta com resumo completo da conversa</li>
-          <li>Detecta clientes frustrados e alerta com prioridade ⚠️</li>
-          <li>Lembrete automático se o cliente esperar +12h sem retorno</li>
-          <li>1 ajuste por mês</li>
-          <li>Suporte via WhatsApp (SLA 8h)</li>
+          <li data-i18n="atende_f1">1 número WhatsApp</li>
+          <li data-i18n="atende_f2">Fluxo configurado pro seu negócio</li>
+          <li data-i18n="atende_f3">Respostas automáticas 24h/7d</li>
+          <li data-i18n="atende_f4">Entende mensagens de texto e de voz 🎙️</li>
+          <li data-i18n="atende_f5">Triagem e qualificação de leads</li>
+          <li data-i18n="atende_f6">Alerta com resumo completo da conversa</li>
+          <li data-i18n="atende_f7">Detecta clientes frustrados e alerta com prioridade ⚠️</li>
+          <li data-i18n="atende_f8">Lembrete automático se o cliente esperar +12h sem retorno</li>
+          <li data-i18n="atende_f9">1 ajuste por mês</li>
+          <li data-i18n="atende_f10">Suporte via WhatsApp (SLA 8h)</li>
         </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Atende%20da%20Tyve%20(site)!" class="btn-plan" target="_blank" rel="noopener">Começar com Atende</a>
+        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Atende%20da%20Tyve%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="atende_cta">Começar com Atende</a>
       </div>
 
       <div class="plan featured">
-        <div class="plan-badge-top">MAIS POPULAR</div>
+        <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
         <p class="plan-name">Cresce</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">697</span><span class="plan-period">/mês</span></div>
-        <p class="plan-tagline">Até 500 contatos atendidos/mês</p>
+        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-tagline" data-i18n="cresce_tagline">Até 500 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li class="feature-all">Tudo do Atende</li>
-          <li>Follow-up automático D+1</li>
-          <li>Pesquisa de satisfação automática (NPS)</li>
-          <li>1 ajuste por semana</li>
-          <li>Resumo semanal por email</li>
-          <li>O agente envia link da sua agenda</li>
-          <li>Suporte prioritário (SLA 4h)</li>
+          <li class="feature-all" data-i18n="cresce_all">Tudo do Atende</li>
+          <li data-i18n="cresce_f1">Follow-up automático D+1</li>
+          <li data-i18n="cresce_f2">Pesquisa de satisfação automática (NPS)</li>
+          <li data-i18n="cresce_f3">1 ajuste por semana</li>
+          <li data-i18n="cresce_f4">Resumo semanal por email</li>
+          <li data-i18n="cresce_f5">O agente envia link da sua agenda</li>
+          <li data-i18n="cresce_f6">Suporte prioritário (SLA 4h)</li>
         </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Cresce%20da%20Tyve%20(site)!" class="btn-plan" target="_blank" rel="noopener">Começar com Cresce</a>
+        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Cresce%20da%20Tyve%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="cresce_cta">Começar com Cresce</a>
       </div>
 
       <div class="plan">
         <p class="plan-name">Escala</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">997</span><span class="plan-period">/mês</span></div>
-        <p class="plan-tagline">Até 1.000 contatos/mês</p>
+        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-tagline" data-i18n="escala_tagline">Até 1.000 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li class="feature-all">Tudo do Cresce</li>
-          <li>Follow-up D+1 e D+3</li>
-          <li>Painel de resultados com link</li>
-          <li>Agendamento nativo no WhatsApp</li>
-          <li>Múltiplos fluxos e segmentações</li>
-          <li>Relatório mensal PDF com análise completa</li>
-          <li>Reunião mensal de resultados</li>
-          <li>Gerente de conta dedicado (SLA 2h)</li>
+          <li class="feature-all" data-i18n="escala_all">Tudo do Cresce</li>
+          <li data-i18n="escala_f1">Follow-up D+1 e D+3</li>
+          <li data-i18n="escala_f2">Painel de resultados com link</li>
+          <li data-i18n="escala_f3">Agendamento nativo no WhatsApp</li>
+          <li data-i18n="escala_f4">Múltiplos fluxos e segmentações</li>
+          <li data-i18n="escala_f5">Relatório mensal PDF com análise completa</li>
+          <li data-i18n="escala_f6">Reunião mensal de resultados</li>
+          <li data-i18n="escala_f7">Gerente de conta dedicado (SLA 2h)</li>
         </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Escala%20da%20Tyve%20(site)!" class="btn-plan" target="_blank" rel="noopener">Começar com Escala</a>
+        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20plano%20Escala%20da%20Tyve%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="escala_cta">Começar com Escala</a>
       </div>
     </div>
 
     <div class="addon-box">
       <div class="addon-icon">📅</div>
       <div class="addon-content">
-        <p class="addon-title">Add-on: Agendamento automático via WhatsApp</p>
-        <p class="addon-desc">O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.</p>
+        <p class="addon-title" data-i18n="addon_title">Add-on: Agendamento automático via WhatsApp</p>
+        <p class="addon-desc" data-i18n-html="addon_desc">O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.</p>
       </div>
       <div class="addon-price">
-        <span class="addon-amount">+R$197</span><span class="addon-period">/mês</span>
-        <p class="addon-note">Para Atende e Cresce<br/><span style="color:var(--teal);font-weight:600;">✓ Incluso no Escala</span></p>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20add-on%20de%20agendamento%20(site)!" class="btn-plan" style="font-size:13px;padding:10px 18px;display:inline-block;width:auto;margin-top:12px;" target="_blank" rel="noopener">Adicionar</a>
+        <span class="addon-amount">+R$197</span><span class="addon-period" data-i18n="per_month">/mês</span>
+        <p class="addon-note"><span data-i18n="addon_note1">Para Atende e Cresce</span><br/><span style="color:var(--teal);font-weight:600;" data-i18n="addon_note2">✓ Incluso no Escala</span></p>
+        <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20add-on%20de%20agendamento%20(site)!" class="btn-plan" style="font-size:13px;padding:10px 18px;display:inline-block;width:auto;margin-top:12px;" target="_blank" rel="noopener" data-i18n="addon_cta">Adicionar</a>
       </div>
     </div>
 
     <div class="converte-divider">
-      <div class="converte-label">Tyve Converte — Track de Vendas</div>
-      <h3 class="converte-headline">Não só recepcionista. Um vendedor que não descansa.</h3>
-      <p class="converte-sub">Para negócios de alto ticket: qualifica, argumenta e fecha. Passa para humano só quando necessário.</p>
+      <div class="converte-label" data-i18n="conv_label">Tyve Converte — Track de Vendas</div>
+      <h3 class="converte-headline" data-i18n="conv_h2">Não só recepcionista. Um vendedor que não descansa.</h3>
+      <p class="converte-sub" data-i18n="conv_sub">Para negócios de alto ticket: qualifica, argumenta e fecha. Passa para humano só quando necessário.</p>
     </div>
 
     <div class="converte-grid">
       <div class="plan converte">
         <p class="plan-name">Converte Standard</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">1.497</span><span class="plan-period">/mês</span></div>
-        <p class="plan-tagline">Até 300 contatos/mês</p>
+        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">1.497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-tagline" data-i18n="convstd_tagline">Até 300 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li>IA de alto desempenho (Tyve Pro)</li>
-          <li>Entende mensagens de texto e de voz 🎙️</li>
-          <li>Script de vendas customizado</li>
-          <li>Qualificação + argumentação + fechamento</li>
-          <li>Follow-up D+1 e D+3 em linguagem de vendas</li>
-          <li>Painel de resultados com taxa de conversão</li>
-          <li>Integração CRM inclusa</li>
-          <li>Reunião quinzenal de resultados</li>
-          <li>Suporte prioritário (SLA 1h)</li>
+          <li data-i18n="convstd_f1">IA de alto desempenho (Tyve Pro)</li>
+          <li data-i18n="convstd_f2">Entende mensagens de texto e de voz 🎙️</li>
+          <li data-i18n="convstd_f3">Script de vendas customizado</li>
+          <li data-i18n="convstd_f4">Qualificação + argumentação + fechamento</li>
+          <li data-i18n="convstd_f5">Follow-up D+1 e D+3 em linguagem de vendas</li>
+          <li data-i18n="convstd_f6">Painel de resultados com taxa de conversão</li>
+          <li data-i18n="convstd_f7">Integração CRM inclusa</li>
+          <li data-i18n="convstd_f8">Reunião quinzenal de resultados</li>
+          <li data-i18n="convstd_f9">Suporte prioritário (SLA 1h)</li>
         </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20Tyve%20Converte%20(site)!" class="btn-plan" target="_blank" rel="noopener">Começar com Converte</a>
+        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20Tyve%20Converte%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="convstd_cta">Começar com Converte</a>
       </div>
       <div class="plan converte">
-        <div class="plan-badge-top" style="background:#555;">MAIS VOLUME</div>
+        <div class="plan-badge-top" style="background:#555;" data-i18n="plans_volume">MAIS VOLUME</div>
         <p class="plan-name">Converte Pro</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">1.997</span><span class="plan-period">/mês</span></div>
-        <p class="plan-tagline">Até 700 contatos/mês</p>
+        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">1.997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-tagline" data-i18n="convpro_tagline">Até 700 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
-          <li class="feature-all">Tudo do Converte Standard</li>
-          <li>Volume estendido para maior tráfego</li>
-          <li>Acima de 700? Proposta customizada</li>
+          <li class="feature-all" data-i18n="convpro_all">Tudo do Converte Standard</li>
+          <li data-i18n="convpro_f1">Volume estendido para maior tráfego</li>
+          <li data-i18n="convpro_f2">Acima de 700? Proposta customizada</li>
         </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20Tyve%20Converte%20Pro%20(site)!" class="btn-plan" target="_blank" rel="noopener">Começar com Converte Pro</a>
+        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20Tyve%20Converte%20Pro%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="convpro_cta">Começar com Converte Pro</a>
       </div>
     </div>
 
     <div class="track-compare">
-      <p class="track-compare-title">Qual track é certa para meu negócio?</p>
+      <p class="track-compare-title" data-i18n="track_title">Qual track é certa para meu negócio?</p>
       <table>
-        <thead><tr><th></th><th>Atende / Cresce / Escala</th><th>+ Add-on Agenda</th><th>Tyve Converte</th></tr></thead>
+        <thead><tr><th></th><th data-i18n="track_th1">Atende / Cresce / Escala</th><th data-i18n="track_th2">+ Add-on Agenda</th><th data-i18n="track_th3">Tyve Converte</th></tr></thead>
         <tbody>
-          <tr><td>Faz o quê</td><td>Recepciona e qualifica</td><td>Agenda direto no WhatsApp</td><td>Converte e fecha</td></tr>
-          <tr><td>Ideal pra</td><td>Clínicas e serviços gerais</td><td>Negócios com agenda cheia</td><td>Imobiliárias, estética premium, alto ticket</td></tr>
-          <tr><td>Complementa</td><td>Sua recepção</td><td>Recepção + agenda</td><td>Recepção + equipe comercial</td></tr>
+          <tr><td data-i18n="track_r1l">Faz o quê</td><td data-i18n="track_r1c1">Recepciona e qualifica</td><td data-i18n="track_r1c2">Agenda direto no WhatsApp</td><td data-i18n="track_r1c3">Converte e fecha</td></tr>
+          <tr><td data-i18n="track_r2l">Ideal pra</td><td data-i18n="track_r2c1">Clínicas e serviços gerais</td><td data-i18n="track_r2c2">Negócios com agenda cheia</td><td data-i18n="track_r2c3">Imobiliárias, estética premium, alto ticket</td></tr>
+          <tr><td data-i18n="track_r3l">Complementa</td><td data-i18n="track_r3c1">Sua recepção</td><td data-i18n="track_r3c2">Recepção + agenda</td><td data-i18n="track_r3c3">Recepção + equipe comercial</td></tr>
         </tbody>
       </table>
     </div>
@@ -777,38 +774,38 @@
 <section class="features-demo" id="na-pratica">
   <div class="container">
     <div class="features-demo-header">
-      <div class="sec-label">Na prática</div>
-      <h2 class="section-title section-title-dark">Veja como funciona no seu dia a dia</h2>
+      <div class="sec-label" data-i18n="nd_label">Na prática</div>
+      <h2 class="section-title section-title-dark" data-i18n="nd_h2">Veja como funciona no seu dia a dia</h2>
     </div>
 
     <div class="slider-tabs">
-      <button class="slider-tab active" onclick="showSlide(0)">Alerta de handoff</button>
-      <button class="slider-tab" onclick="showSlide(1)">Painel de resultados</button>
-      <button class="slider-tab" onclick="showSlide(2)">Follow-up automático</button>
-      <button class="slider-tab" onclick="showSlide(3)">Agendamento</button>
+      <button class="slider-tab active" onclick="showSlide(0)" data-i18n="tabs_t0">Alerta de handoff</button>
+      <button class="slider-tab" onclick="showSlide(1)" data-i18n="tabs_t1">Painel de resultados</button>
+      <button class="slider-tab" onclick="showSlide(2)" data-i18n="tabs_t2">Follow-up automático</button>
+      <button class="slider-tab" onclick="showSlide(3)" data-i18n="tabs_t3">Agendamento</button>
     </div>
 
     <!-- Panel 0 -->
     <div class="slider-panel active" id="panel-0">
       <div class="sp-text">
-        <span class="sp-badge">Incluído em todos os planos</span>
-        <h3 class="sp-title">Você recebe um alerta quando o agente precisar de você</h3>
-        <p class="sp-desc">Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.</p>
+        <span class="sp-badge" data-i18n="p0_badge">Incluído em todos os planos</span>
+        <h3 class="sp-title" data-i18n="p0_h3">Você recebe um alerta quando o agente precisar de você</h3>
+        <p class="sp-desc" data-i18n="p0_desc">Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.</p>
       </div>
       <div class="sp-visual">
         <div class="notif-mockup">
           <div class="notif-hdr">
             <div class="notif-av">T</div>
-            <div><div class="notif-nm">Tyve</div><div class="notif-sb">Notificações</div></div>
+            <div><div class="notif-nm">Tyve</div><div class="notif-sb" data-i18n="notif_sb">Notificações</div></div>
           </div>
           <div class="notif-bubble">
             <div class="notif-txt">
-              <span class="nb-urg">🚨 URGENTE — Tyve</span><br/><br/>
-              <span class="nb-dim">📱 WhatsApp: </span><span class="nb-cyan">(16) 99999-9999</span><br/>
-              <span class="nb-dim">👤 Nome: </span>Maria Silva<br/><br/>
-              <strong>💬 O que o cliente disse:</strong><br/>
-              Preciso falar com alguém urgente<br/><br/>
-              <em style="color:#8696a0;font-size:11px;">Responda diretamente no WhatsApp do cliente.</em>
+              <span class="nb-urg" data-i18n="notif_urg">🚨 URGENTE — Tyve</span><br/><br/>
+              <span class="nb-dim" data-i18n="notif_wa">📱 WhatsApp: </span><span class="nb-cyan">(16) 99999-9999</span><br/>
+              <span class="nb-dim" data-i18n="notif_name">👤 Nome: </span>Maria Silva<br/><br/>
+              <strong><span data-i18n="notif_what">💬 O que o cliente disse:</span></strong><br/>
+              <span data-i18n="notif_msg">Preciso falar com alguém urgente</span><br/><br/>
+              <em style="color:#8696a0;font-size:11px;" data-i18n="notif_reply">Responda diretamente no WhatsApp do cliente.</em>
             </div>
             <div class="notif-time">14:32 ✓✓</div>
           </div>
@@ -819,20 +816,20 @@
     <!-- Panel 1 -->
     <div class="slider-panel" id="panel-1">
       <div class="sp-text">
-        <span class="sp-badge">Planos Escala e Converte</span>
-        <h3 class="sp-title">Painel de resultados que você acessa de qualquer lugar</h3>
-        <p class="sp-desc">Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.</p>
+        <span class="sp-badge" data-i18n="p1_badge">Planos Escala e Converte</span>
+        <h3 class="sp-title" data-i18n="p1_h3">Painel de resultados que você acessa de qualquer lugar</h3>
+        <p class="sp-desc" data-i18n="p1_desc">Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.</p>
       </div>
       <div class="sp-visual">
         <div class="dash-mockup">
-          <div class="dm-hdr">📊 Painel Tyve — Março 2026</div>
+          <div class="dm-hdr" data-i18n="dm_hdr">📊 Painel Tyve — Março 2026</div>
           <div class="dm-metrics">
-            <div class="dm-metric"><span class="dm-num">847</span><span class="dm-lbl">Atendimentos</span></div>
-            <div class="dm-metric"><span class="dm-num">23</span><span class="dm-lbl">Encaminhados</span></div>
-            <div class="dm-metric"><span class="dm-num">156</span><span class="dm-lbl">Follow-ups</span></div>
-            <div class="dm-metric green"><span class="dm-num">97%</span><span class="dm-lbl">Resolvidos pelo agente</span></div>
+            <div class="dm-metric"><span class="dm-num">847</span><span class="dm-lbl" data-i18n="dm_atend">Atendimentos</span></div>
+            <div class="dm-metric"><span class="dm-num">23</span><span class="dm-lbl" data-i18n="dm_enc">Encaminhados</span></div>
+            <div class="dm-metric"><span class="dm-num">156</span><span class="dm-lbl" data-i18n="dm_followup">Follow-ups</span></div>
+            <div class="dm-metric green"><span class="dm-num">97%</span><span class="dm-lbl" data-i18n="dm_res">Resolvidos pelo agente</span></div>
           </div>
-          <div style="font-size:11px;color:#bbb;margin-bottom:8px;">Atendimentos por semana</div>
+          <div style="font-size:11px;color:#bbb;margin-bottom:8px;" data-i18n="dm_week">Atendimentos por semana</div>
           <div class="dm-bars">
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="dm-bar" style="height:33px;width:100%;"></div><span style="font-size:10px;color:#bbb;">S1</span></div>
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="dm-bar" style="height:42px;width:100%;"></div><span style="font-size:10px;color:#bbb;">S2</span></div>
@@ -846,15 +843,15 @@
     <!-- Panel 2 -->
     <div class="slider-panel" id="panel-2">
       <div class="sp-text">
-        <span class="sp-badge">Cresce: D+1 · Escala: D+1 + D+3</span>
-        <h3 class="sp-title">Follow-up automático para quem não voltou</h3>
-        <p class="sp-desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática 1 dia depois para ver se o cliente conseguiu o que precisava. No Escala, vai mais uma no D+3. Você não precisa fazer nada.</p>
+        <span class="sp-badge" data-i18n="p2_badge">Cresce: D+1 · Escala: D+1 + D+3</span>
+        <h3 class="sp-title" data-i18n="p2_h3">Follow-up automático para quem não voltou</h3>
+        <p class="sp-desc" data-i18n="p2_desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática 1 dia depois para ver se o cliente conseguiu o que precisava. No Escala, vai mais uma no D+3. Você não precisa fazer nada.</p>
       </div>
       <div class="sp-visual">
         <div class="fc-chat">
-          <div class="fc-bot">Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊<div class="fc-time">D+1 — 09:00</div></div>
-          <div class="fc-client">Sim! Já agendei, obrigado!<div class="fc-time">09:14</div></div>
-          <div class="fc-bot">Ótimo! Qualquer coisa estamos aqui. Até logo! 👋<div class="fc-time">09:14</div></div>
+          <div class="fc-bot"><span data-i18n="p2_bot1">Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊</span><div class="fc-time">D+1 — 09:00</div></div>
+          <div class="fc-client"><span data-i18n="p2_client">Sim! Já agendei, obrigado!</span><div class="fc-time">09:14</div></div>
+          <div class="fc-bot"><span data-i18n="p2_bot2">Ótimo! Qualquer coisa estamos aqui. Até logo! 👋</span><div class="fc-time">09:14</div></div>
         </div>
       </div>
     </div>
@@ -862,20 +859,20 @@
     <!-- Panel 3 -->
     <div class="slider-panel" id="panel-3">
       <div class="sp-text">
-        <span class="sp-badge">Incluso no Escala · Add-on para Atende e Cresce</span>
-        <h3 class="sp-title">Cliente escolhe o horário sem sair do WhatsApp</h3>
-        <p class="sp-desc">O agente consulta sua agenda em tempo real e apresenta os horários disponíveis direto na conversa. O cliente escolhe, o evento é criado no Google Calendar automaticamente, com lembrete D-1.</p>
+        <span class="sp-badge" data-i18n="p3_badge">Incluso no Escala · Add-on para Atende e Cresce</span>
+        <h3 class="sp-title" data-i18n="p3_h3">Cliente escolhe o horário sem sair do WhatsApp</h3>
+        <p class="sp-desc" data-i18n="p3_desc">O agente consulta sua agenda em tempo real e apresenta os horários disponíveis direto na conversa. O cliente escolhe, o evento é criado no Google Calendar automaticamente, com lembrete D-1.</p>
       </div>
       <div class="sp-visual">
         <div class="sched-mockup">
-          <div class="sched-hdr">📅 Agendar consulta</div>
+          <div class="sched-hdr" data-i18n="p3_sched_hdr">📅 Agendar consulta</div>
           <div class="sched-opts">
             <div class="sched-opt sel">Seg 07/04 às 09h</div>
             <div class="sched-opt">Seg 07/04 às 10h</div>
             <div class="sched-opt">Ter 08/04 às 14h</div>
             <div class="sched-opt">Qua 09/04 às 11h</div>
           </div>
-          <button class="sched-btn">Confirmar horário</button>
+          <button class="sched-btn" data-i18n="p3_sched_btn">Confirmar horário</button>
         </div>
       </div>
     </div>
@@ -887,51 +884,51 @@
 <section class="avb-section">
   <div class="container">
     <div class="avb-intro">
-      <div class="avb-sec-label">Por que faz diferença</div>
-      <h2 class="section-title section-title-light">Agente de IA não é<br>o mesmo que chatbot</h2>
-      <p class="avb-subtitle">A maioria das automações usa regras simples — se o cliente escrever a palavra certa, funciona. O agente Tyve lê, interpreta e raciocina como um atendente de verdade.</p>
+      <div class="avb-sec-label" data-i18n="avb_label">Por que faz diferença</div>
+      <h2 class="section-title section-title-light" data-i18n-html="avb_h2">Agente de IA não é<br>o mesmo que chatbot</h2>
+      <p class="avb-subtitle" data-i18n="avb_sub">A maioria das automações usa regras simples — se o cliente escrever a palavra certa, funciona. O agente Tyve lê, interpreta e raciocina como um atendente de verdade.</p>
     </div>
     <div class="avb-grid">
 
       <!-- Chatbot simples -->
       <div class="avb-card avb-bot">
         <div class="avb-card-header">
-          <span class="avb-badge avb-badge-bot">Chatbot simples</span>
+          <span class="avb-badge avb-badge-bot" data-i18n="avb_badge_bot">Chatbot simples</span>
           <span class="avb-icon">🤖</span>
         </div>
         <ul class="avb-list">
-          <li><span class="avb-x">✗</span>Só entende palavras-chave programadas</li>
-          <li><span class="avb-x">✗</span>Trava se o cliente digitar diferente</li>
-          <li><span class="avb-x">✗</span>Sem memória — cada mensagem é isolada</li>
-          <li><span class="avb-x">✗</span>Resposta mecânica e genérica</li>
-          <li><span class="avb-x">✗</span>Não decide — segue script fixo</li>
-          <li><span class="avb-x">✗</span>Cliente percebe a frieza na hora</li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f1">Só entende palavras-chave programadas</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f2">Trava se o cliente digitar diferente</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f3">Sem memória — cada mensagem é isolada</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f4">Resposta mecânica e genérica</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f5">Não decide — segue script fixo</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f6">Cliente percebe a frieza na hora</span></li>
         </ul>
         <div class="avb-example avb-example-bot">
-          <div class="avb-ex-label">Exemplo real</div>
-          <div class="avb-bubble avb-in">"qual o preço pra consulta de urgencia"</div>
-          <div class="avb-bubble avb-out-bot">Desculpe, não entendi. Digite: <strong>CONSULTA</strong> ou <strong>AGENDAR</strong></div>
+          <div class="avb-ex-label" data-i18n="avb_bot_ex_label">Exemplo real</div>
+          <div class="avb-bubble avb-in" data-i18n="avb_bot_q">"qual o preço pra consulta de urgencia"</div>
+          <div class="avb-bubble avb-out-bot" data-i18n-html="avb_bot_a">Desculpe, não entendi. Digite: <strong>CONSULTA</strong> ou <strong>AGENDAR</strong></div>
         </div>
       </div>
 
       <!-- Agente Tyve -->
       <div class="avb-card avb-agent">
         <div class="avb-card-header">
-          <span class="avb-badge avb-badge-agent">Agente Tyve</span>
+          <span class="avb-badge avb-badge-agent" data-i18n="avb_badge_agent">Agente Tyve</span>
           <span class="avb-icon">✨</span>
         </div>
         <ul class="avb-list">
-          <li><span class="avb-chk">✓</span>Lê e interpreta qualquer mensagem</li>
-          <li><span class="avb-chk">✓</span>Entende linguagem informal, erros e abreviações</li>
-          <li><span class="avb-chk">✓</span>Lembra toda a conversa — responde com continuidade</li>
-          <li><span class="avb-chk">✓</span>Tom e linguagem do seu negócio</li>
-          <li><span class="avb-chk">✓</span>Raciocina — decide quando escalar ou agendar</li>
-          <li><span class="avb-chk">✓</span>Experiência natural, como falar com um atendente</li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f1">Lê e interpreta qualquer mensagem</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f2">Entende linguagem informal, erros e abreviações</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f3">Lembra toda a conversa — responde com continuidade</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f4">Tom e linguagem do seu negócio</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f5">Raciocina — decide quando escalar ou agendar</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f6">Experiência natural, como falar com um atendente</span></li>
         </ul>
         <div class="avb-example avb-example-agent">
-          <div class="avb-ex-label">Mesmo exemplo</div>
-          <div class="avb-bubble avb-in">"qual o preço pra consulta de urgencia"</div>
-          <div class="avb-bubble avb-out-agent">Oi! 😊 Consulta de urgência tem atendimento prioritário, a partir de R$150. Quer que eu verifique os horários disponíveis ainda hoje?</div>
+          <div class="avb-ex-label" data-i18n="avb_agent_ex_label">Mesmo exemplo</div>
+          <div class="avb-bubble avb-in" data-i18n="avb_agent_q">"qual o preço pra consulta de urgencia"</div>
+          <div class="avb-bubble avb-out-agent" data-i18n="avb_agent_a">Oi! 😊 Consulta de urgência tem atendimento prioritário, a partir de R$150. Quer que eu verifique os horários disponíveis ainda hoje?</div>
         </div>
       </div>
 
@@ -944,19 +941,19 @@
 <section class="vs-section">
   <div class="container">
     <div class="vs-header">
-      <div class="sec-label">Comparativo</div>
-      <h2 class="section-title section-title-dark">Tyve vs as outras opções</h2>
+      <div class="sec-label" data-i18n="vs_label">Comparativo</div>
+      <h2 class="section-title section-title-dark" data-i18n="vs_h2">Tyve vs as outras opções</h2>
     </div>
     <table class="vs-table">
-      <thead><tr><th></th><th class="col-tyve">Tyve</th><th>App de automação</th><th>Montar do zero</th></tr></thead>
+      <thead><tr><th></th><th class="col-tyve">Tyve</th><th data-i18n="vs_th2">App de automação</th><th data-i18n="vs_th3">Montar do zero</th></tr></thead>
       <tbody>
-        <tr><td>Tempo de resposta do agente</td><td><span class="check">✓</span> &lt;15s em média</td><td><span class="partial">Se bem configurado</span></td><td><span class="partial">Variável</span></td></tr>
-        <tr><td>Configurado pro seu negócio</td><td><span class="check">✓</span></td><td><span class="cross">✗</span> você configura</td><td><span class="cross">✗</span> você faz tudo</td></tr>
-        <tr><td>Sem virar técnico de TI</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
-        <tr><td>A gente mantém. Você só usa.</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
-        <tr><td>Funcionando na primeira semana</td><td><span class="check">✓</span></td><td><span class="partial">Semanas de setup</span></td><td><span class="partial">Meses de setup</span></td></tr>
-        <tr><td>Suporte de quem conhece o seu agente</td><td><span class="check">✓</span></td><td><span class="partial">Ticket / FAQ</span></td><td><span class="cross">✗</span></td></tr>
-        <tr><td>IA treinada no seu negócio</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="partial">Depende de você</span></td></tr>
+        <tr><td data-i18n="vs_r1l">Tempo de resposta do agente</td><td data-i18n-html="vs_r1c1"><span class="check">✓</span> &lt;15s em média</td><td data-i18n-html="vs_r1c2"><span class="partial">Se bem configurado</span></td><td data-i18n-html="vs_r1c3"><span class="partial">Variável</span></td></tr>
+        <tr><td data-i18n="vs_r2l">Configurado pro seu negócio</td><td data-i18n-html="vs_r2c1"><span class="check">✓</span></td><td data-i18n-html="vs_r2c2"><span class="cross">✗</span> você configura</td><td data-i18n-html="vs_r2c3"><span class="cross">✗</span> você faz tudo</td></tr>
+        <tr><td data-i18n="vs_r3l">Sem virar técnico de TI</td><td data-i18n-html="vs_r3c1"><span class="check">✓</span></td><td data-i18n-html="vs_r3c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r3c3"><span class="cross">✗</span></td></tr>
+        <tr><td data-i18n="vs_r4l">A gente mantém. Você só usa.</td><td data-i18n-html="vs_r4c1"><span class="check">✓</span></td><td data-i18n-html="vs_r4c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r4c3"><span class="cross">✗</span></td></tr>
+        <tr><td data-i18n="vs_r5l">Funcionando na primeira semana</td><td data-i18n-html="vs_r5c1"><span class="check">✓</span></td><td data-i18n-html="vs_r5c2"><span class="partial">Semanas de setup</span></td><td data-i18n-html="vs_r5c3"><span class="partial">Meses de setup</span></td></tr>
+        <tr><td data-i18n="vs_r6l">Suporte de quem conhece o seu agente</td><td data-i18n-html="vs_r6c1"><span class="check">✓</span></td><td data-i18n-html="vs_r6c2"><span class="partial">Ticket / FAQ</span></td><td data-i18n-html="vs_r6c3"><span class="cross">✗</span></td></tr>
+        <tr><td data-i18n="vs_r7l">IA treinada no seu negócio</td><td data-i18n-html="vs_r7c1"><span class="check">✓</span></td><td data-i18n-html="vs_r7c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r7c3"><span class="partial">Depende de você</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -967,13 +964,13 @@
 <section class="testimonial">
   <div class="container">
     <div class="testimonial-inner">
-      <div class="sec-label">Quem já usa</div>
+      <div class="sec-label" data-i18n="tst_label">Quem já usa</div>
       <div class="testimonial-card">
         <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"Antes eu ficava respondendo mensagem até de madrugada. Agora o agente faz a triagem, responde as dúvidas e me entrega tudo organizado. Na manhã seguinte eu só dou continuidade. Minha agenda não para de lotar."</p>
+        <p class="testimonial-text" data-i18n="tst_text">"Antes eu ficava respondendo mensagem até de madrugada. Agora o agente faz a triagem, responde as dúvidas e me entrega tudo organizado. Na manhã seguinte eu só dou continuidade. Minha agenda não para de lotar."</p>
         <div class="testimonial-author">
           <div class="author-avatar">🦷</div>
-          <div><p class="author-name">Dr. Bachur</p><p class="author-role">Bachur Odontologia — Piloto Tyve</p></div>
+          <div><p class="author-name" data-i18n="tst_name">Dr. Bachur</p><p class="author-role" data-i18n="tst_role">Bachur Odontologia — Piloto Tyve</p></div>
         </div>
       </div>
     </div>
@@ -986,24 +983,24 @@
   <div class="container">
     <div class="roi-inner">
       <div class="roi-header">
-        <div class="sec-label">Calculadora de economia</div>
-        <h2 class="section-title section-title-dark" style="font-size:clamp(32px,4vw,52px);">Quanto tempo sua equipe<br>ganha com a Tyve?</h2>
-        <p class="roi-sub">Baseado em pesquisas do Sebrae e dados reais de negócios como o seu.</p>
+        <div class="sec-label" data-i18n="roi_label">Calculadora de economia</div>
+        <h2 class="section-title section-title-dark" style="font-size:clamp(32px,4vw,52px);" data-i18n-html="roi_h2">Quanto tempo sua equipe<br>ganha com a Tyve?</h2>
+        <p class="roi-sub" data-i18n="roi_sub">Baseado em pesquisas do Sebrae e dados reais de negócios como o seu.</p>
       </div>
       <div class="roi-calc">
-        <label class="roi-input-label">Mensagens no WhatsApp por dia</label>
+        <label class="roi-input-label" data-i18n="roi_input_label">Mensagens no WhatsApp por dia</label>
         <div class="roi-slider-row">
           <input type="range" id="roiSlider" min="30" max="300" value="80" step="10" class="roi-slider" />
           <span class="roi-slider-value" id="roiValue">80</span>
         </div>
-        <div class="roi-slider-hints"><span>30/dia</span><span>Clínica média: ~80</span><span>300/dia</span></div>
+        <div class="roi-slider-hints"><span data-i18n="roi_hint1">30/dia</span><span data-i18n="roi_hint2">Clínica média: ~80</span><span data-i18n="roi_hint3">300/dia</span></div>
         <div class="roi-results">
-          <div class="roi-card"><span class="roi-card-label">Tempo manual por mês</span><span class="roi-card-value" id="roiManual">93h</span><span class="roi-card-detail">~3,5 min por mensagem × 20 dias úteis</span></div>
-          <div class="roi-card roi-card-highlight"><span class="roi-card-label">Horas liberadas com a Tyve</span><span class="roi-card-value" id="roiSaved">70h</span><span class="roi-card-detail">75% das interações resolvidas pela IA</span></div>
-          <div class="roi-card"><span class="roi-card-label">Dias de trabalho de volta</span><span class="roi-card-value" id="roiDays">9 dias</span><span class="roi-card-detail">Tempo que sua equipe ganha pra focar no que importa</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c1_label">Tempo manual por mês</span><span class="roi-card-value" id="roiManual">93h</span><span class="roi-card-detail" data-i18n="roi_c1_detail">~3,5 min por mensagem × 20 dias úteis</span></div>
+          <div class="roi-card roi-card-highlight"><span class="roi-card-label" data-i18n="roi_c2_label">Horas liberadas com a Tyve</span><span class="roi-card-value" id="roiSaved">70h</span><span class="roi-card-detail" data-i18n="roi_c2_detail">75% das interações resolvidas pela IA</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c3_label">Dias de trabalho de volta</span><span class="roi-card-value" id="roiDays">9 dias</span><span class="roi-card-detail" data-i18n="roi_c3_detail">Tempo que sua equipe ganha pra focar no que importa</span></div>
         </div>
-        <p class="roi-bonus">São <strong id="roiSavedText">70 horas</strong> que sua equipe ganha de volta por mês — sem contar atendimento 24h e follow-up automático.</p>
-        <p class="roi-footnote">Estimativa com base em pesquisas do Sebrae. Cada negócio pode variar.</p>
+        <p class="roi-bonus" id="roiBonus">São <strong id="roiSavedText">70 horas</strong> que sua equipe ganha de volta por mês — sem contar atendimento 24h e follow-up automático.</p>
+        <p class="roi-footnote" data-i18n="roi_footnote">Estimativa com base em pesquisas do Sebrae. Cada negócio pode variar.</p>
       </div>
     </div>
   </div>
@@ -1014,18 +1011,18 @@
 <section class="faq" id="faq">
   <div class="container">
     <div class="faq-header">
-      <div class="sec-label">Dúvidas</div>
-      <h2 class="section-title section-title-dark">Perguntas frequentes</h2>
+      <div class="sec-label" data-i18n="faq_label">Dúvidas</div>
+      <h2 class="section-title section-title-dark" data-i18n="faq_h2">Perguntas frequentes</h2>
     </div>
     <div class="faq-list">
-      <div class="faq-item"><button class="faq-question">Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span></button><div class="faq-answer"><p>Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.</p></div></div>
-      <div class="faq-item"><button class="faq-question">Quanto tempo até estar funcionando? <span class="faq-icon">+</span></button><div class="faq-answer"><p>De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.</p></div></div>
-      <div class="faq-item"><button class="faq-question">Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span></button><div class="faq-answer"><p>Não. A Tyve funciona no número que você já usa. É só conectar via QR code — menos de 5 minutos e tá feito.</p></div></div>
-      <div class="faq-item"><button class="faq-question">E se o agente falar alguma coisa errada? <span class="faq-icon">+</span></button><div class="faq-answer"><p>O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.</p></div></div>
-      <div class="faq-item"><button class="faq-question">O que é o follow-up automático? <span class="faq-icon">+</span></button><div class="faq-answer"><p>Quando um cliente conversa com o agente mas não agenda, não compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ele conseguiu o que precisava. Nos planos Escala, manda de novo 3 dias depois se ainda não houve retorno. Tudo sem você precisar lembrar de ninguém.</p></div></div>
-      <div class="faq-item"><button class="faq-question">O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span></button><div class="faq-answer"><p>Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada.</p></div></div>
-      <div class="faq-item"><button class="faq-question">Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span></button><div class="faq-answer"><p>Sem contrato longo. Pedimos 3 meses mínimo para ver resultado real. Depois disso, mês a mês sem multa.</p></div></div>
-      <div class="faq-item"><button class="faq-question">Precisa de WhatsApp Business? <span class="faq-icon">+</span></button><div class="faq-answer"><p>Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q1">Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a1">Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q2">Quanto tempo até estar funcionando? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a2">De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q3">Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a3">Não. A Tyve funciona no número que você já usa. É só conectar via QR code — menos de 5 minutos e tá feito.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q4">E se o agente falar alguma coisa errada? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a4">O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q5">O que é o follow-up automático? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a5">Quando um cliente conversa com o agente mas não agenda, não compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ele conseguiu o que precisava. Nos planos Escala, manda de novo 3 dias depois se ainda não houve retorno. Tudo sem você precisar lembrar de ninguém.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q6">O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a6">Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q7">Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a7">Sem contrato longo. Pedimos 3 meses mínimo para ver resultado real. Depois disso, mês a mês sem multa.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q8">Precisa de WhatsApp Business? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a8">Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.</p></div></div>
     </div>
   </div>
 </section>
@@ -1035,11 +1032,11 @@
 <section class="final-cta">
   <div class="container">
     <div class="final-cta-content">
-      <h2>Chega de perder cliente<br/>no WhatsApp!</h2>
-      <p>Em 20 minutinhos a gente mostra ao vivo como fica seu negócio,<br/>sem compromisso nenhum.</p>
+      <h2 data-i18n-html="cta_h2">Chega de perder cliente<br/>no WhatsApp!</h2>
+      <p data-i18n-html="cta_p">Em 20 minutinhos a gente mostra ao vivo como fica seu negócio,<br/>sem compromisso nenhum.</p>
       <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20uma%20demo%20da%20Tyve%20(site)!" class="btn-cta-teal" target="_blank" rel="noopener">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Agendar demo grátis
+        <span data-i18n="cta_btn">Agendar demo grátis</span>
       </a>
     </div>
   </div>
@@ -1053,12 +1050,12 @@
       <img src="/assets/logo-tyve.svg" alt="Tyve" style="height:28px; filter:brightness(0) invert(1);" />
     </div>
     <div class="footer-links">
-      <a href="/termos.html">Termos de Serviço</a>
-      <a href="/privacy">Privacidade</a>
+      <a href="/termos.html" data-i18n="footer_terms">Termos de Serviço</a>
+      <a href="/privacy" data-i18n="footer_privacy">Privacidade</a>
       <a href="https://wa.me/5516994247541?text=Oi%20(site)!" target="_blank">WhatsApp</a>
     </div>
-    <p class="footer-copy">&copy; 2026 Tyve. Todos os direitos reservados.</p>
-    <p class="footer-disclaimer">Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.</p>
+    <p class="footer-copy" data-i18n="footer_copy">&copy; 2026 Tyve. Todos os direitos reservados.</p>
+    <p class="footer-disclaimer" data-i18n="footer_disclaimer">Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.</p>
   </div>
 </footer>
 
@@ -1070,40 +1067,458 @@
 
 
 <script>
-  /* Slider */
-  function showSlide(i) {
-    document.querySelectorAll('.slider-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
-    document.querySelectorAll('.slider-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
-  }
+/* ─── I18N ─────────────────────────────────────────────── */
+var currentLang = 'pt';
 
-  /* ROI */
-  const rs = document.getElementById('roiSlider');
-  function calcROI() {
-    const m = parseInt(rs.value);
-    document.getElementById('roiValue').textContent = m;
-    const manual = Math.round(m*3.5*20/60);
-    const saved = Math.round(manual*.75);
-    const days = Math.round(saved/8);
-    document.getElementById('roiManual').textContent = manual+'h';
-    document.getElementById('roiSaved').textContent = saved+'h';
-    document.getElementById('roiDays').textContent = days+' dias';
-    document.getElementById('roiSavedText').textContent = saved+' horas';
+var T = {
+  pt: {
+    nav_how:'Como funciona', nav_segments:'Segmentos', nav_faq:'FAQ',
+    nav_plans:'Planos e Preços', nav_demo:'⚡ Ver demo ao vivo',
+    hero_badge:'WhatsApp Cloud API oficial',
+    hero_h1:'Seu WhatsApp vira seu<br/>melhor atendente. <span class="accent">24h por dia!</span>',
+    hero_sub:'Responde, qualifica e encaminha. Sem complicação.',
+    hero_br:'🇧🇷 Feito no Brasil, suporte em português',
+    hero_cta:'Começar agora',
+    showcase_name:'Luma — Clínica Sorriso', showcase_online:'online',
+    chat_m1_user:'Oi, queria saber sobre clareamento dental. Quanto custa?',
+    chat_m1_bot:'Olá! Que bom que você se interessou pelo clareamento! 😊 Na Clínica Sorriso trabalhamos com duas opções: o clareamento a laser (sessão única, R$800) e o caseiro com moldeira (R$450). Posso te ajudar a escolher?',
+    chat_m2_user:'O a laser demora quanto tempo?',
+    chat_m2_bot:'Cerca de 1 hora! Você sai do consultório no mesmo dia com os dentes mais claros. Quer agendar uma avaliação? Temos horários ainda esta semana 🗓️',
+    chat_m3_user:'Quinta de tarde tem?',
+    prob_label:'O problema',
+    prob_h2:'Quantos clientes você perdeu<br/>enquanto não estava no WhatsApp?',
+    prob_c1h:'Mensagem às 22h sem resposta', prob_c1p:'Seu cliente manda mensagem à noite. De manhã já agendou na clínica do lado.',
+    prob_c2h:'Equipe afogada de mensagem', prob_c2p:'Todo dia ficam mensagens sem retorno. Cada uma delas é uma venda que não aconteceu.',
+    prob_c3h:'As mesmas perguntas, todo dia', prob_c3p:'Preço, horário, localização, convênio. A equipe responde 30 vezes a mesma coisa.',
+    prob_c4h:'Lead chega sem contexto nenhum', prob_c4p:'Você ou sua equipe pergunta tudo de novo. O cliente repete. Todo mundo se frustra.',
+    how_label:'Como funciona',
+    how_h2:'Você não precisa fazer nada.<br/>A gente cuida de tudo.',
+    how_s1badge:'Passo 1', how_s1h:'Configuramos tudo para você',
+    how_s1m1:'Minha clínica atende ortopedia e fisio',
+    how_s1m2:'Perfeito! Vou configurar triagem por especialidade, horários e convênios aceitos ✅',
+    how_s2badge:'Passo 2', how_s2h:'O agente atende 24h, todo dia',
+    how_s2m1:'Boa noite, aceita Unimed?',
+    how_s2m2:'Boa noite! Sim, aceitamos Unimed 😊 Posso agendar uma consulta pra você?',
+    how_s2m3:'Sim! Amanhã de manhã tem?', how_s2m4:'Tem sim! Dr. Silva às 9h30. Confirmo?',
+    how_s3badge:'Passo 3', how_s3h:'Você recebe leads prontos',
+    how_s3m1:'🔔 Handoff — Clínica Sorriso',
+    how_s3m2:'Paciente: Maria, 34a. Interesse: implante. Convênio: Bradesco. Quer parcelamento.',
+    tarja_text:'Existem ferramentas para quem quer aprender a fazer.<br/>Tyve é para quem quer que funcione.',
+    fw_label:'Para quem é',
+    fw_h2:'Pra quem tem negócio local<br/>e WhatsApp que não para de tocar',
+    fw_c1:'Clínicas e Consultórios', fw_c2:'Estética e Beleza', fw_c3:'Imobiliárias',
+    fw_c4:'Oficinas e Auto', fw_c5:'Advogados e Contadores', fw_c6:'Academias e Escolas',
+    fw_more:'Saiba mais →',
+    plans_label:'Planos', plans_h2:'Investimento direto. Resultado real.',
+    plans_popular:'MAIS POPULAR', plans_volume:'MAIS VOLUME', per_month:'/mês',
+    atende_tagline:'Até 200 contatos atendidos/mês',
+    atende_f1:'1 número WhatsApp', atende_f2:'Fluxo configurado pro seu negócio',
+    atende_f3:'Respostas automáticas 24h/7d', atende_f4:'Entende mensagens de texto e de voz 🎙️',
+    atende_f5:'Triagem e qualificação de leads', atende_f6:'Alerta com resumo completo da conversa',
+    atende_f7:'Detecta clientes frustrados e alerta com prioridade ⚠️',
+    atende_f8:'Lembrete automático se o cliente esperar +12h sem retorno',
+    atende_f9:'1 ajuste por mês', atende_f10:'Suporte via WhatsApp (SLA 8h)',
+    atende_cta:'Começar com Atende',
+    cresce_tagline:'Até 500 contatos atendidos/mês', cresce_all:'Tudo do Atende',
+    cresce_f1:'Follow-up automático D+1', cresce_f2:'Pesquisa de satisfação automática (NPS)',
+    cresce_f3:'1 ajuste por semana', cresce_f4:'Resumo semanal por email',
+    cresce_f5:'O agente envia link da sua agenda', cresce_f6:'Suporte prioritário (SLA 4h)',
+    cresce_cta:'Começar com Cresce',
+    escala_tagline:'Até 1.000 contatos/mês', escala_all:'Tudo do Cresce',
+    escala_f1:'Follow-up D+1 e D+3', escala_f2:'Painel de resultados com link',
+    escala_f3:'Agendamento nativo no WhatsApp', escala_f4:'Múltiplos fluxos e segmentações',
+    escala_f5:'Relatório mensal PDF com análise completa', escala_f6:'Reunião mensal de resultados',
+    escala_f7:'Gerente de conta dedicado (SLA 2h)', escala_cta:'Começar com Escala',
+    addon_title:'Add-on: Agendamento automático via WhatsApp',
+    addon_desc:'O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.',
+    addon_note1:'Para Atende e Cresce', addon_note2:'✓ Incluso no Escala', addon_cta:'Adicionar',
+    conv_label:'Tyve Converte — Track de Vendas',
+    conv_h2:'Não só recepcionista. Um vendedor que não descansa.',
+    conv_sub:'Para negócios de alto ticket: qualifica, argumenta e fecha. Passa para humano só quando necessário.',
+    convstd_tagline:'Até 300 contatos/mês',
+    convstd_f1:'IA de alto desempenho (Tyve Pro)', convstd_f2:'Entende mensagens de texto e de voz 🎙️',
+    convstd_f3:'Script de vendas customizado', convstd_f4:'Qualificação + argumentação + fechamento',
+    convstd_f5:'Follow-up D+1 e D+3 em linguagem de vendas',
+    convstd_f6:'Painel de resultados com taxa de conversão', convstd_f7:'Integração CRM inclusa',
+    convstd_f8:'Reunião quinzenal de resultados', convstd_f9:'Suporte prioritário (SLA 1h)',
+    convstd_cta:'Começar com Converte',
+    convpro_tagline:'Até 700 contatos/mês', convpro_all:'Tudo do Converte Standard',
+    convpro_f1:'Volume estendido para maior tráfego', convpro_f2:'Acima de 700? Proposta customizada',
+    convpro_cta:'Começar com Converte Pro',
+    track_title:'Qual track é certa para meu negócio?',
+    track_th1:'Atende / Cresce / Escala', track_th2:'+ Add-on Agenda', track_th3:'Tyve Converte',
+    track_r1l:'Faz o quê', track_r1c1:'Recepciona e qualifica', track_r1c2:'Agenda direto no WhatsApp', track_r1c3:'Converte e fecha',
+    track_r2l:'Ideal pra', track_r2c1:'Clínicas e serviços gerais', track_r2c2:'Negócios com agenda cheia', track_r2c3:'Imobiliárias, estética premium, alto ticket',
+    track_r3l:'Complementa', track_r3c1:'Sua recepção', track_r3c2:'Recepção + agenda', track_r3c3:'Recepção + equipe comercial',
+    nd_label:'Na prática', nd_h2:'Veja como funciona no seu dia a dia',
+    tabs_t0:'Alerta de handoff', tabs_t1:'Painel de resultados', tabs_t2:'Follow-up automático', tabs_t3:'Agendamento',
+    p0_badge:'Incluído em todos os planos',
+    p0_h3:'Você recebe um alerta quando o agente precisar de você',
+    p0_desc:'Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.',
+    p1_badge:'Planos Escala e Converte',
+    p1_h3:'Painel de resultados que você acessa de qualquer lugar',
+    p1_desc:'Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.',
+    p2_badge:'Cresce: D+1 · Escala: D+1 + D+3',
+    p2_h3:'Follow-up automático para quem não voltou',
+    p2_desc:'Depois que o agente encaminha um cliente, ele manda uma mensagem automática 1 dia depois para ver se o cliente conseguiu o que precisava. No Escala, vai mais uma no D+3. Você não precisa fazer nada.',
+    p2_bot1:'Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊',
+    p2_client:'Sim! Já agendei, obrigado!',
+    p2_bot2:'Ótimo! Qualquer coisa estamos aqui. Até logo! 👋',
+    p3_badge:'Incluso no Escala · Add-on para Atende e Cresce',
+    p3_h3:'Cliente escolhe o horário sem sair do WhatsApp',
+    p3_desc:'O agente consulta sua agenda em tempo real e apresenta os horários disponíveis direto na conversa. O cliente escolhe, o evento é criado no Google Calendar automaticamente, com lembrete D-1.',
+    p3_sched_hdr:'📅 Agendar consulta', p3_sched_btn:'Confirmar horário',
+    avb_label:'Por que faz diferença',
+    avb_h2:'Agente de IA não é<br>o mesmo que chatbot',
+    avb_sub:'A maioria das automações usa regras simples — se o cliente escrever a palavra certa, funciona. O agente Tyve lê, interpreta e raciocina como um atendente de verdade.',
+    avb_badge_bot:'Chatbot simples', avb_badge_agent:'Agente Tyve',
+    avb_bot_f1:'Só entende palavras-chave programadas', avb_bot_f2:'Trava se o cliente digitar diferente',
+    avb_bot_f3:'Sem memória — cada mensagem é isolada', avb_bot_f4:'Resposta mecânica e genérica',
+    avb_bot_f5:'Não decide — segue script fixo', avb_bot_f6:'Cliente percebe a frieza na hora',
+    avb_agent_f1:'Lê e interpreta qualquer mensagem', avb_agent_f2:'Entende linguagem informal, erros e abreviações',
+    avb_agent_f3:'Lembra toda a conversa — responde com continuidade', avb_agent_f4:'Tom e linguagem do seu negócio',
+    avb_agent_f5:'Raciocina — decide quando escalar ou agendar', avb_agent_f6:'Experiência natural, como falar com um atendente',
+    avb_bot_ex_label:'Exemplo real', avb_bot_q:'"qual o preço pra consulta de urgencia"',
+    avb_bot_a:'Desculpe, não entendi. Digite: <strong>CONSULTA</strong> ou <strong>AGENDAR</strong>',
+    avb_agent_ex_label:'Mesmo exemplo', avb_agent_q:'"qual o preço pra consulta de urgencia"',
+    avb_agent_a:'Oi! 😊 Consulta de urgência tem atendimento prioritário, a partir de R$150. Quer que eu verifique os horários disponíveis ainda hoje?',
+    vs_label:'Comparativo', vs_h2:'Tyve vs as outras opções',
+    vs_th2:'App de automação', vs_th3:'Montar do zero',
+    vs_r1l:'Tempo de resposta do agente',
+    vs_r1c1:'<span class="check">✓</span> &lt;15s em média',
+    vs_r1c2:'<span class="partial">Se bem configurado</span>',
+    vs_r1c3:'<span class="partial">Variável</span>',
+    vs_r2l:'Configurado pro seu negócio',
+    vs_r2c1:'<span class="check">✓</span>',
+    vs_r2c2:'<span class="cross">✗</span> você configura',
+    vs_r2c3:'<span class="cross">✗</span> você faz tudo',
+    vs_r3l:'Sem virar técnico de TI',
+    vs_r3c1:'<span class="check">✓</span>', vs_r3c2:'<span class="cross">✗</span>', vs_r3c3:'<span class="cross">✗</span>',
+    vs_r4l:'A gente mantém. Você só usa.',
+    vs_r4c1:'<span class="check">✓</span>', vs_r4c2:'<span class="cross">✗</span>', vs_r4c3:'<span class="cross">✗</span>',
+    vs_r5l:'Funcionando na primeira semana',
+    vs_r5c1:'<span class="check">✓</span>',
+    vs_r5c2:'<span class="partial">Semanas de setup</span>',
+    vs_r5c3:'<span class="partial">Meses de setup</span>',
+    vs_r6l:'Suporte de quem conhece o seu agente',
+    vs_r6c1:'<span class="check">✓</span>',
+    vs_r6c2:'<span class="partial">Ticket / FAQ</span>',
+    vs_r6c3:'<span class="cross">✗</span>',
+    vs_r7l:'IA treinada no seu negócio',
+    vs_r7c1:'<span class="check">✓</span>', vs_r7c2:'<span class="cross">✗</span>',
+    vs_r7c3:'<span class="partial">Depende de você</span>',
+    tst_label:'Quem já usa',
+    tst_text:'"Antes eu ficava respondendo mensagem até de madrugada. Agora o agente faz a triagem, responde as dúvidas e me entrega tudo organizado. Na manhã seguinte eu só dou continuidade. Minha agenda não para de lotar."',
+    tst_name:'Dr. Bachur', tst_role:'Bachur Odontologia — Piloto Tyve',
+    roi_label:'Calculadora de economia',
+    roi_h2:'Quanto tempo sua equipe<br>ganha com a Tyve?',
+    roi_sub:'Baseado em pesquisas do Sebrae e dados reais de negócios como o seu.',
+    roi_input_label:'Mensagens no WhatsApp por dia',
+    roi_hint1:'30/dia', roi_hint2:'Clínica média: ~80', roi_hint3:'300/dia',
+    roi_c1_label:'Tempo manual por mês', roi_c1_detail:'~3,5 min por mensagem × 20 dias úteis',
+    roi_c2_label:'Horas liberadas com a Tyve', roi_c2_detail:'75% das interações resolvidas pela IA',
+    roi_c3_label:'Dias de trabalho de volta', roi_c3_detail:'Tempo que sua equipe ganha pra focar no que importa',
+    roi_footnote:'Estimativa com base em pesquisas do Sebrae. Cada negócio pode variar.',
+    roi_unit_days:' dias',
+    roi_bonus_pre:'São ', roi_bonus_mid:' horas', roi_bonus_post:' que sua equipe ganha de volta por mês — sem contar atendimento 24h e follow-up automático.',
+    faq_label:'Dúvidas', faq_h2:'Perguntas frequentes',
+    faq_q1:'Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span>',
+    faq_a1:'Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.',
+    faq_q2:'Quanto tempo até estar funcionando? <span class="faq-icon">+</span>',
+    faq_a2:'De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.',
+    faq_q3:'Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span>',
+    faq_a3:'Não. A Tyve funciona no número que você já usa. É só conectar via QR code — menos de 5 minutos e tá feito.',
+    faq_q4:'E se o agente falar alguma coisa errada? <span class="faq-icon">+</span>',
+    faq_a4:'O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.',
+    faq_q5:'O que é o follow-up automático? <span class="faq-icon">+</span>',
+    faq_a5:'Quando um cliente conversa com o agente mas não agenda, não compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ele conseguiu o que precisava. Nos planos Escala, manda de novo 3 dias depois se ainda não houve retorno. Tudo sem você precisar lembrar de ninguém.',
+    faq_q6:'O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span>',
+    faq_a6:'Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada.',
+    faq_q7:'Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span>',
+    faq_a7:'Sem contrato longo. Pedimos 3 meses mínimo para ver resultado real. Depois disso, mês a mês sem multa.',
+    faq_q8:'Precisa de WhatsApp Business? <span class="faq-icon">+</span>',
+    faq_a8:'Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.',
+    cta_h2:'Chega de perder cliente<br/>no WhatsApp!',
+    cta_p:'Em 20 minutinhos a gente mostra ao vivo como fica seu negócio,<br/>sem compromisso nenhum.',
+    cta_btn:'Agendar demo grátis',
+    footer_terms:'Termos de Serviço', footer_privacy:'Privacidade',
+    footer_copy:'© 2026 Tyve. Todos os direitos reservados.',
+    footer_disclaimer:'Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.',
+    notif_sb:'Notificações', notif_urg:'🚨 URGENTE — Tyve',
+    notif_wa:'📱 WhatsApp: ', notif_name:'👤 Nome: ',
+    notif_what:'💬 O que o cliente disse:', notif_msg:'Preciso falar com alguém urgente',
+    notif_reply:'Responda diretamente no WhatsApp do cliente.',
+    dm_hdr:'📊 Painel Tyve — Março 2026', dm_atend:'Atendimentos',
+    dm_enc:'Encaminhados', dm_followup:'Follow-ups', dm_res:'Resolvidos pelo agente',
+    dm_week:'Atendimentos por semana'
+  },
+  en: {
+    nav_how:'How it works', nav_segments:'Segments', nav_faq:'FAQ',
+    nav_plans:'Plans & Pricing', nav_demo:'⚡ See live demo',
+    hero_badge:'Official WhatsApp Cloud API',
+    hero_h1:'Your WhatsApp becomes your<br/>best employee. <span class="accent">24/7!</span>',
+    hero_sub:'Responds, qualifies and routes. No hassle.',
+    hero_br:'🇧🇷 Made in Brazil, support in Portuguese',
+    hero_cta:'Get started',
+    showcase_name:'Luma — Smile Clinic', showcase_online:'online',
+    chat_m1_user:'Hi, I wanted to ask about teeth whitening. How much does it cost?',
+    chat_m1_bot:'Hello! Great that you\'re interested in whitening! 😊 At Smile Clinic we offer two options: laser whitening (single session, R$800) and at-home tray whitening (R$450). Can I help you choose?',
+    chat_m2_user:'How long does the laser one take?',
+    chat_m2_bot:'About 1 hour! You leave the office the same day with whiter teeth. Want to book an evaluation? We have slots this week 🗓️',
+    chat_m3_user:'Thursday afternoon available?',
+    prob_label:'The problem',
+    prob_h2:'How many customers did you lose<br/>while you were away from WhatsApp?',
+    prob_c1h:'Message at 10pm, no reply', prob_c1p:'Your customer messages at night. By morning they\'ve already booked with your competitor.',
+    prob_c2h:'Team drowning in messages', prob_c2p:'Every day messages go unanswered. Each one is a sale that didn\'t happen.',
+    prob_c3h:'The same questions, every day', prob_c3p:'Price, hours, location, insurance. Your team answers the same thing 30 times.',
+    prob_c4h:'Leads arrive with no context', prob_c4p:'You or your team asks everything again. The customer repeats. Everyone gets frustrated.',
+    how_label:'How it works',
+    how_h2:'You don\'t have to do anything.<br/>We take care of everything.',
+    how_s1badge:'Step 1', how_s1h:'We set everything up for you',
+    how_s1m1:'My clinic sees orthopedics and physio',
+    how_s1m2:'Perfect! I\'ll configure triage by specialty, hours and accepted insurance ✅',
+    how_s2badge:'Step 2', how_s2h:'The agent serves clients 24/7',
+    how_s2m1:'Good evening, do you accept insurance?',
+    how_s2m2:'Good evening! Yes, we do 😊 Can I schedule an appointment for you?',
+    how_s2m3:'Yes! Tomorrow morning available?', how_s2m4:'Yes! Dr. Silva at 9:30am. Confirm?',
+    how_s3badge:'Step 3', how_s3h:'You receive ready-to-close leads',
+    how_s3m1:'🔔 Handoff — Smile Clinic',
+    how_s3m2:'Patient: Maria, 34. Interest: implant. Insurance: Bradesco. Wants installments.',
+    tarja_text:'There are tools for those who want to learn how to build.<br/>Tyve is for those who want it to just work.',
+    fw_label:'Who it\'s for',
+    fw_h2:'For local businesses with a WhatsApp<br/>that never stops ringing',
+    fw_c1:'Clinics & Medical Offices', fw_c2:'Beauty & Aesthetics', fw_c3:'Real Estate',
+    fw_c4:'Auto Shops', fw_c5:'Lawyers & Accountants', fw_c6:'Gyms & Schools',
+    fw_more:'Learn more →',
+    plans_label:'Plans', plans_h2:'Straightforward pricing. Real results.',
+    plans_popular:'MOST POPULAR', plans_volume:'MORE VOLUME', per_month:'/mo',
+    atende_tagline:'Up to 200 contacts/month',
+    atende_f1:'1 WhatsApp number', atende_f2:'Flow configured for your business',
+    atende_f3:'Automatic responses 24/7', atende_f4:'Understands text and voice messages 🎙️',
+    atende_f5:'Lead triage and qualification', atende_f6:'Alert with full conversation summary',
+    atende_f7:'Detects frustrated customers and alerts with priority ⚠️',
+    atende_f8:'Automatic reminder if customer waits 12h+ without a reply',
+    atende_f9:'1 adjustment per month', atende_f10:'WhatsApp support (SLA 8h)',
+    atende_cta:'Start with Atende',
+    cresce_tagline:'Up to 500 contacts/month', cresce_all:'Everything in Atende',
+    cresce_f1:'Automatic D+1 follow-up', cresce_f2:'Automatic satisfaction survey (NPS)',
+    cresce_f3:'1 adjustment per week', cresce_f4:'Weekly email summary',
+    cresce_f5:'Agent sends your booking link', cresce_f6:'Priority support (SLA 4h)',
+    cresce_cta:'Start with Cresce',
+    escala_tagline:'Up to 1,000 contacts/month', escala_all:'Everything in Cresce',
+    escala_f1:'D+1 and D+3 follow-up', escala_f2:'Results dashboard with link',
+    escala_f3:'Native WhatsApp scheduling', escala_f4:'Multiple flows and segments',
+    escala_f5:'Monthly PDF report with full analysis', escala_f6:'Monthly results meeting',
+    escala_f7:'Dedicated account manager (SLA 2h)', escala_cta:'Start with Escala',
+    addon_title:'Add-on: Automatic Scheduling via WhatsApp',
+    addon_desc:'The customer picks a time slot <strong>directly in WhatsApp</strong>. The agent checks your calendar, creates the event and sends a D-1 reminder. Google Calendar integration.',
+    addon_note1:'For Atende and Cresce', addon_note2:'✓ Included in Escala', addon_cta:'Add on',
+    conv_label:'Tyve Converte — Sales Track',
+    conv_h2:'Not just a receptionist. A salesperson that never rests.',
+    conv_sub:'For high-ticket businesses: qualifies, argues and closes. Hands off to a human only when needed.',
+    convstd_tagline:'Up to 300 contacts/month',
+    convstd_f1:'High-performance AI (Tyve Pro)', convstd_f2:'Understands text and voice messages 🎙️',
+    convstd_f3:'Custom sales script', convstd_f4:'Qualification + argumentation + closing',
+    convstd_f5:'D+1 and D+3 follow-up in sales language',
+    convstd_f6:'Results dashboard with conversion rate', convstd_f7:'CRM integration included',
+    convstd_f8:'Bi-weekly results meeting', convstd_f9:'Priority support (SLA 1h)',
+    convstd_cta:'Start with Converte',
+    convpro_tagline:'Up to 700 contacts/month', convpro_all:'Everything in Converte Standard',
+    convpro_f1:'Extended volume for higher traffic', convpro_f2:'Over 700? Custom proposal',
+    convpro_cta:'Start with Converte Pro',
+    track_title:'Which track is right for my business?',
+    track_th1:'Atende / Cresce / Escala', track_th2:'+ Schedule Add-on', track_th3:'Tyve Converte',
+    track_r1l:'Does what', track_r1c1:'Receives and qualifies', track_r1c2:'Schedules directly in WhatsApp', track_r1c3:'Converts and closes',
+    track_r2l:'Ideal for', track_r2c1:'Clinics and general services', track_r2c2:'Businesses with full calendars', track_r2c3:'Real estate, premium aesthetics, high ticket',
+    track_r3l:'Complements', track_r3c1:'Your reception', track_r3c2:'Reception + calendar', track_r3c3:'Reception + sales team',
+    nd_label:'In practice', nd_h2:'See how it works in your day-to-day',
+    tabs_t0:'Handoff alert', tabs_t1:'Results dashboard', tabs_t2:'Automatic follow-up', tabs_t3:'Scheduling',
+    p0_badge:'Included in all plans',
+    p0_h3:'You get an alert when the agent needs you',
+    p0_desc:'When a customer has an urgent need or a question only a human can solve, Tyve sends you a WhatsApp notification instantly — with the customer\'s name and a conversation summary. You jump in directly, no scrolling needed.',
+    p1_badge:'Escala and Converte plans',
+    p1_h3:'A results dashboard you can access from anywhere',
+    p1_desc:'See how many sessions the agent handled, how many times it needed you, how many follow-ups were sent. Accessible by link, no install needed.',
+    p2_badge:'Cresce: D+1 · Escala: D+1 + D+3',
+    p2_h3:'Automatic follow-up for customers who didn\'t return',
+    p2_desc:'After the agent hands off a customer, it sends an automatic message 1 day later to check if they got what they needed. On Escala, another one goes out on D+3. You don\'t have to do anything.',
+    p2_bot1:'Hi, Renato! Just checking in to see if you got what you needed 😊',
+    p2_client:'Yes! Already booked, thanks!',
+    p2_bot2:'Great! We\'re here whenever you need us. Bye! 👋',
+    p3_badge:'Included in Escala · Add-on for Atende and Cresce',
+    p3_h3:'Customer picks a time without leaving WhatsApp',
+    p3_desc:'The agent checks your calendar in real time and presents available slots directly in the conversation. The customer picks, the event is created in Google Calendar automatically, with a D-1 reminder.',
+    p3_sched_hdr:'📅 Book appointment', p3_sched_btn:'Confirm time',
+    avb_label:'Why it matters',
+    avb_h2:'An AI agent is not<br>the same as a chatbot',
+    avb_sub:'Most automations use simple rules — if the customer types the right word, it works. The Tyve agent reads, interprets and reasons like a real attendant.',
+    avb_badge_bot:'Simple chatbot', avb_badge_agent:'Tyve Agent',
+    avb_bot_f1:'Only understands pre-programmed keywords', avb_bot_f2:'Breaks if the customer types differently',
+    avb_bot_f3:'No memory — each message is isolated', avb_bot_f4:'Mechanical and generic responses',
+    avb_bot_f5:'Doesn\'t decide — follows a fixed script', avb_bot_f6:'Customer notices the coldness immediately',
+    avb_agent_f1:'Reads and interprets any message', avb_agent_f2:'Understands informal language, typos and abbreviations',
+    avb_agent_f3:'Remembers the full conversation — replies with continuity', avb_agent_f4:'Your business\'s tone and language',
+    avb_agent_f5:'Reasons — decides when to escalate or schedule', avb_agent_f6:'Natural experience, like talking to a real attendant',
+    avb_bot_ex_label:'Real example', avb_bot_q:'"what\'s the price for an urgent appointment"',
+    avb_bot_a:'Sorry, I didn\'t understand. Type: <strong>CONSULT</strong> or <strong>BOOK</strong>',
+    avb_agent_ex_label:'Same example', avb_agent_q:'"what\'s the price for an urgent appointment"',
+    avb_agent_a:'Hi! 😊 Urgent appointments have priority care, starting at R$150. Would you like me to check available slots for today?',
+    vs_label:'Comparison', vs_h2:'Tyve vs the alternatives',
+    vs_th2:'Automation app', vs_th3:'Build from scratch',
+    vs_r1l:'Agent response time',
+    vs_r1c1:'<span class="check">✓</span> &lt;15s on average',
+    vs_r1c2:'<span class="partial">If well configured</span>',
+    vs_r1c3:'<span class="partial">Variable</span>',
+    vs_r2l:'Configured for your business',
+    vs_r2c1:'<span class="check">✓</span>',
+    vs_r2c2:'<span class="cross">✗</span> you configure it',
+    vs_r2c3:'<span class="cross">✗</span> you do everything',
+    vs_r3l:'No IT skills needed',
+    vs_r3c1:'<span class="check">✓</span>', vs_r3c2:'<span class="cross">✗</span>', vs_r3c3:'<span class="cross">✗</span>',
+    vs_r4l:'We maintain it. You just use it.',
+    vs_r4c1:'<span class="check">✓</span>', vs_r4c2:'<span class="cross">✗</span>', vs_r4c3:'<span class="cross">✗</span>',
+    vs_r5l:'Up and running in the first week',
+    vs_r5c1:'<span class="check">✓</span>',
+    vs_r5c2:'<span class="partial">Weeks of setup</span>',
+    vs_r5c3:'<span class="partial">Months of setup</span>',
+    vs_r6l:'Support from someone who knows your agent',
+    vs_r6c1:'<span class="check">✓</span>',
+    vs_r6c2:'<span class="partial">Ticket / FAQ</span>',
+    vs_r6c3:'<span class="cross">✗</span>',
+    vs_r7l:'AI trained on your business',
+    vs_r7c1:'<span class="check">✓</span>', vs_r7c2:'<span class="cross">✗</span>',
+    vs_r7c3:'<span class="partial">Depends on you</span>',
+    tst_label:'Who\'s using it',
+    tst_text:'"Before I was answering messages until midnight. Now the agent does the triage, answers questions and delivers everything organized. The next morning I just pick up where it left off. My schedule hasn\'t stopped filling up."',
+    tst_name:'Dr. Bachur', tst_role:'Bachur Dentistry — Tyve Pilot',
+    roi_label:'Savings calculator',
+    roi_h2:'How much time does your team<br>gain with Tyve?',
+    roi_sub:'Based on research and real data from businesses like yours.',
+    roi_input_label:'WhatsApp messages per day',
+    roi_hint1:'30/day', roi_hint2:'Average clinic: ~80', roi_hint3:'300/day',
+    roi_c1_label:'Manual time per month', roi_c1_detail:'~3.5 min per message × 20 working days',
+    roi_c2_label:'Hours freed with Tyve', roi_c2_detail:'75% of interactions resolved by AI',
+    roi_c3_label:'Working days back', roi_c3_detail:'Time your team gains to focus on what matters',
+    roi_footnote:'Estimate based on research. Each business may vary.',
+    roi_unit_days:' days',
+    roi_bonus_pre:'That\'s ', roi_bonus_mid:' hours', roi_bonus_post:' your team gets back per month — not counting 24h coverage and automatic follow-up.',
+    faq_label:'Questions', faq_h2:'Frequently asked questions',
+    faq_q1:'Will my customers notice it\'s an AI agent? <span class="faq-icon">+</span>',
+    faq_a1:'Most of the time, no. The agent is configured with your business\'s tone and language — it reads the message, understands the context and responds naturally. When personalized attention is needed, it hands the conversation to your team with a complete summary of everything that happened.',
+    faq_q2:'How long until it\'s up and running? <span class="faq-icon">+</span>',
+    faq_a2:'3 to 7 business days. We have a discovery call, set everything up, test it with you and only launch when you approve. No surprises.',
+    faq_q3:'Do I need to change my WhatsApp number? <span class="faq-icon">+</span>',
+    faq_a3:'No. Tyve works with the number you already use. Just connect via QR code — less than 5 minutes and you\'re done.',
+    faq_q4:'What if the agent says something wrong? <span class="faq-icon">+</span>',
+    faq_a4:'The agent only responds within what we\'ve configured — it doesn\'t make things up. If something unexpected appears, you message us and we adjust within 24h. In the first week we monitor everything closely.',
+    faq_q5:'What is automatic follow-up? <span class="faq-icon">+</span>',
+    faq_a5:'When a customer chats with the agent but doesn\'t book, doesn\'t buy or disappears without a reply, the agent sends an automatic message the next day asking if they got what they needed. On Escala plans, it sends again 3 days later if still no reply. All without you needing to remember anyone.',
+    faq_q6:'What is the automatic satisfaction survey? <span class="faq-icon">+</span>',
+    faq_a6:'After each session, the agent sends a message asking if the customer was satisfied — on a simple scale from 0 to 10. You see these scores in your dashboard and know exactly which sessions went well and which need attention. All automatic, without you having to ask anything.',
+    faq_q7:'Is there a long contract? Can I cancel? <span class="faq-icon">+</span>',
+    faq_a7:'No long contract. We ask for 3 months minimum to see real results. After that, month-to-month with no penalty.',
+    faq_q8:'Do I need WhatsApp Business? <span class="faq-icon">+</span>',
+    faq_a8:'Yes — Tyve works exclusively with WhatsApp Business, ensuring compliance with WhatsApp\'s terms.',
+    cta_h2:'Stop losing customers<br/>on WhatsApp!',
+    cta_p:'In 20 minutes we\'ll show you live how your business would look,<br/>with no commitment whatsoever.',
+    cta_btn:'Book free demo',
+    footer_terms:'Terms of Service', footer_privacy:'Privacy',
+    footer_copy:'© 2026 Tyve. All rights reserved.',
+    footer_disclaimer:'Tyve is not affiliated with Meta, Facebook or WhatsApp. Integrated with the official WhatsApp Cloud API.',
+    notif_sb:'Notifications', notif_urg:'🚨 URGENT — Tyve',
+    notif_wa:'📱 WhatsApp: ', notif_name:'👤 Name: ',
+    notif_what:'💬 What the customer said:', notif_msg:'I need to speak with someone urgently',
+    notif_reply:'Reply directly on the customer\'s WhatsApp.',
+    dm_hdr:'📊 Tyve Dashboard — March 2026', dm_atend:'Sessions',
+    dm_enc:'Handed off', dm_followup:'Follow-ups', dm_res:'Resolved by agent',
+    dm_week:'Sessions per week'
   }
-  if(rs){ rs.addEventListener('input',calcROI); calcROI(); }
+};
 
-  /* FAQ */
-  document.querySelectorAll('.faq-question').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const item=btn.closest('.faq-item');
-      const open=item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(el=>el.classList.remove('open'));
-      if(!open) item.classList.add('open');
-    });
+function setLang(lang) {
+  currentLang = lang;
+  try { localStorage.setItem('tyve-lang', lang); } catch(e) {}
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+
+  /* textContent swap */
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
   });
 
-  /* WA float */
-  const waf=document.querySelector('.whatsapp-float');
-  window.addEventListener('scroll',()=>{ if(waf) waf.classList.toggle('visible',window.scrollY>300); });
+  /* innerHTML swap */
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-html');
+    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+
+  /* flag opacity */
+  var flags = document.querySelectorAll('.nav-flags span');
+  if (flags[0]) flags[0].style.opacity = lang === 'pt' ? '1' : '0.45';
+  if (flags[1]) flags[1].style.opacity = lang === 'en' ? '1' : '0.45';
+
+  /* meta */
+  if (lang === 'en') {
+    document.title = 'Tyve — Your WhatsApp becomes your best employee';
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', 'Tyve turns your WhatsApp into your best employee — 24/7. Responds, qualifies and routes. Made in Brazil.');
+    var ol = document.querySelector('meta[property="og:locale"]');
+    if (ol) ol.setAttribute('content', 'en_US');
+  } else {
+    document.title = 'Tyve — Seu WhatsApp vira seu melhor atendente';
+    var md2 = document.querySelector('meta[name="description"]');
+    if (md2) md2.setAttribute('content', 'A Tyve transforma seu WhatsApp no melhor atendente do seu negócio — 24h por dia. Responde, qualifica e encaminha. Feito no Brasil.');
+    var ol2 = document.querySelector('meta[property="og:locale"]');
+    if (ol2) ol2.setAttribute('content', 'pt_BR');
+  }
+
+  /* re-run ROI with updated units */
+  if (rs) calcROI();
+}
+
+/* ─── SLIDER ─────────────────────────────────────────────── */
+function showSlide(i) {
+  document.querySelectorAll('.slider-panel').forEach(function(p,j){ p.classList.toggle('active',j===i); });
+  document.querySelectorAll('.slider-tab').forEach(function(t,j){ t.classList.toggle('active',j===i); });
+}
+
+/* ─── ROI ────────────────────────────────────────────────── */
+var rs = document.getElementById('roiSlider');
+function calcROI() {
+  var m = parseInt(rs.value);
+  document.getElementById('roiValue').textContent = m;
+  var manual = Math.round(m*3.5*20/60);
+  var saved = Math.round(manual*.75);
+  var days = Math.round(saved/8);
+  var L = T[currentLang];
+  document.getElementById('roiManual').textContent = manual+'h';
+  document.getElementById('roiSaved').textContent = saved+'h';
+  document.getElementById('roiDays').textContent = days + L.roi_unit_days;
+  var bonus = document.getElementById('roiBonus');
+  if (bonus) bonus.innerHTML = L.roi_bonus_pre + '<strong>' + saved + '</strong>' + L.roi_bonus_mid + L.roi_bonus_post;
+}
+if (rs) { rs.addEventListener('input', calcROI); calcROI(); }
+
+/* ─── FAQ ────────────────────────────────────────────────── */
+document.querySelectorAll('.faq-question').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(el){ el.classList.remove('open'); });
+    if (!open) item.classList.add('open');
+  });
+});
+
+/* ─── WA FLOAT ───────────────────────────────────────────── */
+var waf = document.querySelector('.whatsapp-float');
+window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visible', window.scrollY>300); });
+
+/* ─── INIT LANG ──────────────────────────────────────────── */
+(function() {
+  var saved;
+  try { saved = localStorage.getItem('tyve-lang'); } catch(e) {}
+  if (saved && saved !== 'pt') setLang(saved);
+})();
 </script>
 </body>
 </html>
