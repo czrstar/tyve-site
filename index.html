@@ -647,7 +647,7 @@
     <div class="pricing-grid">
       <div class="plan">
         <p class="plan-name">Atende</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-tagline" data-i18n="atende_tagline">Até 200 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -668,7 +668,7 @@
       <div class="plan featured">
         <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
         <p class="plan-name">Cresce</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-tagline" data-i18n="cresce_tagline">Até 500 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -685,7 +685,7 @@
 
       <div class="plan">
         <p class="plan-name">Escala</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-tagline" data-i18n="escala_tagline">Até 1.000 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -709,7 +709,7 @@
         <p class="addon-desc" data-i18n-html="addon_desc">O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.</p>
       </div>
       <div class="addon-price">
-        <span class="addon-amount">+R$197</span><span class="addon-period" data-i18n="per_month">/mês</span>
+        <span class="addon-amount" data-addon-brl="197">+R$197</span><span class="addon-period" data-i18n="per_month">/mês</span>
         <p class="addon-note"><span data-i18n="addon_note1">Para Atende e Cresce</span><br/><span style="color:var(--teal);font-weight:600;" data-i18n="addon_note2">✓ Incluso no Escala</span></p>
         <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20add-on%20de%20agendamento%20(site)!" class="btn-plan" style="font-size:13px;padding:10px 18px;display:inline-block;width:auto;margin-top:12px;" target="_blank" rel="noopener" data-i18n="addon_cta">Adicionar</a>
       </div>
@@ -724,7 +724,7 @@
     <div class="converte-grid">
       <div class="plan converte">
         <p class="plan-name">Converte Standard</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">1.497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="1497">1.497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-tagline" data-i18n="convstd_tagline">Até 300 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -743,7 +743,7 @@
       <div class="plan converte">
         <div class="plan-badge-top" style="background:#555;" data-i18n="plans_volume">MAIS VOLUME</div>
         <p class="plan-name">Converte Pro</p>
-        <div class="plan-price"><span class="plan-currency">R$</span><span class="plan-amount">1.997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="1997">1.997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-tagline" data-i18n="convpro_tagline">Até 700 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -1069,6 +1069,12 @@
 <script>
 /* ─── I18N ─────────────────────────────────────────────── */
 var currentLang = 'pt';
+
+var USD_PRICES = { 497: 86, 697: 120, 997: 172, 1497: 258, 1997: 344, 197: 34 };
+
+function formatBRL(n) {
+  return n >= 1000 ? Math.floor(n/1000) + '.' + (n % 1000).toString().padStart(3,'0') : n.toString();
+}
 
 var T = {
   pt: {
@@ -1450,6 +1456,20 @@ function setLang(lang) {
   document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
     var key = el.getAttribute('data-i18n-html');
     if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+
+  /* currency swap */
+  var isEN = lang === 'en';
+  document.querySelectorAll('[data-currency]').forEach(function(el) {
+    el.textContent = isEN ? '$' : 'R$';
+  });
+  document.querySelectorAll('[data-brl]').forEach(function(el) {
+    var brl = parseInt(el.getAttribute('data-brl'));
+    el.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
+  });
+  document.querySelectorAll('[data-addon-brl]').forEach(function(el) {
+    var brl = parseInt(el.getAttribute('data-addon-brl'));
+    el.textContent = isEN ? '+$' + USD_PRICES[brl] : '+R$' + formatBRL(brl);
   });
 
   /* flag opacity */
