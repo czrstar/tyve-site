@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel — TYVE</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0A0E17;--surface:#111827;--surface2:#1E2837;--surface3:#263245;
+      --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+      --orange:#f84100;--teal:#00e8df;--text:#F8FAFC;--muted:#94A3B8;
+      --amber:#F59E0B;--red:#EF4444;--radius:14px;
+    }
+    body{font-family:'Grift','DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+    /* NAV */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--border);background:rgba(10,14,23,0.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo img{height:26px;filter:brightness(0) invert(1)}
+    .nav-right{display:flex;align-items:center;gap:10px}
+    .client-pill{font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px;background:rgba(0,232,223,0.12);border:1px solid rgba(0,232,223,0.2);color:var(--teal)}
+    .refresh-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;transition:all .2s;font-family:inherit}
+    .refresh-btn:hover{color:var(--text);border-color:var(--border2)}
+
+    /* TABS */
+    .tabs-wrap{max-width:1100px;margin:0 auto;padding:24px 24px 0}
+    .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;width:fit-content}
+    .tab-btn{display:flex;align-items:center;gap:7px;padding:8px 20px;border:none;background:transparent;color:var(--muted);font-family:inherit;font-size:14px;font-weight:600;border-radius:9px;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--text)}
+    .tab-btn.active{background:var(--surface2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+
+    /* MAIN */
+    main{max-width:1100px;margin:0 auto;padding:28px 24px 80px}
+
+    /* STATE SCREENS */
+    .state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;gap:16px}
+    .state h2{font-size:22px;font-weight:700}
+    .state p{color:var(--muted);max-width:360px;line-height:1.6;font-size:15px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--orange);animation:spin .8s linear infinite}
+    .wa-btn{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:12px 24px;background:var(--orange);color:#fff;font-weight:700;font-size:14px;border-radius:8px;text-decoration:none}
+
+    /* CARDS */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+    .card-title{font-size:15px;font-weight:700;margin-bottom:4px}
+    .card-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+    /* KPI */
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+    .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+    .kpi-icon{font-size:20px;margin-bottom:8px}
+    .kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:8px}
+    .kpi-value{font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1}
+    .kpi-value.orange{color:var(--orange)}.kpi-value.teal{color:var(--teal)}
+    .kpi-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+    /* CHART */
+    .chart-wrap{height:240px;position:relative}
+
+    /* STATS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:20px}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:14px}
+    .stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .stat-icon.o{background:rgba(248,65,0,0.12)}.stat-icon.t{background:rgba(0,232,223,0.12)}
+    .stat-num{font-size:22px;font-weight:800;letter-spacing:-.5px}
+    .stat-desc{font-size:12px;color:var(--muted);margin-top:2px}
+
+    /* PLAN BANNER */
+    .plan-banner{background:linear-gradient(135deg,rgba(248,65,0,0.08),rgba(0,232,223,0.08));border:1px solid rgba(0,232,223,0.2);border-radius:var(--radius);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+    .plan-badge{font-size:13px;font-weight:700;padding:6px 18px;border-radius:999px;background:linear-gradient(135deg,#f84100,#00e8df);color:#000}
+
+    /* BOT STATUS */
+    .bot-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .bot-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .bot-dot.active{background:var(--orange);box-shadow:0 0 8px rgba(248,65,0,0.5)}
+    .bot-dot.human{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,0.5)}
+    .unlock-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:var(--amber);font-size:13px;font-weight:700;border-radius:8px;cursor:pointer;font-family:inherit;transition:all .2s}
+    .unlock-btn:hover{background:rgba(245,158,11,0.22)}
+    .unlock-btn.success{background:rgba(248,65,0,0.12);border-color:rgba(248,65,0,0.3);color:var(--orange)}
+
+    /* NPS */
+    .nps-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+    .nps-stat{text-align:center}
+    .nps-val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1}
+    .nps-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:6px}
+    .nps-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .nps-bar-lbl{font-size:12px;font-weight:600;width:78px;flex-shrink:0}
+    .nps-bar-lbl.p{color:var(--orange)}.nps-bar-lbl.n{color:var(--teal)}.nps-bar-lbl.d{color:var(--amber)}
+    .nps-bar-track{flex:1;height:10px;background:var(--surface2);border-radius:99px;overflow:hidden}
+    .nps-bar-fill{height:100%;border-radius:99px;transition:width .5s}
+    .nps-bar-fill.p{background:var(--orange)}.nps-bar-fill.n{background:var(--teal)}.nps-bar-fill.d{background:var(--amber)}
+    .nps-bar-cnt{font-size:12px;font-weight:700;width:26px;text-align:right;flex-shrink:0}
+
+    /* ── CONFIG TAB ── */
+    /* Hours */
+    .hours-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+    .hours-field{flex:1;min-width:120px}
+    .hours-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+    .hours-field select{width:100%;padding:10px 14px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+    .hours-field select:focus{border-color:var(--orange)}
+
+    /* FAQ */
+    .faq-search{width:100%;padding:10px 14px 10px 38px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;margin-bottom:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+    .faq-search:focus{border-color:var(--orange)}
+    .faq-search::placeholder{color:var(--muted)}
+    .faq-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+    .faq-item{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s}
+    .faq-item:hover{border-color:var(--border2)}
+    .faq-item.disabled{opacity:.4}
+    .faq-item.hidden{display:none}
+    .faq-row{display:flex;align-items:flex-start;gap:12px}
+    /* toggle */
+    .toggle{position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0;margin-top:2px}
+    .toggle input{opacity:0;width:0;height:0}
+    .toggle-slider{position:absolute;inset:0;background:#374151;border-radius:20px;cursor:pointer;transition:.2s}
+    .toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+    .toggle input:checked + .toggle-slider{background:var(--teal)}
+    .toggle input:checked + .toggle-slider::before{transform:translateX(16px)}
+    /* faq content */
+    .faq-content{flex:1;min-width:0}
+    .faq-q{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+    .faq-a{font-size:13px;color:var(--muted);line-height:1.5}
+    .faq-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+    .tag{background:rgba(0,232,223,0.1);color:var(--teal);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid rgba(0,232,223,0.2)}
+    .faq-actions{display:flex;gap:6px;flex-shrink:0;margin-top:1px}
+    .faq-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+    .faq-btn:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+    .faq-btn.danger:hover{color:var(--red);border-color:var(--red)}
+    /* inline edit */
+    .faq-edit-form{margin-top:12px;display:none}
+    .faq-edit-form.open{display:block}
+    .edit-field{margin-bottom:10px}
+    .edit-field label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+    .edit-field input,.edit-field textarea{width:100%;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;outline:none;resize:vertical;transition:border-color .2s}
+    .edit-field input:focus,.edit-field textarea:focus{border-color:var(--orange)}
+    .edit-field textarea{min-height:70px}
+    .edit-actions{display:flex;gap:8px}
+    /* add form */
+    .add-form-wrap{border:1.5px dashed var(--border2);border-radius:10px;padding:18px;display:none;margin-top:16px}
+    .add-form-wrap.open{display:block}
+    .add-field{margin-bottom:12px}
+    .add-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
+    .add-field input,.add-field textarea{width:100%;padding:10px 14px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;resize:vertical;transition:border-color .2s}
+    .add-field input:focus,.add-field textarea:focus{border-color:var(--orange)}
+    .add-field textarea{min-height:80px}
+    /* tips */
+    .tips{background:rgba(0,232,223,0.05);border:1px solid rgba(0,232,223,0.15);border-radius:12px;padding:18px 22px;margin-top:4px}
+    .tips p{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
+    .tips ul{font-size:13px;color:var(--muted);line-height:1.9;padding-left:18px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:999px;font-family:inherit;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:opacity .2s}
+    .btn:hover{opacity:.85}
+    .btn-primary{background:var(--orange);color:#fff}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
+    .btn-sm{padding:7px 14px;font-size:12px}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999;max-width:320px}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.err{border-color:var(--red);color:var(--red)}
+
+    /* COUNT */
+    .faq-count-lbl{font-size:12px;color:var(--muted)}
+
+    footer{text-align:center;padding:28px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)}
+    footer a{color:inherit}
+
+    @media(max-width:640px){
+      nav{padding:12px 16px}
+      .tabs-wrap{padding:16px 16px 0}
+      main{padding:20px 16px 60px}
+      .kpi-value{font-size:30px}
+      .hours-row{flex-direction:column}
+      .faq-actions{margin-top:8px}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="https://tyve.com.br" target="_blank" rel="noopener">
+    <img src="/assets/logo-tyve.svg" alt="TYVE" />
+  </a>
+  <div class="nav-right">
+    <span class="client-pill" id="clientPill">–</span>
+    <button class="refresh-btn" onclick="reload()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
+      Atualizar
+    </button>
+  </div>
+</nav>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="resultados" onclick="switchTab('resultados')">📊 Resultados</button>
+    <button class="tab-btn" data-tab="config" onclick="switchTab('config')">⚙️ Configurações</button>
+  </div>
+</div>
+
+<main>
+  <!-- Loading -->
+  <div class="state" id="stateLoading">
+    <div class="spinner"></div>
+    <h2>Carregando seu painel…</h2>
+  </div>
+
+  <!-- No token -->
+  <div class="state" id="stateNoToken" style="display:none">
+    <div style="font-size:48px">📊</div>
+    <h2>Seu painel TYVE</h2>
+    <p>Use o link personalizado enviado pela TYVE no WhatsApp.</p>
+    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+do+meu+link+do+painel+TYVE" target="_blank" rel="noopener">Falar com a TYVE</a>
+  </div>
+
+  <!-- Error -->
+  <div class="state" id="stateError" style="display:none">
+    <div style="font-size:48px">🔒</div>
+    <h2>Acesso não autorizado</h2>
+    <p>Link inválido ou expirado. Fale com a equipe TYVE.</p>
+    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+renovar+meu+link+do+painel+TYVE" target="_blank" rel="noopener" style="background:var(--surface2);border:1px solid var(--border2)">Solicitar novo link</a>
+  </div>
+
+  <!-- CONTENT (hidden until loaded) -->
+  <div id="content" style="display:none">
+
+    <!-- ══════════════ TAB: RESULTADOS ══════════════ -->
+    <div id="tab-resultados">
+
+      <div style="margin-bottom:20px">
+        <h1 id="bizName" style="font-size:26px;font-weight:800;letter-spacing:-.5px">–</h1>
+        <p style="color:var(--muted);font-size:14px;margin-top:3px">Painel de resultados — últimos 30 dias</p>
+        <p style="color:var(--muted);font-size:12px;margin-top:4px" id="updatedAt"></p>
+      </div>
+
+      <!-- Bot status -->
+      <div class="bot-card" id="botCard">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="bot-dot active" id="botDot"></div>
+          <div>
+            <div style="font-size:14px;font-weight:600" id="botLabel">Agente ativo</div>
+            <div style="font-size:12px;color:var(--muted)" id="botSub">Respondendo automaticamente</div>
+          </div>
+        </div>
+        <button class="unlock-btn" id="unlockBtn" onclick="unlockBot()" style="display:none">🤖 Liberar agente</button>
+      </div>
+
+      <!-- Plan banner -->
+      <div class="plan-banner">
+        <div>
+          <div style="font-size:12px;color:var(--muted);font-weight:500">Plano atual</div>
+          <div style="font-size:20px;font-weight:800;margin-top:2px" id="planName">–</div>
+        </div>
+        <span class="plan-badge" id="planBadge">–</span>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">💬</div>
+          <div class="kpi-label">Contatos atendidos</div>
+          <div class="kpi-value orange" id="kpiContacts">–</div>
+          <div class="kpi-sub">este mês</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🤝</div>
+          <div class="kpi-label">Encaminhamentos</div>
+          <div class="kpi-value teal" id="kpiHandoffs">–</div>
+          <div class="kpi-sub">para sua equipe</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">📲</div>
+          <div class="kpi-label">Follow-ups enviados</div>
+          <div class="kpi-value" id="kpiFollowups">–</div>
+          <div class="kpi-sub">reengajamento automático</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">✅</div>
+          <div class="kpi-label">Agendamentos confirmados</div>
+          <div class="kpi-value orange" id="kpiBookings">–</div>
+          <div class="kpi-sub">via agente</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="card">
+        <div class="card-title">Contatos únicos por dia — últimos 30 dias</div>
+        <div class="chart-wrap" style="margin-top:16px"><canvas id="trendChart"></canvas></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon o">📅</div>
+          <div><div class="stat-num" id="statAvg">–</div><div class="stat-desc">Média diária de contatos</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon t">⚡</div>
+          <div><div class="stat-num">&lt;15s</div><div class="stat-desc">Tempo de resposta</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon o">🕐</div>
+          <div><div class="stat-num">24/7</div><div class="stat-desc">Atendimento ativo</div></div>
+        </div>
+      </div>
+
+      <!-- NPS -->
+      <div class="card" id="npsSection" style="display:none">
+        <div class="card-title">⭐ NPS — Satisfação dos clientes</div>
+        <div class="nps-row" style="margin-top:16px">
+          <div class="nps-stat"><div class="nps-val" id="npsScore">–</div><div class="nps-lbl">NPS Score</div></div>
+          <div class="nps-stat"><div class="nps-val teal" id="npsAvg" style="color:var(--teal)">–</div><div class="nps-lbl">Nota média</div></div>
+          <div class="nps-stat"><div class="nps-val" id="npsRate">–</div><div class="nps-lbl">Taxa de resposta</div></div>
+        </div>
+        <div>
+          <div class="nps-bar-row"><span class="nps-bar-lbl p">Promotores</span><div class="nps-bar-track"><div class="nps-bar-fill p" id="barP" style="width:0%"></div></div><span class="nps-bar-cnt" id="cntP">0</span></div>
+          <div class="nps-bar-row"><span class="nps-bar-lbl n">Neutros</span><div class="nps-bar-track"><div class="nps-bar-fill n" id="barN" style="width:0%"></div></div><span class="nps-bar-cnt" id="cntN">0</span></div>
+          <div class="nps-bar-row"><span class="nps-bar-lbl d">Detratores</span><div class="nps-bar-track"><div class="nps-bar-fill d" id="barD" style="width:0%"></div></div><span class="nps-bar-cnt" id="cntD">0</span></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-resultados -->
+
+    <!-- ══════════════ TAB: CONFIGURAÇÕES ══════════════ -->
+    <div id="tab-config" style="display:none">
+
+      <!-- Hours -->
+      <div class="card">
+        <div class="card-title">Horário de atendimento da equipe</div>
+        <div class="card-sub">O agente funciona 24h. Este horário define quando sua equipe humana está disponível para handoffs.</div>
+        <div class="hours-row">
+          <div class="hours-field">
+            <label>Início do atendimento</label>
+            <select id="hoursStart"></select>
+          </div>
+          <div class="hours-field">
+            <label>Fim do atendimento</label>
+            <select id="hoursEnd"></select>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveHours()" style="flex-shrink:0">Salvar</button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="card">
+        <div class="card-title">Base de conhecimento (FAQ)</div>
+        <div class="card-sub">O agente responde estas perguntas diretamente, sem IA — mais rápido e preciso. Desative entradas desatualizadas.</div>
+
+        <input class="faq-search" id="faqSearch" type="text" placeholder="Buscar no FAQ..." oninput="filterFAQ()" />
+
+        <div class="faq-list" id="faqList"></div>
+
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="toggleAddForm()">
+            <span id="addBtnTxt">+ Adicionar pergunta</span>
+          </button>
+          <span class="faq-count-lbl" id="faqCountLbl"></span>
+        </div>
+
+        <div class="add-form-wrap" id="addFormWrap">
+          <div class="add-field">
+            <label>Pergunta</label>
+            <input type="text" id="newQ" placeholder="Ex: Vocês atendem no sábado?" />
+          </div>
+          <div class="add-field">
+            <label>Resposta</label>
+            <textarea id="newA" placeholder="Ex: Atendemos de segunda a sexta, das 8h às 18h."></textarea>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary btn-sm" onclick="saveFAQ()">Salvar</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleAddForm()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="tips">
+        <p>💡 Dicas para um FAQ eficiente</p>
+        <ul>
+          <li>Use respostas objetivas — o agente repete o texto exatamente como você escrever.</li>
+          <li>Inclua variações da mesma pergunta em entradas separadas.</li>
+          <li>Não coloque no FAQ: situações que precisam de julgamento, negociações ou contexto pessoal.</li>
+          <li>Dúvida? A TYVE revisa e otimiza o FAQ em cada ajuste contratado no seu plano.</li>
+        </ul>
+      </div>
+
+    </div><!-- /tab-config -->
+
+  </div><!-- /content -->
+</main>
+
+<footer>Painel privado &nbsp;·&nbsp; <a href="https://tyve.com.br">TYVE</a></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────
+const N8N       = 'https://n8n.tyve.com.br/webhook';
+const DASH_API  = N8N + '/8b29ec75-5c8b-4ec5-9c47-4cd293c03e7f';
+const CFG_API   = N8N + '/tyve-client-config';
+const UNLOCK    = N8N + '/tyve-unlock-bot';
+const FAQ_SAVE  = N8N + '/tyve-faq-save';
+const FAQ_EDIT  = N8N + '/tyve-faq-edit';
+const FAQ_TOGGLE= N8N + '/tyve-faq-toggle';
+const CFG_SAVE  = N8N + '/tyve-config-save';
+const REFRESH_MS = 5 * 60 * 1000;
+
+let TOKEN = '', CONFIG = {}, FAQ = [], chart = null;
+
+// ── UTILS ────────────────────────────────────────────
+function token() { return new URLSearchParams(location.search).get('token') || ''; }
+function fmt(n)  { return Number(n||0).toLocaleString('pt-BR'); }
+function esc(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function toast(msg, ok=true) {
+  const el = document.getElementById('toast');
+  el.textContent = (ok ? '✓ ' : '✗ ') + msg;
+  el.className = 'toast' + (ok ? '' : ' err') + ' show';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+function postJSON(url, body) {
+  return fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}).then(r=>r.json());
+}
+
+// ── TABS ─────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('tab-resultados').style.display = tab === 'resultados' ? '' : 'none';
+  document.getElementById('tab-config').style.display     = tab === 'config'     ? '' : 'none';
+  history.replaceState(null,'', location.pathname + location.search + '#' + tab);
+}
+
+function initTab() {
+  const hash = location.hash.replace('#','') || 'resultados';
+  switchTab(['resultados','config'].includes(hash) ? hash : 'resultados');
+}
+
+// ── LOAD ─────────────────────────────────────────────
+async function reload() {
+  TOKEN = token();
+  if (!TOKEN) { showState('noToken'); return; }
+  try {
+    const [dash, cfg] = await Promise.all([
+      fetch(DASH_API + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json()).catch(()=>null),
+      fetch(CFG_API  + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json()).catch(()=>null),
+    ]);
+    if (!dash || dash.error || dash.contacts_this_month === undefined) { showState('error'); return; }
+    if (!cfg  || !cfg.ok) { showState('error'); return; }
+    CONFIG = cfg.config || {};
+    FAQ    = cfg.faq_entries || [];
+    renderDash(dash);
+    renderConfig();
+    showState('ok');
+  } catch(e) { showState('error'); }
+}
+
+function showState(s) {
+  document.getElementById('stateLoading').style.display  = s === 'loading'  ? '' : 'none';
+  document.getElementById('stateNoToken').style.display  = s === 'noToken'  ? '' : 'none';
+  document.getElementById('stateError').style.display    = s === 'error'    ? '' : 'none';
+  document.getElementById('content').style.display       = s === 'ok'       ? '' : 'none';
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+function renderDash(d) {
+  const plan = d.plan || '–';
+  document.getElementById('bizName').textContent   = d.client_name || '–';
+  document.getElementById('planName').textContent  = plan;
+  document.getElementById('planBadge').textContent = plan;
+  document.getElementById('clientPill').textContent = d.client_name || plan;
+
+  document.getElementById('kpiContacts').textContent  = fmt(d.contacts_this_month);
+  document.getElementById('kpiHandoffs').textContent  = fmt(d.total_handoffs);
+  document.getElementById('kpiFollowups').textContent = fmt((+d.followups_d1||0)+(+d.followups_d3||0));
+  document.getElementById('kpiBookings').textContent  = fmt(d.bookings_confirmed);
+
+  const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
+  const total = trend.reduce((s,r) => s + Number(r.contacts), 0);
+  document.getElementById('statAvg').textContent = trend.length ? (total/trend.length).toFixed(1) : '0';
+
+  const ts = d.generated_at ? new Date(d.generated_at) : new Date();
+  document.getElementById('updatedAt').textContent = 'Atualizado em ' +
+    ts.toLocaleDateString('pt-BR') + ' às ' + ts.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+  buildChart(trend);
+  renderNPS(d);
+  updateBotStatus(d);
+}
+
+function updateBotStatus(d) {
+  const human = d.human_mode_active === true || d.human_mode_active === 1;
+  const dot   = document.getElementById('botDot');
+  const lbl   = document.getElementById('botLabel');
+  const sub   = document.getElementById('botSub');
+  const btn   = document.getElementById('unlockBtn');
+  if (human) {
+    dot.className = 'bot-dot human';
+    lbl.textContent = 'Atendimento humano ativo';
+    sub.textContent = 'Agente pausado — sua equipe está no controle';
+    btn.style.display = 'inline-flex';
+    btn.disabled = false;
+    btn.className = 'unlock-btn';
+    btn.innerHTML = '🤖 Liberar agente';
+  } else {
+    dot.className = 'bot-dot active';
+    lbl.textContent = 'Agente ativo';
+    sub.textContent = 'Respondendo automaticamente';
+    btn.style.display = 'none';
+  }
+}
+
+async function unlockBot() {
+  const btn = document.getElementById('unlockBtn');
+  btn.disabled = true; btn.innerHTML = '⏳ Liberando…';
+  try {
+    const d = await postJSON(UNLOCK, {token: TOKEN});
+    if (d.success) {
+      btn.className = 'unlock-btn success'; btn.innerHTML = '✅ Agente liberado';
+      document.getElementById('botDot').className = 'bot-dot active';
+      document.getElementById('botLabel').textContent = 'Agente ativo';
+      document.getElementById('botSub').textContent = 'Respondendo automaticamente';
+      setTimeout(() => btn.style.display = 'none', 2000);
+    } else { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; toast('Erro ao liberar agente',false); }
+  } catch(e) { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; }
+}
+
+function renderNPS(d) {
+  const sent = Number(d.nps_sent||0);
+  if (!sent) return;
+  document.getElementById('npsSection').style.display = '';
+  const score = Number(d.nps_score||0);
+  const scoreEl = document.getElementById('npsScore');
+  scoreEl.textContent = (score>0?'+':'')+score;
+  scoreEl.style.color = score>=50?'var(--orange)':score>=0?'var(--teal)':score>=-20?'var(--amber)':'var(--red)';
+  document.getElementById('npsAvg').textContent  = (+d.nps_avg>0) ? (+d.nps_avg).toFixed(1)+'/10' : '–';
+  const resp = Number(d.nps_responses||0);
+  document.getElementById('npsRate').textContent = sent>0 ? Math.round(resp/sent*100)+'%' : '–';
+  const p=Number(d.promoters||0), n=Number(d.passives||0), det=Number(d.detractors||0), tot=p+n+det||1;
+  document.getElementById('barP').style.width = Math.round(p/tot*100)+'%';
+  document.getElementById('barN').style.width = Math.round(n/tot*100)+'%';
+  document.getElementById('barD').style.width = Math.round(det/tot*100)+'%';
+  document.getElementById('cntP').textContent=p; document.getElementById('cntN').textContent=n; document.getElementById('cntD').textContent=det;
+}
+
+function buildChart(trend) {
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: trend.map(d=>{ const [,m,day]=d.day.split('-'); return day+'/'+m; }),
+      datasets:[{data:trend.map(d=>Number(d.contacts)),backgroundColor:'rgba(248,65,0,0.15)',borderColor:'#f84100',borderWidth:2,borderRadius:5,borderSkipped:false}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1E2837',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F8FAFC',bodyColor:'#94A3B8',callbacks:{label:c=>' '+c.parsed.y+' contato'+(c.parsed.y!==1?'s':'')}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:11},maxRotation:45}},
+        y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#64748B',font:{size:11},stepSize:1}}
+      }
+    }
+  });
+}
+
+// ── CONFIG TAB ────────────────────────────────────────
+function makeHourOptions(selected) {
+  return Array.from({length:24},(_,i)=>`<option value="${i}"${+selected===i?' selected':''}>${String(i).padStart(2,'0')}:00</option>`).join('');
+}
+
+function renderConfig() {
+  document.getElementById('hoursStart').innerHTML = makeHourOptions(CONFIG.hours_start ?? 8);
+  document.getElementById('hoursEnd').innerHTML   = makeHourOptions(CONFIG.hours_end   ?? 18);
+  renderFAQ();
+}
+
+async function saveHours() {
+  const s = +document.getElementById('hoursStart').value;
+  const e = +document.getElementById('hoursEnd').value;
+  if (s >= e) { toast('Abertura deve ser antes do fechamento', false); return; }
+  try {
+    const [r1,r2] = await Promise.all([
+      postJSON(CFG_SAVE, {token:TOKEN, key:'hours_start', value:String(s)}),
+      postJSON(CFG_SAVE, {token:TOKEN, key:'hours_end',   value:String(e)}),
+    ]);
+    if (r1.ok && r2.ok) { CONFIG.hours_start=String(s); CONFIG.hours_end=String(e); toast('Horários salvos'); }
+    else toast('Erro ao salvar horários', false);
+  } catch(e) { toast('Erro de conexão', false); }
+}
+
+// ── FAQ ───────────────────────────────────────────────
+function renderFAQ() {
+  const list = document.getElementById('faqList');
+  const en = FAQ.filter(f=>f.enabled!==false).length;
+  document.getElementById('faqCountLbl').textContent = en + ' ativas de ' + FAQ.length + ' entradas';
+
+  if (!FAQ.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:14px;padding:10px 0">Nenhuma entrada ainda. Adicione a primeira abaixo.</p>';
+    return;
+  }
+
+  list.innerHTML = FAQ.map(f => {
+    const dis = f.enabled === false;
+    return `
+    <div class="faq-item${dis?' disabled':''}" id="faq-${f.id}">
+      <div class="faq-row">
+        <label class="toggle">
+          <input type="checkbox" ${!dis?'checked':''} onchange="toggleFAQ(${f.id},this.checked,this)" />
+          <span class="toggle-slider"></span>
+        </label>
+        <div class="faq-content">
+          <div class="faq-q" id="faq-q-${f.id}">${esc(f.question)}</div>
+          <div class="faq-a" id="faq-a-${f.id}">${esc(f.answer)}</div>
+          ${f.tags&&f.tags.length?'<div class="faq-tags">'+f.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')+'</div>':''}
+        </div>
+        <div class="faq-actions">
+          <button class="faq-btn" onclick="openEdit(${f.id})">Editar</button>
+          <button class="faq-btn danger" onclick="removeFAQ(${f.id})">Remover</button>
+        </div>
+      </div>
+      <div class="faq-edit-form" id="edit-${f.id}">
+        <div class="edit-field"><label>Pergunta</label><input type="text" id="eq-${f.id}" value="${esc(f.question)}" /></div>
+        <div class="edit-field"><label>Resposta</label><textarea id="ea-${f.id}">${esc(f.answer)}</textarea></div>
+        <div class="edit-actions">
+          <button class="btn btn-primary btn-sm" onclick="saveEdit(${f.id})">Salvar</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeEdit(${f.id})">Cancelar</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  filterFAQ();
+}
+
+function filterFAQ() {
+  const q = document.getElementById('faqSearch').value.toLowerCase().trim();
+  document.querySelectorAll('.faq-item').forEach(el => {
+    if (!q) { el.classList.remove('hidden'); return; }
+    const text = el.textContent.toLowerCase();
+    el.classList.toggle('hidden', !text.includes(q));
+  });
+}
+
+async function toggleFAQ(id, enabled, checkbox) {
+  const el = document.getElementById('faq-' + id);
+  if (el) el.classList.toggle('disabled', !enabled);
+  const f = FAQ.find(x=>x.id===id);
+  if (f) f.enabled = enabled;
+  document.getElementById('faqCountLbl').textContent =
+    FAQ.filter(f=>f.enabled!==false).length + ' ativas de ' + FAQ.length + ' entradas';
+  try {
+    const d = await postJSON(FAQ_TOGGLE, {token:TOKEN, id, enabled});
+    if (!d.ok) { toast('Erro ao atualizar',false); if(f)f.enabled=!enabled; if(el)el.classList.toggle('disabled',enabled); if(checkbox)checkbox.checked=!enabled; }
+    else toast(enabled ? 'Entrada ativada' : 'Entrada desativada');
+  } catch(e) { toast('Erro de conexão',false); }
+}
+
+async function removeFAQ(id) {
+  if (!confirm('Remover esta entrada do FAQ?')) return;
+  const el = document.getElementById('faq-' + id);
+  const f = FAQ.find(x=>x.id===id);
+  try {
+    const d = await postJSON(FAQ_TOGGLE, {token:TOKEN, id, enabled:false});
+    if (d.ok) {
+      if (f) f.enabled = false;
+      if (el) el.style.display = 'none';
+      document.getElementById('faqCountLbl').textContent =
+        FAQ.filter(f=>f.enabled!==false).length + ' ativas de ' + FAQ.length + ' entradas';
+      toast('Entrada removida');
+    } else toast('Erro ao remover',false);
+  } catch(e) { toast('Erro de conexão',false); }
+}
+
+function openEdit(id) {
+  document.querySelectorAll('.faq-edit-form').forEach(f => f.classList.remove('open'));
+  document.getElementById('edit-' + id).classList.add('open');
+  document.getElementById('eq-' + id).focus();
+}
+function closeEdit(id) { document.getElementById('edit-' + id).classList.remove('open'); }
+
+async function saveEdit(id) {
+  const q = document.getElementById('eq-'+id).value.trim();
+  const a = document.getElementById('ea-'+id).value.trim();
+  if (!q||!a) { toast('Preencha pergunta e resposta',false); return; }
+  try {
+    const d = await postJSON(FAQ_EDIT, {token:TOKEN, id, question:q, answer:a});
+    if (d.ok && d.entry) {
+      const f = FAQ.find(x=>x.id===id);
+      if (f) { f.question=q; f.answer=a; }
+      document.getElementById('faq-q-'+id).textContent = q;
+      document.getElementById('faq-a-'+id).textContent = a;
+      closeEdit(id);
+      toast('Entrada atualizada');
+    } else toast('Erro ao salvar',false);
+  } catch(e) { toast('Erro de conexão',false); }
+}
+
+function toggleAddForm() {
+  const wrap = document.getElementById('addFormWrap');
+  const btn  = document.getElementById('addBtnTxt');
+  const open = wrap.classList.toggle('open');
+  btn.textContent = open ? '✕ Cancelar' : '+ Adicionar pergunta';
+  if (open) document.getElementById('newQ').focus();
+  else { document.getElementById('newQ').value=''; document.getElementById('newA').value=''; }
+}
+
+async function saveFAQ() {
+  const q = document.getElementById('newQ').value.trim();
+  const a = document.getElementById('newA').value.trim();
+  if (!q||!a) { toast('Preencha pergunta e resposta',false); return; }
+  try {
+    const d = await postJSON(FAQ_SAVE, {token:TOKEN, question:q, answer:a});
+    if (d.ok && d.entry) {
+      FAQ.push({id:d.entry.id, question:q, answer:a, enabled:true});
+      renderFAQ();
+      toggleAddForm();
+      toast('Pergunta adicionada');
+    } else toast('Erro ao salvar',false);
+  } catch(e) { toast('Erro de conexão',false); }
+}
+
+// ── INIT ──────────────────────────────────────────────
+showState('loading');
+reload();
+setInterval(reload, REFRESH_MS);
+initTab();
+</script>
+
+</body>
+</html>
