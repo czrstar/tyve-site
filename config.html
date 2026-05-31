@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações — TYVE</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Bold.woff2') format('woff2');font-weight:700}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2');font-weight:600}
+    :root{--orange:#f84100;--dark:#111e1d;--teal:#00e8df;--light:#fff;--grey:#f6f6f6;--border:#e8e8e8;--txt:#111e1d;--mid:#555;--dim:#888;--font:'Grift','DM Sans',sans-serif}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:#f4f4f4;color:var(--txt);min-height:100vh}
+    /* NAV */
+    .nav{background:var(--orange);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
+    .nav-logo{color:#fff;font-size:22px;font-weight:700;text-decoration:none;letter-spacing:-.3px}
+    .nav-client{color:rgba(255,255,255,.8);font-size:13px}
+    /* LAYOUT */
+    .page{max-width:860px;margin:0 auto;padding:32px 24px 80px}
+    .page-title{font-size:24px;font-weight:700;margin-bottom:6px}
+    .page-sub{font-size:14px;color:var(--dim);margin-bottom:32px}
+    /* CARDS */
+    .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:24px}
+    .card-title{font-size:15px;font-weight:700;margin-bottom:4px}
+    .card-sub{font-size:13px;color:var(--dim);margin-bottom:20px}
+    /* HOURS */
+    .hours-row{display:flex;gap:16px;align-items:flex-end}
+    .hours-field{flex:1}
+    .hours-field label{display:block;font-size:12px;font-weight:600;color:var(--mid);margin-bottom:6px}
+    .hours-field input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s}
+    .hours-field input:focus{border-color:var(--orange)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;font-family:var(--font);font-size:13px;font-weight:700;border:none;cursor:pointer;transition:opacity .2s}
+    .btn:hover{opacity:.85}
+    .btn-primary{background:var(--orange);color:#fff}
+    .btn-ghost{background:#f0f0f0;color:var(--txt)}
+    .btn-sm{padding:7px 14px;font-size:12px}
+    .btn-danger{background:#fee2e2;color:#c0392b}
+    /* FAQ */
+    .faq-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+    .faq-item{border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s}
+    .faq-item.disabled{opacity:.45}
+    .faq-item.disabled .faq-q{text-decoration:line-through}
+    .faq-toggle{flex-shrink:0;margin-top:2px}
+    .toggle{position:relative;display:inline-block;width:38px;height:22px}
+    .toggle input{opacity:0;width:0;height:0}
+    .toggle-slider{position:absolute;inset:0;background:#ddd;border-radius:22px;cursor:pointer;transition:.2s}
+    .toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+    .toggle input:checked + .toggle-slider{background:var(--teal)}
+    .toggle input:checked + .toggle-slider::before{transform:translateX(16px)}
+    .faq-content{flex:1;min-width:0}
+    .faq-q{font-size:14px;font-weight:600;margin-bottom:4px;color:var(--txt)}
+    .faq-a{font-size:13px;color:var(--mid);line-height:1.5}
+    .faq-tags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+    .tag{background:#f0f0f0;color:var(--dim);font-size:11px;padding:2px 8px;border-radius:100px}
+    /* ADD FAQ FORM */
+    .add-form{border:1.5px dashed var(--border);border-radius:10px;padding:20px;display:none}
+    .add-form.open{display:block}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:12px;font-weight:600;color:var(--mid);margin-bottom:6px}
+    .field input,.field textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);font-size:14px;outline:none;resize:vertical;transition:border-color .2s}
+    .field input:focus,.field textarea:focus{border-color:var(--orange)}
+    .field textarea{min-height:80px}
+    /* PLAN INFO */
+    .plan-row{display:flex;gap:12px;flex-wrap:wrap}
+    .plan-chip{background:var(--grey);border-radius:8px;padding:12px 18px;font-size:13px;color:var(--mid)}
+    .plan-chip strong{display:block;font-size:18px;font-weight:700;color:var(--txt);margin-bottom:2px}
+    /* TOAST */
+    .toast{position:fixed;bottom:28px;right:28px;background:var(--dark);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999}
+    .toast.show{opacity:1;transform:translateY(0)}
+    /* LOADING */
+    .loading{text-align:center;padding:60px;color:var(--dim)}
+    .spinner{width:32px;height:32px;border:3px solid #eee;border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    /* NO TOKEN */
+    .no-token{text-align:center;padding:80px 24px}
+    .no-token h2{font-size:22px;margin-bottom:12px}
+    .no-token p{color:var(--dim);font-size:14px;margin-bottom:24px}
+    @media(max-width:600px){.hours-row{flex-direction:column}.page{padding:20px 16px 80px}}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">TYVE</a>
+  <span class="nav-client" id="navClient"></span>
+</nav>
+
+<div class="page" id="mainPage">
+  <div class="loading" id="loadingView">
+    <div class="spinner"></div>
+    <p>Carregando configurações...</p>
+  </div>
+
+  <div id="noTokenView" class="no-token" style="display:none">
+    <h2>Link inválido</h2>
+    <p>Esse link de configuração não é válido ou expirou.<br/>Entre em contato com a TYVE para obter um novo link.</p>
+    <a href="https://wa.me/5516994247541" style="display:inline-block;background:var(--orange);color:#fff;padding:12px 28px;border-radius:100px;text-decoration:none;font-weight:700;font-size:14px">Falar com a TYVE</a>
+  </div>
+
+  <div id="configView" style="display:none">
+    <div class="page-title">Configurações do agente</div>
+    <p class="page-sub" id="clientSubtitle"></p>
+
+    <!-- Plan Info -->
+    <div class="card">
+      <div class="card-title">Seu plano</div>
+      <div class="card-sub">Informações da sua assinatura</div>
+      <div class="plan-row" id="planInfo"></div>
+    </div>
+
+    <!-- Business Hours -->
+    <div class="card">
+      <div class="card-title">Horário de atendimento</div>
+      <div class="card-sub">O agente atende 24h. Este horário define quando a equipe humana está disponível para handoffs.</div>
+      <div class="hours-row">
+        <div class="hours-field">
+          <label>Abertura (hora)</label>
+          <input type="number" id="hoursStart" min="0" max="23" placeholder="8" />
+        </div>
+        <div class="hours-field">
+          <label>Fechamento (hora)</label>
+          <input type="number" id="hoursEnd" min="0" max="23" placeholder="18" />
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="saveHours()">Salvar horários</button>
+      </div>
+    </div>
+
+    <!-- FAQ Management -->
+    <div class="card">
+      <div class="card-title">Base de conhecimento (FAQ)</div>
+      <div class="card-sub">O agente responde estas perguntas diretamente, sem consultar a IA — mais rápido e preciso. Desative entradas que não se aplicam mais.</div>
+
+      <div class="faq-list" id="faqList"></div>
+
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="toggleAddForm()">
+          <span id="addBtnText">+ Adicionar pergunta</span>
+        </button>
+        <span style="font-size:12px;color:var(--dim)" id="faqCount"></span>
+      </div>
+
+      <div class="add-form" id="addForm">
+        <div style="height:16px"></div>
+        <div class="field">
+          <label>Pergunta</label>
+          <input type="text" id="newQ" placeholder="Ex: Qual o horário de funcionamento?" />
+        </div>
+        <div class="field">
+          <label>Resposta</label>
+          <textarea id="newA" placeholder="Ex: Atendemos de segunda a sexta, das 8h às 18h."></textarea>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="saveFAQ()">Salvar</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleAddForm()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div style="background:#f0fffe;border:1px solid rgba(0,232,223,.3);border-radius:12px;padding:20px 24px">
+      <p style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px">💡 Dicas para um FAQ eficiente</p>
+      <ul style="font-size:13px;color:var(--mid);line-height:1.8;padding-left:18px">
+        <li>Use respostas objetivas — o agente vai repetir o texto exatamente como você escreveu.</li>
+        <li>Inclua variações da mesma pergunta em entradas separadas.</li>
+        <li>Não coloque no FAQ: situações que precisam de julgamento, negociações ou contexto pessoal do cliente.</li>
+        <li>Dúvida? A TYVE revisa e otimiza o FAQ a cada ajuste contratado no seu plano.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const N8N = 'https://n8n.tyve.com.br/webhook';
+let TOKEN = '';
+let INSTANCE = '';
+let CONFIG = {};
+let FAQ = [];
+
+function getToken() {
+  const p = new URLSearchParams(window.location.search);
+  return p.get('token') || '';
+}
+
+function toast(msg, ok = true) {
+  const t = document.getElementById('toast');
+  t.textContent = (ok ? '✓ ' : '✗ ') + msg;
+  t.style.background = ok ? '#111e1d' : '#c0392b';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function loadConfig() {
+  TOKEN = getToken();
+  if (!TOKEN) { showNoToken(); return; }
+
+  try {
+    const r = await fetch(`${N8N}/tyve-client-config?token=${encodeURIComponent(TOKEN)}`);
+    const d = await r.json();
+    if (!d.ok || !d.client_id) { showNoToken(); return; }
+
+    INSTANCE = d.client_id;
+    CONFIG = d.config || {};
+    FAQ = d.faq_entries || [];
+
+    render(d);
+  } catch(e) {
+    showNoToken();
+  }
+}
+
+function showNoToken() {
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('noTokenView').style.display = 'block';
+}
+
+function render(d) {
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('configView').style.display = 'block';
+
+  const name = CONFIG.client_name || INSTANCE;
+  document.getElementById('navClient').textContent = name;
+  document.getElementById('clientSubtitle').textContent = name + ' · ' + (CONFIG.plan || 'cresce');
+
+  // Plan chips
+  const planMap = {
+    atende: 'Atende', cresce: 'Cresce', escala: 'Escala',
+    converte: 'Converte Standard', 'converte-pro': 'Converte Pro'
+  };
+  const plan = CONFIG.plan || 'cresce';
+  const limitMap = {atende:'200',cresce:'500',escala:'1.000',converte:'300','converte-pro':'700'};
+  document.getElementById('planInfo').innerHTML = `
+    <div class="plan-chip"><strong>${planMap[plan] || plan}</strong>Plano atual</div>
+    <div class="plan-chip"><strong>${limitMap[plan] || '—'}</strong>Contatos/mês</div>
+    <div class="plan-chip"><strong>${CONFIG.hours_start || '8'}h – ${CONFIG.hours_end || '18'}h</strong>Horário equipe</div>
+  `;
+
+  // Hours inputs
+  document.getElementById('hoursStart').value = CONFIG.hours_start || '8';
+  document.getElementById('hoursEnd').value = CONFIG.hours_end || '18';
+
+  // FAQ
+  renderFAQ();
+}
+
+function renderFAQ() {
+  const list = document.getElementById('faqList');
+  const enabled = FAQ.filter(f => f.enabled !== false);
+  document.getElementById('faqCount').textContent = enabled.length + ' ativas de ' + FAQ.length + ' entradas';
+
+  if (!FAQ.length) {
+    list.innerHTML = '<p style="color:var(--dim);font-size:14px;padding:12px 0">Nenhuma entrada no FAQ ainda. Adicione a primeira abaixo.</p>';
+    return;
+  }
+
+  list.innerHTML = FAQ.map(f => `
+    <div class="faq-item ${f.enabled === false ? 'disabled' : ''}" id="faq-${f.id}">
+      <label class="toggle faq-toggle">
+        <input type="checkbox" ${f.enabled !== false ? 'checked' : ''} onchange="toggleFAQ(${f.id}, this.checked)" />
+        <span class="toggle-slider"></span>
+      </label>
+      <div class="faq-content">
+        <div class="faq-q">${escHtml(f.question || '')}</div>
+        <div class="faq-a">${escHtml(f.answer || '')}</div>
+        ${f.tags && f.tags.length ? '<div class="faq-tags">' + f.tags.map(t => `<span class="tag">${escHtml(t)}</span>`).join('') + '</div>' : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleAddForm() {
+  const form = document.getElementById('addForm');
+  const btn = document.getElementById('addBtnText');
+  const open = form.classList.toggle('open');
+  btn.textContent = open ? '✕ Cancelar' : '+ Adicionar pergunta';
+  if (open) document.getElementById('newQ').focus();
+  else { document.getElementById('newQ').value = ''; document.getElementById('newA').value = ''; }
+}
+
+async function saveFAQ() {
+  const q = document.getElementById('newQ').value.trim();
+  const a = document.getElementById('newA').value.trim();
+  if (!q || !a) { toast('Preencha pergunta e resposta', false); return; }
+
+  try {
+    const r = await fetch(`${N8N}/tyve-faq-save`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ token: TOKEN, question: q, answer: a })
+    });
+    const d = await r.json();
+    if (d.ok && d.entry) {
+      FAQ.push({ id: d.entry.id, question: q, answer: a, enabled: true });
+      renderFAQ();
+      toggleAddForm();
+      toast('Pergunta adicionada com sucesso');
+    } else { toast('Erro ao salvar. Tente novamente.', false); }
+  } catch(e) { toast('Erro de conexão', false); }
+}
+
+async function toggleFAQ(id, enabled) {
+  const el = document.getElementById('faq-' + id);
+  if (el) el.classList.toggle('disabled', !enabled);
+
+  const f = FAQ.find(x => x.id === id);
+  if (f) f.enabled = enabled;
+  document.getElementById('faqCount').textContent =
+    FAQ.filter(f => f.enabled !== false).length + ' ativas de ' + FAQ.length + ' entradas';
+
+  try {
+    const r = await fetch(`${N8N}/tyve-faq-toggle`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ token: TOKEN, id: id, enabled: enabled })
+    });
+    const d = await r.json();
+    if (!d.ok) toast('Erro ao atualizar', false);
+    else toast(enabled ? 'Entrada ativada' : 'Entrada desativada');
+  } catch(e) { toast('Erro de conexão', false); }
+}
+
+async function saveHours() {
+  const start = parseInt(document.getElementById('hoursStart').value);
+  const end = parseInt(document.getElementById('hoursEnd').value);
+  if (isNaN(start) || isNaN(end) || start < 0 || end > 23 || start >= end) {
+    toast('Horários inválidos (abertura deve ser antes do fechamento)', false); return;
+  }
+
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch(`${N8N}/tyve-config-save`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ token: TOKEN, key: 'hours_start', value: String(start) })
+      }),
+      fetch(`${N8N}/tyve-config-save`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ token: TOKEN, key: 'hours_end', value: String(end) })
+      })
+    ]);
+    const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
+    if (d1.ok && d2.ok) {
+      CONFIG.hours_start = String(start);
+      CONFIG.hours_end = String(end);
+      toast('Horários salvos com sucesso');
+    } else toast('Erro ao salvar horários', false);
+  } catch(e) { toast('Erro de conexão', false); }
+}
+
+loadConfig();
+</script>
+</body>
+</html>
