@@ -493,19 +493,19 @@
           <div class="kpi-icon">🤝</div>
           <div class="kpi-label">Encaminhamentos</div>
           <div class="kpi-value teal" id="kpiHandoffs">–</div>
-          <div class="kpi-sub">para sua equipe</div>
+          <div class="kpi-sub">últimos 30 dias</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-icon">📲</div>
           <div class="kpi-label">Follow-ups enviados</div>
           <div class="kpi-value" id="kpiFollowups">–</div>
-          <div class="kpi-sub">reengajamento automático</div>
+          <div class="kpi-sub">últimos 30 dias</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-icon">✅</div>
           <div class="kpi-label">Agendamentos confirmados</div>
           <div class="kpi-value orange" id="kpiBookings">–</div>
-          <div class="kpi-sub">via agente</div>
+          <div class="kpi-sub">últimos 30 dias</div>
         </div>
       </div>
 
@@ -787,7 +787,7 @@ async function unlockBot() {
 
 function renderNPS(d) {
   const sent = Number(d.nps_sent||0);
-  if (!sent) return;
+  if (!sent) { document.getElementById('npsSection').style.display = 'none'; return; }
   document.getElementById('npsSection').style.display = '';
   const score = Number(d.nps_score||0);
   const scoreEl = document.getElementById('npsScore');
