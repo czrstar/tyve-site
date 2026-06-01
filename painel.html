@@ -710,8 +710,13 @@ function showState(s) {
 }
 
 // ── DASHBOARD ────────────────────────────────────────
+function planLabel(p) {
+  const map = {atende:'Atende',cresce:'Cresce',escala:'Escala',converte:'Converte Standard','converte-pro':'Converte Pro'};
+  return map[(p||'').toLowerCase()] || (p ? p.charAt(0).toUpperCase()+p.slice(1) : '–');
+}
+
 function renderDash(d) {
-  const plan = d.plan || '–';
+  const plan = planLabel(d.plan);
   document.getElementById('bizName').textContent    = d.client_name || '–';
   document.getElementById('planName').textContent   = plan;
   document.getElementById('planBadge').textContent  = plan;
@@ -725,16 +730,17 @@ function renderDash(d) {
   document.getElementById('kpiBookings').textContent  = fmt(d.bookings_confirmed);
 
   const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
-  const total = trend.reduce((s,r) => s + Number(r.contacts), 0);
-  document.getElementById('statAvg').textContent = trend.length ? (total/trend.length).toFixed(1) : '0';
+  const trendTotal = trend.reduce((s,r) => s + Number(r.contacts), 0);
+  document.getElementById('statAvg').textContent = trend.length ? (trendTotal/trend.length).toFixed(1) : '0';
 
   const ts = d.generated_at ? new Date(d.generated_at) : new Date();
   document.getElementById('updatedAt').textContent = 'Atualizado ' +
     ts.toLocaleDateString('pt-BR') + ' às ' + ts.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 
+  // FIX: use contacts_this_month (unique contacts this billing month) not trendTotal (daily sum)
   const limitEl = document.getElementById('contactLimit');
   if (limitEl && CONFIG.contact_limit) {
-    limitEl.textContent = fmt(total) + ' / ' + fmt(CONFIG.contact_limit) + ' contatos';
+    limitEl.textContent = fmt(d.contacts_this_month) + ' / ' + fmt(CONFIG.contact_limit) + ' contatos';
   }
 
   buildChart(trend);
