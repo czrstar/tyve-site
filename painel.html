@@ -21,29 +21,31 @@
     :root{
       /* Brand */
       --orange:#f84100;
-      --orange-dim:rgba(248,65,0,0.12);
-      --orange-glow:rgba(248,65,0,0.35);
-      --teal:#00e8df;
-      --teal-dim:rgba(0,232,223,0.10);
-      /* Surface — dark app */
-      --bg:#0d1117;
-      --surface:#141b24;
-      --surface2:#1b2535;
-      --surface3:#212f42;
-      --border:rgba(255,255,255,0.07);
-      --border2:rgba(255,255,255,0.13);
-      /* Type */
-      --text:#f0f4f8;
-      --muted:#7a8fa8;
-      --muted2:#4a6080;
+      --orange-dim:rgba(248,65,0,0.08);
+      --orange-glow:rgba(248,65,0,0.28);
+      --teal:#00b5ae;
+      --teal-dim:rgba(0,181,174,0.10);
+      /* Light surfaces — matches tyve.com.br beige/white sections */
+      --bg:#f0ebe3;
+      --surface:#ffffff;
+      --surface2:#f7f4ef;
+      --surface3:#ede9e1;
+      --border:rgba(17,30,29,0.09);
+      --border2:rgba(17,30,29,0.16);
+      /* Type — exact match to site tokens */
+      --text:#111e1d;
+      --muted:#555;
+      --muted2:#888;
       /* Semantic */
-      --amber:#F59E0B;
-      --red:#EF4444;
-      --green:#22c55e;
+      --amber:#b45309;
+      --red:#dc2626;
+      --green:#15803d;
       /* UI */
       --radius:14px;
       --radius-sm:10px;
       --font:'Grift','DM Sans',system-ui,sans-serif;
+      /* Dark strip (hero + tabs) */
+      --dark:#111e1d;
     }
 
     html{scroll-behavior:smooth}
@@ -65,15 +67,15 @@
     }
     .refresh-btn{
       display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
-      color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.15);
+      color:rgba(255,255,255,.85);background:rgba(0,0,0,0.15);
       border:1px solid rgba(255,255,255,0.2);border-radius:999px;
       padding:7px 16px;cursor:pointer;transition:all .2s;font-family:var(--font);
     }
     .refresh-btn:hover{background:rgba(0,0,0,0.28);color:#fff}
 
-    /* ── HERO STRIP — dark + raios, shows biz name ─────────── */
+    /* ── HERO STRIP — dark + raios, like site hero ──────────── */
     .painel-hero{
-      position:relative;background:#111e1d;overflow:hidden;
+      position:relative;background:var(--dark);overflow:hidden;
       padding:40px 40px 36px;
     }
     .painel-hero::before{
@@ -96,31 +98,33 @@
     .hero-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
     .hero-plan-badge{
       font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px;
-      background:linear-gradient(90deg,var(--orange),var(--teal));color:#000;
+      background:linear-gradient(90deg,var(--orange),#00e8df);color:#000;
     }
     #updatedAt{font-size:12px;color:rgba(255,255,255,.4)}
 
-    /* ── TABS ────────────────────────────────────────────────── */
+    /* ── TABS — dark strip below hero ───────────────────────── */
     .tabs-bar{
-      background:#111e1d;border-bottom:1px solid rgba(255,255,255,0.06);
+      background:var(--dark);
+      border-bottom:3px solid var(--orange);
       padding:0 40px;
     }
     .tabs{display:flex;gap:2px;max-width:1100px;margin:0 auto}
     .tab-btn{
       display:flex;align-items:center;gap:7px;padding:14px 22px;
-      border:none;border-bottom:2px solid transparent;background:transparent;
-      color:var(--muted);font-family:var(--font);font-size:13px;font-weight:600;
+      border:none;border-bottom:3px solid transparent;margin-bottom:-3px;
+      background:transparent;color:rgba(255,255,255,.5);
+      font-family:var(--font);font-size:13px;font-weight:600;
       cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:.01em;
     }
-    .tab-btn:hover{color:var(--text)}
+    .tab-btn:hover{color:rgba(255,255,255,.85)}
     .tab-btn.active{color:#fff;border-bottom-color:var(--orange)}
 
-    /* ── MAIN ────────────────────────────────────────────────── */
+    /* ── MAIN — light content area ───────────────────────────── */
     main{max-width:1100px;margin:0 auto;padding:32px 40px 80px}
 
     /* ── STATE SCREENS ───────────────────────────────────────── */
     .state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;gap:16px}
-    .state h2{font-size:22px;font-weight:700;color:#fff}
+    .state h2{font-size:22px;font-weight:700;color:var(--text)}
     .state p{color:var(--muted);max-width:360px;line-height:1.6;font-size:15px}
     @keyframes spin{to{transform:rotate(360deg)}}
     .spinner{
@@ -136,7 +140,7 @@
     }
     .wa-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--orange-glow)}
 
-    /* ── SEC LABEL — orange pill like tyve.com.br ────────────── */
+    /* ── SEC LABEL — orange outlined pill ───────────────────── */
     .sec-label{
       display:inline-block;border:1.5px solid var(--orange);color:var(--orange);
       border-radius:100px;padding:4px 14px;font-size:10px;font-weight:700;
@@ -147,27 +151,23 @@
     .card{
       background:var(--surface);border:1px solid var(--border);
       border-radius:var(--radius);padding:26px;margin-bottom:20px;
+      box-shadow:0 1px 3px rgba(17,30,29,0.06);
     }
-    .card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:4px}
+    .card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
     .card-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
 
-    /* ── KPI ─────────────────────────────────────────────────── */
+    /* ── KPI GRID ────────────────────────────────────────────── */
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
     .kpi-card{
       background:var(--surface);border:1px solid var(--border);
       border-radius:var(--radius);padding:22px 22px 20px;
-      position:relative;overflow:hidden;transition:border-color .2s;
+      box-shadow:0 1px 3px rgba(17,30,29,0.05);
+      border-top:3px solid transparent;transition:border-top-color .2s, box-shadow .2s;
     }
-    .kpi-card:hover{border-color:var(--border2)}
-    .kpi-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:3px;
-      background:linear-gradient(90deg,var(--orange),var(--teal));
-      opacity:0;transition:opacity .2s;
-    }
-    .kpi-card:hover::before{opacity:1}
+    .kpi-card:hover{border-top-color:var(--orange);box-shadow:0 4px 14px rgba(17,30,29,0.10)}
     .kpi-icon{font-size:20px;margin-bottom:10px}
-    .kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
-    .kpi-value{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+    .kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:8px}
+    .kpi-value{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1;color:var(--text)}
     .kpi-value.orange{color:var(--orange)}.kpi-value.teal{color:var(--teal)}
     .kpi-sub{font-size:12px;color:var(--muted2);margin-top:7px}
 
@@ -180,15 +180,16 @@
       background:var(--surface);border:1px solid var(--border);
       border-radius:var(--radius);padding:18px 20px;
       display:flex;align-items:center;gap:14px;
+      box-shadow:0 1px 3px rgba(17,30,29,0.05);
     }
     .stat-icon{
       width:44px;height:44px;border-radius:12px;
       display:flex;align-items:center;justify-content:center;
       font-size:18px;flex-shrink:0;
     }
-    .stat-icon.o{background:var(--orange-dim);border:1px solid rgba(248,65,0,0.2)}
-    .stat-icon.t{background:var(--teal-dim);border:1px solid rgba(0,232,223,0.15)}
-    .stat-num{font-size:22px;font-weight:800;letter-spacing:-.5px;color:#fff}
+    .stat-icon.o{background:var(--orange-dim);border:1px solid rgba(248,65,0,0.15)}
+    .stat-icon.t{background:var(--teal-dim);border:1px solid rgba(0,181,174,0.15)}
+    .stat-num{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
     .stat-desc{font-size:12px;color:var(--muted);margin-top:2px}
 
     /* ── BOT STATUS ──────────────────────────────────────────── */
@@ -196,33 +197,34 @@
       background:var(--surface);border:1px solid var(--border);
       border-radius:var(--radius);padding:18px 24px;margin-bottom:20px;
       display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+      box-shadow:0 1px 3px rgba(17,30,29,0.05);
     }
     .bot-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-    .bot-dot.active{background:var(--orange);box-shadow:0 0 0 3px rgba(248,65,0,0.2)}
-    .bot-dot.human{background:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,0.2)}
+    .bot-dot.active{background:var(--orange);box-shadow:0 0 0 3px rgba(248,65,0,0.15)}
+    .bot-dot.human{background:var(--amber);box-shadow:0 0 0 3px rgba(180,83,9,0.15)}
     .bot-status-left{display:flex;align-items:center;gap:12px}
     .unlock-btn{
       display:inline-flex;align-items:center;gap:8px;padding:10px 20px;
-      background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);
+      background:rgba(180,83,9,0.08);border:1px solid rgba(180,83,9,0.25);
       color:var(--amber);font-size:13px;font-weight:700;border-radius:999px;
       cursor:pointer;font-family:var(--font);transition:all .2s;
     }
-    .unlock-btn:hover{background:rgba(245,158,11,0.2)}
-    .unlock-btn.success{background:var(--orange-dim);border-color:rgba(248,65,0,0.3);color:var(--orange)}
+    .unlock-btn:hover{background:rgba(180,83,9,0.14)}
+    .unlock-btn.success{background:var(--orange-dim);border-color:rgba(248,65,0,0.25);color:var(--orange)}
 
     /* ── PLAN BANNER ─────────────────────────────────────────── */
     .plan-banner{
-      background:linear-gradient(135deg,rgba(248,65,0,0.07) 0%,rgba(0,232,223,0.05) 100%);
-      border:1px solid rgba(248,65,0,0.18);
+      background:var(--surface);border:1px solid var(--border);
+      border-left:4px solid var(--orange);
       border-radius:var(--radius);padding:20px 26px;
-      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+      margin-bottom:20px;box-shadow:0 1px 3px rgba(17,30,29,0.05);
     }
-    .plan-banner-left{}
-    .plan-label-sm{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-    #planName{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px}
+    .plan-label-sm{font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+    #planName{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
     .plan-badge{
       font-size:13px;font-weight:700;padding:8px 22px;border-radius:999px;
-      background:linear-gradient(90deg,var(--orange),var(--teal));color:#000;
+      background:linear-gradient(90deg,var(--orange),#00e8df);color:#000;
       letter-spacing:.03em;
     }
 
@@ -230,10 +232,10 @@
     .nps-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
     .nps-stat{
       text-align:center;background:var(--surface2);
-      border-radius:var(--radius-sm);padding:16px 8px;
+      border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 8px;
     }
-    .nps-val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;color:#fff}
-    .nps-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:6px}
+    .nps-val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--text)}
+    .nps-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);margin-top:6px}
     .nps-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
     .nps-bar-lbl{font-size:12px;font-weight:600;width:80px;flex-shrink:0}
     .nps-bar-lbl.p{color:var(--orange)}.nps-bar-lbl.n{color:var(--teal)}.nps-bar-lbl.d{color:var(--amber)}
@@ -251,10 +253,10 @@
       border:1.5px solid var(--border2);border-radius:var(--radius-sm);
       color:var(--text);font-family:var(--font);font-size:14px;outline:none;
       cursor:pointer;transition:border-color .2s;appearance:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8fa8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
       background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
     }
-    .hours-field select:focus{border-color:var(--orange)}
+    .hours-field select:focus{border-color:var(--orange);outline:none}
 
     /* FAQ */
     .faq-search{
@@ -262,33 +264,36 @@
       border:1.5px solid var(--border2);border-radius:var(--radius-sm);
       color:var(--text);font-family:var(--font);font-size:14px;outline:none;
       transition:border-color .2s;margin-bottom:16px;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a8fa8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
       background-repeat:no-repeat;background-position:14px center;
     }
     .faq-search:focus{border-color:var(--orange)}
-    .faq-search::placeholder{color:var(--muted)}
+    .faq-search::placeholder{color:var(--muted2)}
     .faq-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
     .faq-item{
       background:var(--surface2);border:1.5px solid var(--border);
-      border-radius:var(--radius-sm);padding:14px 16px;transition:border-color .2s;
+      border-radius:var(--radius-sm);padding:14px 16px;transition:border-color .2s, box-shadow .2s;
     }
-    .faq-item:hover{border-color:var(--border2)}
-    .faq-item.disabled{opacity:.38}
+    .faq-item:hover{border-color:var(--border2);box-shadow:0 2px 8px rgba(17,30,29,0.07)}
+    .faq-item.disabled{opacity:.4}
     .faq-item.hidden{display:none}
     .faq-row{display:flex;align-items:flex-start;gap:12px}
+    /* toggle */
     .toggle{position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0;margin-top:2px}
     .toggle input{opacity:0;width:0;height:0}
-    .toggle-slider{position:absolute;inset:0;background:#2a3a50;border-radius:20px;cursor:pointer;transition:.2s}
-    .toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+    .toggle-slider{position:absolute;inset:0;background:#d1cdc6;border-radius:20px;cursor:pointer;transition:.2s}
+    .toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
     .toggle input:checked + .toggle-slider{background:var(--orange)}
     .toggle input:checked + .toggle-slider::before{transform:translateX(16px)}
+    /* faq content */
     .faq-content{flex:1;min-width:0}
     .faq-q{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
     .faq-a{font-size:13px;color:var(--muted);line-height:1.5}
     .faq-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
     .tag{
       background:var(--teal-dim);color:var(--teal);font-size:11px;
-      padding:2px 9px;border-radius:999px;border:1px solid rgba(0,232,223,0.2);
+      padding:2px 9px;border-radius:999px;border:1px solid rgba(0,181,174,0.2);
+      font-weight:600;
     }
     .faq-actions{display:flex;gap:6px;flex-shrink:0;margin-top:1px}
     .faq-btn{
@@ -296,8 +301,9 @@
       border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;
       cursor:pointer;font-family:var(--font);transition:all .2s;white-space:nowrap;
     }
-    .faq-btn:hover{color:var(--text);border-color:rgba(255,255,255,.25)}
+    .faq-btn:hover{color:var(--text);border-color:var(--border2)}
     .faq-btn.danger:hover{color:var(--red);border-color:var(--red)}
+    /* inline edit */
     .faq-edit-form{margin-top:12px;display:none}
     .faq-edit-form.open{display:block}
     .edit-field{margin-bottom:10px}
@@ -311,23 +317,26 @@
     .edit-field input:focus,.edit-field textarea:focus{border-color:var(--orange)}
     .edit-field textarea{min-height:70px}
     .edit-actions{display:flex;gap:8px}
+    /* add form */
     .add-form-wrap{
-      border:1.5px dashed rgba(248,65,0,0.25);border-radius:var(--radius-sm);
-      padding:20px;display:none;margin-top:16px;background:var(--orange-dim);
+      border:1.5px dashed rgba(248,65,0,0.3);border-radius:var(--radius-sm);
+      padding:20px;display:none;margin-top:16px;
+      background:rgba(248,65,0,0.03);
     }
     .add-form-wrap.open{display:block}
     .add-field{margin-bottom:12px}
     .add-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
     .add-field input,.add-field textarea{
-      width:100%;padding:10px 14px;background:var(--surface2);
+      width:100%;padding:10px 14px;background:var(--surface);
       border:1.5px solid var(--border2);border-radius:var(--radius-sm);
       color:var(--text);font-family:var(--font);font-size:14px;outline:none;
       resize:vertical;transition:border-color .2s;
     }
     .add-field input:focus,.add-field textarea:focus{border-color:var(--orange)}
     .add-field textarea{min-height:80px}
+    /* tips */
     .tips{
-      background:var(--teal-dim);border:1px solid rgba(0,232,223,0.15);
+      background:rgba(0,181,174,0.06);border:1px solid rgba(0,181,174,0.18);
       border-radius:var(--radius);padding:20px 24px;margin-top:4px;
     }
     .tips p{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
@@ -338,28 +347,25 @@
       display:inline-flex;align-items:center;gap:7px;padding:10px 22px;
       border-radius:999px;font-family:var(--font);font-size:13px;
       font-weight:700;border:none;cursor:pointer;transition:all .2s;
-      letter-spacing:.01em;
     }
-    .btn:hover{opacity:.85;transform:translateY(-1px)}
+    .btn:hover{opacity:.87;transform:translateY(-1px)}
     .btn-primary{background:var(--orange);color:#fff;box-shadow:0 3px 12px var(--orange-glow)}
-    .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
+    .btn-ghost{background:var(--surface2);color:var(--text);border:1.5px solid var(--border2)}
     .btn-sm{padding:8px 16px;font-size:12px}
-
-    /* ── DIVIDER ─────────────────────────────────────────────── */
-    .divider{border:none;border-top:1px solid var(--border);margin:4px 0 20px}
 
     /* ── TOAST ───────────────────────────────────────────────── */
     .toast{
       position:fixed;bottom:28px;right:28px;
-      background:var(--surface2);border:1px solid var(--border2);
-      color:var(--text);padding:12px 20px;border-radius:var(--radius-sm);
+      background:var(--dark);color:#fff;
+      padding:12px 20px;border-radius:var(--radius-sm);
       font-size:14px;font-weight:500;opacity:0;transform:translateY(10px);
       transition:all .3s;pointer-events:none;z-index:999;max-width:320px;
+      box-shadow:0 4px 20px rgba(17,30,29,0.25);
     }
     .toast.show{opacity:1;transform:translateY(0)}
-    .toast.err{border-color:var(--red);color:var(--red)}
+    .toast.err{background:var(--red)}
 
-    .faq-count-lbl{font-size:12px;color:var(--muted)}
+    .faq-count-lbl{font-size:12px;color:var(--muted2)}
 
     /* ── FOOTER ──────────────────────────────────────────────── */
     footer{
@@ -398,7 +404,7 @@
   </div>
 </nav>
 
-<!-- ── HERO STRIP ────────────────────────────────────────────── -->
+<!-- ── HERO STRIP — dark, like site hero ────────────────────── -->
 <div class="painel-hero" id="heroStrip" style="display:none">
   <div class="hero-inner">
     <div class="hero-eyebrow">Painel de resultados</div>
@@ -410,7 +416,7 @@
   </div>
 </div>
 
-<!-- ── TABS BAR ──────────────────────────────────────────────── -->
+<!-- ── TABS — dark strip ─────────────────────────────────────── -->
 <div class="tabs-bar" id="tabsBar" style="display:none">
   <div class="tabs">
     <button class="tab-btn active" data-tab="resultados" onclick="switchTab('resultados')">📊 Resultados</button>
@@ -418,12 +424,13 @@
   </div>
 </div>
 
+<!-- ── MAIN — light content ───────────────────────────────────── -->
 <main>
   <!-- Loading -->
   <div class="state" id="stateLoading">
     <div class="spinner"></div>
     <h2>Carregando seu painel…</h2>
-    <p style="color:var(--muted)">Isso leva apenas um segundo.</p>
+    <p>Isso leva apenas um segundo.</p>
   </div>
 
   <!-- No token -->
@@ -439,7 +446,7 @@
     <div style="font-size:52px">🔒</div>
     <h2>Acesso não autorizado</h2>
     <p>Link inválido ou expirado. Entre em contato com a equipe TYVE.</p>
-    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+renovar+meu+link+do+painel+TYVE" target="_blank" rel="noopener" style="background:var(--surface2);border:1px solid var(--border2);box-shadow:none">Solicitar novo link</a>
+    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+renovar+meu+link+do+painel+TYVE" target="_blank" rel="noopener" style="background:var(--surface2);color:var(--text);border:1.5px solid var(--border2);box-shadow:none">Solicitar novo link</a>
   </div>
 
   <!-- CONTENT -->
@@ -453,7 +460,7 @@
         <div class="bot-status-left">
           <div class="bot-dot active" id="botDot"></div>
           <div>
-            <div style="font-size:14px;font-weight:600;color:#fff" id="botLabel">Agente ativo</div>
+            <div style="font-size:14px;font-weight:600" id="botLabel">Agente ativo</div>
             <div style="font-size:12px;color:var(--muted)" id="botSub">Respondendo automaticamente</div>
           </div>
         </div>
@@ -462,14 +469,15 @@
 
       <!-- Plan banner -->
       <div class="plan-banner">
-        <div class="plan-banner-left">
+        <div>
           <div class="plan-label-sm">Plano atual</div>
           <div id="planName">–</div>
         </div>
-        <div>
-          <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Últimos 30 dias</div>
+        <div style="text-align:right">
+          <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Últimos 30 dias</div>
           <div style="font-size:13px;color:var(--muted)" id="contactLimit"></div>
         </div>
+        <span class="plan-badge" id="planBadge2">–</span>
       </div>
 
       <!-- KPIs -->
@@ -580,7 +588,6 @@
         <div class="card-sub">O agente responde estas perguntas diretamente, sem IA — mais rápido e preciso. Desative entradas desatualizadas.</div>
 
         <input class="faq-search" id="faqSearch" type="text" placeholder="Buscar no FAQ..." oninput="filterFAQ()" />
-
         <div class="faq-list" id="faqList"></div>
 
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
@@ -695,7 +702,6 @@ function showState(s) {
   document.getElementById('stateNoToken').style.display  = s === 'noToken'  ? '' : 'none';
   document.getElementById('stateError').style.display    = s === 'error'    ? '' : 'none';
   document.getElementById('content').style.display       = s === 'ok'       ? '' : 'none';
-  // show hero + tabs only when content is loaded
   const show = s === 'ok';
   const hs = document.getElementById('heroStrip');
   const tb = document.getElementById('tabsBar');
@@ -709,6 +715,8 @@ function renderDash(d) {
   document.getElementById('bizName').textContent    = d.client_name || '–';
   document.getElementById('planName').textContent   = plan;
   document.getElementById('planBadge').textContent  = plan;
+  const pb2 = document.getElementById('planBadge2');
+  if (pb2) pb2.textContent = plan;
   document.getElementById('clientPill').textContent = d.client_name || plan;
 
   document.getElementById('kpiContacts').textContent  = fmt(d.contacts_this_month);
@@ -726,7 +734,7 @@ function renderDash(d) {
 
   const limitEl = document.getElementById('contactLimit');
   if (limitEl && CONFIG.contact_limit) {
-    limitEl.textContent = total + ' / ' + CONFIG.contact_limit + ' contatos';
+    limitEl.textContent = fmt(total) + ' / ' + fmt(CONFIG.contact_limit) + ' contatos';
   }
 
   buildChart(trend);
@@ -798,12 +806,12 @@ function buildChart(trend) {
       labels: trend.map(d=>{ const [,m,day]=d.day.split('-'); return day+'/'+m; }),
       datasets:[{
         data:trend.map(d=>Number(d.contacts)),
-        backgroundColor:'rgba(248,65,0,0.13)',
+        backgroundColor:'rgba(248,65,0,0.10)',
         borderColor:'#f84100',
         borderWidth:2,
         borderRadius:5,
         borderSkipped:false,
-        hoverBackgroundColor:'rgba(248,65,0,0.22)',
+        hoverBackgroundColor:'rgba(248,65,0,0.20)',
       }]
     },
     options:{
@@ -811,18 +819,18 @@ function buildChart(trend) {
       plugins:{
         legend:{display:false},
         tooltip:{
-          backgroundColor:'#1b2535',
-          borderColor:'rgba(255,255,255,0.08)',
+          backgroundColor:'#111e1d',
+          borderColor:'rgba(17,30,29,0.1)',
           borderWidth:1,
-          titleColor:'#f0f4f8',
-          bodyColor:'#7a8fa8',
+          titleColor:'#fff',
+          bodyColor:'#aaa',
           padding:12,
           callbacks:{label:c=>' '+c.parsed.y+' contato'+(c.parsed.y!==1?'s':'')}
         }
       },
       scales:{
-        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#4a6080',font:{size:11},maxRotation:45}},
-        y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4a6080',font:{size:11},stepSize:1}}
+        x:{grid:{color:'rgba(17,30,29,0.06)'},ticks:{color:'#888',font:{size:11},maxRotation:45}},
+        y:{beginAtZero:true,grid:{color:'rgba(17,30,29,0.06)'},ticks:{color:'#888',font:{size:11},stepSize:1}}
       }
     }
   });
