@@ -15,180 +15,376 @@
     @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
     @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
     @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
+
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
     :root{
-      --bg:#0A0E17;--surface:#111827;--surface2:#1E2837;--surface3:#263245;
-      --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-      --orange:#f84100;--teal:#00e8df;--text:#F8FAFC;--muted:#94A3B8;
-      --amber:#F59E0B;--red:#EF4444;--radius:14px;
+      /* Brand */
+      --orange:#f84100;
+      --orange-dim:rgba(248,65,0,0.12);
+      --orange-glow:rgba(248,65,0,0.35);
+      --teal:#00e8df;
+      --teal-dim:rgba(0,232,223,0.10);
+      /* Surface — dark app */
+      --bg:#0d1117;
+      --surface:#141b24;
+      --surface2:#1b2535;
+      --surface3:#212f42;
+      --border:rgba(255,255,255,0.07);
+      --border2:rgba(255,255,255,0.13);
+      /* Type */
+      --text:#f0f4f8;
+      --muted:#7a8fa8;
+      --muted2:#4a6080;
+      /* Semantic */
+      --amber:#F59E0B;
+      --red:#EF4444;
+      --green:#22c55e;
+      /* UI */
+      --radius:14px;
+      --radius-sm:10px;
+      --font:'Grift','DM Sans',system-ui,sans-serif;
     }
-    body{font-family:'Grift','DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 
-    /* NAV */
-    nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--border);background:rgba(10,14,23,0.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+    /* ── NAV — orange, matches tyve.com.br ─────────────────── */
+    nav{
+      height:64px;display:flex;align-items:center;justify-content:space-between;
+      padding:0 40px;background:var(--orange);
+      position:sticky;top:0;z-index:200;
+    }
     .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-    .nav-logo img{height:26px;filter:brightness(0) invert(1)}
+    .nav-logo img{height:28px;filter:brightness(0) invert(1)}
     .nav-right{display:flex;align-items:center;gap:10px}
-    .client-pill{font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px;background:rgba(0,232,223,0.12);border:1px solid rgba(0,232,223,0.2);color:var(--teal)}
-    .refresh-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;transition:all .2s;font-family:inherit}
-    .refresh-btn:hover{color:var(--text);border-color:var(--border2)}
+    .client-pill{
+      font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px;
+      background:rgba(0,0,0,0.18);border:1px solid rgba(255,255,255,0.25);
+      color:#fff;letter-spacing:.01em;
+    }
+    .refresh-btn{
+      display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
+      color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.15);
+      border:1px solid rgba(255,255,255,0.2);border-radius:999px;
+      padding:7px 16px;cursor:pointer;transition:all .2s;font-family:var(--font);
+    }
+    .refresh-btn:hover{background:rgba(0,0,0,0.28);color:#fff}
 
-    /* TABS */
-    .tabs-wrap{max-width:1100px;margin:0 auto;padding:24px 24px 0}
-    .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;width:fit-content}
-    .tab-btn{display:flex;align-items:center;gap:7px;padding:8px 20px;border:none;background:transparent;color:var(--muted);font-family:inherit;font-size:14px;font-weight:600;border-radius:9px;cursor:pointer;transition:all .2s;white-space:nowrap}
+    /* ── HERO STRIP — dark + raios, shows biz name ─────────── */
+    .painel-hero{
+      position:relative;background:#111e1d;overflow:hidden;
+      padding:40px 40px 36px;
+    }
+    .painel-hero::before{
+      content:'';position:absolute;inset:0;
+      background-image:url('/assets/raios-tyve.svg');
+      background-size:auto 120%;background-repeat:repeat-x;
+      background-position:center center;opacity:.07;pointer-events:none;
+    }
+    .hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--orange);margin-bottom:10px;
+    }
+    .hero-eyebrow::before{content:'';width:18px;height:2px;background:var(--orange);border-radius:2px}
+    #bizName{
+      font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.5px;
+      color:#fff;line-height:1.15;margin-bottom:6px;
+    }
+    .hero-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
+    .hero-plan-badge{
+      font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px;
+      background:linear-gradient(90deg,var(--orange),var(--teal));color:#000;
+    }
+    #updatedAt{font-size:12px;color:rgba(255,255,255,.4)}
+
+    /* ── TABS ────────────────────────────────────────────────── */
+    .tabs-bar{
+      background:#111e1d;border-bottom:1px solid rgba(255,255,255,0.06);
+      padding:0 40px;
+    }
+    .tabs{display:flex;gap:2px;max-width:1100px;margin:0 auto}
+    .tab-btn{
+      display:flex;align-items:center;gap:7px;padding:14px 22px;
+      border:none;border-bottom:2px solid transparent;background:transparent;
+      color:var(--muted);font-family:var(--font);font-size:13px;font-weight:600;
+      cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:.01em;
+    }
     .tab-btn:hover{color:var(--text)}
-    .tab-btn.active{background:var(--surface2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+    .tab-btn.active{color:#fff;border-bottom-color:var(--orange)}
 
-    /* MAIN */
-    main{max-width:1100px;margin:0 auto;padding:28px 24px 80px}
+    /* ── MAIN ────────────────────────────────────────────────── */
+    main{max-width:1100px;margin:0 auto;padding:32px 40px 80px}
 
-    /* STATE SCREENS */
+    /* ── STATE SCREENS ───────────────────────────────────────── */
     .state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;gap:16px}
-    .state h2{font-size:22px;font-weight:700}
+    .state h2{font-size:22px;font-weight:700;color:#fff}
     .state p{color:var(--muted);max-width:360px;line-height:1.6;font-size:15px}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .spinner{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--orange);animation:spin .8s linear infinite}
-    .wa-btn{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:12px 24px;background:var(--orange);color:#fff;font-weight:700;font-size:14px;border-radius:8px;text-decoration:none}
+    .spinner{
+      width:38px;height:38px;border-radius:50%;
+      border:3px solid var(--border2);border-top-color:var(--orange);
+      animation:spin .7s linear infinite;
+    }
+    .wa-btn{
+      display:inline-flex;align-items:center;gap:8px;margin-top:8px;
+      padding:13px 28px;background:var(--orange);color:#fff;
+      font-weight:700;font-size:14px;border-radius:999px;text-decoration:none;
+      box-shadow:0 4px 18px var(--orange-glow);transition:transform .2s,box-shadow .2s;
+    }
+    .wa-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--orange-glow)}
 
-    /* CARDS */
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
-    .card-title{font-size:15px;font-weight:700;margin-bottom:4px}
-    .card-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+    /* ── SEC LABEL — orange pill like tyve.com.br ────────────── */
+    .sec-label{
+      display:inline-block;border:1.5px solid var(--orange);color:var(--orange);
+      border-radius:100px;padding:4px 14px;font-size:10px;font-weight:700;
+      letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;
+    }
 
-    /* KPI */
+    /* ── CARDS ───────────────────────────────────────────────── */
+    .card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:26px;margin-bottom:20px;
+    }
+    .card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:4px}
+    .card-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+
+    /* ── KPI ─────────────────────────────────────────────────── */
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
-    .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
-    .kpi-icon{font-size:20px;margin-bottom:8px}
-    .kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:8px}
-    .kpi-value{font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1}
+    .kpi-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:22px 22px 20px;
+      position:relative;overflow:hidden;transition:border-color .2s;
+    }
+    .kpi-card:hover{border-color:var(--border2)}
+    .kpi-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--orange),var(--teal));
+      opacity:0;transition:opacity .2s;
+    }
+    .kpi-card:hover::before{opacity:1}
+    .kpi-icon{font-size:20px;margin-bottom:10px}
+    .kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
+    .kpi-value{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1}
     .kpi-value.orange{color:var(--orange)}.kpi-value.teal{color:var(--teal)}
-    .kpi-sub{font-size:12px;color:var(--muted);margin-top:6px}
+    .kpi-sub{font-size:12px;color:var(--muted2);margin-top:7px}
 
-    /* CHART */
+    /* ── CHART ───────────────────────────────────────────────── */
     .chart-wrap{height:240px;position:relative}
 
-    /* STATS */
+    /* ── STATS GRID ──────────────────────────────────────────── */
     .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:20px}
-    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:14px}
-    .stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-    .stat-icon.o{background:rgba(248,65,0,0.12)}.stat-icon.t{background:rgba(0,232,223,0.12)}
-    .stat-num{font-size:22px;font-weight:800;letter-spacing:-.5px}
+    .stat-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:18px 20px;
+      display:flex;align-items:center;gap:14px;
+    }
+    .stat-icon{
+      width:44px;height:44px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;flex-shrink:0;
+    }
+    .stat-icon.o{background:var(--orange-dim);border:1px solid rgba(248,65,0,0.2)}
+    .stat-icon.t{background:var(--teal-dim);border:1px solid rgba(0,232,223,0.15)}
+    .stat-num{font-size:22px;font-weight:800;letter-spacing:-.5px;color:#fff}
     .stat-desc{font-size:12px;color:var(--muted);margin-top:2px}
 
-    /* PLAN BANNER */
-    .plan-banner{background:linear-gradient(135deg,rgba(248,65,0,0.08),rgba(0,232,223,0.08));border:1px solid rgba(0,232,223,0.2);border-radius:var(--radius);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
-    .plan-badge{font-size:13px;font-weight:700;padding:6px 18px;border-radius:999px;background:linear-gradient(135deg,#f84100,#00e8df);color:#000}
-
-    /* BOT STATUS */
-    .bot-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    /* ── BOT STATUS ──────────────────────────────────────────── */
+    .bot-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:18px 24px;margin-bottom:20px;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+    }
     .bot-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-    .bot-dot.active{background:var(--orange);box-shadow:0 0 8px rgba(248,65,0,0.5)}
-    .bot-dot.human{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,0.5)}
-    .unlock-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:var(--amber);font-size:13px;font-weight:700;border-radius:8px;cursor:pointer;font-family:inherit;transition:all .2s}
-    .unlock-btn:hover{background:rgba(245,158,11,0.22)}
-    .unlock-btn.success{background:rgba(248,65,0,0.12);border-color:rgba(248,65,0,0.3);color:var(--orange)}
+    .bot-dot.active{background:var(--orange);box-shadow:0 0 0 3px rgba(248,65,0,0.2)}
+    .bot-dot.human{background:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,0.2)}
+    .bot-status-left{display:flex;align-items:center;gap:12px}
+    .unlock-btn{
+      display:inline-flex;align-items:center;gap:8px;padding:10px 20px;
+      background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);
+      color:var(--amber);font-size:13px;font-weight:700;border-radius:999px;
+      cursor:pointer;font-family:var(--font);transition:all .2s;
+    }
+    .unlock-btn:hover{background:rgba(245,158,11,0.2)}
+    .unlock-btn.success{background:var(--orange-dim);border-color:rgba(248,65,0,0.3);color:var(--orange)}
 
-    /* NPS */
+    /* ── PLAN BANNER ─────────────────────────────────────────── */
+    .plan-banner{
+      background:linear-gradient(135deg,rgba(248,65,0,0.07) 0%,rgba(0,232,223,0.05) 100%);
+      border:1px solid rgba(248,65,0,0.18);
+      border-radius:var(--radius);padding:20px 26px;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;
+    }
+    .plan-banner-left{}
+    .plan-label-sm{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+    #planName{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px}
+    .plan-badge{
+      font-size:13px;font-weight:700;padding:8px 22px;border-radius:999px;
+      background:linear-gradient(90deg,var(--orange),var(--teal));color:#000;
+      letter-spacing:.03em;
+    }
+
+    /* ── NPS ─────────────────────────────────────────────────── */
     .nps-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
-    .nps-stat{text-align:center}
-    .nps-val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1}
-    .nps-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:6px}
+    .nps-stat{
+      text-align:center;background:var(--surface2);
+      border-radius:var(--radius-sm);padding:16px 8px;
+    }
+    .nps-val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;color:#fff}
+    .nps-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:6px}
     .nps-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-    .nps-bar-lbl{font-size:12px;font-weight:600;width:78px;flex-shrink:0}
+    .nps-bar-lbl{font-size:12px;font-weight:600;width:80px;flex-shrink:0}
     .nps-bar-lbl.p{color:var(--orange)}.nps-bar-lbl.n{color:var(--teal)}.nps-bar-lbl.d{color:var(--amber)}
-    .nps-bar-track{flex:1;height:10px;background:var(--surface2);border-radius:99px;overflow:hidden}
+    .nps-bar-track{flex:1;height:8px;background:var(--surface3);border-radius:99px;overflow:hidden}
     .nps-bar-fill{height:100%;border-radius:99px;transition:width .5s}
     .nps-bar-fill.p{background:var(--orange)}.nps-bar-fill.n{background:var(--teal)}.nps-bar-fill.d{background:var(--amber)}
-    .nps-bar-cnt{font-size:12px;font-weight:700;width:26px;text-align:right;flex-shrink:0}
+    .nps-bar-cnt{font-size:12px;font-weight:700;width:26px;text-align:right;flex-shrink:0;color:var(--muted)}
 
-    /* ── CONFIG TAB ── */
-    /* Hours */
+    /* ── CONFIG TAB ──────────────────────────────────────────── */
     .hours-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
     .hours-field{flex:1;min-width:120px}
-    .hours-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
-    .hours-field select{width:100%;padding:10px 14px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+    .hours-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em}
+    .hours-field select{
+      width:100%;padding:11px 14px;background:var(--surface2);
+      border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+      color:var(--text);font-family:var(--font);font-size:14px;outline:none;
+      cursor:pointer;transition:border-color .2s;appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8fa8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+    }
     .hours-field select:focus{border-color:var(--orange)}
 
     /* FAQ */
-    .faq-search{width:100%;padding:10px 14px 10px 38px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;margin-bottom:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+    .faq-search{
+      width:100%;padding:11px 14px 11px 40px;background:var(--surface2);
+      border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+      color:var(--text);font-family:var(--font);font-size:14px;outline:none;
+      transition:border-color .2s;margin-bottom:16px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a8fa8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:14px center;
+    }
     .faq-search:focus{border-color:var(--orange)}
     .faq-search::placeholder{color:var(--muted)}
     .faq-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
-    .faq-item{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s}
+    .faq-item{
+      background:var(--surface2);border:1.5px solid var(--border);
+      border-radius:var(--radius-sm);padding:14px 16px;transition:border-color .2s;
+    }
     .faq-item:hover{border-color:var(--border2)}
-    .faq-item.disabled{opacity:.4}
+    .faq-item.disabled{opacity:.38}
     .faq-item.hidden{display:none}
     .faq-row{display:flex;align-items:flex-start;gap:12px}
-    /* toggle */
     .toggle{position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0;margin-top:2px}
     .toggle input{opacity:0;width:0;height:0}
-    .toggle-slider{position:absolute;inset:0;background:#374151;border-radius:20px;cursor:pointer;transition:.2s}
+    .toggle-slider{position:absolute;inset:0;background:#2a3a50;border-radius:20px;cursor:pointer;transition:.2s}
     .toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
-    .toggle input:checked + .toggle-slider{background:var(--teal)}
+    .toggle input:checked + .toggle-slider{background:var(--orange)}
     .toggle input:checked + .toggle-slider::before{transform:translateX(16px)}
-    /* faq content */
     .faq-content{flex:1;min-width:0}
     .faq-q{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
     .faq-a{font-size:13px;color:var(--muted);line-height:1.5}
     .faq-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
-    .tag{background:rgba(0,232,223,0.1);color:var(--teal);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid rgba(0,232,223,0.2)}
+    .tag{
+      background:var(--teal-dim);color:var(--teal);font-size:11px;
+      padding:2px 9px;border-radius:999px;border:1px solid rgba(0,232,223,0.2);
+    }
     .faq-actions{display:flex;gap:6px;flex-shrink:0;margin-top:1px}
-    .faq-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
-    .faq-btn:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+    .faq-btn{
+      background:transparent;border:1px solid var(--border2);color:var(--muted);
+      border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;
+      cursor:pointer;font-family:var(--font);transition:all .2s;white-space:nowrap;
+    }
+    .faq-btn:hover{color:var(--text);border-color:rgba(255,255,255,.25)}
     .faq-btn.danger:hover{color:var(--red);border-color:var(--red)}
-    /* inline edit */
     .faq-edit-form{margin-top:12px;display:none}
     .faq-edit-form.open{display:block}
     .edit-field{margin-bottom:10px}
-    .edit-field label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-    .edit-field input,.edit-field textarea{width:100%;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;outline:none;resize:vertical;transition:border-color .2s}
+    .edit-field label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+    .edit-field input,.edit-field textarea{
+      width:100%;padding:9px 12px;background:var(--surface);
+      border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+      color:var(--text);font-family:var(--font);font-size:13px;outline:none;
+      resize:vertical;transition:border-color .2s;
+    }
     .edit-field input:focus,.edit-field textarea:focus{border-color:var(--orange)}
     .edit-field textarea{min-height:70px}
     .edit-actions{display:flex;gap:8px}
-    /* add form */
-    .add-form-wrap{border:1.5px dashed var(--border2);border-radius:10px;padding:18px;display:none;margin-top:16px}
+    .add-form-wrap{
+      border:1.5px dashed rgba(248,65,0,0.25);border-radius:var(--radius-sm);
+      padding:20px;display:none;margin-top:16px;background:var(--orange-dim);
+    }
     .add-form-wrap.open{display:block}
     .add-field{margin-bottom:12px}
-    .add-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
-    .add-field input,.add-field textarea{width:100%;padding:10px 14px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;resize:vertical;transition:border-color .2s}
+    .add-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+    .add-field input,.add-field textarea{
+      width:100%;padding:10px 14px;background:var(--surface2);
+      border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+      color:var(--text);font-family:var(--font);font-size:14px;outline:none;
+      resize:vertical;transition:border-color .2s;
+    }
     .add-field input:focus,.add-field textarea:focus{border-color:var(--orange)}
     .add-field textarea{min-height:80px}
-    /* tips */
-    .tips{background:rgba(0,232,223,0.05);border:1px solid rgba(0,232,223,0.15);border-radius:12px;padding:18px 22px;margin-top:4px}
+    .tips{
+      background:var(--teal-dim);border:1px solid rgba(0,232,223,0.15);
+      border-radius:var(--radius);padding:20px 24px;margin-top:4px;
+    }
     .tips p{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
     .tips ul{font-size:13px;color:var(--muted);line-height:1.9;padding-left:18px}
 
-    /* BUTTONS */
-    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:999px;font-family:inherit;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:opacity .2s}
-    .btn:hover{opacity:.85}
-    .btn-primary{background:var(--orange);color:#fff}
+    /* ── BUTTONS ─────────────────────────────────────────────── */
+    .btn{
+      display:inline-flex;align-items:center;gap:7px;padding:10px 22px;
+      border-radius:999px;font-family:var(--font);font-size:13px;
+      font-weight:700;border:none;cursor:pointer;transition:all .2s;
+      letter-spacing:.01em;
+    }
+    .btn:hover{opacity:.85;transform:translateY(-1px)}
+    .btn-primary{background:var(--orange);color:#fff;box-shadow:0 3px 12px var(--orange-glow)}
     .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
-    .btn-sm{padding:7px 14px;font-size:12px}
+    .btn-sm{padding:8px 16px;font-size:12px}
 
-    /* TOAST */
-    .toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999;max-width:320px}
+    /* ── DIVIDER ─────────────────────────────────────────────── */
+    .divider{border:none;border-top:1px solid var(--border);margin:4px 0 20px}
+
+    /* ── TOAST ───────────────────────────────────────────────── */
+    .toast{
+      position:fixed;bottom:28px;right:28px;
+      background:var(--surface2);border:1px solid var(--border2);
+      color:var(--text);padding:12px 20px;border-radius:var(--radius-sm);
+      font-size:14px;font-weight:500;opacity:0;transform:translateY(10px);
+      transition:all .3s;pointer-events:none;z-index:999;max-width:320px;
+    }
     .toast.show{opacity:1;transform:translateY(0)}
     .toast.err{border-color:var(--red);color:var(--red)}
 
-    /* COUNT */
     .faq-count-lbl{font-size:12px;color:var(--muted)}
 
-    footer{text-align:center;padding:28px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)}
-    footer a{color:inherit}
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer{
+      text-align:center;padding:28px;color:var(--muted2);font-size:12px;
+      border-top:1px solid var(--border);
+    }
+    footer a{color:var(--muted);text-decoration:none}
+    footer a:hover{color:var(--orange)}
 
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
     @media(max-width:640px){
-      nav{padding:12px 16px}
-      .tabs-wrap{padding:16px 16px 0}
+      nav{padding:0 16px}
+      .painel-hero{padding:28px 16px 24px}
+      .tabs-bar{padding:0 16px}
       main{padding:20px 16px 60px}
-      .kpi-value{font-size:30px}
+      .kpi-value{font-size:32px}
       .hours-row{flex-direction:column}
       .faq-actions{margin-top:8px}
+      .nps-row{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
+<!-- ── NAV ──────────────────────────────────────────────────── -->
 <nav>
   <a class="nav-logo" href="https://tyve.com.br" target="_blank" rel="noopener">
     <img src="/assets/logo-tyve.svg" alt="TYVE" />
@@ -202,8 +398,20 @@
   </div>
 </nav>
 
-<!-- TABS -->
-<div class="tabs-wrap">
+<!-- ── HERO STRIP ────────────────────────────────────────────── -->
+<div class="painel-hero" id="heroStrip" style="display:none">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Painel de resultados</div>
+    <h1 id="bizName">–</h1>
+    <div class="hero-meta">
+      <span class="hero-plan-badge" id="planBadge">–</span>
+      <span id="updatedAt"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ── TABS BAR ──────────────────────────────────────────────── -->
+<div class="tabs-bar" id="tabsBar" style="display:none">
   <div class="tabs">
     <button class="tab-btn active" data-tab="resultados" onclick="switchTab('resultados')">📊 Resultados</button>
     <button class="tab-btn" data-tab="config" onclick="switchTab('config')">⚙️ Configurações</button>
@@ -215,42 +423,37 @@
   <div class="state" id="stateLoading">
     <div class="spinner"></div>
     <h2>Carregando seu painel…</h2>
+    <p style="color:var(--muted)">Isso leva apenas um segundo.</p>
   </div>
 
   <!-- No token -->
   <div class="state" id="stateNoToken" style="display:none">
-    <div style="font-size:48px">📊</div>
-    <h2>Seu painel TYVE</h2>
-    <p>Use o link personalizado enviado pela TYVE no WhatsApp.</p>
+    <div style="font-size:52px">⚡</div>
+    <h2>Painel TYVE</h2>
+    <p>Use o link personalizado enviado pela TYVE no WhatsApp para acessar seus resultados.</p>
     <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+do+meu+link+do+painel+TYVE" target="_blank" rel="noopener">Falar com a TYVE</a>
   </div>
 
   <!-- Error -->
   <div class="state" id="stateError" style="display:none">
-    <div style="font-size:48px">🔒</div>
+    <div style="font-size:52px">🔒</div>
     <h2>Acesso não autorizado</h2>
-    <p>Link inválido ou expirado. Fale com a equipe TYVE.</p>
-    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+renovar+meu+link+do+painel+TYVE" target="_blank" rel="noopener" style="background:var(--surface2);border:1px solid var(--border2)">Solicitar novo link</a>
+    <p>Link inválido ou expirado. Entre em contato com a equipe TYVE.</p>
+    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+renovar+meu+link+do+painel+TYVE" target="_blank" rel="noopener" style="background:var(--surface2);border:1px solid var(--border2);box-shadow:none">Solicitar novo link</a>
   </div>
 
-  <!-- CONTENT (hidden until loaded) -->
+  <!-- CONTENT -->
   <div id="content" style="display:none">
 
-    <!-- ══════════════ TAB: RESULTADOS ══════════════ -->
+    <!-- ══ TAB: RESULTADOS ════════════════════════════════════ -->
     <div id="tab-resultados">
-
-      <div style="margin-bottom:20px">
-        <h1 id="bizName" style="font-size:26px;font-weight:800;letter-spacing:-.5px">–</h1>
-        <p style="color:var(--muted);font-size:14px;margin-top:3px">Painel de resultados — últimos 30 dias</p>
-        <p style="color:var(--muted);font-size:12px;margin-top:4px" id="updatedAt"></p>
-      </div>
 
       <!-- Bot status -->
       <div class="bot-card" id="botCard">
-        <div style="display:flex;align-items:center;gap:12px">
+        <div class="bot-status-left">
           <div class="bot-dot active" id="botDot"></div>
           <div>
-            <div style="font-size:14px;font-weight:600" id="botLabel">Agente ativo</div>
+            <div style="font-size:14px;font-weight:600;color:#fff" id="botLabel">Agente ativo</div>
             <div style="font-size:12px;color:var(--muted)" id="botSub">Respondendo automaticamente</div>
           </div>
         </div>
@@ -259,14 +462,18 @@
 
       <!-- Plan banner -->
       <div class="plan-banner">
-        <div>
-          <div style="font-size:12px;color:var(--muted);font-weight:500">Plano atual</div>
-          <div style="font-size:20px;font-weight:800;margin-top:2px" id="planName">–</div>
+        <div class="plan-banner-left">
+          <div class="plan-label-sm">Plano atual</div>
+          <div id="planName">–</div>
         </div>
-        <span class="plan-badge" id="planBadge">–</span>
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Últimos 30 dias</div>
+          <div style="font-size:13px;color:var(--muted)" id="contactLimit"></div>
+        </div>
       </div>
 
       <!-- KPIs -->
+      <div class="sec-label">Métricas principais</div>
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-icon">💬</div>
@@ -296,32 +503,44 @@
 
       <!-- Chart -->
       <div class="card">
-        <div class="card-title">Contatos únicos por dia — últimos 30 dias</div>
-        <div class="chart-wrap" style="margin-top:16px"><canvas id="trendChart"></canvas></div>
+        <div class="card-title">Contatos únicos por dia</div>
+        <div class="card-sub">Últimos 30 dias</div>
+        <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
       </div>
 
       <!-- Stats -->
+      <div class="sec-label">Performance</div>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon o">📅</div>
-          <div><div class="stat-num" id="statAvg">–</div><div class="stat-desc">Média diária de contatos</div></div>
+          <div>
+            <div class="stat-num" id="statAvg">–</div>
+            <div class="stat-desc">Média diária de contatos</div>
+          </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon t">⚡</div>
-          <div><div class="stat-num">&lt;15s</div><div class="stat-desc">Tempo de resposta</div></div>
+          <div>
+            <div class="stat-num">&lt;15s</div>
+            <div class="stat-desc">Tempo de resposta</div>
+          </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon o">🕐</div>
-          <div><div class="stat-num">24/7</div><div class="stat-desc">Atendimento ativo</div></div>
+          <div>
+            <div class="stat-num">24/7</div>
+            <div class="stat-desc">Atendimento ativo</div>
+          </div>
         </div>
       </div>
 
       <!-- NPS -->
       <div class="card" id="npsSection" style="display:none">
-        <div class="card-title">⭐ NPS — Satisfação dos clientes</div>
-        <div class="nps-row" style="margin-top:16px">
+        <div class="card-title">⭐ Satisfação dos clientes</div>
+        <div class="card-sub">NPS — Net Promoter Score</div>
+        <div class="nps-row" style="margin-bottom:20px">
           <div class="nps-stat"><div class="nps-val" id="npsScore">–</div><div class="nps-lbl">NPS Score</div></div>
-          <div class="nps-stat"><div class="nps-val teal" id="npsAvg" style="color:var(--teal)">–</div><div class="nps-lbl">Nota média</div></div>
+          <div class="nps-stat"><div class="nps-val" style="color:var(--teal)" id="npsAvg">–</div><div class="nps-lbl">Nota média</div></div>
           <div class="nps-stat"><div class="nps-val" id="npsRate">–</div><div class="nps-lbl">Taxa de resposta</div></div>
         </div>
         <div>
@@ -333,29 +552,31 @@
 
     </div><!-- /tab-resultados -->
 
-    <!-- ══════════════ TAB: CONFIGURAÇÕES ══════════════ -->
+    <!-- ══ TAB: CONFIGURAÇÕES ══════════════════════════════════ -->
     <div id="tab-config" style="display:none">
 
       <!-- Hours -->
       <div class="card">
+        <div class="sec-label" style="margin-bottom:12px">Horários</div>
         <div class="card-title">Horário de atendimento da equipe</div>
         <div class="card-sub">O agente funciona 24h. Este horário define quando sua equipe humana está disponível para handoffs.</div>
         <div class="hours-row">
           <div class="hours-field">
-            <label>Início do atendimento</label>
+            <label>Abertura</label>
             <select id="hoursStart"></select>
           </div>
           <div class="hours-field">
-            <label>Fim do atendimento</label>
+            <label>Fechamento</label>
             <select id="hoursEnd"></select>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="saveHours()" style="flex-shrink:0">Salvar</button>
+          <button class="btn btn-primary btn-sm" onclick="saveHours()" style="flex-shrink:0;margin-bottom:1px">Salvar horários</button>
         </div>
       </div>
 
       <!-- FAQ -->
       <div class="card">
-        <div class="card-title">Base de conhecimento (FAQ)</div>
+        <div class="sec-label" style="margin-bottom:12px">Base de conhecimento</div>
+        <div class="card-title">FAQ — Respostas automáticas</div>
         <div class="card-sub">O agente responde estas perguntas diretamente, sem IA — mais rápido e preciso. Desative entradas desatualizadas.</div>
 
         <input class="faq-search" id="faqSearch" type="text" placeholder="Buscar no FAQ..." oninput="filterFAQ()" />
@@ -401,7 +622,10 @@
   </div><!-- /content -->
 </main>
 
-<footer>Painel privado &nbsp;·&nbsp; <a href="https://tyve.com.br">TYVE</a></footer>
+<footer>
+  Painel privado &nbsp;·&nbsp; <a href="https://tyve.com.br" target="_blank">tyve.com.br</a>
+  &nbsp;·&nbsp; <span style="color:var(--orange);font-weight:700">Zapt vupt, resolve.</span>
+</footer>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -472,14 +696,20 @@ function showState(s) {
   document.getElementById('stateNoToken').style.display  = s === 'noToken'  ? '' : 'none';
   document.getElementById('stateError').style.display    = s === 'error'    ? '' : 'none';
   document.getElementById('content').style.display       = s === 'ok'       ? '' : 'none';
+  // show hero + tabs only when content is loaded
+  const show = s === 'ok';
+  const hs = document.getElementById('heroStrip');
+  const tb = document.getElementById('tabsBar');
+  if (hs) hs.style.display = show ? '' : 'none';
+  if (tb) tb.style.display = show ? '' : 'none';
 }
 
 // ── DASHBOARD ────────────────────────────────────────
 function renderDash(d) {
   const plan = d.plan || '–';
-  document.getElementById('bizName').textContent   = d.client_name || '–';
-  document.getElementById('planName').textContent  = plan;
-  document.getElementById('planBadge').textContent = plan;
+  document.getElementById('bizName').textContent    = d.client_name || '–';
+  document.getElementById('planName').textContent   = plan;
+  document.getElementById('planBadge').textContent  = plan;
   document.getElementById('clientPill').textContent = d.client_name || plan;
 
   document.getElementById('kpiContacts').textContent  = fmt(d.contacts_this_month);
@@ -492,8 +722,13 @@ function renderDash(d) {
   document.getElementById('statAvg').textContent = trend.length ? (total/trend.length).toFixed(1) : '0';
 
   const ts = d.generated_at ? new Date(d.generated_at) : new Date();
-  document.getElementById('updatedAt').textContent = 'Atualizado em ' +
+  document.getElementById('updatedAt').textContent = 'Atualizado ' +
     ts.toLocaleDateString('pt-BR') + ' às ' + ts.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+  const limitEl = document.getElementById('contactLimit');
+  if (limitEl && CONFIG.contact_limit) {
+    limitEl.textContent = total + ' / ' + CONFIG.contact_limit + ' contatos';
+  }
 
   buildChart(trend);
   renderNPS(d);
@@ -562,14 +797,33 @@ function buildChart(trend) {
     type:'bar',
     data:{
       labels: trend.map(d=>{ const [,m,day]=d.day.split('-'); return day+'/'+m; }),
-      datasets:[{data:trend.map(d=>Number(d.contacts)),backgroundColor:'rgba(248,65,0,0.15)',borderColor:'#f84100',borderWidth:2,borderRadius:5,borderSkipped:false}]
+      datasets:[{
+        data:trend.map(d=>Number(d.contacts)),
+        backgroundColor:'rgba(248,65,0,0.13)',
+        borderColor:'#f84100',
+        borderWidth:2,
+        borderRadius:5,
+        borderSkipped:false,
+        hoverBackgroundColor:'rgba(248,65,0,0.22)',
+      }]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1E2837',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F8FAFC',bodyColor:'#94A3B8',callbacks:{label:c=>' '+c.parsed.y+' contato'+(c.parsed.y!==1?'s':'')}}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#1b2535',
+          borderColor:'rgba(255,255,255,0.08)',
+          borderWidth:1,
+          titleColor:'#f0f4f8',
+          bodyColor:'#7a8fa8',
+          padding:12,
+          callbacks:{label:c=>' '+c.parsed.y+' contato'+(c.parsed.y!==1?'s':'')}
+        }
+      },
       scales:{
-        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:11},maxRotation:45}},
-        y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#64748B',font:{size:11},stepSize:1}}
+        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#4a6080',font:{size:11},maxRotation:45}},
+        y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4a6080',font:{size:11},stepSize:1}}
       }
     }
   });
