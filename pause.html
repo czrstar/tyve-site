@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pausar Bot — TYVE</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0d0d0d;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    .logo { font-size: 22px; font-weight: 700; color: #f84100; margin-bottom: 24px; letter-spacing: -0.5px; }
+    h1 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: #888; margin-bottom: 28px; line-height: 1.5; }
+    .info-box {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      text-align: left;
+      font-size: 13px;
+      color: #aaa;
+    }
+    .info-box strong { color: #fff; display: block; margin-bottom: 2px; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #f84100;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.88; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .status {
+      margin-top: 20px;
+      font-size: 14px;
+      min-height: 22px;
+      color: #888;
+    }
+    .status.ok { color: #22c55e; }
+    .status.err { color: #ef4444; }
+    .hours-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .hours-row label { font-size: 13px; color: #888; white-space: nowrap; }
+    .hours-row select {
+      flex: 1;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    .already-paused { background: #1a2a1a; border-color: #2a4a2a; color: #4ade80; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">TYVE</div>
+  <h1>🤚 Pausar Atendimento Automático</h1>
+  <p class="subtitle">O bot será pausado para este contato. Você vai responder diretamente no WhatsApp.</p>
+
+  <div class="info-box" id="info-box">
+    <strong id="info-chat">Carregando...</strong>
+    <span id="info-instance"></span>
+  </div>
+
+  <div class="hours-row">
+    <label>Pausar por:</label>
+    <select id="hours-select">
+      <option value="2">2 horas</option>
+      <option value="4" selected>4 horas</option>
+      <option value="8">8 horas</option>
+      <option value="24">24 horas</option>
+    </select>
+  </div>
+
+  <button class="btn" id="pause-btn" onclick="doPause()">Pausar Bot Agora</button>
+  <div class="status" id="status"></div>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const chatId = params.get('chat') || '';
+  const instance = params.get('instance') || '';
+
+  const infoBox = document.getElementById('info-box');
+  const infoChat = document.getElementById('info-chat');
+  const infoInstance = document.getElementById('info-instance');
+
+  if (chatId) {
+    const formatted = chatId.length >= 11
+      ? '+' + chatId.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '$1 ($2) $3-$4')
+      : chatId;
+    infoChat.textContent = formatted;
+    infoInstance.textContent = instance ? 'Instância: ' + instance : '';
+  } else {
+    infoChat.textContent = 'Parâmetros inválidos';
+    document.getElementById('pause-btn').disabled = true;
+  }
+
+  async function doPause() {
+    if (!chatId || !instance) return;
+    const btn = document.getElementById('pause-btn');
+    const status = document.getElementById('status');
+    const hours = document.getElementById('hours-select').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Pausando...';
+    status.textContent = '';
+    status.className = 'status';
+
+    try {
+      const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-pause-bot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, instance, hours: parseInt(hours) })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        btn.textContent = '✅ Bot pausado!';
+        infoBox.classList.add('already-paused');
+        status.textContent = 'Atendimento automático pausado por ' + hours + 'h. Responda diretamente no WhatsApp.';
+        status.className = 'status ok';
+      } else {
+        throw new Error(data.error || 'Erro desconhecido');
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Pausar Bot Agora';
+      status.textContent = 'Erro: ' + e.message;
+      status.className = 'status err';
+    }
+  }
+</script>
+</body>
+</html>
