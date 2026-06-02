@@ -44,8 +44,8 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: var(--font); background: var(--light); color: var(--txt); overflow-x: hidden; }
+  html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
+  body { font-family: var(--font); background: var(--light); color: var(--txt); overflow-x: hidden; max-width: 100%; }
 
   .container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
   @media (max-width: 768px) { .container { padding: 0 24px; } }
@@ -265,7 +265,8 @@
     transition: opacity .2s; margin-top: auto;
   }
   .btn-plan-grey:hover { opacity: .85; }
-  .track-compare { margin-top: 48px; }
+  .track-compare { margin-top: 48px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .vs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .track-compare-title { font-size: 15px; font-weight: 700; text-align: center; margin-bottom: 20px; color: var(--txt); letter-spacing: -.01em; }
   .track-compare table { width: 100%; border-collapse: collapse; font-size: 13.5px; border: 1.5px solid #ebebeb; border-radius: 12px; overflow: hidden; }
   .track-compare th, .track-compare td { padding: 13px 18px; border-bottom: 1.5px solid #ebebeb; vertical-align: middle; }
@@ -944,7 +945,7 @@
       <div class="sec-label" data-i18n="vs_label">Comparativo</div>
       <h2 class="section-title section-title-dark" data-i18n="vs_h2">Tyve vs as outras opções</h2>
     </div>
-    <table class="vs-table">
+    <div class="vs-table-wrap"><table class="vs-table">
       <thead><tr><th></th><th class="col-tyve">Tyve</th><th data-i18n="vs_th2">App de automação</th><th data-i18n="vs_th3">Montar do zero</th></tr></thead>
       <tbody>
         <tr><td data-i18n="vs_r1l">Tempo de resposta do agente</td><td data-i18n-html="vs_r1c1"><span class="check">✓</span> &lt;15s em média</td><td data-i18n-html="vs_r1c2"><span class="partial">Se bem configurado</span></td><td data-i18n-html="vs_r1c3"><span class="partial">Variável</span></td></tr>
@@ -955,7 +956,7 @@
         <tr><td data-i18n="vs_r6l">Suporte de quem conhece o seu agente</td><td data-i18n-html="vs_r6c1"><span class="check">✓</span></td><td data-i18n-html="vs_r6c2"><span class="partial">Ticket / FAQ</span></td><td data-i18n-html="vs_r6c3"><span class="cross">✗</span></td></tr>
         <tr><td data-i18n="vs_r7l">IA treinada no seu negócio</td><td data-i18n-html="vs_r7c1"><span class="check">✓</span></td><td data-i18n-html="vs_r7c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r7c3"><span class="partial">Depende de você</span></td></tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 </section>
 
