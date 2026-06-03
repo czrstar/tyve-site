@@ -460,8 +460,8 @@
         <div class="bot-status-left">
           <div class="bot-dot active" id="botDot"></div>
           <div>
-            <div style="font-size:14px;font-weight:600" id="botLabel">Agente ativo</div>
-            <div style="font-size:12px;color:var(--muted)" id="botSub">Respondendo automaticamente</div>
+            <div style="font-size:14px;font-weight:600" id="botLabel">Conversas</div>
+            <div style="font-size:12px;color:var(--muted)" id="botSub">Nenhuma em atendimento humano no momento</div>
           </div>
         </div>
         <button class="unlock-btn" id="unlockBtn" onclick="unlockBot()" style="display:none">🤖 Liberar agente</button>
@@ -791,8 +791,8 @@ function updateBotStatus(d) {
     btn.innerHTML = '🤖 Liberar agente';
   } else {
     dot.className = 'bot-dot active';
-    lbl.textContent = 'Agente ativo';
-    sub.textContent = 'Nenhuma conversa em atendimento humano no momento';
+    lbl.textContent = 'Conversas';
+    sub.textContent = 'Nenhuma em atendimento humano no momento';
     btn.style.display = 'none';
   }
 }
@@ -805,8 +805,8 @@ async function unlockBot() {
     if (d.success) {
       btn.className = 'unlock-btn success'; btn.innerHTML = '✅ Agente liberado';
       document.getElementById('botDot').className = 'bot-dot active';
-      document.getElementById('botLabel').textContent = 'Agente ativo';
-      document.getElementById('botSub').textContent = 'Nenhuma conversa em atendimento humano no momento';
+      document.getElementById('botLabel').textContent = 'Conversas';
+      document.getElementById('botSub').textContent = 'Nenhuma em atendimento humano no momento';
       setTimeout(() => btn.style.display = 'none', 2000);
     } else { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; toast('Erro ao liberar agente',false); }
   } catch(e) { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; }
