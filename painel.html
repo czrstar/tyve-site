@@ -768,7 +768,7 @@ function updateBotStatus(d) {
   } else {
     dot.className = 'bot-dot active';
     lbl.textContent = 'Agente ativo';
-    sub.textContent = 'Respondendo automaticamente';
+    sub.textContent = 'Nenhuma conversa em atendimento humano no momento';
     btn.style.display = 'none';
   }
 }
@@ -782,7 +782,7 @@ async function unlockBot() {
       btn.className = 'unlock-btn success'; btn.innerHTML = '✅ Agente liberado';
       document.getElementById('botDot').className = 'bot-dot active';
       document.getElementById('botLabel').textContent = 'Agente ativo';
-      document.getElementById('botSub').textContent = 'Respondendo automaticamente';
+      document.getElementById('botSub').textContent = 'Nenhuma conversa em atendimento humano no momento';
       setTimeout(() => btn.style.display = 'none', 2000);
     } else { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; toast('Erro ao liberar agente',false); }
   } catch(e) { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; }
