@@ -637,6 +637,34 @@
 </section>
 
 
+<!-- ══ NPS SOCIAL PROOF — hidden until 15+ responses ══ -->
+<section id="nps-social" style="display:none;background:#fff;padding:40px 0 0">
+  <div class="container" style="text-align:center">
+    <p style="font-size:13px;color:#94a3b8;margin:0 0 8px;letter-spacing:.5px;text-transform:uppercase;font-weight:600">Avaliado por clientes reais</p>
+    <div style="display:inline-flex;align-items:center;gap:12px;background:#fff7f4;border:1.5px solid #f84100;border-radius:16px;padding:14px 28px">
+      <span style="font-size:32px;font-weight:800;color:#f84100" id="nps-score">–</span>
+      <div style="text-align:left">
+        <div style="font-size:13px;font-weight:700;color:#0f172a">de satisfação</div>
+        <div style="font-size:12px;color:#64748b" id="nps-label">– avaliações</div>
+      </div>
+      <div style="font-size:24px;margin-left:4px">⭐</div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  fetch('https://n8n.tyve.com.br/webhook/tyve-nps-public')
+    .then(r=>r.json()).then(d=>{
+      const data = Array.isArray(d) ? d[0] : d;
+      if(data && data.threshold_met){
+        document.getElementById('nps-score').textContent = data.display;
+        document.getElementById('nps-label').textContent = data.label;
+        document.getElementById('nps-social').style.display = '';
+      }
+    }).catch(()=>{});
+})();
+</script>
+
 <!-- ══ 08 PLANOS — white ══ -->
 <section class="pricing" id="planos">
   <div class="container">
