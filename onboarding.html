@@ -630,9 +630,11 @@
           <input type="text" name="qual_sistema" placeholder="Ex: Doctoralia, iClinic, Simples Dental, Agendô..." />
         </div>
 
+        <!-- Single hidden input — value set by selectPlan() JS -->
+        <input type="hidden" name="preferencia_agendamento" id="pref_agend_input" value="coletar_encaminhar" />
+
         <!-- ATENDE: coleta preferência + encaminha -->
         <div class="agenda-block" id="agenda-atende">
-          <input type="hidden" name="preferencia_agendamento" value="coletar_encaminhar" />
           <div class="question">
             <div class="agenda-info-box">
               📋 <strong>Plano Atende:</strong> o agente vai perguntar qual dia e período o cliente prefere e encaminhar para sua equipe confirmar o horário. Simples e sem integração técnica necessária.
@@ -654,7 +656,6 @@
 
         <!-- ESCALA: Google Calendar automático -->
         <div class="agenda-block" id="agenda-escala">
-          <input type="hidden" name="preferencia_agendamento" value="automatico" />
           <div class="question">
             <div class="agenda-info-box">
               🗓️ <strong>Plano Escala:</strong> o agente agenda automaticamente via Google Calendar — verifica disponibilidade em tempo real, cria o evento e envia lembrete D-1. Nossa equipe vai solicitar acesso ao seu Google Calendar após o onboarding.<br/><br/>
@@ -665,7 +666,6 @@
 
         <!-- CONVERTE: foco em vendas, não agendamento -->
         <div class="agenda-block" id="agenda-converte">
-          <input type="hidden" name="preferencia_agendamento" value="coletar_encaminhar" />
           <div class="question">
             <div class="agenda-info-box">
               💼 <strong>Plano Converte:</strong> o foco do agente é qualificar e converter leads. Para agendamentos, o agente coleta a preferência e passa para sua equipe fechar.
@@ -899,7 +899,10 @@
     const notice = document.getElementById('plan-lock-notice');
     if (notice) notice.style.display = 'none';
 
-    // Show/hide agenda blocks
+    // Show/hide agenda blocks + set single preferencia_agendamento value
+    const prefMap = { atende: 'coletar_encaminhar', cresce: 'coletar_encaminhar', escala: 'automatico', converte_std: 'coletar_encaminhar', converte_pro: 'coletar_encaminhar' };
+    document.getElementById('pref_agend_input').value = prefMap[plan] || 'coletar_encaminhar';
+
     ['atende','cresce','escala','converte'].forEach(id => {
       const el = document.getElementById('agenda-' + id);
       if (el) el.classList.remove('visible');
@@ -1007,6 +1010,12 @@
   // ── Form submit ──
   document.getElementById('onboardingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!selectedPlan) {
+      document.querySelector('.plan-picker-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelector('.plan-picker-title').style.color = '#ef4444';
+      setTimeout(() => document.querySelector('.plan-picker-title').style.color = '', 2000);
+      return;
+    }
     const form = e.target;
     const data = new FormData(form);
 
