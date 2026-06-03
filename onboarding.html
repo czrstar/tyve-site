@@ -250,6 +250,27 @@
     .radio-item.selected .radio-box::after { content: "●"; color: #000; font-size: 8px; }
     .check-label, .radio-label { font-size: 13px; color: var(--grey-700); line-height: 1.4; }
 
+    /* ── PLAN PICKER ── */
+    .plan-picker-wrap { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 28px; margin-bottom: 20px; }
+    .plan-picker-label { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #f84100; margin-bottom: 6px; }
+    .plan-picker-title { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .plan-picker-hint { font-size: 12px; color: #64748b; margin-bottom: 20px; }
+    .plan-picker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .plan-pill { border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all .15s; background: #fff; }
+    .plan-pill:hover { border-color: #f84100; }
+    .plan-pill.selected { border-color: #f84100; background: #fff7f4; }
+    .plan-pill-name { font-size: 14px; font-weight: 800; color: #0f172a; }
+    .plan-pill-price { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .plan-pill.selected .plan-pill-name { color: #f84100; }
+    .sections-locked { opacity: .4; pointer-events: none; filter: grayscale(1); }
+    .plan-lock-notice { text-align: center; padding: 24px; font-size: 14px; color: #64748b; background: #f8fafc; border-radius: 12px; margin-bottom: 12px; display: none; }
+
+    /* ── AGENDA CONDITIONAL ── */
+    .agenda-block { display: none; }
+    .agenda-block.visible { display: block; }
+    .agenda-info-box { background: #f0fffe; border: 1px solid rgba(0,232,223,.4); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #0f172a; line-height: 1.6; margin-top: 4px; }
+    .agenda-info-box strong { color: #00a89f; }
+
     /* ── SECTION FOOTER ── */
     .section-footer {
       display: flex; justify-content: flex-end; margin-top: 28px;
@@ -370,6 +391,40 @@
   </div>
 
   <form id="onboardingForm" name="tyve-onboarding" novalidate>
+
+    <!-- ── SELETOR DE PLANO ── -->
+    <div class="plan-picker-wrap">
+      <div class="plan-picker-label">Passo 0</div>
+      <div class="plan-picker-title">Qual plano você contratou?</div>
+      <div class="plan-picker-hint">Selecione seu plano para personalizar o formulário de acordo com o que será configurado.</div>
+      <div class="plan-picker-grid">
+        <div class="plan-pill" onclick="selectPlan('atende')" id="pill-atende">
+          <div class="plan-pill-name">Atende</div>
+          <div class="plan-pill-price">R$497/mês</div>
+        </div>
+        <div class="plan-pill" onclick="selectPlan('cresce')" id="pill-cresce">
+          <div class="plan-pill-name">Cresce</div>
+          <div class="plan-pill-price">R$697/mês</div>
+        </div>
+        <div class="plan-pill" onclick="selectPlan('escala')" id="pill-escala">
+          <div class="plan-pill-name">Escala</div>
+          <div class="plan-pill-price">R$997/mês</div>
+        </div>
+        <div class="plan-pill" onclick="selectPlan('converte_std')" id="pill-converte_std">
+          <div class="plan-pill-name">Converte Std</div>
+          <div class="plan-pill-price">R$1.497/mês</div>
+        </div>
+        <div class="plan-pill" onclick="selectPlan('converte_pro')" id="pill-converte_pro">
+          <div class="plan-pill-name">Converte Pro</div>
+          <div class="plan-pill-price">R$1.997/mês</div>
+        </div>
+      </div>
+      <input type="hidden" name="plano_contratado" id="plano_contratado_input" value="" />
+    </div>
+
+    <div id="plan-lock-notice" class="plan-lock-notice">↑ Selecione seu plano acima para preencher o formulário</div>
+
+    <div id="sections-wrap" class="sections-locked">
 
     <!-- ── SEÇÃO 1 ── -->
     <div class="section-card open active" id="sec-1" data-sec="1">
@@ -561,29 +616,70 @@
         <span class="section-chevron">▾</span>
       </div>
       <div class="section-body">
+        <!-- Campo universal -->
         <div class="question">
           <label class="q-label">Como vocês agendam hoje? <span class="req">*</span></label>
           <div class="radio-group">
             <label class="radio-item"><input type="radio" name="sistema_agenda" value="google_calendar" required /><div class="radio-box"></div><span class="radio-label">Google Calendar</span></label>
-            <label class="radio-item"><input type="radio" name="sistema_agenda" value="sistema" /><div class="radio-box"></div><span class="radio-label">Sistema de agenda — especifique abaixo</span></label>
-            <label class="radio-item"><input type="radio" name="sistema_agenda" value="manual" /><div class="radio-box"></div><span class="radio-label">Manual (WhatsApp / papel)</span></label>
+            <label class="radio-item"><input type="radio" name="sistema_agenda" value="sistema" /><div class="radio-box"></div><span class="radio-label">Sistema de agenda (Doctoralia, iClinic, Agendô...)</span></label>
+            <label class="radio-item"><input type="radio" name="sistema_agenda" value="manual" /><div class="radio-box"></div><span class="radio-label">Manual (WhatsApp / papel / telefone)</span></label>
           </div>
         </div>
-        <div class="question">
-          <label class="q-label">Se usa sistema, qual é?</label>
+        <div class="question" id="qual-sistema-wrap" style="display:none;">
+          <label class="q-label">Qual sistema você usa?</label>
           <input type="text" name="qual_sistema" placeholder="Ex: Doctoralia, iClinic, Simples Dental, Agendô..." />
         </div>
-        <div class="question">
-          <label class="q-label">No piloto, o agente deve: <span class="req">*</span></label>
-          <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="preferencia_agendamento" value="coletar_encaminhar" required /><div class="radio-box"></div><span class="radio-label">Coletar preferência (dia/período) e encaminhar para a equipe confirmar</span></label>
-            <label class="radio-item"><input type="radio" name="preferencia_agendamento" value="automatico" /><div class="radio-box"></div><span class="radio-label">Agendar automaticamente via Google Calendar (plano Escala)</span></label>
+
+        <!-- ATENDE: coleta preferência + encaminha -->
+        <div class="agenda-block" id="agenda-atende">
+          <input type="hidden" name="preferencia_agendamento" value="coletar_encaminhar" />
+          <div class="question">
+            <div class="agenda-info-box">
+              📋 <strong>Plano Atende:</strong> o agente vai perguntar qual dia e período o cliente prefere e encaminhar para sua equipe confirmar o horário. Simples e sem integração técnica necessária.
+            </div>
           </div>
         </div>
-        <div class="question">
+
+        <!-- CRESCE: envia link de agenda -->
+        <div class="agenda-block" id="agenda-cresce">
+          <div class="question">
+            <label class="q-label">Tem um link de agenda pública? <span style="color:#64748b;font-weight:400;">(opcional, mas recomendado)</span></label>
+            <p class="q-hint">Calendly, Google Appointment Scheduling, SimplyBook, Agendô, etc. O agente envia este link automaticamente quando o cliente quiser agendar.</p>
+            <input type="url" name="link_agenda" placeholder="Ex: calendly.com/suaclinica ou booking.google.com/..." />
+          </div>
+          <div class="agenda-info-box" style="margin-top:4px;">
+            📅 <strong>Plano Cresce:</strong> se você tiver um link de agenda, o agente o envia ao cliente. Se não tiver, o agente coleta a preferência e encaminha para sua equipe confirmar.
+          </div>
+        </div>
+
+        <!-- ESCALA: Google Calendar automático -->
+        <div class="agenda-block" id="agenda-escala">
+          <input type="hidden" name="preferencia_agendamento" value="automatico" />
+          <div class="question">
+            <div class="agenda-info-box">
+              🗓️ <strong>Plano Escala:</strong> o agente agenda automaticamente via Google Calendar — verifica disponibilidade em tempo real, cria o evento e envia lembrete D-1. Nossa equipe vai solicitar acesso ao seu Google Calendar após o onboarding.<br/><br/>
+              <strong>Importante:</strong> para isso funcionar, você precisa usar o <strong>Google Calendar</strong> como sua agenda principal (ou sincronizado com ela).
+            </div>
+          </div>
+        </div>
+
+        <!-- CONVERTE: foco em vendas, não agendamento -->
+        <div class="agenda-block" id="agenda-converte">
+          <input type="hidden" name="preferencia_agendamento" value="coletar_encaminhar" />
+          <div class="question">
+            <div class="agenda-info-box">
+              💼 <strong>Plano Converte:</strong> o foco do agente é qualificar e converter leads. Para agendamentos, o agente coleta a preferência e passa para sua equipe fechar.
+            </div>
+          </div>
+        </div>
+
+        <!-- Campo universal: horários prioritários -->
+        <div class="question" style="margin-top:16px;">
           <label class="q-label">Horários prioritários para preencher (dias e períodos)</label>
+          <p class="q-hint">Ajuda o agente a sugerir os melhores horários quando o cliente não tiver preferência.</p>
           <input type="text" name="horarios_prioritarios" placeholder="Ex: manhã de segunda e terça, sexta à tarde" />
         </div>
+
         <div class="section-footer">
           <button type="button" class="btn-next" onclick="nextSection(5)">Próxima seção →</button>
         </div>
@@ -752,6 +848,8 @@
       </div>
     </div>
 
+    </div><!-- /sections-wrap -->
+
     <!-- ── SUBMIT ── -->
     <div class="submit-card" id="submitCard" style="display:none">
       <h3>Tudo pronto! 🎉</h3>
@@ -779,6 +877,53 @@
 <script>
   const TOTAL_SECTIONS = 10;
   const sectionState = {}; // 1–10: 'open' | 'done'
+  let selectedPlan = '';
+
+  // ── Plan picker ──
+  const PLAN_LABELS = {
+    atende: 'Atende', cresce: 'Cresce', escala: 'Escala',
+    converte_std: 'Converte Standard', converte_pro: 'Converte Pro'
+  };
+
+  function selectPlan(plan) {
+    selectedPlan = plan;
+    document.getElementById('plano_contratado_input').value = plan;
+
+    // Highlight selected pill
+    document.querySelectorAll('.plan-pill').forEach(p => p.classList.remove('selected'));
+    document.getElementById('pill-' + plan).classList.add('selected');
+
+    // Unlock sections
+    const wrap = document.getElementById('sections-wrap');
+    wrap.classList.remove('sections-locked');
+    const notice = document.getElementById('plan-lock-notice');
+    if (notice) notice.style.display = 'none';
+
+    // Show/hide agenda blocks
+    ['atende','cresce','escala','converte'].forEach(id => {
+      const el = document.getElementById('agenda-' + id);
+      if (el) el.classList.remove('visible');
+    });
+    if (plan === 'atende') document.getElementById('agenda-atende').classList.add('visible');
+    else if (plan === 'cresce') document.getElementById('agenda-cresce').classList.add('visible');
+    else if (plan === 'escala') document.getElementById('agenda-escala').classList.add('visible');
+    else if (plan === 'converte_std' || plan === 'converte_pro') document.getElementById('agenda-converte').classList.add('visible');
+  }
+
+  // Show notice on load
+  window.addEventListener('DOMContentLoaded', function() {
+    const notice = document.getElementById('plan-lock-notice');
+    if (notice) notice.style.display = 'block';
+  });
+
+  // Show qual-sistema if "sistema" selected
+  document.addEventListener('change', function(e) {
+    if (e.target && e.target.name === 'sistema_agenda') {
+      const wrap = document.getElementById('qual-sistema-wrap');
+      if (wrap) wrap.style.display = e.target.value === 'sistema' ? 'block' : 'none';
+    }
+  });
+
   for (let i = 1; i <= TOTAL_SECTIONS; i++) sectionState[i] = i === 1 ? 'open' : 'pending';
 
   // ── Build section dots ──
@@ -894,6 +1039,8 @@
         responsavel_grupo:     fields.responsavel_grupo || '',
         exemplos_mensagens:    fields.exemplos_mensagens || '',
         situacao_chip:         fields.situacao_chip || '',
+        plano_contratado:      fields.plano_contratado || '',
+        link_agenda:           fields.link_agenda || '',
         submitted_at:          new Date().toISOString()
       };
       const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-onboarding-form', {
