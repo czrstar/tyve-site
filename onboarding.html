@@ -1013,8 +1013,10 @@
   });
 
   // ── Form submit ──
+  let submitting = false;
   document.getElementById('onboardingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (submitting) return;
     if (!selectedPlan) {
       document.querySelector('.plan-picker-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
       document.querySelector('.plan-picker-title').style.color = '#ef4444';
@@ -1022,6 +1024,9 @@
       return;
     }
     const form = e.target;
+    const submitBtn = form.querySelector('.btn-submit');
+    submitting = true;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
     const data = new FormData(form);
 
     try {
@@ -1071,6 +1076,8 @@
       document.getElementById('successScreen').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
+      submitting = false;
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar formulário'; }
       alert('Erro ao enviar. Tente novamente ou entre em contato pelo WhatsApp: +55 16 99424-7541');
     }
   });
