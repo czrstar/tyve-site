@@ -750,13 +750,16 @@ function renderDash(d) {
 
 function updateBotStatus(d) {
   const human = d.human_mode_active === true || d.human_mode_active === 1;
+  const count = Number(d.human_mode_count || 0);
   const dot   = document.getElementById('botDot');
   const lbl   = document.getElementById('botLabel');
   const sub   = document.getElementById('botSub');
   const btn   = document.getElementById('unlockBtn');
   if (human) {
     dot.className = 'bot-dot human';
-    lbl.textContent = 'Atendimento humano ativo';
+    lbl.textContent = count === 1
+      ? '1 conversa em atendimento humano'
+      : count + ' conversas em atendimento humano';
     sub.textContent = 'Agente pausado — sua equipe está no controle';
     btn.style.display = 'inline-flex';
     btn.disabled = false;
