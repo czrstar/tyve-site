@@ -1024,6 +1024,20 @@
       return;
     }
     const form = e.target;
+    // Validate link_agenda for Cresce (required to inject link into bot prompt)
+    if (selectedPlan === 'cresce') {
+      const linkVal = (form.querySelector('input[name="link_agenda"]') || {}).value || '';
+      if (!linkVal.trim()) {
+        const linkInput = form.querySelector('input[name="link_agenda"]');
+        if (linkInput) {
+          linkInput.style.borderColor = '#ef4444';
+          linkInput.focus();
+          linkInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => linkInput.style.borderColor = '', 3000);
+        }
+        return;
+      }
+    }
     const submitBtn = form.querySelector('.btn-submit');
     submitting = true;
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
@@ -1071,7 +1085,6 @@
       });
       if (!res.ok) throw new Error('status ' + res.status);
       document.getElementById('onboardingForm').style.display = 'none';
-      document.getElementById('progressWrap') && (document.getElementById('progressWrap').style.display = 'none');
       document.querySelector('.progress-wrap').style.display = 'none';
       document.getElementById('successScreen').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
