@@ -1026,6 +1026,7 @@
 
     try {
       const fields = Object.fromEntries(data);
+      const objetivos = data.getAll('objetivo[]');
       const payload = {
         nome_empresa:          fields.nome_empresa || '',
         cidade_bairro:         fields.cidade_bairro || '',
@@ -1053,6 +1054,7 @@
         responsavel_grupo:     fields.responsavel_grupo || '',
         exemplos_mensagens:    fields.exemplos_mensagens || '',
         situacao_chip:         fields.situacao_chip || '',
+        objetivos:             objetivos,
         plano_contratado:      fields.plano_contratado || '',
         link_agenda:           fields.link_agenda || '',
         submitted_at:          new Date().toISOString()
