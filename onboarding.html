@@ -902,6 +902,11 @@
     // Show/hide agenda blocks + set single preferencia_agendamento value
     const prefMap = { atende: 'coletar_encaminhar', cresce: 'coletar_encaminhar', escala: 'automatico', converte_std: 'coletar_encaminhar', converte_pro: 'coletar_encaminhar' };
     document.getElementById('pref_agend_input').value = prefMap[plan] || 'coletar_encaminhar';
+    // Clear link_agenda when switching away from Cresce (prevents stale link polluting other plans' prompts)
+    if (plan !== 'cresce') {
+      const linkInput = document.querySelector('input[name="link_agenda"]');
+      if (linkInput) linkInput.value = '';
+    }
 
     ['atende','cresce','escala','converte'].forEach(id => {
       const el = document.getElementById('agenda-' + id);
