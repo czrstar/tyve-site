@@ -540,6 +540,13 @@
             <div class="stat-desc">Atendimento ativo</div>
           </div>
         </div>
+        <div class="stat-card">
+          <div class="stat-icon t">📨</div>
+          <div>
+            <div class="stat-num" id="statLastMsg">–</div>
+            <div class="stat-desc">Última mensagem recebida</div>
+          </div>
+        </div>
       </div>
 
       <!-- NPS -->
@@ -732,6 +739,23 @@ function renderDash(d) {
   const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
   const trendTotal = trend.reduce((s,r) => s + Number(r.contacts), 0);
   document.getElementById('statAvg').textContent = trend.length ? (trendTotal/trend.length).toFixed(1) : '0';
+
+  // Última mensagem
+  const lastMsgEl = document.getElementById('statLastMsg');
+  if (d.last_activity_at) {
+    const diff = Date.now() - new Date(d.last_activity_at).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hrs  = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    if (mins < 60)       lastMsgEl.textContent = mins <= 1 ? 'agora' : mins + ' min atrás';
+    else if (hrs < 24)   lastMsgEl.textContent = hrs + 'h atrás';
+    else if (days < 7)   lastMsgEl.textContent = days + (days === 1 ? ' dia atrás' : ' dias atrás');
+    else                 lastMsgEl.textContent = new Date(d.last_activity_at).toLocaleDateString('pt-BR');
+  } else {
+    lastMsgEl.textContent = 'Sem dados';
+    lastMsgEl.style.fontSize = '13px';
+    lastMsgEl.closest('.stat-card').querySelector('.stat-desc').textContent = 'Nenhuma mensagem registrada';
+  }
 
   const ts = d.generated_at ? new Date(d.generated_at) : new Date();
   document.getElementById('updatedAt').textContent = 'Atualizado ' +
