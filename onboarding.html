@@ -749,6 +749,11 @@
           </div>
         </div>
         <div class="question">
+          <label class="q-label">Emoji de assinatura da marca (opcional)</label>
+          <p class="q-hint">Se a sua marca usa um emoji caracter&iacute;stico, ele aparece na mensagem de agradecimento ao cliente (ex: &#x1F9E1; &#x26A1; &#x1F9B7;). Deixe em branco para n&atilde;o usar nenhum.</p>
+          <input type="text" name="brand_emoji" maxlength="4" placeholder="Ex: &#x1F9E1; (opcional)" />
+        </div>
+        <div class="question">
           <label class="q-label">Nome do assistente virtual</label>
           <p class="q-hint">O nome padrão Tyve é <strong>Luma</strong>. Se quiser um nome personalizado para a sua empresa (ex: Sofia, Max, Bia), escreva abaixo. Deixe em branco para usar Luma.</p>
           <input type="text" name="nome_assistente" placeholder="Deixe em branco para usar Luma" />
@@ -1066,6 +1071,7 @@
         guardrails:            fields.guardrails || '',
         tom_voz:               fields.tom_voz || 'profissional',
         emojis:                fields.emojis || 'sim',
+        brand_emoji:           fields.brand_emoji || '',
         nome_assistente:       fields.nome_assistente || 'Luma',
         horario_equipe:        fields.horario_equipe || '',
         sla_resposta:          fields.sla_resposta || '4h',
