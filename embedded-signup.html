@@ -416,6 +416,10 @@
       tokenExchangeWebhook: "https://n8n.tyve.com.br/webhook/b3e7a1c9-5d2f-4e8a-9c6b-8f1d2e3a4b5c",
     };
 
+    // Identidade do cliente (link personalizado: ?token=<dashboard_token>) + sessão Meta
+    const SIGNUP_TOKEN = new URLSearchParams(window.location.search).get('token') || '';
+    let WA_SESSION = { waba_id: '', phone_number_id: '' };
+
     // ══════════════════════════════════════════
     // CHECKLIST LOGIC
     // ══════════════════════════════════════════
@@ -494,12 +498,14 @@
 
           setStatus('loading', 'C\u00f3digo recebido! Trocando por token de acesso...');
 
-          // Enviar code para n8n para token exchange
+          // Enviar code + token (identidade do cliente) + waba_id (capturado do evento FINISH) para n8n
           fetch(CONFIG.tokenExchangeWebhook, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               code: code,
+              token: SIGNUP_TOKEN,
+              waba_id: WA_SESSION.waba_id || "",
               timestamp: new Date().toISOString()
             })
           })
@@ -550,9 +556,14 @@
         console.log("[Tyve] Message event from Meta:", data);
 
         if (data.type === 'WA_EMBEDDED_SIGNUP') {
-          if (data.event === 'FINISH') {
-            console.log("[Tyve] Embedded Signup finished:", data.data);
-            // data.data contém phone_number_id e waba_id
+          // Coexistence (featureType whatsapp_business_app_onboarding) emite
+          // FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING com data.data.waba_id (sem phone_number_id).
+          if (data.data && data.data.waba_id) WA_SESSION.waba_id = data.data.waba_id;
+          if (data.data && data.data.phone_number_id) WA_SESSION.phone_number_id = data.data.phone_number_id;
+
+          if (data.event === 'FINISH' || data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING' || data.event === 'FINISH_ONLY_WABA') {
+            console.log("[Tyve] Embedded Signup finished:", data.event, data.data);
+            // waba_id capturado acima; phone_number_id é resolvido no backend via GET /{waba_id}/phone_numbers
           } else if (data.event === 'CANCEL') {
             console.log("[Tyve] Embedded Signup cancelled");
             setStatus('error', 'O processo foi cancelado na janela da Meta.');
