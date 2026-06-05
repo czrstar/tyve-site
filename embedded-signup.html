@@ -390,8 +390,9 @@
     window.fbAsyncInit = function() {
       FB.init({
         appId: "25550821164592492",
+        autoLogAppEvents: true,
         xfbml: true,
-        version: "v22.0"
+        version: "v25.0"
       });
       console.log("[Tyve] Facebook SDK initialized");
     };
@@ -550,7 +551,7 @@
     // LISTEN FOR EMBEDDED SIGNUP EVENTS
     // ══════════════════════════════════════════
     window.addEventListener('message', function(event) {
-      if (event.origin !== "https://www.facebook.com" && event.origin !== "https://web.facebook.com") return;
+      if (!event.origin.endsWith('facebook.com')) return;
 
       try {
         var data = JSON.parse(event.data);
