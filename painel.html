@@ -718,7 +718,7 @@ function showState(s) {
 
 // ── DASHBOARD ────────────────────────────────────────
 function planLabel(p) {
-  const map = {atende:'Atende',cresce:'Cresce',escala:'Escala',converte:'Converte Standard','converte-pro':'Converte Pro'};
+  const map = {atende:'Atende',cresce:'Cresce',escala:'Escala'};
   return map[(p||'').toLowerCase()] || (p ? p.charAt(0).toUpperCase()+p.slice(1) : '–');
 }
 

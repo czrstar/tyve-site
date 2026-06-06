@@ -227,10 +227,10 @@ function render(d) {
   // Plan chips
   const planMap = {
     atende: 'Atende', cresce: 'Cresce', escala: 'Escala',
-    converte: 'Converte Standard', 'converte-pro': 'Converte Pro'
+    
   };
   const plan = CONFIG.plan || 'cresce';
-  const limitMap = {atende:'200',cresce:'500',escala:'1.000',converte:'300','converte-pro':'700'};
+  const limitMap = {atende:'200',cresce:'500',escala:'1.000'};
   document.getElementById('planInfo').innerHTML = `
     <div class="plan-chip"><strong>${planMap[plan] || plan}</strong>Plano atual</div>
     <div class="plan-chip"><strong>${limitMap[plan] || '—'}</strong>Contatos/mês</div>

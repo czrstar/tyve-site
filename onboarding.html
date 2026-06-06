@@ -410,14 +410,7 @@
           <div class="plan-pill-name">Escala</div>
           <div class="plan-pill-price">R$997/mês</div>
         </div>
-        <div class="plan-pill" onclick="selectPlan('converte_std')" id="pill-converte_std">
-          <div class="plan-pill-name">Converte Std</div>
-          <div class="plan-pill-price">R$1.497/mês</div>
-        </div>
-        <div class="plan-pill" onclick="selectPlan('converte_pro')" id="pill-converte_pro">
-          <div class="plan-pill-name">Converte Pro</div>
-          <div class="plan-pill-price">R$1.997/mês</div>
-        </div>
+
       </div>
       <input type="hidden" name="plano_contratado" id="plano_contratado_input" value="" />
     </div>
@@ -664,14 +657,6 @@
           </div>
         </div>
 
-        <!-- CONVERTE: foco em vendas, não agendamento -->
-        <div class="agenda-block" id="agenda-converte">
-          <div class="question">
-            <div class="agenda-info-box">
-              💼 <strong>Plano Converte:</strong> o foco do agente é qualificar e converter leads. Para agendamentos, o agente coleta a preferência e passa para sua equipe fechar.
-            </div>
-          </div>
-        </div>
 
         <!-- Campo universal: horários prioritários -->
         <div class="question" style="margin-top:16px;">
@@ -886,8 +871,7 @@
 
   // ── Plan picker ──
   const PLAN_LABELS = {
-    atende: 'Atende', cresce: 'Cresce', escala: 'Escala',
-    converte_std: 'Converte Standard', converte_pro: 'Converte Pro'
+    atende: 'Atende', cresce: 'Cresce', escala: 'Escala'
   };
 
   function selectPlan(plan) {
@@ -905,7 +889,7 @@
     if (notice) notice.style.display = 'none';
 
     // Show/hide agenda blocks + set single preferencia_agendamento value
-    const prefMap = { atende: 'coletar_encaminhar', cresce: 'coletar_encaminhar', escala: 'automatico', converte_std: 'coletar_encaminhar', converte_pro: 'coletar_encaminhar' };
+    const prefMap = { atende: 'coletar_encaminhar', cresce: 'coletar_encaminhar', escala: 'automatico' };
     document.getElementById('pref_agend_input').value = prefMap[plan] || 'coletar_encaminhar';
     // Clear link_agenda when switching away from Cresce (prevents stale link polluting other plans' prompts)
     if (plan !== 'cresce') {
@@ -913,14 +897,13 @@
       if (linkInput) linkInput.value = '';
     }
 
-    ['atende','cresce','escala','converte'].forEach(id => {
+    ['atende','cresce','escala'].forEach(id => {
       const el = document.getElementById('agenda-' + id);
       if (el) el.classList.remove('visible');
     });
     if (plan === 'atende') document.getElementById('agenda-atende').classList.add('visible');
     else if (plan === 'cresce') document.getElementById('agenda-cresce').classList.add('visible');
     else if (plan === 'escala') document.getElementById('agenda-escala').classList.add('visible');
-    else if (plan === 'converte_std' || plan === 'converte_pro') document.getElementById('agenda-converte').classList.add('visible');
   }
 
   // Show notice on load

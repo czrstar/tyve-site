@@ -250,32 +250,7 @@
   .addon-period { font-size: 14px; color: var(--txt-dim); }
   .addon-note { font-size: 11px; color: var(--txt-dim); margin-top: 4px; }
   @media (max-width: 640px) { .addon-box { flex-direction: column; text-align: center; } }
-  .converte-divider { text-align: center; padding: 40px 0 28px; }
-  .converte-label { display: inline-block; background: #f0f0f0; color: #666; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 5px 16px; border-radius: 100px; margin-bottom: 14px; }
-  .converte-headline { font-size: clamp(20px, 2.2vw, 28px); font-weight: 800; color: var(--txt); margin-bottom: 10px; }
-  .converte-sub { font-size: 14px; color: var(--txt-mid); max-width: 520px; margin: 0 auto; line-height: 1.6; }
-  .converte-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .plan.converte .plan-name { color: #888; }
-  .plan.converte .plan-amount { color: var(--txt); }
-  .btn-plan-grey {
-    display: block; width: 100%; padding: 13px;
-    background: #222; color: white;
-    font-family: var(--font); font-size: 14px; font-weight: 700;
-    border-radius: 100px; text-align: center; text-decoration: none; border: none; cursor: pointer;
-    transition: opacity .2s; margin-top: auto;
-  }
-  .btn-plan-grey:hover { opacity: .85; }
-  .track-compare { margin-top: 48px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .vs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .track-compare-title { font-size: 15px; font-weight: 700; text-align: center; margin-bottom: 20px; color: var(--txt); letter-spacing: -.01em; }
-  .track-compare table { width: 100%; border-collapse: collapse; font-size: 13.5px; border: 1.5px solid #ebebeb; border-radius: 12px; overflow: hidden; }
-  .track-compare th, .track-compare td { padding: 13px 18px; border-bottom: 1.5px solid #ebebeb; vertical-align: middle; }
-  .track-compare tr:last-child td { border-bottom: none; }
-  .track-compare th { background: #f4f4f4; font-weight: 700; text-align: left; color: #333; font-size: 12.5px; letter-spacing: .01em; }
-  .track-compare th:first-child { width: 140px; color: transparent; }
-  .track-compare td { color: #555; text-align: left; line-height: 1.4; }
-  .track-compare td:first-child { font-weight: 700; color: var(--txt); width: 140px; font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em; }
-  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } .converte-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
 
   /* ─── NA PRÁTICA / SLIDER (09) — light grey ───────────── */
   .features-demo { padding: 88px 0; background: var(--light2); }
@@ -756,57 +731,6 @@
       </div>
     </div>
 
-    <div class="converte-divider">
-      <div class="converte-label" data-i18n="conv_label">Tyve Converte — Track de Vendas</div>
-      <h3 class="converte-headline" data-i18n="conv_h2">Não só recepcionista. Um vendedor que não descansa.</h3>
-      <p class="converte-sub" data-i18n="conv_sub">Para negócios de alto ticket: qualifica, argumenta e fecha. Passa para humano só quando necessário.</p>
-    </div>
-
-    <div class="converte-grid">
-      <div class="plan converte">
-        <p class="plan-name" data-i18n="plan_convstd">Converte Standard</p>
-        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="1497">1.497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
-        <p class="plan-tagline" data-i18n="convstd_tagline">Até 300 contatos/mês</p>
-        <hr class="plan-divider"/>
-        <ul class="plan-features">
-          <li data-i18n="convstd_f1">IA de alto desempenho (Tyve Pro)</li>
-          <li data-i18n="convstd_f2">Entende mensagens de texto e de voz 🎙️</li>
-          <li data-i18n="convstd_f3">Script de vendas customizado</li>
-          <li data-i18n="convstd_f4">Qualificação + argumentação + fechamento</li>
-          <li data-i18n="convstd_f5">Follow-up D+1 e D+3 em linguagem de vendas</li>
-          <li data-i18n="convstd_f6">Painel de resultados com taxa de conversão</li>
-          <li data-i18n="convstd_f7">Integração CRM inclusa</li>
-          <li data-i18n="convstd_f8">Reunião quinzenal de resultados</li>
-          <li data-i18n="convstd_f9">Suporte prioritário (SLA 1h)</li>
-        </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20Tyve%20Converte%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="convstd_cta">Começar com Converte</a>
-      </div>
-      <div class="plan converte">
-        <div class="plan-badge-top" style="background:#555;" data-i18n="plans_volume">MAIS VOLUME</div>
-        <p class="plan-name" data-i18n="plan_convpro">Converte Pro</p>
-        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="1997">1.997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
-        <p class="plan-tagline" data-i18n="convpro_tagline">Até 700 contatos/mês</p>
-        <hr class="plan-divider"/>
-        <ul class="plan-features">
-          <li class="feature-all" data-i18n="convpro_all">Tudo do Converte Standard</li>
-          <li data-i18n="convpro_f1">Volume estendido para maior tráfego</li>
-          <li data-i18n="convpro_f2">Acima de 700? Proposta customizada</li>
-        </ul>
-        <a href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20interesse%20no%20Tyve%20Converte%20Pro%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="convpro_cta">Começar com Converte Pro</a>
-      </div>
-    </div>
-
-    <div class="track-compare">
-      <p class="track-compare-title" data-i18n="track_title">Qual track é certa para meu negócio?</p>
-      <table>
-        <thead><tr><th></th><th data-i18n="track_th1">Atende / Cresce / Escala</th><th data-i18n="track_th2">+ Adicional Agenda</th><th data-i18n="track_th3">Tyve Converte</th></tr></thead>
-        <tbody>
-          <tr><td data-i18n="track_r1l">Faz o quê</td><td data-i18n="track_r1c1">Recepciona e qualifica</td><td data-i18n="track_r1c2">Agenda direto no WhatsApp</td><td data-i18n="track_r1c3">Converte e fecha</td></tr>
-          <tr><td data-i18n="track_r2l">Ideal pra</td><td data-i18n="track_r2c1">Clínicas e serviços gerais</td><td data-i18n="track_r2c2">Negócios com agenda cheia</td><td data-i18n="track_r2c3">Imobiliárias, estética premium, alto ticket</td></tr>
-          <tr><td data-i18n="track_r3l">Complementa</td><td data-i18n="track_r3c1">Sua recepção</td><td data-i18n="track_r3c2">Recepção + agenda</td><td data-i18n="track_r3c3">Recepção + equipe comercial</td></tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 </section>
 
@@ -857,7 +781,7 @@
     <!-- Panel 1 -->
     <div class="slider-panel" id="panel-1">
       <div class="sp-text">
-        <span class="sp-badge" data-i18n="p1_badge">Planos Escala e Converte</span>
+        <span class="sp-badge" data-i18n="p1_badge">Plano Escala</span>
         <h3 class="sp-title" data-i18n="p1_h3">Painel de resultados que você acessa de qualquer lugar</h3>
         <p class="sp-desc" data-i18n="p1_desc">Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.</p>
       </div>
@@ -1158,7 +1082,7 @@ var T = {
     fw_more:'Saiba mais →',
     plans_label:'Planos', plans_h2:'Investimento direto. Resultado real.',
     plans_popular:'MAIS POPULAR', plans_volume:'MAIS VOLUME', per_month:'/mês',
-    plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala', plan_convstd:'Converte Standard', plan_convpro:'Converte Pro',
+    plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
     atende_tagline:'Até 200 contatos atendidos/mês',
     atende_f1:'1 número WhatsApp', atende_f2:'Fluxo configurado pro seu negócio',
     atende_f3:'Respostas automáticas 24h/7d', atende_f4:'Entende mensagens de texto e de voz 🎙️',
@@ -1181,30 +1105,13 @@ var T = {
     addon_desc:'O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.',
     addon_note1:'Para Atende e Cresce', addon_note2:'✓ Incluso no Escala', addon_cta:'Adicionar',
     addon_cta_atende:'Atende + Agenda', addon_cta_cresce:'Cresce + Agenda',
-    conv_label:'Tyve Converte — Track de Vendas',
-    conv_h2:'Não só recepcionista. Um vendedor que não descansa.',
-    conv_sub:'Para negócios de alto ticket: qualifica, argumenta e fecha. Passa para humano só quando necessário.',
-    convstd_tagline:'Até 300 contatos/mês',
-    convstd_f1:'IA de alto desempenho (Tyve Pro)', convstd_f2:'Entende mensagens de texto e de voz 🎙️',
-    convstd_f3:'Script de vendas customizado', convstd_f4:'Qualificação + argumentação + fechamento',
-    convstd_f5:'Follow-up D+1 e D+3 em linguagem de vendas',
-    convstd_f6:'Painel de resultados com taxa de conversão', convstd_f7:'Integração CRM inclusa',
-    convstd_f8:'Reunião quinzenal de resultados', convstd_f9:'Suporte prioritário (SLA 1h)',
-    convstd_cta:'Começar com Converte',
-    convpro_tagline:'Até 700 contatos/mês', convpro_all:'Tudo do Converte Standard',
-    convpro_f1:'Volume estendido para maior tráfego', convpro_f2:'Acima de 700? Proposta customizada',
-    convpro_cta:'Começar com Converte Pro',
-    track_title:'Qual track é certa para meu negócio?',
-    track_th1:'Atende / Cresce / Escala', track_th2:'+ Adicional Agenda', track_th3:'Tyve Converte',
-    track_r1l:'Faz o quê', track_r1c1:'Recepciona e qualifica', track_r1c2:'Agenda direto no WhatsApp', track_r1c3:'Converte e fecha',
-    track_r2l:'Ideal pra', track_r2c1:'Clínicas e serviços gerais', track_r2c2:'Negócios com agenda cheia', track_r2c3:'Imobiliárias, estética premium, alto ticket',
-    track_r3l:'Complementa', track_r3c1:'Sua recepção', track_r3c2:'Recepção + agenda', track_r3c3:'Recepção + equipe comercial',
+
     nd_label:'Na prática', nd_h2:'Veja como funciona no seu dia a dia',
     tabs_t0:'Alerta de transição', tabs_t1:'Painel de resultados', tabs_t2:'Follow-up automático', tabs_t3:'Agendamento',
     p0_badge:'Incluído em todos os planos',
     p0_h3:'Você recebe um alerta quando o agente precisar de você',
     p0_desc:'Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.',
-    p1_badge:'Planos Escala e Converte',
+    p1_badge:'Plano Escala',
     p1_h3:'Painel de resultados que você acessa de qualquer lugar',
     p1_desc:'Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.',
     p2_badge:'Cresce: D+1 · Escala: D+1 + D+3',
@@ -1364,30 +1271,13 @@ var T = {
     addon_desc:'The customer picks a time slot <strong>directly in WhatsApp</strong>. The agent checks your calendar, creates the event and sends a D-1 reminder. Google Calendar integration.',
     addon_note1:'For Atende and Cresce', addon_note2:'✓ Included in Escala', addon_cta:'Add on',
     addon_cta_atende:'Answers + Scheduling', addon_cta_cresce:'Grows + Scheduling',
-    conv_label:'Tyve Converte — Sales Track',
-    conv_h2:'Not just a receptionist. A salesperson that never rests.',
-    conv_sub:'For high-ticket businesses: qualifies, argues and closes. Hands off to a human only when needed.',
-    convstd_tagline:'Up to 300 contacts/month',
-    convstd_f1:'High-performance AI (Tyve Pro)', convstd_f2:'Understands text and voice messages 🎙️',
-    convstd_f3:'Custom sales script', convstd_f4:'Qualification + argumentation + closing',
-    convstd_f5:'D+1 and D+3 follow-up in sales language',
-    convstd_f6:'Results dashboard with conversion rate', convstd_f7:'CRM integration included',
-    convstd_f8:'Bi-weekly results meeting', convstd_f9:'Priority support (SLA 1h)',
-    convstd_cta:'Start with Converte',
-    convpro_tagline:'Up to 700 contacts/month', convpro_all:'Everything in Converts Standard',
-    convpro_f1:'Extended volume for higher traffic', convpro_f2:'Over 700? Custom proposal',
-    convpro_cta:'Start with Converte Pro',
-    track_title:'Which track is right for my business?',
-    track_th1:'Atende / Cresce / Escala', track_th2:'+ Schedule Add-on', track_th3:'Tyve Converte',
-    track_r1l:'Does what', track_r1c1:'Receives and qualifies', track_r1c2:'Schedules directly in WhatsApp', track_r1c3:'Converts and closes',
-    track_r2l:'Ideal for', track_r2c1:'Clinics and general services', track_r2c2:'Businesses with full calendars', track_r2c3:'Real estate, premium aesthetics, high ticket',
-    track_r3l:'Complements', track_r3c1:'Your reception', track_r3c2:'Reception + calendar', track_r3c3:'Reception + sales team',
+
     nd_label:'In practice', nd_h2:'See how it works in your day-to-day',
     tabs_t0:'Transfer alert', tabs_t1:'Results dashboard', tabs_t2:'Automatic follow-up', tabs_t3:'Scheduling',
     p0_badge:'Included in all plans',
     p0_h3:'You get an alert when the agent needs you',
     p0_desc:'When a customer has an urgent need or a question only a human can solve, Tyve sends you a WhatsApp notification instantly — with the customer\'s name and a conversation summary. You jump in directly, no scrolling needed.',
-    p1_badge:'Escala and Converte plans',
+    p1_badge:'Escala plan',
     p1_h3:'A results dashboard you can access from anywhere',
     p1_desc:'See how many sessions the agent handled, how many times it needed you, how many follow-ups were sent. Accessible by link, no install needed.',
     p2_badge:'Cresce: D+1 · Escala: D+1 + D+3',
