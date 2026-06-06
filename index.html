@@ -540,7 +540,12 @@
     <div class="showcase-phone">
       <div class="phone-mockup">
         <div class="chat-header">
-          <div class="chat-avatar"><img src="/assets/luma-oficial.png" alt="Luma" onerror="this.style.display='none'" /></div>
+          <div class="chat-avatar">
+            <picture>
+              <source srcset="/assets/luma-avatar.webp" type="image/webp" />
+              <img src="/assets/luma-avatar.png" alt="Luma" onerror="this.style.display='none'" />
+            </picture>
+          </div>
           <div class="chat-info"><strong data-i18n="showcase_name">Luma — Clínica Sorriso</strong><span class="online" data-i18n="showcase_online">online</span></div>
         </div>
         <div class="chat-messages">
