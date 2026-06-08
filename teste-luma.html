@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TYVE — Checklist de Testes · Luma (Bot de Vendas)</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+  :root{
+    --orange:#f84100;--teal:#00e8df;--red:#ef4444;--amber:#f59e0b;
+    --border:#e2e8f0;--card:#fff;--muted:#64748b;--dark:#0f172a
+  }
+  .header{background:linear-gradient(135deg,#0f172a,#1a0a00);color:#fff;padding:24px 32px;display:flex;align-items:center;gap:16px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+  .logo-fallback{width:48px;height:48px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;flex-shrink:0;letter-spacing:-1px}
+  .header-title{font-size:1.35rem;font-weight:800;line-height:1.2}
+  .header-sub{font-size:.82rem;color:#94a3b8;margin-top:3px}
+  .header-right{margin-left:auto;text-align:right}
+  .progress-wrap{background:rgba(255,255,255,.07);border-radius:10px;padding:12px 20px;min-width:190px;border:1px solid rgba(255,255,255,.1)}
+  .progress-label{font-size:.68rem;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .progress-bar-bg{background:#1e293b;border-radius:4px;height:6px;overflow:hidden}
+  .progress-bar{background:linear-gradient(90deg,var(--orange),var(--teal));height:100%;border-radius:4px;transition:width .4s}
+  .progress-count{font-size:.82rem;font-weight:700;color:#e2e8f0;margin-top:5px}
+  .container{max-width:980px;margin:0 auto;padding:28px 16px 60px}
+  .infobar{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:.84rem;color:#9a3412;line-height:1.7}
+  .infobar strong{color:#c2410c}
+  .phone-chip{display:inline-block;background:#f1f5f9;border:1.5px solid var(--border);border-radius:8px;padding:4px 12px;font-size:.82rem;font-weight:700;color:#334155;font-family:monospace;margin:2px 4px}
+  .phone-chip.highlight{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+  .section-header{display:flex;align-items:center;gap:10px;border-radius:10px;padding:13px 18px;margin:30px 0 8px;color:#fff;font-weight:700;font-size:.93rem}
+  .section-header.orange {background:linear-gradient(90deg,#9a3412,#c2410c)}
+  .section-header.teal   {background:linear-gradient(90deg,#0e7490,#0891b2)}
+  .section-header.purple {background:linear-gradient(90deg,#5b21b6,#7c3aed)}
+  .section-header.green  {background:linear-gradient(90deg,#166534,#15803d)}
+  .section-header.red    {background:linear-gradient(90deg,#991b1b,#b91c1c)}
+  .section-header.slate  {background:linear-gradient(90deg,#334155,#475569)}
+  .section-header.amber  {background:linear-gradient(90deg,#92400e,#b45309)}
+  .section-badge{background:rgba(255,255,255,.18);border-radius:6px;padding:2px 9px;font-size:.73rem;margin-left:auto;font-weight:600}
+  .test-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
+  .test-card:hover{box-shadow:0 2px 14px rgba(0,0,0,.08)}
+  .test-card.pass{border-left:4px solid #22c55e}
+  .test-card.fail{border-left:4px solid var(--red)}
+  .test-card.skip{border-left:4px solid #94a3b8}
+  .card-top{display:flex;align-items:flex-start;gap:12px;padding:14px 16px 12px}
+  .card-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0;background:#f1f5f9;color:var(--muted)}
+  .card-num.critico{background:#fee2e2;color:var(--red)}
+  .card-num.medio   {background:#fef3c7;color:#92400e}
+  .card-content{flex:1;min-width:0}
+  .card-title{font-weight:700;font-size:.93rem;margin-bottom:5px}
+  .card-steps{font-size:.81rem;color:var(--muted);line-height:1.75;margin-bottom:8px}
+  .card-steps .step{display:block;padding-left:18px;position:relative}
+  .card-steps .step::before{content:attr(data-n)".";position:absolute;left:0;color:#94a3b8;font-weight:600}
+  .card-expected{background:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;padding:9px 12px;font-size:.81rem;color:#166534;line-height:1.6}
+  .card-expected .lbl{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;color:#16a34a;font-weight:700}
+  .card-actions{display:flex;gap:8px;padding:10px 16px;background:#f8fafc;border-top:1px solid var(--border);flex-wrap:wrap;align-items:center}
+  .radio-group{display:flex;gap:6px}
+  .radio-btn{position:relative}
+  .radio-btn input{position:absolute;opacity:0;width:0}
+  .radio-btn label{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:.79rem;font-weight:700;cursor:pointer;transition:all .15s;background:#fff;color:var(--muted);user-select:none;white-space:nowrap}
+  .radio-btn input:checked + label.pass-lbl{background:#dcfce7;border-color:#22c55e;color:#166534}
+  .radio-btn input:checked + label.fail-lbl{background:#fee2e2;border-color:var(--red);color:#991b1b}
+  .radio-btn input:checked + label.skip-lbl{background:#f1f5f9;border-color:#94a3b8;color:#475569}
+  .radio-btn label:hover{border-color:#94a3b8;background:#f8fafc}
+  .notes-input{flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:.79rem;color:#334155;resize:vertical;min-height:34px;font-family:inherit;background:#fff;transition:border .15s}
+  .notes-input:focus{outline:none;border-color:var(--teal)}
+  .notes-input::placeholder{color:#cbd5e1}
+  .tag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:8px;vertical-align:middle}
+  .tag-critico{background:#fee2e2;color:#991b1b}
+  .tag-medio{background:#fef3c7;color:#92400e}
+  .tag-auto{background:#f0fdf4;color:#166534}
+  .summary-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:32px}
+  .summary-title{font-weight:800;font-size:1.05rem;margin-bottom:18px;color:#0f172a}
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-bottom:20px}
+  .summary-card{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)}
+  .summary-card .val{font-size:1.9rem;font-weight:900;line-height:1}
+  .summary-card .lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+  .summary-card.pass-card .val{color:#22c55e}
+  .summary-card.fail-card .val{color:var(--red)}
+  .summary-card.skip-card .val{color:#94a3b8}
+  .summary-card.pct-card  .val{color:#0f172a}
+  .fails-list{margin-bottom:16px}
+  .fails-list h4{font-size:.85rem;font-weight:700;color:var(--red);margin-bottom:8px}
+  .fail-item{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;margin-bottom:6px;font-size:.82rem;color:#7f1d1d;line-height:1.5}
+  .fail-item strong{color:#991b1b}
+  .tester-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .tester-row input{flex:1;min-width:160px;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:.85rem;color:#334155;font-family:inherit}
+  .tester-row input:focus{outline:none;border-color:var(--teal)}
+  .btn{padding:10px 22px;border-radius:8px;border:none;font-size:.87rem;font-weight:700;cursor:pointer;transition:all .15s}
+  .btn-primary{background:linear-gradient(135deg,var(--orange),#ff6530);color:#fff;box-shadow:0 2px 8px rgba(248,65,0,.25)}
+  .btn-primary:hover{opacity:.88}
+  .btn-outline{background:#fff;border:1.5px solid var(--border) !important;color:#475569}
+  .btn-outline:hover{border-color:var(--orange) !important;color:var(--orange)}
+  .result-badge{display:inline-block;padding:4px 16px;border-radius:20px;font-weight:700;font-size:.85rem}
+  .result-aprovado{background:#dcfce7;color:#166534}
+  .result-reprovado{background:#fee2e2;color:#991b1b}
+  .result-parcial{background:#fef3c7;color:#92400e}
+  @media print{
+    .header,.section-header,.test-card.pass,.test-card.fail,.test-card.skip
+      {-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .no-print{display:none}
+    body{background:#fff}
+    .container{padding:0}
+  }
+  @media(max-width:600px){
+    .header{flex-wrap:wrap}
+    .header-right{margin-left:0;width:100%}
+    .progress-wrap{min-width:unset;width:100%}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-fallback">T</div>
+  <div>
+    <div class="header-title">TYVE — Checklist de Testes · Luma (Bot de Vendas)</div>
+    <div class="header-sub">Chip demo +55 16 98104-6619 · Leads no grupo "Leads TYVE" · v1.0 — Jun/2026</div>
+  </div>
+  <div class="header-right">
+    <div class="progress-wrap">
+      <div class="progress-label">Progresso</div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-count" id="progressCount">0 / 16 testados</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="infobar">
+    <strong>Como usar:</strong> Vocês são <strong>prospects fingindo querer contratar a TYVE</strong>. Mandem mensagens pela Luma no chip demo
+    <span class="phone-chip highlight">+55 16 98104-6619</span>.
+    As notificações de lead chegam no grupo <strong>"Leads TYVE"</strong> (vocês dois estão nele) — fiquem de olho lá.
+    Marquem <strong>✅ Pass</strong>, <strong>❌ Fail</strong> ou <strong>⏭ Skip</strong> em cada teste e usem as notas pra registrar bugs.
+    Dica: testem em uma <strong>conversa nova</strong> (número que nunca falou com a Luma) pra exercitar o fluxo do início.
+    Tags: <span class="tag tag-critico">crítico</span> = bloqueia ·
+    <span class="tag tag-medio">médio</span> = importante ·
+    <span class="tag tag-auto">automático</span> = verificar no sistema.
+  </div>
+
+  <div id="tests-container"></div>
+
+  <div class="summary-section no-print" id="summarySection">
+    <div class="summary-title">📊 Resumo dos Testes</div>
+    <div class="summary-grid">
+      <div class="summary-card pass-card"><div class="val" id="countPass">0</div><div class="lbl">✅ Pass</div></div>
+      <div class="summary-card fail-card"><div class="val" id="countFail">0</div><div class="lbl">❌ Fail</div></div>
+      <div class="summary-card skip-card"><div class="val" id="countSkip">0</div><div class="lbl">⏭ Skip</div></div>
+      <div class="summary-card pct-card"> <div class="val" id="countPct">—</div><div class="lbl">% aprovação</div></div>
+    </div>
+    <div class="fails-list" id="failsList" style="display:none">
+      <h4>❌ Falhas encontradas:</h4>
+      <div id="failsContent"></div>
+    </div>
+    <div class="tester-row">
+      <input id="testerName" type="text" placeholder="Testador(a): nome completo" />
+      <input id="testerDate" type="date" />
+      <input id="testerDevice" type="text" placeholder="Dispositivo (ex: iPhone 15, Android)" />
+    </div>
+    <div id="resultBadgeWrap" style="margin-bottom:16px;display:none"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="gerarRelatorio()">📋 Gerar Relatório</button>
+      <button class="btn btn-outline" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+      <button class="btn btn-outline" onclick="resetar()">🔄 Limpar tudo</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    title: "1 — Recepção e Qualificação (Vendas)",
+    color: "orange",
+    tests: [
+      {
+        id: 1, pri: "critico",
+        title: "Primeira mensagem do prospect → Luma responde como vendedora",
+        steps: [
+          "Em uma conversa NOVA, envie \"Oi, queria saber sobre a TYVE\" para o chip demo (+55 16 98104-6619)",
+          "Aguarde até 15 segundos"
+        ],
+        expected: "Luma responde de forma comercial e acolhedora, se apresenta (Luma, da TYVE) e começa a qualificar o interesse. Resposta chega via Cloud API."
+      },
+      {
+        id: 2, pri: "critico",
+        title: "Estágio 1 — Luma pede nome + WhatsApp",
+        steps: [
+          "Após a primeira resposta da Luma, demonstre interesse (ex: \"tenho uma clínica e quero automatizar o WhatsApp\")",
+          "Aguarde a resposta"
+        ],
+        expected: "Antes de avançar, a Luma pede seu NOME e seu WHATSAPP (Estágio 1). Se você não fornecer, ela insiste 1x educadamente."
+      },
+      {
+        id: 3, pri: "medio",
+        title: "Qualificação — entende segmento e dor",
+        steps: [
+          "Conte seu segmento e a dor (ex: \"perco clientes porque demoro pra responder\")",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma faz perguntas de qualificação relevantes e conecta a dor à solução (recuperar clientes perdidos por falta de resposta rápida). Sem prometer o que não existe."
+      }
+    ]
+  },
+  {
+    title: "2 — Planos e Preços",
+    color: "teal",
+    tests: [
+      {
+        id: 4, pri: "critico",
+        title: "Preços corretos",
+        steps: [
+          "Pergunte \"quais os planos e valores?\"",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma cita os valores CORRETOS: Atende R$497, Cresce R$697, Escala R$997. Não inventa preço. Pode citar add-on Agenda +R$197."
+      },
+      {
+        id: 5, pri: "medio",
+        title: "Diferença entre planos",
+        steps: [
+          "Pergunte \"qual a diferença do Cresce pro Escala?\"",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma explica certo: Cresce = follow-up D+1, até 500 contatos; Escala = D+1 e D+3, dashboard, PDF mensal, agendamento nativo, SLA menor. Sem informação inventada."
+      },
+      {
+        id: 6, pri: "critico",
+        title: "Não revela o modelo de IA",
+        steps: [
+          "Pergunte \"você é o ChatGPT? que IA você usa?\"",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma se identifica como a IA da TYVE (Luma), mas NÃO revela nomes técnicos (Claude, Haiku, OpenRouter, etc.). Mantém o foco comercial."
+      }
+    ]
+  },
+  {
+    title: "3 — Notificação de Lead (grupo Leads TYVE)",
+    color: "purple",
+    tests: [
+      {
+        id: 7, pri: "critico",
+        title: "Lead notificado no grupo com nome + WhatsApp",
+        steps: [
+          "Complete a qualificação fornecendo seu nome e WhatsApp quando a Luma pedir",
+          "Abra o grupo \"Leads TYVE\" e verifique"
+        ],
+        expected: "Chega uma notificação de lead no grupo \"Leads TYVE\" com: NOME, WHATSAPP e um resumo do interesse/contexto. (Obs: nº TYVE está PENDING → o grupo é notificado via Evolution.)"
+      },
+      {
+        id: 8, pri: "critico",
+        title: "Handoff explícito → equipe acionada",
+        steps: [
+          "Diga \"quero falar com uma pessoa\" ou \"quero fechar agora\"",
+          "Aguarde a resposta + verifique o grupo Leads TYVE"
+        ],
+        expected: "Luma confirma que vai te conectar com o time, e a notificação de handoff chega no grupo Leads TYVE com seu número e o contexto da conversa."
+      }
+    ]
+  },
+  {
+    title: "4 — Áudio e Buffer",
+    color: "green",
+    tests: [
+      {
+        id: 9, pri: "critico",
+        title: "Áudio → Whisper transcreve → Luma responde",
+        steps: [
+          "Grave e envie um áudio curto (ex: \"Quero saber quanto custa o plano de vocês\")",
+          "Aguarde até 30 segundos"
+        ],
+        expected: "Luma responde ao conteúdo do áudio corretamente (transcrição via Whisper). Sem erro nem execução presa."
+      },
+      {
+        id: 10, pri: "medio",
+        title: "Buffer — várias mensagens rápidas → 1 resposta só",
+        steps: [
+          "Envie 3-4 mensagens em menos de 10s (ex: \"oi\", \"tenho uma clínica\", \"quero automatizar\", \"quanto custa?\")",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma envia UMA resposta considerando todas as mensagens juntas — não responde 4 vezes separadas."
+      }
+    ]
+  },
+  {
+    title: "5 — Ordenação das Respostas (ajuste 08/06)",
+    color: "amber",
+    tests: [
+      {
+        id: 11, pri: "critico",
+        title: "Resposta longa → chunks chegam na ORDEM certa",
+        steps: [
+          "Faça uma pergunta que gere resposta longa (ex: \"me explica tudo que a TYVE faz e todos os planos\")",
+          "Observe a ordem em que as mensagens (pedaços) chegam"
+        ],
+        expected: "A resposta chega em pedaços NA ORDEM CORRETA, sem mensagem trocada/fora de ordem, com ~2,5s de intervalo entre cada. (Este é o cenário que motivou o ajuste de 1,2s→2,5s em 08/06.)"
+      }
+    ]
+  },
+  {
+    title: "6 — Guardrails e Robustez",
+    color: "red",
+    tests: [
+      {
+        id: 12, pri: "medio",
+        title: "Mensagem confusa → Luma pede clareza",
+        steps: [
+          "Envie \"asdfg ??? 123 !!!\"",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma pede esclarecimento de forma educada, sem travar nem responder algo sem sentido."
+      },
+      {
+        id: 13, pri: "medio",
+        title: "Foco no negócio (não vira assistente genérico)",
+        steps: [
+          "Pergunte algo fora do escopo (ex: \"qual a capital da França?\" ou \"me dá uma receita de bolo\")",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma educadamente redireciona pro tema TYVE/vendas. NÃO atua como assistente genérico (regra Meta jan/2026 — bot só para fins do negócio)."
+      },
+      {
+        id: 14, pri: "medio",
+        title: "Continuidade de contexto",
+        steps: [
+          "Depois de algumas mensagens, refira-se a algo que você disse antes (ex: \"e pro meu caso da clínica, qual plano?\")",
+          "Aguarde a resposta"
+        ],
+        expected: "Luma lembra do contexto (segmento clínica) e responde coerente. Memória de sessão funcionando."
+      },
+      {
+        id: 15, pri: "medio",
+        title: "iPhone (@lid) — coleta de número funciona",
+        steps: [
+          "SE você testar de um iPhone: complete a qualificação informando seu WhatsApp",
+          "Verifique a notificação no grupo Leads TYVE",
+          "Se testar de Android, marque Skip"
+        ],
+        expected: "Mesmo no iPhone (@lid), a notificação de lead traz o WhatsApp que você informou no Estágio 1 (COMPOSE_NOTIF busca o número no texto da conversa)."
+      },
+      {
+        id: 16, pri: "medio", tag: "auto",
+        title: "Fallback Anthropic (se OpenRouter cair)",
+        steps: [
+          "Difícil testar manualmente — verificar no n8n se houve uso de fallback nas execuções recentes da Luma",
+          "Marque Skip se não houver como verificar"
+        ],
+        expected: "Em caso de erro do OpenRouter, o AGENTE_FALLBACK (Anthropic) assume sem o prospect perceber — sem mensagem quebrada nem silêncio."
+      }
+    ]
+  }
+];
+
+function render() {
+  const container = document.getElementById('tests-container');
+  let totalTests = 0;
+  SECTIONS.forEach(sec => {
+    totalTests += sec.tests.length;
+    const hdr = document.createElement('div');
+    hdr.className = `section-header ${sec.color}`;
+    hdr.innerHTML = `<span>${sec.title}</span><span class="section-badge">${sec.tests.length} testes</span>`;
+    container.appendChild(hdr);
+    sec.tests.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'test-card';
+      card.id = `card-${t.id}`;
+      const priClass = t.pri === 'critico' ? 'critico' : (t.pri === 'medio' ? 'medio' : '');
+      const tagHtml = t.pri === 'critico'
+        ? `<span class="tag tag-critico">crítico</span>`
+        : t.pri === 'medio'
+        ? `<span class="tag tag-medio">médio</span>`
+        : '';
+      const autoTagHtml = t.tag === 'auto' ? `<span class="tag tag-auto">automático</span>` : '';
+      const stepsHtml = t.steps.map((s, i) =>
+        `<span class="step" data-n="${i+1}">${s}</span>`
+      ).join('');
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-num ${priClass}">#${t.id}</div>
+          <div class="card-content">
+            <div class="card-title">${t.title}${tagHtml}${autoTagHtml}</div>
+            <div class="card-steps">${stepsHtml}</div>
+            <div class="card-expected"><span class="lbl">✅ Resultado esperado</span>${t.expected}</div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <div class="radio-group">
+            <div class="radio-btn">
+              <input type="radio" name="r${t.id}" id="pass${t.id}" value="pass" onchange="onRadio(${t.id})">
+              <label for="pass${t.id}" class="pass-lbl">✅ Pass</label>
+            </div>
+            <div class="radio-btn">
+              <input type="radio" name="r${t.id}" id="fail${t.id}" value="fail" onchange="onRadio(${t.id})">
+              <label for="fail${t.id}" class="fail-lbl">❌ Fail</label>
+            </div>
+            <div class="radio-btn">
+              <input type="radio" name="r${t.id}" id="skip${t.id}" value="skip" onchange="onRadio(${t.id})">
+              <label for="skip${t.id}" class="skip-lbl">⏭ Skip</label>
+            </div>
+          </div>
+          <textarea class="notes-input" id="notes${t.id}" placeholder="Notas / observações / o que a Luma respondeu..." rows="1"
+            oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+        </div>`;
+      container.appendChild(card);
+    });
+  });
+  document.getElementById('progressCount').textContent = `0 / ${totalTests} testados`;
+  updateSummary();
+}
+
+function onRadio(id) {
+  const val = document.querySelector(`input[name="r${id}"]:checked`)?.value;
+  const card = document.getElementById(`card-${id}`);
+  card.classList.remove('pass','fail','skip');
+  if (val) card.classList.add(val);
+  updateSummary();
+}
+
+function updateSummary() {
+  let pass = 0, fail = 0, skip = 0, total = 0;
+  SECTIONS.forEach(s => s.tests.forEach(t => {
+    total++;
+    const v = document.querySelector(`input[name="r${t.id}"]:checked`)?.value;
+    if (v === 'pass') pass++;
+    else if (v === 'fail') fail++;
+    else if (v === 'skip') skip++;
+  }));
+  const tested = pass + fail + skip;
+  const pctDisplay = (pass + fail) > 0 ? Math.round(pass / (pass + fail) * 100) + '%' : '—';
+  document.getElementById('countPass').textContent = pass;
+  document.getElementById('countFail').textContent = fail;
+  document.getElementById('countSkip').textContent = skip;
+  document.getElementById('countPct').textContent  = pctDisplay;
+  const bar = document.getElementById('progressBar');
+  bar.style.width = (tested / total * 100) + '%';
+  document.getElementById('progressCount').textContent = `${tested} / ${total} testados`;
+}
+
+function gerarRelatorio() {
+  let pass = [], fail = [], skip = [];
+  SECTIONS.forEach(s => s.tests.forEach(t => {
+    const v  = document.querySelector(`input[name="r${t.id}"]:checked`)?.value;
+    const nt = document.getElementById(`notes${t.id}`)?.value?.trim();
+    const item = { id: t.id, title: t.title, notes: nt };
+    if (v === 'pass') pass.push(item);
+    else if (v === 'fail') fail.push(item);
+    else if (v === 'skip') skip.push(item);
+  }));
+  const tester = document.getElementById('testerName').value || '—';
+  const date   = document.getElementById('testerDate').value  || new Date().toLocaleDateString('pt-BR');
+  const device = document.getElementById('testerDevice').value || '—';
+  const pct    = (pass.length + fail.length) > 0
+    ? Math.round(pass.length / (pass.length + fail.length) * 100) + '%' : '—';
+  let verdict, vClass;
+  if (fail.filter(f => {
+    const t = SECTIONS.flatMap(s=>s.tests).find(t=>t.id===f.id);
+    return t?.pri==='critico';
+  }).length > 0) {
+    verdict = '❌ REPROVADO — há falhas críticas'; vClass = 'result-reprovado';
+  } else if (fail.length > 0) {
+    verdict = '⚠️ PARCIAL — falhas não-críticas identificadas'; vClass = 'result-parcial';
+  } else {
+    verdict = '✅ APROVADO — todos os testes passaram'; vClass = 'result-aprovado';
+  }
+  document.getElementById('resultBadgeWrap').style.display = 'block';
+  document.getElementById('resultBadgeWrap').innerHTML =
+    `<span class="result-badge ${vClass}">${verdict}</span>`;
+  if (fail.length > 0) {
+    document.getElementById('failsList').style.display = 'block';
+    document.getElementById('failsContent').innerHTML = fail.map(f =>
+      `<div class="fail-item"><strong>#${f.id} — ${f.title}</strong>${f.notes ? '<br>📝 ' + f.notes : ''}</div>`
+    ).join('');
+  }
+  alert(
+`📋 TYVE — Relatório de Testes da Luma
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Testador: ${tester}
+Data: ${date}  |  Dispositivo: ${device}
+
+✅ Pass:  ${pass.length}
+❌ Fail:  ${fail.length}
+⏭ Skip:  ${skip.length}
+📊 Aprovação: ${pct}
+
+${verdict}
+${fail.length > 0 ? '\nFalhas:\n' + fail.map(f => `  • #${f.id} ${f.title}${f.notes ? '\n    → '+f.notes : ''}`).join('\n') : ''}
+
+Use "Imprimir / Salvar PDF" para compartilhar.`
+  );
+}
+
+function resetar() {
+  if (!confirm('Limpar todos os resultados?')) return;
+  SECTIONS.forEach(s => s.tests.forEach(t => {
+    const radios = document.querySelectorAll(`input[name="r${t.id}"]`);
+    radios.forEach(r => r.checked = false);
+    const card = document.getElementById(`card-${t.id}`);
+    card.classList.remove('pass','fail','skip');
+    const notes = document.getElementById(`notes${t.id}`);
+    if (notes) notes.value = '';
+  }));
+  document.getElementById('failsList').style.display = 'none';
+  document.getElementById('resultBadgeWrap').style.display = 'none';
+  document.getElementById('testerName').value = '';
+  document.getElementById('testerDate').value = '';
+  document.getElementById('testerDevice').value = '';
+  updateSummary();
+}
+
+render();
+</script>
+</body>
+</html>
