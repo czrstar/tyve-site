@@ -158,10 +158,12 @@
     </div>
     <div id="resultBadgeWrap" style="margin-bottom:16px;display:none"></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="gerarRelatorio()">📋 Gerar Relatório</button>
+      <button class="btn btn-primary" onclick="enviarResultados(this)">📤 Enviar resultados</button>
+      <button class="btn btn-outline" onclick="gerarRelatorio()">📋 Gerar Relatório</button>
       <button class="btn btn-outline" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
       <button class="btn btn-outline" onclick="resetar()">🔄 Limpar tudo</button>
     </div>
+    <div style="font-size:.76rem;color:#64748b;margin-top:10px">📤 <strong>Enviar resultados</strong> manda o resumo direto pro WhatsApp do Renato (preencha seu nome antes).</div>
   </div>
 
 </div>
@@ -487,6 +489,63 @@ ${fail.length > 0 ? '\nFalhas:\n' + fail.map(f => `  • #${f.id} ${f.title}${f.
 
 Use "Imprimir / Salvar PDF" para compartilhar.`
   );
+}
+
+function enviarResultados(btn) {
+  const tester = document.getElementById('testerName').value.trim();
+  if (!tester) {
+    alert('Preencha seu nome no campo "Testador(a)" antes de enviar.');
+    document.getElementById('testerName').focus();
+    return;
+  }
+  let pass = [], fail = [], skip = [];
+  SECTIONS.forEach(s => s.tests.forEach(t => {
+    const v  = document.querySelector(`input[name="r${t.id}"]:checked`)?.value;
+    const nt = document.getElementById(`notes${t.id}`)?.value?.trim();
+    const item = { id: t.id, title: t.title, notes: nt };
+    if (v === 'pass') pass.push(item);
+    else if (v === 'fail') fail.push(item);
+    else if (v === 'skip') skip.push(item);
+  }));
+  const tested = pass.length + fail.length + skip.length;
+  if (tested === 0) { alert('Marque pelo menos um teste (Pass/Fail/Skip) antes de enviar.'); return; }
+
+  const pct = (pass.length + fail.length) > 0
+    ? Math.round(pass.length / (pass.length + fail.length) * 100) + '%' : '—';
+  const critFail = fail.some(f => {
+    const t = SECTIONS.flatMap(s => s.tests).find(t => t.id === f.id);
+    return t?.pri === 'critico';
+  });
+  const verdict = critFail
+    ? '❌ REPROVADO — há falhas críticas'
+    : (fail.length > 0 ? '⚠️ PARCIAL — falhas não-críticas' : '✅ APROVADO — todos passaram');
+
+  const payload = {
+    tester,
+    date:   document.getElementById('testerDate').value   || new Date().toLocaleDateString('pt-BR'),
+    device: document.getElementById('testerDevice').value || '—',
+    pass: pass.length, fail: fail.length, skip: skip.length, pct, verdict,
+    fails: fail
+  };
+
+  btn.disabled = true;
+  const orig = btn.textContent;
+  btn.textContent = '⏳ Enviando...';
+  fetch('https://n8n.tyve.com.br/webhook/tyve-luma-test-results', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(r => r.json())
+    .then(d => {
+      alert(d && d.ok
+        ? '✅ Resultados enviados! O Renato já recebeu no WhatsApp. Obrigado(a)!'
+        : '⚠️ Enviado, mas a resposta veio estranha. Avise o Renato.');
+    })
+    .catch(e => {
+      alert('❌ Não consegui enviar (' + e + ').\nUse "Imprimir / Salvar PDF" e mande pro Renato.');
+    })
+    .finally(() => { btn.disabled = false; btn.textContent = orig; });
 }
 
 function resetar() {
