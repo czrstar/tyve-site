@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tyve — Connect WhatsApp (Embedded Signup)</title>
+  <title>Tyve — Connect your WhatsApp</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -294,9 +294,9 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge">INTERNAL USE</div>
-    <h1>Connect <span>WhatsApp</span></h1>
-    <p>Activate WhatsApp Cloud API with Coexistence for the client. The phone keeps working normally.</p>
+    <div class="hero-badge">SECURE &middot; 2 MINUTES</div>
+    <h1>Connect your <span>WhatsApp</span></h1>
+    <p>Link your number to Tyve's automated assistant. Your WhatsApp keeps working normally on your phone &mdash; nothing changes for you.</p>
   </section>
 
   <!-- MAIN -->
@@ -319,36 +319,29 @@
 
     <!-- Card 1: Pre-flight checklist -->
     <div class="card" id="card-checklist">
-      <h2>Pre-connection checklist</h2>
-      <p>Confirm the client meets all requirements before starting the Embedded Signup.</p>
+      <h2>Before you start</h2>
+      <p>Tap each item below to confirm. Once all three are checked, the connect button becomes available.</p>
 
       <ul class="checklist">
         <li>
           <span class="check-icon check-pending" data-check="0">&#x2713;</span>
           <div>
-            <strong>WhatsApp Business App active</strong><br>
-            The client's number has been using WhatsApp Business (not regular WhatsApp) for at least 7 days.
+            <strong>You use WhatsApp Business</strong><br>
+            Your number is on the <em>WhatsApp Business</em> app (the dark green icon), not regular WhatsApp. If you still use the regular app, download WhatsApp Business and move your number over before continuing.
           </div>
         </li>
         <li>
           <span class="check-icon check-pending" data-check="1">&#x2713;</span>
           <div>
-            <strong>App version 2.24.17+</strong><br>
-            The client has updated WhatsApp Business to version 2.24.17 or higher.
+            <strong>Your app is up to date</strong><br>
+            Open your app store (Play Store or App Store) and make sure WhatsApp Business is on the latest version.
           </div>
         </li>
         <li>
           <span class="check-icon check-pending" data-check="2">&#x2713;</span>
           <div>
-            <strong>Meta Business Manager access</strong><br>
-            The client has (or has created) a Meta Business Manager account with their business details.
-          </div>
-        </li>
-        <li>
-          <span class="check-icon check-pending" data-check="3">&#x2713;</span>
-          <div>
-            <strong>n8n workflow configured</strong><br>
-            The client's workflow has already been cloned from the template and set up in n8n.
+            <strong>You have your phone with you</strong><br>
+            During the connection you'll confirm on your phone (via a notification or QR code). Keep it nearby.
           </div>
         </li>
       </ul>
@@ -361,32 +354,32 @@
 
     <!-- Card 2: Connect (hidden initially) -->
     <div class="card" id="card-connect" style="display:none;">
-      <h2>Connect WhatsApp via Embedded Signup</h2>
-      <p>The client (or you, using their login) will authorize the number connection to Cloud API. The WhatsApp Business App on the phone keeps working normally.</p>
+      <h2>Connect now</h2>
+      <p>When you tap the button, an official window from Meta (WhatsApp's owner) will open. Log in with your account, pick your number, and authorize. It takes about 2 minutes.</p>
 
       <button class="btn-connect" id="btn-signup" onclick="launchEmbeddedSignup()">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        Start Embedded Signup
+        Connect my WhatsApp
       </button>
 
       <div class="status" id="status-box"></div>
 
       <div class="info-box">
-        <strong>What happens:</strong> A Meta window will open asking for login. The client selects the number and authorizes. The WhatsApp Business App on the phone will request confirmation via QR code or notification. After confirming, the number is connected to Cloud API AND the app simultaneously (Coexistence).
+        <strong>How it works:</strong> the Meta window asks for your login and shows your number for you to authorize. Then WhatsApp on your phone asks for a quick confirmation (notification or QR code). That's it: the automated assistant starts working <strong>alongside</strong> your WhatsApp &mdash; you keep sending and receiving messages normally on your phone.
       </div>
     </div>
 
     <!-- Card 3: Success (hidden initially) -->
     <div class="card" id="card-success" style="display:none;">
       <h2 style="color:#d13600;">WhatsApp connected successfully!</h2>
-      <p>The number has been activated on Cloud API with Coexistence. The phone keeps working normally.</p>
+      <p>Your number is now linked to Tyve's automated assistant. Keep using WhatsApp on your phone as usual.</p>
 
       <div id="result-details" style="background:var(--grey-50); border-radius:var(--radius); padding:20px; font-size:14px; line-height:1.8; color:var(--grey-700);">
         <!-- Populated by JS -->
       </div>
 
       <div class="info-box" style="margin-top:24px;">
-        <strong>Next steps:</strong> Activate the client's workflow in n8n, send a test message, and confirm the agent is responding.
+        <strong>What's next?</strong> Our team will finish the setup and let you know as soon as your assistant is live &mdash; usually within a few hours. There's nothing else you need to do here. Any questions, reach us on WhatsApp.
       </div>
     </div>
 
@@ -394,7 +387,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>Tyve internal page &mdash; not indexed. <a href="/">tyve.com.br</a></p>
+    <p>Tyve &mdash; <a href="/">tyve.com.br</a></p>
     <p style="margin-top:4px;">Tyve is not affiliated with Meta, Facebook, or WhatsApp.</p>
   </footer>
 
@@ -470,10 +463,8 @@
 
       var details = document.getElementById('result-details');
       var html = '';
-      if (data.waba_id) html += '<strong>WABA ID:</strong> ' + data.waba_id + '<br>';
-      if (data.phone_number_id) html += '<strong>Phone Number ID:</strong> ' + data.phone_number_id + '<br>';
-      if (data.phone_number) html += '<strong>Number:</strong> ' + data.phone_number + '<br>';
-      if (!html) html = 'Connection successful. Check n8n to confirm the details.';
+      if (data.phone_number) html += '<strong>Connected number:</strong> ' + data.phone_number + '<br>';
+      html += '<strong>Status:</strong> connected and active ✅';
       details.innerHTML = html;
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
