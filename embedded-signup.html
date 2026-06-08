@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tyve — Conectar WhatsApp (Embedded Signup)</title>
+  <title>Tyve — Conectar seu WhatsApp</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -281,9 +281,9 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge">USO INTERNO</div>
-    <h1>Conectar <span>WhatsApp</span></h1>
-    <p>Ative o WhatsApp Cloud API com Coexistence para o cliente. O celular continua funcionando normalmente.</p>
+    <div class="hero-badge">CONEX&Atilde;O SEGURA &middot; 2 MINUTOS</div>
+    <h1>Conecte seu <span>WhatsApp</span></h1>
+    <p>Ligue o seu n&uacute;mero ao atendimento autom&aacute;tico da Tyve. Seu WhatsApp continua funcionando normalmente no celular &mdash; nada muda pra voc&ecirc;.</p>
   </section>
 
   <!-- MAIN -->
@@ -306,36 +306,29 @@
 
     <!-- Card 1: Pre-flight checklist -->
     <div class="card" id="card-checklist">
-      <h2>Checklist antes de conectar</h2>
-      <p>Confirme que o cliente atende todos os requisitos antes de iniciar o Embedded Signup.</p>
+      <h2>Antes de come&ccedil;ar</h2>
+      <p>Toque em cada item abaixo para confirmar. Quando os tr&ecirc;s estiverem marcados, o bot&atilde;o de conectar fica dispon&iacute;vel.</p>
 
       <ul class="checklist">
         <li>
           <span class="check-icon check-pending" data-check="0">&#x2713;</span>
           <div>
-            <strong>WhatsApp Business App ativo</strong><br>
-            O n&uacute;mero do cliente est&aacute; usando o WhatsApp Business (n&atilde;o o WhatsApp normal) h&aacute; pelo menos 7 dias.
+            <strong>Voc&ecirc; usa o WhatsApp Business</strong><br>
+            O seu n&uacute;mero est&aacute; no app <em>WhatsApp Business</em> (o &iacute;cone verde escuro), n&atilde;o no WhatsApp comum. Se ainda usa o comum, baixe o WhatsApp Business e migre o n&uacute;mero antes de continuar.
           </div>
         </li>
         <li>
           <span class="check-icon check-pending" data-check="1">&#x2713;</span>
           <div>
-            <strong>Vers&atilde;o do app 2.24.17+</strong><br>
-            O cliente atualizou o WhatsApp Business para a vers&atilde;o 2.24.17 ou superior.
+            <strong>Seu app est&aacute; atualizado</strong><br>
+            Abra a loja de aplicativos (Play Store ou App Store) e confirme que o WhatsApp Business est&aacute; na vers&atilde;o mais recente.
           </div>
         </li>
         <li>
           <span class="check-icon check-pending" data-check="2">&#x2713;</span>
           <div>
-            <strong>Acesso ao Meta Business Manager</strong><br>
-            O cliente tem (ou criou) uma conta no Meta Business Manager com o CNPJ da empresa.
-          </div>
-        </li>
-        <li>
-          <span class="check-icon check-pending" data-check="3">&#x2713;</span>
-          <div>
-            <strong>Workflow n8n configurado</strong><br>
-            O workflow do cliente j&aacute; foi clonado do template e configurado no n8n.
+            <strong>Voc&ecirc; tem o celular em m&atilde;os</strong><br>
+            Durante a conex&atilde;o, voc&ecirc; vai confirmar pelo celular (por uma notifica&ccedil;&atilde;o ou QR code). Deixe-o por perto.
           </div>
         </li>
       </ul>
@@ -348,32 +341,32 @@
 
     <!-- Card 2: Connect (hidden initially) -->
     <div class="card" id="card-connect" style="display:none;">
-      <h2>Conectar WhatsApp via Embedded Signup</h2>
-      <p>O cliente (ou voc&ecirc;, com o login dele) vai autorizar a conex&atilde;o do n&uacute;mero com a Cloud API. O WhatsApp Business App no celular continua funcionando normalmente.</p>
+      <h2>Conectar agora</h2>
+      <p>Ao tocar no bot&atilde;o, uma janela oficial da Meta (dona do WhatsApp) vai abrir. Fa&ccedil;a login com a sua conta, escolha o seu n&uacute;mero e autorize. Leva cerca de 2 minutos.</p>
 
       <button class="btn-connect" id="btn-signup" onclick="launchEmbeddedSignup()">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        Iniciar Embedded Signup
+        Conectar meu WhatsApp
       </button>
 
       <div class="status" id="status-box"></div>
 
       <div class="info-box">
-        <strong>O que acontece:</strong> Uma janela da Meta vai abrir pedindo login. O cliente seleciona o n&uacute;mero e autoriza. O WhatsApp Business App no celular vai pedir confirma&ccedil;&atilde;o via QR code ou notifica&ccedil;&atilde;o. Ap&oacute;s confirmar, o n&uacute;mero fica conectado &agrave; Cloud API E ao app ao mesmo tempo (Coexistence).
+        <strong>Como funciona:</strong> a janela da Meta pede seu login e mostra o seu n&uacute;mero para voc&ecirc; autorizar. Em seguida, o WhatsApp no seu celular pede uma confirma&ccedil;&atilde;o (notifica&ccedil;&atilde;o ou QR code). Pronto: o atendimento autom&aacute;tico passa a funcionar <strong>junto</strong> com o seu WhatsApp &mdash; voc&ecirc; continua enviando e recebendo mensagens normalmente no celular.
       </div>
     </div>
 
     <!-- Card 3: Success (hidden initially) -->
     <div class="card" id="card-success" style="display:none;">
       <h2 style="color:#d13600;">WhatsApp conectado com sucesso!</h2>
-      <p>O n&uacute;mero foi ativado na Cloud API com Coexistence. O celular continua funcionando normalmente.</p>
+      <p>Seu n&uacute;mero j&aacute; est&aacute; ligado ao atendimento autom&aacute;tico da Tyve. Pode continuar usando o WhatsApp no celular normalmente.</p>
 
       <div id="result-details" style="background:var(--grey-50); border-radius:var(--radius); padding:20px; font-size:14px; line-height:1.8; color:var(--grey-700);">
         <!-- Populated by JS -->
       </div>
 
       <div class="info-box" style="margin-top:24px;">
-        <strong>Pr&oacute;ximos passos:</strong> Ativar o workflow do cliente no n8n, enviar mensagem de teste, e confirmar que o agente est&aacute; respondendo.
+        <strong>E agora?</strong> Nossa equipe vai finalizar a configura&ccedil;&atilde;o e avisar voc&ecirc; assim que o atendimento estiver no ar &mdash; normalmente em poucas horas. N&atilde;o precisa fazer mais nada por aqui. Qualquer d&uacute;vida, fale com a gente pelo WhatsApp.
       </div>
     </div>
 
@@ -381,7 +374,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>P&aacute;gina interna Tyve &mdash; n&atilde;o indexada. <a href="/">tyve.com.br</a></p>
+    <p>Tyve &mdash; <a href="/">tyve.com.br</a></p>
     <p style="margin-top:4px;">Tyve n&atilde;o &eacute; afiliada a Meta, Facebook ou WhatsApp.</p>
   </footer>
 
@@ -463,10 +456,8 @@
 
       var details = document.getElementById('result-details');
       var html = '';
-      if (data.waba_id) html += '<strong>WABA ID:</strong> ' + data.waba_id + '<br>';
-      if (data.phone_number_id) html += '<strong>Phone Number ID:</strong> ' + data.phone_number_id + '<br>';
-      if (data.phone_number) html += '<strong>N\u00famero:</strong> ' + data.phone_number + '<br>';
-      if (!html) html = 'Conex\u00e3o realizada. Verifique o n8n para confirmar os dados.';
+      if (data.phone_number) html += '<strong>N\u00famero conectado:</strong> ' + data.phone_number + '<br>';
+      html += '<strong>Status:</strong> conectado e ativo \u2705';
       details.innerHTML = html;
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
