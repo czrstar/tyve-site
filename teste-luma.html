@@ -156,6 +156,12 @@
       <input id="testerDate" type="date" />
       <input id="testerDevice" type="text" placeholder="Dispositivo (ex: iPhone 15, Android)" />
     </div>
+
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:.82rem;font-weight:700;color:#334155;margin-bottom:6px">💡 Sugestões livres (opcional)</label>
+      <textarea id="suggestion" class="notes-input" style="width:100%;min-height:80px"
+        placeholder="Melhorias, ideias ou problemas que não couberam nos testes acima — escreva à vontade..."></textarea>
+    </div>
     <div id="resultBadgeWrap" style="margin-bottom:16px;display:none"></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-primary" onclick="enviarResultados(this)">📤 Enviar resultados</button>
@@ -525,7 +531,8 @@ function enviarResultados(btn) {
     date:   document.getElementById('testerDate').value   || new Date().toLocaleDateString('pt-BR'),
     device: document.getElementById('testerDevice').value || '—',
     pass: pass.length, fail: fail.length, skip: skip.length, pct, verdict,
-    fails: fail
+    fails: fail,
+    suggestion: (document.getElementById('suggestion')?.value || '').trim()
   };
 
   btn.disabled = true;
@@ -563,6 +570,7 @@ function resetar() {
   document.getElementById('testerName').value = '';
   document.getElementById('testerDate').value = '';
   document.getElementById('testerDevice').value = '';
+  const sug = document.getElementById('suggestion'); if (sug) sug.value = '';
   updateSummary();
 }
 
