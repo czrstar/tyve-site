@@ -413,6 +413,10 @@
     // Identidade do cliente (link personalizado: ?token=<dashboard_token>) + sessão Meta
     const SIGNUP_TOKEN = new URLSearchParams(window.location.search).get('token') || '';
     let WA_SESSION = { waba_id: '', phone_number_id: '' };
+    let AUTH_CODE = '';
+    let exchangeFired = false;
+    let exchangeTimer = null;
+    const RETRY_LABEL = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Tentar novamente';
 
     // ══════════════════════════════════════════
     // CHECKLIST LOGIC
@@ -473,6 +477,52 @@
     }
 
     // ══════════════════════════════════════════
+    // TOKEN EXCHANGE — disparado quando code E waba_id
+    // estiverem disponíveis (ordem entre FB.login callback e
+    // message event NÃO é garantida pela Meta). Fallback por
+    // timeout para não travar caso o message event não chegue.
+    // ══════════════════════════════════════════
+    function doTokenExchange() {
+      if (exchangeFired || !AUTH_CODE) return;
+      exchangeFired = true;
+      if (exchangeTimer) { clearTimeout(exchangeTimer); exchangeTimer = null; }
+
+      setStatus('loading', 'Código recebido! Trocando por token de acesso...');
+
+      fetch(CONFIG.tokenExchangeWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: AUTH_CODE,
+          token: SIGNUP_TOKEN,
+          waba_id: WA_SESSION.waba_id || "",
+          phone_number_id: WA_SESSION.phone_number_id || "",
+          timestamp: new Date().toISOString()
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        console.log("[Tyve] Token exchange response:", data);
+        var btn = document.getElementById('btn-signup');
+        if (data.success) {
+          setStatus('success', 'WhatsApp conectado com sucesso!');
+          showSuccessCard(data);
+        } else {
+          setStatus('error', 'Erro no token exchange: ' + (data.error || 'resposta inesperada do servidor'));
+          btn.disabled = false;
+          btn.innerHTML = RETRY_LABEL;
+        }
+      })
+      .catch(function(err) {
+        console.error("[Tyve] Token exchange error:", err);
+        setStatus('error', 'Erro de conexão com o servidor. Verifique se o workflow n8n está ativo.');
+        var btn = document.getElementById('btn-signup');
+        btn.disabled = false;
+        btn.innerHTML = RETRY_LABEL;
+      });
+    }
+
+    // ══════════════════════════════════════════
     // EMBEDDED SIGNUP — CORE FUNCTION
     // ══════════════════════════════════════════
     function launchEmbeddedSignup() {
@@ -485,46 +535,24 @@
         console.log("[Tyve] FB.login response:", response);
 
         if (response.authResponse) {
-          var code = response.authResponse.code;
-          console.log("[Tyve] Auth code received:", code.substring(0, 20) + "...");
+          AUTH_CODE = response.authResponse.code;
+          console.log("[Tyve] Auth code received:", AUTH_CODE.substring(0, 20) + "...");
 
-          setStatus('loading', 'C\u00f3digo recebido! Trocando por token de acesso...');
-
-          // Enviar code + token (identidade do cliente) + waba_id (capturado do evento FINISH) para n8n
-          fetch(CONFIG.tokenExchangeWebhook, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              code: code,
-              token: SIGNUP_TOKEN,
-              waba_id: WA_SESSION.waba_id || "",
-              timestamp: new Date().toISOString()
-            })
-          })
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            console.log("[Tyve] Token exchange response:", data);
-            if (data.success) {
-              setStatus('success', 'WhatsApp conectado com sucesso!');
-              showSuccessCard(data);
-            } else {
-              setStatus('error', 'Erro no token exchange: ' + (data.error || 'resposta inesperada do servidor'));
-              btn.disabled = false;
-              btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Tentar novamente';
-            }
-          })
-          .catch(function(err) {
-            console.error("[Tyve] Token exchange error:", err);
-            setStatus('error', 'Erro de conex\u00e3o com o servidor. Verifique se o workflow n8n est\u00e1 ativo.');
-            btn.disabled = false;
-            btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Tentar novamente';
-          });
+          // Code tem TTL de 30s. Se o waba_id j\u00e1 chegou pelo message event,
+          // troca agora. Sen\u00e3o, espera o message event (at\u00e9 5s) e troca como
+          // fallback mesmo sem ele (backend resolve via token granular scopes).
+          if (WA_SESSION.waba_id) {
+            doTokenExchange();
+          } else {
+            setStatus('loading', 'Aguardando dados da Meta...');
+            exchangeTimer = setTimeout(doTokenExchange, 5000);
+          }
 
         } else {
           console.log("[Tyve] User cancelled or error:", response);
           setStatus('error', 'Autoriza\u00e7\u00e3o cancelada ou erro na janela da Meta. Tente novamente.');
           btn.disabled = false;
-          btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Tentar novamente';
+          btn.innerHTML = RETRY_LABEL;
         }
       }, {
         config_id: CONFIG.configId,
@@ -556,7 +584,9 @@
 
           if (data.event === 'FINISH' || data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING' || data.event === 'FINISH_ONLY_WABA') {
             console.log("[Tyve] Embedded Signup finished:", data.event, data.data);
-            // waba_id capturado acima; phone_number_id é resolvido no backend via GET /{waba_id}/phone_numbers
+            // waba_id capturado acima; phone_number_id é resolvido no backend via GET /{waba_id}/phone_numbers.
+            // Se o code do FB.login já chegou, dispara a troca agora (com waba_id garantido).
+            if (AUTH_CODE) doTokenExchange();
           } else if (data.event === 'CANCEL') {
             console.log("[Tyve] Embedded Signup cancelled");
             setStatus('error', 'O processo foi cancelado na janela da Meta.');
