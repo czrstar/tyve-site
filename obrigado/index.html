@@ -97,11 +97,13 @@
     width: 220px;
     border-radius: 22px;
     overflow: hidden;
-    border: 1.5px solid rgba(248,65,0,0.3);
+    border: 1.5px solid rgba(248,65,0,0.65);
     box-shadow:
       0 0 0 1px rgba(255,255,255,0.04),
-      0 0 60px rgba(248,65,0,0.12),
-      0 24px 48px rgba(0,0,0,0.4);
+      0 0 12px rgba(248,65,0,0.6),
+      0 0 28px rgba(248,65,0,0.35),
+      0 0 60px rgba(248,65,0,0.18),
+      0 24px 48px rgba(0,0,0,0.5);
     background: #0a1514;
   }
 
@@ -272,10 +274,13 @@
 
   /* tagline */
   .tagline {
-    margin-top: 28px;
+    margin-top: 32px;
     font-size: 12px;
     color: rgba(255,255,255,0.2);
     letter-spacing: .05em;
+    text-align: center;
+    width: 100%;
+    max-width: 960px;
     animation: fadeUp .5s .42s ease both;
   }
 
@@ -379,10 +384,11 @@
         <a href="/" class="btn-back">← Voltar ao site</a>
       </div>
 
-      <p class="tagline">Tyve. Resolve.</p>
-
     </div>
   </div>
+
+  <p class="tagline">Tyve. Resolve.</p>
+
 </div>
 </body>
 </html>
