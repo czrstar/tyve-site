@@ -869,6 +869,39 @@
   const sectionState = {}; // 1–10: 'open' | 'done'
   let selectedPlan = '';
 
+  // ── Prefill from payment token ──
+  (async function prefillFromToken() {
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get('t');
+    if (!t) return;
+    try {
+      const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-onboarding-prefill?t=' + encodeURIComponent(t));
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.ok) return;
+
+      // Pre-fill responsavel (nome)
+      if (data.nome) {
+        const respField = document.querySelector('[name="responsavel"]');
+        if (respField && !respField.value) respField.value = data.nome;
+      }
+      // Pre-fill email
+      if (data.email) {
+        const emailField = document.querySelector('[name="client_email"]');
+        if (emailField && !emailField.value) emailField.value = data.email;
+      }
+      // Pre-fill WhatsApp
+      if (data.telefone) {
+        const waField = document.querySelector('[name="numero_whatsapp"]');
+        if (waField && !waField.value) waField.value = data.telefone;
+      }
+      // Auto-select plan
+      if (data.plano && ['atende','cresce','escala'].includes(data.plano)) {
+        selectPlan(data.plano);
+      }
+    } catch(e) { /* silently ignore — form still works without prefill */ }
+  })();
+
   // ── Plan picker ──
   const PLAN_LABELS = {
     atende: 'Atende', cresce: 'Cresce', escala: 'Escala'
