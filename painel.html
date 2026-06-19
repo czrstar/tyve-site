@@ -554,7 +554,7 @@
         <div class="card-title">⭐ Satisfação dos clientes</div>
         <div class="card-sub">NPS — Net Promoter Score</div>
         <div class="nps-row" style="margin-bottom:20px">
-          <div class="nps-stat"><div class="nps-val" id="npsScore">–</div><div class="nps-lbl">NPS Score</div></div>
+          <div class="nps-stat"><div class="nps-val" id="npsScore">–</div><div class="nps-lbl">NPS Score</div><div id="npsClass" style="font-size:11px;font-weight:700;margin-top:4px;letter-spacing:.02em"></div></div>
           <div class="nps-stat"><div class="nps-val" style="color:var(--teal)" id="npsAvg">–</div><div class="nps-lbl">Nota média</div></div>
           <div class="nps-stat"><div class="nps-val" id="npsRate">–</div><div class="nps-lbl">Taxa de resposta</div></div>
         </div>
@@ -819,7 +819,9 @@ function renderNPS(d) {
   const score = Number(d.nps_score||0);
   const scoreEl = document.getElementById('npsScore');
   scoreEl.textContent = (score>0?'+':'')+score;
-  scoreEl.style.color = score>=50?'var(--orange)':score>=0?'var(--teal)':score>=-20?'var(--amber)':'var(--red)';
+  const npsCls = score>=50?['Excelente','var(--orange)']:score>=0?['Bom','var(--teal)']:score>=-49?['Atenção','var(--amber)']:['Crítico','var(--red)'];
+  scoreEl.style.color = npsCls[1];
+  const clsEl = document.getElementById('npsClass'); if(clsEl){ clsEl.textContent = npsCls[0]; clsEl.style.color = npsCls[1]; }
   document.getElementById('npsAvg').textContent  = (+d.nps_avg>0) ? (+d.nps_avg).toFixed(1)+'/10' : '–';
   const resp = Number(d.nps_responses||0);
   document.getElementById('npsRate').textContent = sent>0 ? Math.round(resp/sent*100)+'%' : '–';
