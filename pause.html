@@ -112,24 +112,26 @@
   const params = new URLSearchParams(location.search);
   const chatId = params.get('chat') || '';
   const instance = params.get('instance') || '';
+  const token = params.get('token') || '';
 
   const infoBox = document.getElementById('info-box');
   const infoChat = document.getElementById('info-chat');
   const infoInstance = document.getElementById('info-instance');
 
-  if (chatId) {
+  if (chatId && instance && token) {
     const formatted = chatId.length >= 11
       ? '+' + chatId.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '$1 ($2) $3-$4')
       : chatId;
     infoChat.textContent = formatted;
     infoInstance.textContent = instance ? 'Instância: ' + instance : '';
   } else {
-    infoChat.textContent = 'Parâmetros inválidos';
+    infoChat.textContent = 'Link inválido ou expirado';
+    infoInstance.textContent = 'Use o link da notificação de encaminhamento.';
     document.getElementById('pause-btn').disabled = true;
   }
 
   async function doPause() {
-    if (!chatId || !instance) return;
+    if (!chatId || !instance || !token) return;
     const btn = document.getElementById('pause-btn');
     const status = document.getElementById('status');
     const hours = document.getElementById('hours-select').value;
@@ -143,7 +145,7 @@
       const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-pause-bot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, instance, hours: parseInt(hours) })
+        body: JSON.stringify({ chat_id: chatId, instance, token, hours: parseInt(hours) })
       });
       const data = await res.json();
       if (data.ok) {
