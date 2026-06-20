@@ -844,6 +844,10 @@
     <div class="submit-card" id="submitCard" style="display:none">
       <h3>Tudo pronto! 🎉</h3>
       <p>Revisamos suas respostas e ativamos seu assistente em até 48 horas. Você será contatado pela equipe para aprovar a V1 antes de ir ao ar.</p>
+      <label id="aceiteWrap" style="display:flex;align-items:flex-start;gap:10px;text-align:left;margin:18px 0;font-size:14px;line-height:1.5;cursor:pointer;">
+        <input type="checkbox" id="aceite_termos" name="aceite_termos" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:#f84100;" />
+        <span>Li e aceito os <a href="/termos.html" target="_blank" style="color:#f84100;font-weight:600;">Termos de Serviço</a> e a <a href="/privacy.html" target="_blank" style="color:#f84100;font-weight:600;">Política de Privacidade</a> da Tyve.</span>
+      </label>
       <button type="submit" class="btn-submit">
         ⚡ Enviar formulário
       </button>
@@ -1059,6 +1063,17 @@
         return;
       }
     }
+    // Validate Termos acceptance (required)
+    const aceiteBox = document.getElementById('aceite_termos');
+    if (!aceiteBox || !aceiteBox.checked) {
+      const wrap = document.getElementById('aceiteWrap');
+      if (wrap) {
+        wrap.style.color = '#ef4444';
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => wrap.style.color = '', 3000);
+      }
+      return;
+    }
     const submitBtn = form.querySelector('.btn-submit');
     submitting = true;
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
@@ -1098,6 +1113,9 @@
         objetivos:             objetivos,
         plano_contratado:      fields.plano_contratado || '',
         link_agenda:           fields.link_agenda || '',
+        aceite_termos:         true,
+        termos_versao:         '2026-06-20',
+        prefill_token:         new URLSearchParams(window.location.search).get('t') || '',
         submitted_at:          new Date().toISOString()
       };
       const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-onboarding-form', {
