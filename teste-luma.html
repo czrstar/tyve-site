@@ -267,7 +267,7 @@ const SECTIONS = [
     ]
   },
   {
-    title: "4 — Áudio e Buffer",
+    title: "4 — Áudio, Imagem e Buffer",
     color: "green",
     tests: [
       {
@@ -278,6 +278,16 @@ const SECTIONS = [
           "Aguarde até 30 segundos"
         ],
         expected: "Luma responde ao conteúdo do áudio corretamente (transcrição via Whisper). Sem erro nem execução presa."
+      },
+      {
+        id: 17, pri: "critico",
+        title: "Imagem → Claude Vision entende → Luma responde (novo 21/06)",
+        steps: [
+          "Envie uma FOTO para o número oficial da Luma (ex: print de uma tabela de preços, foto de um produto, ou um documento com texto)",
+          "Opcional: escreva uma legenda junto com a foto (ex: \"isso aqui tá certo?\")",
+          "Aguarde até 30 segundos"
+        ],
+        expected: "A Luma demonstra que ENTENDEU a imagem — descreve/cita o que está nela (texto, números, do que se trata) e responde com base nisso. Se não conseguir processar, pede educadamente que você descreva por texto e aciona um atendente — nunca ignora nem trava."
       },
       {
         id: 10, pri: "medio",
