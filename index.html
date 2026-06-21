@@ -192,6 +192,13 @@
   .pricing { padding: 24px 0 88px; background: var(--light); }
   .pricing-header { text-align: center; margin-bottom: 48px; }
   .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; align-items: stretch; }
+  .biz-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .biz-toggle-btn { background: #f0f0f0; border: 1px solid #e2e2e2; color: var(--txt); padding: 10px 22px; border-radius: 100px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all .2s; }
+  .biz-toggle-btn:hover { border-color: var(--orange); }
+  .biz-toggle-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+  .ecom-explainer { background: rgba(248,65,0,.05); border: 1px solid rgba(248,65,0,.18); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; line-height: 1.6; color: var(--txt); }
+  .ecom-enterprise-note { text-align: center; margin-top: 18px; font-size: 13px; color: #666; }
+  .plan-name .plan-seg { font-size: 11px; color: var(--orange); font-weight: 700; }
   .plan {
     background: #fff; border: 1.5px solid rgba(0,232,223,.35);
     border-radius: 18px; padding: 28px 24px; position: relative;
@@ -610,12 +617,13 @@
       <h2 class="section-title section-title-dark" data-i18n-html="fw_h2">Pra quem tem negócio local<br/>e WhatsApp que não para de tocar</h2>
     </div>
     <div class="for-who-grid">
-      <a href="/odontologia" class="segment-card"><div class="segment-icon">🦷</div><h3 data-i18n="fw_c1">Clínicas e Consultórios</h3><span class="segment-link" data-i18n="fw_more">Saiba mais →</span></a>
+      <div class="segment-card"><div class="segment-icon">🦷</div><h3 data-i18n="fw_c1">Clínicas e Consultórios</h3></div>
       <div class="segment-card"><div class="segment-icon">💆</div><h3 data-i18n="fw_c2">Estética e Beleza</h3></div>
       <div class="segment-card"><div class="segment-icon">🏠</div><h3 data-i18n="fw_c3">Imobiliárias</h3></div>
       <div class="segment-card"><div class="segment-icon">🚗</div><h3 data-i18n="fw_c4">Oficinas e Auto</h3></div>
       <div class="segment-card"><div class="segment-icon">⚖️</div><h3 data-i18n="fw_c5">Advogados e Contadores</h3></div>
       <div class="segment-card"><div class="segment-icon">🏋️</div><h3 data-i18n="fw_c6">Academias e Escolas</h3></div>
+      <a href="#planos-ecommerce" class="segment-card" data-ecom-trigger><div class="segment-icon">🛒</div><h3 data-i18n="fw_c7">E-commerce / Loja online</h3><span class="segment-link">Ver planos →</span></a>
     </div>
   </div>
 </section>
@@ -657,6 +665,12 @@
       <h2 class="section-title section-title-dark" data-i18n="plans_h2">Investimento direto. Resultado real.</h2>
     </div>
 
+    <div class="biz-toggle" id="planos-ecommerce">
+      <button class="biz-toggle-btn active" data-biz="servicos" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+      <button class="biz-toggle-btn" data-biz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+    </div>
+
+    <div id="grid-servicos">
     <div class="pricing-grid">
       <div class="plan">
         <p class="plan-name" data-i18n="plan_atende">Atende</p>
@@ -730,6 +744,67 @@
         <span class="addon-amount" data-addon-brl="197">+R$197</span><span class="addon-period" data-i18n="per_month">/mês</span>
         <p class="addon-note" data-i18n="addon_note1">Para Atende e Cresce</p>
       </div>
+    </div>
+    </div><!-- /grid-servicos -->
+
+    <div id="grid-ecommerce" style="display:none">
+      <div class="ecom-explainer">
+        <strong>Qual plano é o seu?</strong> Se você quer a Tyve respondendo as dúvidas da sua loja — frete, prazo, troca, numeração e pagamento — e encaminhando o resto, o <b>Atende</b> ou o <b>Cresce</b> já resolvem. Se quer a Tyve respondendo <b>"cadê meu pedido?" sozinha</b> — consultando status e rastreio de verdade e gerando o <b>Pix dentro da conversa</b> — esse é o <b>Escala</b>, com integração à sua loja.
+      </div>
+      <div class="pricing-grid">
+        <div class="plan">
+          <p class="plan-name">Atende <span class="plan-seg">E-commerce</span></p>
+          <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period">/mês</span></div>
+          <p class="plan-tagline">Até 1.000 contatos atendidos/mês</p>
+          <hr class="plan-divider"/>
+          <ul class="plan-features">
+            <li>1 número WhatsApp</li>
+            <li>Fluxo configurado pra sua loja</li>
+            <li>Respostas automáticas 24h/7d</li>
+            <li>Entende mensagens de texto e de voz 🎙️</li>
+            <li>FAQ de e-commerce: frete, prazo, troca, numeração, pagamento</li>
+            <li>Tabela de numeração e catálogo no WhatsApp (PDF) 👟</li>
+            <li>Triagem e encaminhamento com resumo</li>
+            <li>Detecta clientes frustrados e prioriza ⚠️</li>
+            <li>1 ajuste por mês · Suporte (SLA 8h)</li>
+          </ul>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Atende%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener">Quero o Atende</a>
+        </div>
+
+        <div class="plan featured">
+          <div class="plan-badge-top">MAIS POPULAR</div>
+          <p class="plan-name">Cresce <span class="plan-seg">E-commerce</span></p>
+          <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period">/mês</span></div>
+          <p class="plan-tagline">Até 3.000 contatos atendidos/mês</p>
+          <hr class="plan-divider"/>
+          <ul class="plan-features">
+            <li class="feature-all">Tudo do Atende</li>
+            <li>Pesquisa de satisfação automática (NPS)</li>
+            <li>O agente envia link de pagamento e orienta 2ª via</li>
+            <li>Resumo semanal por email</li>
+            <li>1 ajuste por semana</li>
+            <li>Suporte prioritário (SLA 4h)</li>
+          </ul>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Cresce%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener">Quero o Cresce</a>
+        </div>
+
+        <div class="plan">
+          <p class="plan-name">Escala <span class="plan-seg">E-commerce</span></p>
+          <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period">/mês</span></div>
+          <p class="plan-tagline">Até 5.000 contatos/mês</p>
+          <hr class="plan-divider"/>
+          <ul class="plan-features">
+            <li class="feature-all">Tudo do Cresce</li>
+            <li>⭐ Consulta de pedido e rastreio ao vivo (integrado à sua loja)</li>
+            <li>⭐ Pix gerado dentro da conversa</li>
+            <li>Painel de resultados + relatório mensal PDF</li>
+            <li>Múltiplos fluxos e segmentações</li>
+            <li>Reunião mensal · Gerente dedicado (SLA 2h)</li>
+          </ul>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Escala%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener">Quero o Escala</a>
+        </div>
+      </div>
+      <p class="ecom-enterprise-note">Loja com mais de 5.000 contatos/mês? Fala com a gente — tem o <b>Escala Enterprise</b>, sob medida.</p>
     </div>
 
   </div>
@@ -1080,7 +1155,8 @@ var T = {
     fw_h2:'Pra quem tem negócio local<br/>e WhatsApp que não para de tocar',
     fw_c1:'Clínicas e Consultórios', fw_c2:'Estética e Beleza', fw_c3:'Imobiliárias',
     fw_c4:'Oficinas e Auto', fw_c5:'Advogados e Contadores', fw_c6:'Academias e Escolas',
-    fw_more:'Saiba mais →',
+    fw_c7:'E-commerce / Loja online', fw_more:'Saiba mais →',
+    biz_servicos:'Serviços e Negócios locais', biz_ecommerce:'🛒 E-commerce / Loja online',
     plans_label:'Planos', plans_h2:'Investimento direto. Resultado real.',
     plans_popular:'MAIS POPULAR', plans_volume:'MAIS VOLUME', per_month:'/mês',
     plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
@@ -1246,7 +1322,8 @@ var T = {
     fw_h2:'For local businesses with a WhatsApp<br/>that never stops ringing',
     fw_c1:'Clinics & Medical Offices', fw_c2:'Beauty & Aesthetics', fw_c3:'Real Estate',
     fw_c4:'Auto Shops', fw_c5:'Lawyers & Accountants', fw_c6:'Gyms & Schools',
-    fw_more:'Learn more →',
+    fw_c7:'E-commerce / Online store', fw_more:'Learn more →',
+    biz_servicos:'Services & Local business', biz_ecommerce:'🛒 E-commerce / Online store',
     plans_label:'Plans', plans_h2:'Straightforward pricing. Real results.',
     plans_popular:'MOST POPULAR', plans_volume:'MORE VOLUME', per_month:'/mo',
     plan_atende:'Answers', plan_cresce:'Grows', plan_escala:'Scales', plan_convstd:'Converts Standard', plan_convpro:'Converts Pro',
@@ -1474,6 +1551,25 @@ window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visi
   var saved;
   try { saved = localStorage.getItem('tyve-lang'); } catch(e) {}
   if (saved && saved !== 'pt') setLang(saved);
+})();
+
+// Toggle tipo de negócio (Serviços <-> E-commerce)
+(function(){
+  function setBiz(b){
+    var s=document.getElementById('grid-servicos'), e=document.getElementById('grid-ecommerce');
+    if(!s||!e) return;
+    var ecom = (b==='ecommerce');
+    s.style.display = ecom ? 'none' : '';
+    e.style.display = ecom ? '' : 'none';
+    document.querySelectorAll('.biz-toggle-btn').forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-biz')===b); });
+  }
+  document.querySelectorAll('.biz-toggle-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setBiz(btn.getAttribute('data-biz')); });
+  });
+  document.querySelectorAll('[data-ecom-trigger]').forEach(function(el){
+    el.addEventListener('click', function(){ setBiz('ecommerce'); });
+  });
+  if (location.hash === '#planos-ecommerce') { setBiz('ecommerce'); }
 })();
 </script>
 </body>
