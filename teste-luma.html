@@ -113,7 +113,7 @@
   <div class="logo-fallback">T</div>
   <div>
     <div class="header-title">TYVE — Checklist de Testes · Luma (Bot de Vendas)</div>
-    <div class="header-sub">Número oficial da Luma +55 16 99424-7541 · Leads no grupo "Leads TYVE" · v1.1 — Jun/2026</div>
+    <div class="header-sub">Número oficial da Luma +55 16 99424-7541 · Notificações de lead no WhatsApp da equipe (Ana/Renato) · v1.2 — Jun/2026</div>
   </div>
   <div class="header-right">
     <div class="progress-wrap">
@@ -129,7 +129,7 @@
   <div class="infobar">
     <strong>Como usar:</strong> Vocês são <strong>prospects fingindo querer contratar a TYVE</strong>. Mandem mensagens pela Luma no número oficial
     <span class="phone-chip highlight">+55 16 99424-7541</span>.
-    As notificações de lead chegam no grupo <strong>"Leads TYVE"</strong> (vocês dois estão nele) — fiquem de olho lá.
+    As notificações de lead chegam direto no <strong>WhatsApp da Ana e do Renato</strong> (via Cloud API, template <code>tyve_encaminhamento</code>) — confirmem com eles se a notificação chegou.
     Marquem <strong>✅ Pass</strong>, <strong>❌ Fail</strong> ou <strong>⏭ Skip</strong> em cada teste e usem as notas pra registrar bugs.
     Dica: testem em uma <strong>conversa nova</strong> (número que nunca falou com a Luma) pra exercitar o fluxo do início.
     Tags: <span class="tag tag-critico">crítico</span> = bloqueia ·
@@ -243,26 +243,26 @@ const SECTIONS = [
     ]
   },
   {
-    title: "3 — Notificação de Lead (grupo Leads TYVE)",
+    title: "3 — Notificação de Lead (WhatsApp da equipe)",
     color: "purple",
     tests: [
       {
         id: 7, pri: "critico",
-        title: "Lead notificado no grupo com nome + WhatsApp",
+        title: "Lead notificado no WhatsApp da equipe com nome + WhatsApp",
         steps: [
           "Complete a qualificação fornecendo seu nome e WhatsApp quando a Luma pedir",
-          "Abra o grupo \"Leads TYVE\" e verifique"
+          "Confirme com Ana/Renato se a notificação chegou no WhatsApp deles"
         ],
-        expected: "Chega uma notificação de lead no grupo \"Leads TYVE\" com: NOME, WHATSAPP e um resumo do interesse/contexto. (Obs: nº TYVE está PENDING → o grupo é notificado via Evolution.)"
+        expected: "Chega uma notificação de lead no WhatsApp da equipe (Ana + Renato) com: NOME, WHATSAPP e um resumo do interesse/contexto, via template tyve_encaminhamento (Cloud API)."
       },
       {
         id: 8, pri: "critico",
         title: "Handoff explícito → equipe acionada",
         steps: [
           "Diga \"quero falar com uma pessoa\" ou \"quero fechar agora\"",
-          "Aguarde a resposta + verifique o grupo Leads TYVE"
+          "Aguarde a resposta + confirme com Ana/Renato se a notificação chegou"
         ],
-        expected: "Luma confirma que vai te conectar com o time, e a notificação de handoff chega no grupo Leads TYVE com seu número e o contexto da conversa."
+        expected: "Luma confirma que vai te conectar com o time, e a notificação de handoff chega no WhatsApp da equipe (Ana + Renato) com seu número e o contexto da conversa."
       }
     ]
   },
@@ -341,7 +341,7 @@ const SECTIONS = [
         title: "iPhone (@lid) — coleta de número funciona",
         steps: [
           "SE você testar de um iPhone: complete a qualificação informando seu WhatsApp",
-          "Verifique a notificação no grupo Leads TYVE",
+          "Confirme a notificação no WhatsApp da equipe (Ana/Renato)",
           "Se testar de Android, marque Skip"
         ],
         expected: "Mesmo no iPhone (@lid), a notificação de lead traz o WhatsApp que você informou no Estágio 1 (COMPOSE_NOTIF busca o número no texto da conversa)."
