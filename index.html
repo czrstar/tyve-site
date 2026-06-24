@@ -1624,12 +1624,11 @@ function renderCycle(){
 
       if (CICLO === 'anual' && !isEN) {
         var total = brl * 10, parcela = brl * 10 / 12, econ = brl * 2;
-        amtEl.textContent = formatBRL(total);
-        if (perEl) perEl.textContent = '/ano';
+        amtEl.textContent = parcela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+        if (perEl) perEl.textContent = '/mês';
         if (noteEl) {
           noteEl.style.display = 'block';
-          noteEl.innerHTML = '12x de R$' + parcela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) +
-            ' sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
+          noteEl.innerHTML = 'R$' + formatBRL(total) + '/ano em 12x sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
         }
         if (btn) {
           if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano=([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar?plano=' + mm[1] + '&ciclo=anual'); }
