@@ -766,10 +766,15 @@
       <div class="ecom-explainer">
         <strong>Qual plano é o seu?</strong> Se você quer a Tyve respondendo as dúvidas da sua loja — frete, prazo, troca, numeração e pagamento — e encaminhando o resto, o <b>Atende</b> ou o <b>Cresce</b> já resolvem. Se quer a Tyve respondendo <b>"cadê meu pedido?" sozinha</b> — consultando status e rastreio de verdade e gerando o <b>Pix dentro da conversa</b> — esse é o <b>Escala</b>, com integração à sua loja.
       </div>
+      <div class="cycle-toggle" id="cycle-toggle-ecom">
+        <button class="cycle-btn active" data-ciclo="mensal" type="button">Mensal</button>
+        <button class="cycle-btn" data-ciclo="anual" type="button">Anual <span class="cycle-badge">2 meses grátis</span></button>
+      </div>
       <div class="pricing-grid">
         <div class="plan">
           <p class="plan-name">Atende <span class="plan-seg">E-commerce</span></p>
           <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period">/mês</span></div>
+          <p class="plan-annual-note" style="display:none"></p>
           <p class="plan-tagline">Até 1.000 contatos atendidos/mês</p>
           <hr class="plan-divider"/>
           <ul class="plan-features">
@@ -790,6 +795,7 @@
           <div class="plan-badge-top">MAIS POPULAR</div>
           <p class="plan-name">Cresce <span class="plan-seg">E-commerce</span></p>
           <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period">/mês</span></div>
+          <p class="plan-annual-note" style="display:none"></p>
           <p class="plan-tagline">Até 3.000 contatos atendidos/mês</p>
           <hr class="plan-divider"/>
           <ul class="plan-features">
@@ -806,6 +812,7 @@
         <div class="plan">
           <p class="plan-name">Escala <span class="plan-seg">E-commerce</span></p>
           <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period">/mês</span></div>
+          <p class="plan-annual-note" style="display:none"></p>
           <p class="plan-tagline">Até 5.000 contatos/mês</p>
           <hr class="plan-divider"/>
           <ul class="plan-features">
@@ -1592,41 +1599,55 @@ window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visi
 
 // Toggle Mensal <-> Anual (2 meses grátis · BR only) — apenas grid Serviços
 var CICLO = 'mensal';
+function waEcom(nome, anual){
+  var txt = 'Oi, quero o ' + nome + ' E-commerce' + (anual ? ' ANUAL (2 meses grátis)' : '') + ' (site)!';
+  return 'https://wa.me/5516994247541?text=' + encodeURIComponent(txt);
+}
 function renderCycle(){
   var isEN = (currentLang === 'en');
-  var ct = document.getElementById('cycle-toggle');
-  if (ct) ct.style.display = isEN ? 'none' : '';
+  document.querySelectorAll('.cycle-toggle').forEach(function(ct){ ct.style.display = isEN ? 'none' : ''; });
   if (isEN) CICLO = 'mensal'; // plano anual 12x é oferta BR
   document.querySelectorAll('.cycle-btn').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-ciclo') === CICLO);
   });
-  document.querySelectorAll('#grid-servicos .pricing-grid .plan').forEach(function(card){
-    var amtEl = card.querySelector('.plan-amount[data-brl]');
-    if (!amtEl) return;
-    var perEl = card.querySelector('.plan-period');
-    var noteEl = card.querySelector('.plan-annual-note');
-    var btn = card.querySelector('.btn-plan');
-    var brl = parseInt(amtEl.getAttribute('data-brl'), 10);
-    var plano = '';
-    if (btn) { var mm = (btn.getAttribute('href') || '').match(/plano=([a-z]+)/); if (mm) plano = mm[1]; }
 
-    if (CICLO === 'anual' && !isEN) {
-      var total = brl * 10, parcela = brl * 10 / 12, econ = brl * 2;
-      amtEl.textContent = formatBRL(total);
-      if (perEl) perEl.textContent = '/ano';
-      if (noteEl) {
-        noteEl.style.display = 'block';
-        noteEl.innerHTML = '12x de R$' + parcela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) +
-          ' sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
+  function applyCards(sel, kind){
+    document.querySelectorAll(sel).forEach(function(card){
+      var amtEl = card.querySelector('.plan-amount[data-brl]');
+      if (!amtEl) return;
+      var perEl = card.querySelector('.plan-period');
+      var noteEl = card.querySelector('.plan-annual-note');
+      var btn = card.querySelector('.btn-plan');
+      var brl = parseInt(amtEl.getAttribute('data-brl'), 10);
+      var nome = '';
+      if (card.querySelector('.plan-name')) nome = card.querySelector('.plan-name').firstChild.textContent.trim();
+
+      if (CICLO === 'anual' && !isEN) {
+        var total = brl * 10, parcela = brl * 10 / 12, econ = brl * 2;
+        amtEl.textContent = formatBRL(total);
+        if (perEl) perEl.textContent = '/ano';
+        if (noteEl) {
+          noteEl.style.display = 'block';
+          noteEl.innerHTML = '12x de R$' + parcela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) +
+            ' sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
+        }
+        if (btn) {
+          if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano=([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar?plano=' + mm[1] + '&ciclo=anual'); }
+          else { btn.setAttribute('href', waEcom(nome, true)); }
+        }
+      } else {
+        amtEl.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
+        if (perEl) perEl.textContent = (T[currentLang] && T[currentLang].per_month) || '/mês';
+        if (noteEl) noteEl.style.display = 'none';
+        if (btn) {
+          if (kind === 'servicos') { var mm2 = (btn.getAttribute('href') || '').match(/plano=([a-z]+)/); if (mm2) btn.setAttribute('href', '/assinar?plano=' + mm2[1]); }
+          else { btn.setAttribute('href', waEcom(nome, false)); }
+        }
       }
-      if (btn && plano) btn.setAttribute('href', '/assinar?plano=' + plano + '&ciclo=anual');
-    } else {
-      amtEl.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
-      if (perEl) perEl.textContent = (T[currentLang] && T[currentLang].per_month) || '/mês';
-      if (noteEl) noteEl.style.display = 'none';
-      if (btn && plano) btn.setAttribute('href', '/assinar?plano=' + plano);
-    }
-  });
+    });
+  }
+  applyCards('#grid-servicos .pricing-grid .plan', 'servicos');
+  applyCards('#grid-ecommerce .pricing-grid .plan', 'ecom');
 }
 document.querySelectorAll('.cycle-btn').forEach(function(b){
   b.addEventListener('click', function(){ CICLO = b.getAttribute('data-ciclo'); renderCycle(); });
