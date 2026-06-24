@@ -200,6 +200,11 @@
     font-size: 13.5px; font-weight: 600; color: #0a8f89;
     display: flex; align-items: center; gap: 8px;
   }
+  .sum-annual-line {
+    margin-top: 8px;
+    font-size: 13.5px; font-weight: 600; color: var(--orange);
+  }
+  .sum-annual-line .save { color: rgba(17,30,29,0.55); font-weight: 500; }
 
   /* right column */
   .aside {
@@ -316,17 +321,18 @@
     <!-- LEFT: order summary -->
     <div class="summary">
       <div class="badge" id="sum-badge" style="display:none">MAIS POPULAR</div>
-      <p class="sum-label">Seu plano</p>
+      <p class="sum-label" id="sum-label">Seu plano</p>
       <p class="sum-name" id="sum-name">Cresce</p>
       <p class="sum-tag" id="sum-tag">Até 500 contatos atendidos/mês</p>
       <div class="sum-price">
-        <span class="cur">R$</span><span class="amt" id="sum-amt">697</span><span class="per">/mês</span>
+        <span class="cur">R$</span><span class="amt" id="sum-amt">697</span><span class="per" id="sum-per">/mês</span>
       </div>
+      <p class="sum-annual-line" id="sum-annual-line" style="display:none"></p>
       <hr class="sum-div" />
       <ul class="sum-feats" id="sum-feats"></ul>
-      <div class="sum-noloy">
+      <div class="sum-noloy" id="sum-noloy">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#0a8f89" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Sem fidelidade — cancela quando quiser.
+        <span id="sum-noloy-text">Sem fidelidade — cancela quando quiser.</span>
       </div>
     </div>
 
@@ -337,7 +343,7 @@
         <div class="nsteps">
           <div class="nstep">
             <div class="nnum">1</div>
-            <div class="ntext">Pagamento seguro<span>Você vai para o ambiente do Asaas e escolhe Pix, cartão ou boleto.</span></div>
+            <div class="ntext">Pagamento seguro<span id="now-step1">Você vai para o ambiente do Asaas e escolhe Pix, cartão ou boleto.</span></div>
           </div>
           <div class="nstep">
             <div class="nnum">2</div>
@@ -398,7 +404,8 @@
         'Alerta com resumo completo da conversa',
         '1 ajuste por mês + suporte via WhatsApp'
       ],
-      asaas: 'https://www.asaas.com/c/k31h5eo13jee7aps'
+      asaas: 'https://www.asaas.com/c/k31h5eo13jee7aps',
+      asaasAnual: 'https://www.asaas.com/c/i6c0rxnbuhs87yfz'
     },
     cresce: {
       name: 'Cresce',
@@ -410,9 +417,10 @@
         'Follow-up automático D+1',
         'Pesquisa de satisfação automática (NPS)',
         'Resumo semanal por e-mail',
-        '1 ajuste por semana + suporte prioritário (SLA 4h)'
+        '1 ajuste por semana + suporte prioritário (retorno em até 4h)'
       ],
-      asaas: 'https://www.asaas.com/c/kwj0xhyvv5z8zptl'
+      asaas: 'https://www.asaas.com/c/kwj0xhyvv5z8zptl',
+      asaasAnual: 'https://www.asaas.com/c/i5lmav7f0egxurij'
     },
     escala: {
       name: 'Escala',
@@ -424,26 +432,21 @@
         'Follow-up D+1 e D+3',
         'Painel de resultados + relatório mensal em PDF',
         'Agendamento nativo no WhatsApp',
-        'Gerente de conta dedicado (SLA 2h)'
+        'Gerente de conta dedicado (retorno em até 2h)'
       ],
-      asaas: 'https://www.asaas.com/c/nbu4h9mut7icws97'
+      asaas: 'https://www.asaas.com/c/nbu4h9mut7icws97',
+      asaasAnual: 'https://www.asaas.com/c/fy2yys06g6s3tcnz'
     }
   };
 
-  function getPlano() {
-    var p = (new URLSearchParams(window.location.search).get('plano') || '').toLowerCase().trim();
-    return PLANS[p] ? p : 'cresce';
-  }
+  function getParam(n){ return (new URLSearchParams(window.location.search).get(n) || '').toLowerCase().trim(); }
+  function getPlano(){ var p = getParam('plano'); return PLANS[p] ? p : 'cresce'; }
+  function isAnual(){ return getParam('ciclo') === 'anual'; }
+  function fmtBR(n, dec){ return n.toLocaleString('pt-BR', { minimumFractionDigits: dec||0, maximumFractionDigits: dec||0 }); }
 
   var key = getPlano();
   var plan = PLANS[key];
-
-  document.getElementById('sum-name').textContent = plan.name;
-  document.getElementById('sum-tag').textContent = plan.tag;
-  document.getElementById('sum-amt').textContent = plan.amt;
-  document.title = 'Confirme seu plano ' + plan.name + ' · Tyve ⚡';
-
-  if (plan.popular) document.getElementById('sum-badge').style.display = 'block';
+  var anual = isAnual();
 
   var ul = document.getElementById('sum-feats');
   var check = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="rgba(248,65,0,0.12)"/><path d="M7.5 12.2l3 3 6-6.4" stroke="#f84100" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -453,13 +456,37 @@
     ul.appendChild(li);
   });
 
-  var btn = document.getElementById('btn-pay');
-  btn.setAttribute('href', plan.asaas);
+  document.getElementById('sum-name').textContent = plan.name;
+  document.getElementById('sum-tag').textContent = plan.tag;
+  if (plan.popular) document.getElementById('sum-badge').style.display = 'block';
 
-  // WhatsApp doubt link mentions the chosen plan
+  var mensal = parseInt(plan.amt, 10);
+  var btn = document.getElementById('btn-pay');
+
+  if (anual) {
+    var total = mensal * 10;      // 2 meses grátis = paga 10
+    var parcela = total / 12;     // 12x sem juros
+    var economia = mensal * 2;    // economia no ano
+    document.getElementById('sum-label').textContent = 'Seu plano · anual';
+    document.getElementById('sum-amt').textContent = fmtBR(total);
+    document.getElementById('sum-per').textContent = '/ano';
+    var al = document.getElementById('sum-annual-line');
+    al.style.display = 'block';
+    al.innerHTML = '12x de R$' + fmtBR(parcela, 2) +
+      ' sem juros <span class="save">· ou à vista no Pix/boleto · economize R$' + fmtBR(economia) + '/ano</span>';
+    document.getElementById('sum-noloy-text').textContent = 'Plano anual — 2 meses grátis. Você garante 12 meses.';
+    document.getElementById('now-step1').textContent = 'Você escolhe: 12x no cartão sem juros, ou Pix/boleto à vista.';
+    btn.setAttribute('href', plan.asaasAnual);
+    document.title = 'Confirme seu plano ' + plan.name + ' anual · Tyve ⚡';
+  } else {
+    document.getElementById('sum-amt').textContent = plan.amt;
+    btn.setAttribute('href', plan.asaas);
+    document.title = 'Confirme seu plano ' + plan.name + ' · Tyve ⚡';
+  }
+
   document.getElementById('wa-link').setAttribute(
     'href',
-    'https://wa.me/5516994247541?text=' + encodeURIComponent('Oi, tenho uma dúvida sobre o plano ' + plan.name + ' (site)!')
+    'https://wa.me/5516994247541?text=' + encodeURIComponent('Oi, tenho uma dúvida sobre o plano ' + plan.name + (anual ? ' anual' : '') + ' (site)!')
   );
 </script>
 </body>

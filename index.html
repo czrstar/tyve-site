@@ -196,6 +196,14 @@
   .biz-toggle-btn { background: #f0f0f0; border: 1px solid #e2e2e2; color: var(--txt); padding: 10px 22px; border-radius: 100px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all .2s; }
   .biz-toggle-btn:hover { border-color: var(--orange); }
   .biz-toggle-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+  .cycle-toggle { display: flex; justify-content: center; align-items: center; gap: 8px; margin: -8px 0 26px; flex-wrap: wrap; }
+  .cycle-btn { background: #f0f0f0; border: 1px solid #e2e2e2; color: var(--txt); padding: 9px 20px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+  .cycle-btn:hover { border-color: var(--orange); }
+  .cycle-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+  .cycle-badge { background: var(--orange); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 100px; }
+  .cycle-btn.active .cycle-badge { background: #fff; color: var(--orange); }
+  .plan-annual-note { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--orange); line-height: 1.4; }
+  .plan-annual-note .save { display: block; color: rgba(0,0,0,.45); font-weight: 500; font-size: 12px; margin-top: 2px; }
   .ecom-explainer { background: rgba(248,65,0,.05); border: 1px solid rgba(248,65,0,.18); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; line-height: 1.6; color: var(--txt); }
   .ecom-enterprise-note { text-align: center; margin-top: 18px; font-size: 13px; color: #666; }
   .plan-name .plan-seg { font-size: 11px; color: var(--orange); font-weight: 700; }
@@ -671,10 +679,15 @@
     </div>
 
     <div id="grid-servicos">
+    <div class="cycle-toggle" id="cycle-toggle">
+      <button class="cycle-btn active" data-ciclo="mensal" type="button">Mensal</button>
+      <button class="cycle-btn" data-ciclo="anual" type="button">Anual <span class="cycle-badge">2 meses grátis</span></button>
+    </div>
     <div class="pricing-grid">
       <div class="plan">
         <p class="plan-name" data-i18n="plan_atende">Atende</p>
         <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
         <p class="plan-tagline" data-i18n="atende_tagline">Até 200 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -687,7 +700,7 @@
           <li data-i18n="atende_f7">Detecta clientes frustrados e alerta com prioridade ⚠️</li>
           <li data-i18n="atende_f8">Lembrete automático se o cliente esperar +12h sem retorno</li>
           <li data-i18n="atende_f9">1 ajuste por mês</li>
-          <li data-i18n="atende_f10">Suporte via WhatsApp (SLA 8h)</li>
+          <li data-i18n="atende_f10">Suporte via WhatsApp (retorno em até 8h)</li>
         </ul>
         <a href="/assinar?plano=atende" class="btn-plan" data-i18n="atende_cta">Assinar Atende</a>
       </div>
@@ -696,6 +709,7 @@
         <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
         <p class="plan-name" data-i18n="plan_cresce">Cresce</p>
         <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
         <p class="plan-tagline" data-i18n="cresce_tagline">Até 500 contatos atendidos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -705,7 +719,7 @@
           <li data-i18n="cresce_f3">1 ajuste por semana</li>
           <li data-i18n="cresce_f4">Resumo semanal por email</li>
           <li data-i18n="cresce_f5">O agente envia link da sua agenda</li>
-          <li data-i18n="cresce_f6">Suporte prioritário (SLA 4h)</li>
+          <li data-i18n="cresce_f6">Suporte prioritário (retorno em até 4h)</li>
         </ul>
         <a href="/assinar?plano=cresce" class="btn-plan" data-i18n="cresce_cta">Assinar Cresce</a>
       </div>
@@ -713,6 +727,7 @@
       <div class="plan">
         <p class="plan-name" data-i18n="plan_escala">Escala</p>
         <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
         <p class="plan-tagline" data-i18n="escala_tagline">Até 1.000 contatos/mês</p>
         <hr class="plan-divider"/>
         <ul class="plan-features">
@@ -723,7 +738,7 @@
           <li data-i18n="escala_f4">Múltiplos fluxos e segmentações</li>
           <li data-i18n="escala_f5">Relatório mensal PDF com análise completa</li>
           <li data-i18n="escala_f6">Reunião mensal de resultados</li>
-          <li data-i18n="escala_f7">Gerente de conta dedicado (SLA 2h)</li>
+          <li data-i18n="escala_f7">Gerente de conta dedicado (retorno em até 2h)</li>
         </ul>
         <a href="/assinar?plano=escala" class="btn-plan" data-i18n="escala_cta">Assinar Escala</a>
       </div>
@@ -741,7 +756,7 @@
         </div>
       </div>
       <div class="addon-price" style="text-align:center;">
-        <span class="addon-amount" data-addon-brl="197">+R$197</span><span class="addon-period" data-i18n="per_month">/mês</span>
+        <span class="addon-amount" data-addon-brl="79">+R$79</span><span class="addon-period" data-i18n="per_month">/mês</span>
         <p class="addon-note" data-i18n="addon_note1">Para Atende e Cresce</p>
       </div>
     </div>
@@ -766,7 +781,7 @@
             <li>Tabela de numeração e catálogo no WhatsApp (PDF) 👟</li>
             <li>Triagem e encaminhamento com resumo</li>
             <li>Detecta clientes frustrados e prioriza ⚠️</li>
-            <li>1 ajuste por mês · Suporte (SLA 8h)</li>
+            <li>1 ajuste por mês · Suporte (retorno em até 8h)</li>
           </ul>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Atende%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener">Quero o Atende</a>
         </div>
@@ -783,7 +798,7 @@
             <li>O agente envia link de pagamento e orienta 2ª via</li>
             <li>Resumo semanal por email</li>
             <li>1 ajuste por semana</li>
-            <li>Suporte prioritário (SLA 4h)</li>
+            <li>Suporte prioritário (retorno em até 4h)</li>
           </ul>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Cresce%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener">Quero o Cresce</a>
         </div>
@@ -799,7 +814,7 @@
             <li>⭐ Pix gerado dentro da conversa</li>
             <li>Painel de resultados + relatório mensal PDF</li>
             <li>Múltiplos fluxos e segmentações</li>
-            <li>Reunião mensal · Gerente dedicado (SLA 2h)</li>
+            <li>Reunião mensal · Gerente dedicado (retorno em até 2h)</li>
           </ul>
           <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Escala%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener">Quero o Escala</a>
         </div>
@@ -1111,7 +1126,7 @@
 /* ─── I18N ─────────────────────────────────────────────── */
 var currentLang = 'pt';
 
-var USD_PRICES = { 497: 199, 697: 299, 997: 499, 197: 69 };
+var USD_PRICES = { 497: 199, 697: 299, 997: 499, 79: 69 };
 
 function formatBRL(n) {
   return n >= 1000 ? Math.floor(n/1000) + '.' + (n % 1000).toString().padStart(3,'0') : n.toString();
@@ -1166,18 +1181,18 @@ var T = {
     atende_f5:'Triagem e qualificação de leads', atende_f6:'Alerta com resumo completo da conversa',
     atende_f7:'Detecta clientes frustrados e alerta com prioridade ⚠️',
     atende_f8:'Lembrete automático se o cliente esperar +12h sem retorno',
-    atende_f9:'1 ajuste por mês', atende_f10:'Suporte via WhatsApp (SLA 8h)',
+    atende_f9:'1 ajuste por mês', atende_f10:'Suporte via WhatsApp (retorno em até 8h)',
     atende_cta:'Assinar Atende',
     cresce_tagline:'Até 500 contatos atendidos/mês', cresce_all:'Tudo do Atende',
     cresce_f1:'Follow-up automático D+1', cresce_f2:'Pesquisa de satisfação automática (NPS)',
     cresce_f3:'1 ajuste por semana', cresce_f4:'Resumo semanal por email',
-    cresce_f5:'O agente envia link da sua agenda', cresce_f6:'Suporte prioritário (SLA 4h)',
+    cresce_f5:'O agente envia link da sua agenda', cresce_f6:'Suporte prioritário (retorno em até 4h)',
     cresce_cta:'Assinar Cresce',
     escala_tagline:'Até 1.000 contatos/mês', escala_all:'Tudo do Cresce',
     escala_f1:'Follow-up D+1 e D+3', escala_f2:'Painel de resultados com link',
     escala_f3:'Agendamento nativo no WhatsApp', escala_f4:'Múltiplos fluxos e segmentações',
     escala_f5:'Relatório mensal PDF com análise completa', escala_f6:'Reunião mensal de resultados',
-    escala_f7:'Gerente de conta dedicado (SLA 2h)', escala_cta:'Assinar Escala',
+    escala_f7:'Gerente de conta dedicado (retorno em até 2h)', escala_cta:'Assinar Escala',
     addon_title:'Adicional: Agendamento automático via WhatsApp',
     addon_desc:'O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.',
     addon_note1:'Para Atende e Cresce', addon_note2:'✓ Incluso no Escala', addon_cta:'Adicionar',
@@ -1507,6 +1522,9 @@ function setLang(lang) {
 
   /* re-run ROI with updated units */
   if (rs) calcROI();
+
+  /* re-aplica ciclo Mensal/Anual após troca de idioma/moeda */
+  if (typeof renderCycle === 'function') renderCycle();
 }
 
 /* ─── SLIDER ─────────────────────────────────────────────── */
@@ -1571,6 +1589,49 @@ window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visi
   });
   if (location.hash === '#planos-ecommerce') { setBiz('ecommerce'); }
 })();
+
+// Toggle Mensal <-> Anual (2 meses grátis · BR only) — apenas grid Serviços
+var CICLO = 'mensal';
+function renderCycle(){
+  var isEN = (currentLang === 'en');
+  var ct = document.getElementById('cycle-toggle');
+  if (ct) ct.style.display = isEN ? 'none' : '';
+  if (isEN) CICLO = 'mensal'; // plano anual 12x é oferta BR
+  document.querySelectorAll('.cycle-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-ciclo') === CICLO);
+  });
+  document.querySelectorAll('#grid-servicos .pricing-grid .plan').forEach(function(card){
+    var amtEl = card.querySelector('.plan-amount[data-brl]');
+    if (!amtEl) return;
+    var perEl = card.querySelector('.plan-period');
+    var noteEl = card.querySelector('.plan-annual-note');
+    var btn = card.querySelector('.btn-plan');
+    var brl = parseInt(amtEl.getAttribute('data-brl'), 10);
+    var plano = '';
+    if (btn) { var mm = (btn.getAttribute('href') || '').match(/plano=([a-z]+)/); if (mm) plano = mm[1]; }
+
+    if (CICLO === 'anual' && !isEN) {
+      var total = brl * 10, parcela = brl * 10 / 12, econ = brl * 2;
+      amtEl.textContent = formatBRL(total);
+      if (perEl) perEl.textContent = '/ano';
+      if (noteEl) {
+        noteEl.style.display = 'block';
+        noteEl.innerHTML = '12x de R$' + parcela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) +
+          ' sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
+      }
+      if (btn && plano) btn.setAttribute('href', '/assinar?plano=' + plano + '&ciclo=anual');
+    } else {
+      amtEl.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
+      if (perEl) perEl.textContent = (T[currentLang] && T[currentLang].per_month) || '/mês';
+      if (noteEl) noteEl.style.display = 'none';
+      if (btn && plano) btn.setAttribute('href', '/assinar?plano=' + plano);
+    }
+  });
+}
+document.querySelectorAll('.cycle-btn').forEach(function(b){
+  b.addEventListener('click', function(){ CICLO = b.getAttribute('data-ciclo'); renderCycle(); });
+});
+renderCycle();
 </script>
 </body>
 </html>
