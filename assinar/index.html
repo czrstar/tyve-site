@@ -363,12 +363,16 @@
 
       <div class="trust">
         <div class="trow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 9.9C7.5 19.5 4 16 4 11V5l8-3z" stroke="rgba(248,65,0,0.8)" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 11.5l2 2 4-4.2" stroke="rgba(248,65,0,0.9)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><strong style="color:rgba(255,255,255,0.82)">Garantia de 7 dias</strong> — não gostou, devolvemos 100%</span>
+        </div>
+        <div class="trow">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 9.9C7.5 19.5 4 16 4 11V5l8-3z" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linejoin="round"/></svg>
           Pagamento processado com segurança pelo Asaas
         </div>
         <div class="trow">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="rgba(0,232,223,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Sem fidelidade — cancela quando quiser, sem multa
+          <span id="trust-commit">Sem fidelidade — cancela quando quiser, sem multa</span>
         </div>
         <div class="trow">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linejoin="round"/></svg>
@@ -379,6 +383,7 @@
       <div class="back-links">
         <a href="/#planos">← Voltar aos planos</a>
         <a id="wa-link" href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20os%20planos%20(site)!" target="_blank" rel="noopener">Tirar uma dúvida no WhatsApp</a>
+        <a href="/termos#cancelamento" target="_blank" rel="noopener">Política de reembolso</a>
       </div>
 
       <p class="disclaimer">A Tyve não é afiliada à Meta, Facebook ou WhatsApp. O pagamento é processado pelo Asaas em ambiente seguro.</p>
@@ -476,10 +481,12 @@
       ' sem juros <span class="save">· ou à vista no Pix/boleto · economize R$' + fmtBR(economia) + '/ano</span>';
     document.getElementById('sum-noloy-text').textContent = 'Plano anual — 2 meses grátis. Você garante 12 meses.';
     document.getElementById('now-step1').textContent = 'Você escolhe: 12x no cartão sem juros, ou Pix/boleto à vista.';
+    document.getElementById('trust-commit').textContent = 'Compromisso de 12 meses · acesso garantido até o fim';
     btn.setAttribute('href', plan.asaasAnual);
     document.title = 'Confirme seu plano ' + plan.name + ' anual · Tyve ⚡';
   } else {
     document.getElementById('sum-amt').textContent = plan.amt;
+    document.getElementById('trust-commit').textContent = 'Sem fidelidade — cancela quando quiser, sem multa';
     btn.setAttribute('href', plan.asaas);
     document.title = 'Confirme seu plano ' + plan.name + ' · Tyve ⚡';
   }
