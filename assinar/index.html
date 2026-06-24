@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirme seu plano · Tyve ⚡</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+
+<style>
+  @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
+
+  :root {
+    --orange: #f84100;
+    --dark:   #111e1d;
+    --teal:   #00e8df;
+    --light:  #ffffff;
+    --font:   'Grift', 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font);
+    background: var(--dark);
+    color: var(--light);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* raios background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('/assets/raios-tyve.svg');
+    background-size: auto 70%;
+    background-repeat: repeat-x;
+    background-position: center 60%;
+    opacity: .06;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* teal glow */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 350px;
+    background: radial-gradient(ellipse at center, rgba(0,232,223,0.14) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  /* logo */
+  .logo {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto 28px;
+    padding: 0 4px;
+    animation: fadeUp .4s .05s ease both;
+  }
+  .logo img { height: 38px; }
+
+  /* progress */
+  .progress {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto 30px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    animation: fadeUp .5s .1s ease both;
+  }
+  .pstep {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-shrink: 0;
+  }
+  .pdot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.14);
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+  .pstep.done .pdot { background: rgba(248,65,0,0.16); border-color: rgba(248,65,0,0.5); color: var(--orange); }
+  .pstep.active .pdot { background: var(--orange); border-color: var(--orange); color: #fff; box-shadow: 0 0 0 4px rgba(248,65,0,0.16); }
+  .plabel {
+    font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    white-space: nowrap;
+  }
+  .pstep.active .plabel { color: #fff; }
+  .pstep.done .plabel { color: rgba(255,255,255,0.6); }
+  .pline {
+    flex: 1;
+    height: 1.5px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 12px;
+    min-width: 14px;
+  }
+  .pline.done { background: rgba(248,65,0,0.4); }
+
+  /* heading */
+  .head {
+    width: 100%; max-width: 920px; margin: 0 auto 22px;
+    animation: fadeUp .5s .15s ease both;
+  }
+  .head h1 {
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 800; line-height: 1.08; letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .head h1 em { font-style: normal; color: var(--orange); }
+  .head p {
+    font-size: clamp(14px, 2vw, 16px);
+    color: rgba(255,255,255,0.55); font-weight: 400; line-height: 1.5;
+  }
+
+  /* layout */
+  .inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 920px;
+    width: 100%;
+    align-items: start;
+  }
+
+  /* summary card */
+  .summary {
+    background: #fff;
+    color: var(--dark);
+    border-radius: 20px;
+    padding: 28px 26px;
+    position: relative;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.35);
+    animation: fadeUp .5s .2s ease both;
+  }
+  .badge {
+    position: absolute; top: -11px; left: 26px;
+    background: var(--orange); color: #fff;
+    font-size: 11px; font-weight: 800; letter-spacing: .06em;
+    padding: 5px 12px; border-radius: 100px;
+  }
+  .sum-label {
+    font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: rgba(17,30,29,0.4);
+    margin-bottom: 6px;
+  }
+  .sum-name {
+    font-size: 28px; font-weight: 800; letter-spacing: -.01em;
+    margin-bottom: 2px;
+  }
+  .sum-tag { font-size: 14px; color: rgba(17,30,29,0.55); margin-bottom: 18px; }
+  .sum-price {
+    display: flex; align-items: baseline; gap: 2px;
+    margin-bottom: 20px;
+  }
+  .sum-price .cur { font-size: 20px; font-weight: 700; }
+  .sum-price .amt { font-size: 46px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .sum-price .per { font-size: 16px; font-weight: 500; color: rgba(17,30,29,0.5); }
+  .sum-div { border: none; border-top: 1px solid rgba(17,30,29,0.1); margin: 0 0 18px; }
+  .sum-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .sum-feats li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 15px; font-weight: 500; color: rgba(17,30,29,0.85); line-height: 1.35;
+  }
+  .sum-feats li svg { flex-shrink: 0; margin-top: 2px; }
+  .sum-noloy {
+    margin-top: 20px; padding: 12px 14px;
+    background: rgba(0,232,223,0.1);
+    border-radius: 12px;
+    font-size: 13.5px; font-weight: 600; color: #0a8f89;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* right column */
+  .aside {
+    display: flex; flex-direction: column; gap: 18px;
+    animation: fadeUp .5s .26s ease both;
+  }
+  .now-title {
+    font-size: 13px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: rgba(255,255,255,0.4);
+    margin-bottom: 2px;
+  }
+  .nsteps { display: flex; flex-direction: column; gap: 10px; }
+  .nstep {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 14px 16px;
+  }
+  .nnum {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(248,65,0,0.14); border: 1px solid rgba(248,65,0,0.4);
+    color: var(--orange); font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .ntext { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.92); line-height: 1.4; }
+  .ntext span { display: block; font-size: 13.5px; font-weight: 400; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  /* CTA */
+  .btn-pay {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    background: var(--orange); color: #fff; text-decoration: none;
+    font-family: var(--font); font-size: 17px; font-weight: 800;
+    padding: 17px 26px; border-radius: 100px;
+    transition: opacity .2s, transform .2s, box-shadow .2s;
+    box-shadow: 0 10px 26px rgba(248,65,0,0.34);
+  }
+  .btn-pay:hover { opacity: .94; transform: translateY(-1px); box-shadow: 0 14px 32px rgba(248,65,0,0.42); }
+
+  /* trust */
+  .trust { display: flex; flex-direction: column; gap: 9px; }
+  .trow {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.62);
+  }
+  .trow svg { flex-shrink: 0; }
+  .disclaimer { font-size: 11.5px; color: rgba(255,255,255,0.28); line-height: 1.4; margin-top: 2px; }
+
+  .back-links {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    margin-top: 2px;
+  }
+  .back-links a {
+    font-size: 13.5px; font-weight: 600;
+    color: rgba(255,255,255,0.5); text-decoration: none;
+    transition: color .2s;
+  }
+  .back-links a:hover { color: #fff; }
+
+  .tagline {
+    margin-top: 34px; font-size: 12px;
+    color: rgba(255,255,255,0.2); letter-spacing: .05em; text-align: center;
+    width: 100%; max-width: 920px;
+    animation: fadeUp .5s .42s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 760px) {
+    .page { padding: 28px 18px; }
+    .inner { grid-template-columns: 1fr; gap: 18px; }
+    .summary { order: 1; }
+    .aside { order: 2; }
+    .progress { gap: 0; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+    .plabel { font-size: 12px; }
+    .pline { min-width: 10px; margin: 0 7px; }
+    .head h1 { font-size: 26px; }
+    .sum-price .amt { font-size: 40px; }
+  }
+  @media (max-width: 460px) {
+    /* keep labels only for active/edges on very small screens */
+    .pstep:not(.active) .plabel { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="logo">
+    <img src="/assets/logo-tyve-orange.svg" alt="Tyve" />
+  </div>
+
+  <!-- progress -->
+  <div class="progress">
+    <div class="pstep done"><div class="pdot">✓</div><div class="plabel">Plano</div></div>
+    <div class="pline done"></div>
+    <div class="pstep active"><div class="pdot">2</div><div class="plabel">Confirmar</div></div>
+    <div class="pline"></div>
+    <div class="pstep"><div class="pdot">3</div><div class="plabel">Pagamento</div></div>
+    <div class="pline"></div>
+    <div class="pstep"><div class="pdot">4</div><div class="plabel">Ativação</div></div>
+  </div>
+
+  <div class="head">
+    <h1>Você está a um passo<br/>de ativar a <em>Tyve</em>.</h1>
+    <p>Confira seu plano e siga para o pagamento seguro. Leva menos de um minuto.</p>
+  </div>
+
+  <div class="inner">
+
+    <!-- LEFT: order summary -->
+    <div class="summary">
+      <div class="badge" id="sum-badge" style="display:none">MAIS POPULAR</div>
+      <p class="sum-label">Seu plano</p>
+      <p class="sum-name" id="sum-name">Cresce</p>
+      <p class="sum-tag" id="sum-tag">Até 500 contatos atendidos/mês</p>
+      <div class="sum-price">
+        <span class="cur">R$</span><span class="amt" id="sum-amt">697</span><span class="per">/mês</span>
+      </div>
+      <hr class="sum-div" />
+      <ul class="sum-feats" id="sum-feats"></ul>
+      <div class="sum-noloy">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#0a8f89" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sem fidelidade — cancela quando quiser.
+      </div>
+    </div>
+
+    <!-- RIGHT: what happens now + CTA -->
+    <div class="aside">
+      <div>
+        <p class="now-title">O que acontece agora</p>
+        <div class="nsteps">
+          <div class="nstep">
+            <div class="nnum">1</div>
+            <div class="ntext">Pagamento seguro<span>Você vai para o ambiente do Asaas e escolhe Pix, cartão ou boleto.</span></div>
+          </div>
+          <div class="nstep">
+            <div class="nnum">2</div>
+            <div class="ntext">Confirmação na hora<span>Assim que o pagamento for aprovado, sua vaga está garantida.</span></div>
+          </div>
+          <div class="nstep">
+            <div class="nnum">3</div>
+            <div class="ntext">A gente te guia<span>Você recebe o passo a passo para ativar sua Luma — simples e sem espera.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#" id="btn-pay" class="btn-pay">
+        Ir para o pagamento seguro
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <div class="trust">
+        <div class="trow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 9.9C7.5 19.5 4 16 4 11V5l8-3z" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          Pagamento processado com segurança pelo Asaas
+        </div>
+        <div class="trow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="rgba(0,232,223,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Sem fidelidade — cancela quando quiser, sem multa
+        </div>
+        <div class="trow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          Suporte com gente de verdade, sempre que precisar
+        </div>
+      </div>
+
+      <div class="back-links">
+        <a href="/#planos">← Voltar aos planos</a>
+        <a id="wa-link" href="https://wa.me/5516994247541?text=Oi%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20os%20planos%20(site)!" target="_blank" rel="noopener">Tirar uma dúvida no WhatsApp</a>
+      </div>
+
+      <p class="disclaimer">A Tyve não é afiliada à Meta, Facebook ou WhatsApp. O pagamento é processado pelo Asaas em ambiente seguro.</p>
+    </div>
+
+  </div>
+
+  <p class="tagline">Tyve. Resolve.</p>
+
+</div>
+
+<script>
+  var PLANS = {
+    atende: {
+      name: 'Atende',
+      amt: '497',
+      tag: 'Até 200 contatos atendidos/mês',
+      popular: false,
+      feats: [
+        '1 número de WhatsApp respondendo 24h por dia',
+        'Entende mensagens de texto, voz e imagens',
+        'Triagem e qualificação de cada lead',
+        'Alerta com resumo completo da conversa',
+        '1 ajuste por mês + suporte via WhatsApp'
+      ],
+      asaas: 'https://www.asaas.com/c/k31h5eo13jee7aps'
+    },
+    cresce: {
+      name: 'Cresce',
+      amt: '697',
+      tag: 'Até 500 contatos atendidos/mês',
+      popular: true,
+      feats: [
+        'Tudo do Atende',
+        'Follow-up automático D+1',
+        'Pesquisa de satisfação automática (NPS)',
+        'Resumo semanal por e-mail',
+        '1 ajuste por semana + suporte prioritário (SLA 4h)'
+      ],
+      asaas: 'https://www.asaas.com/c/kwj0xhyvv5z8zptl'
+    },
+    escala: {
+      name: 'Escala',
+      amt: '997',
+      tag: 'Até 1.000 contatos atendidos/mês',
+      popular: false,
+      feats: [
+        'Tudo do Cresce',
+        'Follow-up D+1 e D+3',
+        'Painel de resultados + relatório mensal em PDF',
+        'Agendamento nativo no WhatsApp',
+        'Gerente de conta dedicado (SLA 2h)'
+      ],
+      asaas: 'https://www.asaas.com/c/nbu4h9mut7icws97'
+    }
+  };
+
+  function getPlano() {
+    var p = (new URLSearchParams(window.location.search).get('plano') || '').toLowerCase().trim();
+    return PLANS[p] ? p : 'cresce';
+  }
+
+  var key = getPlano();
+  var plan = PLANS[key];
+
+  document.getElementById('sum-name').textContent = plan.name;
+  document.getElementById('sum-tag').textContent = plan.tag;
+  document.getElementById('sum-amt').textContent = plan.amt;
+  document.title = 'Confirme seu plano ' + plan.name + ' · Tyve ⚡';
+
+  if (plan.popular) document.getElementById('sum-badge').style.display = 'block';
+
+  var ul = document.getElementById('sum-feats');
+  var check = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="rgba(248,65,0,0.12)"/><path d="M7.5 12.2l3 3 6-6.4" stroke="#f84100" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  plan.feats.forEach(function (f) {
+    var li = document.createElement('li');
+    li.innerHTML = check + '<span>' + f + '</span>';
+    ul.appendChild(li);
+  });
+
+  var btn = document.getElementById('btn-pay');
+  btn.setAttribute('href', plan.asaas);
+
+  // WhatsApp doubt link mentions the chosen plan
+  document.getElementById('wa-link').setAttribute(
+    'href',
+    'https://wa.me/5516994247541?text=' + encodeURIComponent('Oi, tenho uma dúvida sobre o plano ' + plan.name + ' (site)!')
+  );
+</script>
+</body>
+</html>
