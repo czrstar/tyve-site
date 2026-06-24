@@ -118,9 +118,9 @@
   /* ─── SHOWCASE (03) — dark top / beige bottom ────────── */
   .showcase { position: relative; background: var(--dark); overflow: visible; }
   .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 510px; background: var(--beige); border-radius: 0; overflow: hidden; }
-  .showcase-inner { position: relative; z-index: 2; width: min(1000px, 92vw); margin: 0 auto; display: flex; align-items: flex-end; padding: 0; }
-  .showcase-photo { flex: 1 1 0; min-width: 0; display: flex; align-items: flex-end; overflow: visible; position: relative; }
-  .showcase-photo img { width: 100%; display: block; max-height: 720px; object-fit: contain; object-position: bottom left; }
+  .showcase-inner { position: relative; z-index: 2; width: min(1000px, 92vw); margin: 0 auto; display: flex; align-items: flex-end; justify-content: center; padding: 0; }
+  .showcase-photo { flex: 0 0 auto; width: clamp(320px, 38vw, 480px); min-width: 0; display: flex; align-items: flex-end; overflow: visible; position: relative; }
+  .showcase-photo img { width: 100%; display: block; max-height: 720px; object-fit: contain; object-position: bottom center; }
   .showcase-phone { flex: 0 0 auto; display: flex; justify-content: center; align-items: flex-end; padding: 0 20px; overflow: visible; }
   .phone-mockup {
     width: clamp(260px, 28vw, 320px); background: white; border-radius: 20px; overflow: hidden;
@@ -133,7 +133,7 @@
   .chat-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
   .chat-info strong { display: block; font-weight: 600; font-size: 13px; color: #111; }
   .chat-info .online { font-size: 11px; color: #25d366; font-weight: 500; }
-  .chat-messages { background: #ece5dd; padding: 12px 10px; min-height: 624px; display: flex; flex-direction: column; gap: 6px; }
+  .chat-messages { background: #ece5dd; padding: 12px 10px; min-height: 440px; display: flex; flex-direction: column; gap: 6px; }
   .msg { max-width: 86%; padding: 8px 10px 4px; border-radius: 8px; line-height: 1.45; color: #111; }
   .msg-user { background: white; align-self: flex-start; border-radius: 0 8px 8px 8px; }
   .msg-bot { background: #d9fdd3; align-self: flex-end; border-radius: 8px 0 8px 8px; }
