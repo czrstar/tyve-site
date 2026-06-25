@@ -265,6 +265,15 @@
     .sections-locked { opacity: .4; pointer-events: none; filter: grayscale(1); }
     .plan-lock-notice { text-align: center; padding: 24px; font-size: 14px; color: #64748b; background: #f8fafc; border-radius: 12px; margin-bottom: 12px; display: none; }
 
+    /* ── BUSINESS TYPE TOGGLE ── */
+    .biz-pill { border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all .15s; background: #fff; display:flex; align-items:center; gap:12px; }
+    .biz-pill:hover { border-color: #f84100; }
+    .biz-pill.selected { border-color: #f84100; background: #fff7f4; }
+    .biz-pill-emoji { font-size: 22px; line-height:1; flex-shrink:0; }
+    .biz-pill-name { font-size: 15px; font-weight: 800; color: #0f172a; }
+    .biz-pill-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .biz-pill.selected .biz-pill-name { color: #f84100; }
+
     /* ── AGENDA CONDITIONAL ── */
     .agenda-block { display: none; }
     .agenda-block.visible { display: block; }
@@ -392,6 +401,30 @@
 
   <form id="onboardingForm" name="tyve-onboarding" novalidate>
 
+    <!-- ── TIPO DE NEGÓCIO ── -->
+    <div class="plan-picker-wrap">
+      <div class="plan-picker-label">Passo 0</div>
+      <div class="plan-picker-title">Qual o tipo do seu negócio?</div>
+      <div class="plan-picker-hint">Isso adapta o formulário para o que faz sentido no seu caso.</div>
+      <div class="plan-picker-grid">
+        <div class="biz-pill" onclick="selectBusinessType('servico')" id="biz-servico">
+          <span class="biz-pill-emoji">🛎️</span>
+          <div>
+            <div class="biz-pill-name">Serviço / Atendimento</div>
+            <div class="biz-pill-desc">Clínica, salão, restaurante, prestador...</div>
+          </div>
+        </div>
+        <div class="biz-pill" onclick="selectBusinessType('ecommerce')" id="biz-ecommerce">
+          <span class="biz-pill-emoji">🛍️</span>
+          <div>
+            <div class="biz-pill-name">E-commerce / Loja online</div>
+            <div class="biz-pill-desc">Vende produtos online, faz envios e trocas</div>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="business_type" id="business_type_input" value="" />
+    </div>
+
     <!-- ── SELETOR DE PLANO ── -->
     <div class="plan-picker-wrap">
       <div class="plan-picker-label">Passo 0</div>
@@ -420,8 +453,8 @@
     <div id="sections-wrap" class="sections-locked">
 
     <!-- ── SEÇÃO 1 ── -->
-    <div class="section-card open active" id="sec-1" data-sec="1">
-      <div class="section-head" onclick="toggleSection(1)">
+    <div class="section-card open active" id="sec-1" data-sec="1" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">1</div>
           <div>
@@ -464,14 +497,14 @@
           <textarea name="descricao_empresa" required rows="3" placeholder="Descreva sua empresa em 2–3 frases..."></textarea>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(1)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 2 ── -->
-    <div class="section-card" id="sec-2" data-sec="2">
-      <div class="section-head" onclick="toggleSection(2)">
+    <div class="section-card" id="sec-2" data-sec="2" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">2</div>
           <div>
@@ -511,14 +544,14 @@
           </div>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(2)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 3 ── -->
-    <div class="section-card" id="sec-3" data-sec="3">
-      <div class="section-head" onclick="toggleSection(3)">
+    <div class="section-card" id="sec-3" data-sec="3" data-biz="servico">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">3</div>
           <div>
@@ -555,14 +588,14 @@
           </div>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(3)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 4 ── -->
-    <div class="section-card" id="sec-4" data-sec="4">
-      <div class="section-head" onclick="toggleSection(4)">
+    <div class="section-card" id="sec-4" data-sec="4" data-biz="servico">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">4</div>
           <div>
@@ -591,14 +624,14 @@
           <textarea name="politica_cancelamento" rows="2" placeholder="Ex: sinal de 30% para confirmar, cancelamento com 24h de antecedência..."></textarea>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(4)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 5 ── -->
-    <div class="section-card" id="sec-5" data-sec="5">
-      <div class="section-head" onclick="toggleSection(5)">
+    <div class="section-card" id="sec-5" data-sec="5" data-biz="servico">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">5</div>
           <div>
@@ -666,14 +699,188 @@
         </div>
 
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(5)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEÇÃO EC-A — Sua loja online ── -->
+    <div class="section-card" id="sec-ecA" data-sec="ecA" data-biz="ecommerce" style="display:none">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-head-left">
+          <div class="section-num">A</div>
+          <div>
+            <div class="section-title">Sua loja online</div>
+            <div class="section-subtitle">Plataforma, nicho e catálogo</div>
+          </div>
+        </div>
+        <span class="section-chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="question">
+          <label class="q-label">Em qual plataforma sua loja roda? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="plataforma" value="shopify" /><div class="radio-box"></div><span class="radio-label">Shopify</span></label>
+            <label class="radio-item"><input type="radio" name="plataforma" value="nuvemshop" /><div class="radio-box"></div><span class="radio-label">Nuvemshop</span></label>
+            <label class="radio-item"><input type="radio" name="plataforma" value="woocommerce" /><div class="radio-box"></div><span class="radio-label">WooCommerce (WordPress)</span></label>
+            <label class="radio-item"><input type="radio" name="plataforma" value="bling" /><div class="radio-box"></div><span class="radio-label">Bling (ERP)</span></label>
+            <label class="radio-item"><input type="radio" name="plataforma" value="tiny" /><div class="radio-box"></div><span class="radio-label">Tiny (ERP)</span></label>
+            <label class="radio-item"><input type="radio" name="plataforma" value="outra" /><div class="radio-box"></div><span class="radio-label">Outra</span></label>
+          </div>
+        </div>
+        <div class="question" id="plataforma-outra-wrap" style="display:none">
+          <label class="q-label">Qual plataforma?</label>
+          <input type="text" name="plataforma_outra" placeholder="Ex: VTEX, Loja Integrada, Magento, Shopee..." />
+        </div>
+        <div class="question">
+          <label class="q-label">Nicho / categorias de produto <span class="req">*</span></label>
+          <p class="q-hint">Ajuda o agente a entender o vocabulário dos seus clientes (numeração, modelos, materiais...).</p>
+          <input type="text" name="nicho_categorias" placeholder="Ex: calçados femininos, tênis esportivos, moda fitness" />
+        </div>
+        <div class="question">
+          <label class="q-label">Link do catálogo ou tabela de numeração <span style="color:#64748b;font-weight:400;">(opcional)</span></label>
+          <p class="q-hint">Se tiver um catálogo online ou tabela de numeração, cole o link. Se for um PDF, deixe em branco e envie pra gente depois.</p>
+          <input type="text" name="catalogo_url" placeholder="Ex: link do catálogo, tabela de numeração, ou deixe em branco" />
+        </div>
+        <div class="section-footer">
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEÇÃO EC-B — Pedidos e identificação ── -->
+    <div class="section-card" id="sec-ecB" data-sec="ecB" data-biz="ecommerce" style="display:none">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-head-left">
+          <div class="section-num">B</div>
+          <div>
+            <div class="section-title">Pedidos e identificação</div>
+            <div class="section-subtitle">Como o cliente localiza o pedido + volume</div>
+          </div>
+        </div>
+        <span class="section-chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-box blue">
+          O agente consulta o status do pedido para o cliente ("cadê meu pedido?"). Para isso, ele precisa saber como o cliente costuma se identificar.
+        </div>
+        <div class="question">
+          <label class="q-label">Como o cliente costuma identificar o pedido? <span class="req">*</span></label>
+          <p class="q-hint">Marque todas que se aplicam.</p>
+          <div class="checkbox-group">
+            <label class="check-item"><input type="checkbox" name="order_id_method[]" value="telefone" /><div class="check-box"></div><span class="check-label">Telefone / WhatsApp do comprador</span></label>
+            <label class="check-item"><input type="checkbox" name="order_id_method[]" value="numero_pedido" /><div class="check-box"></div><span class="check-label">Número do pedido</span></label>
+            <label class="check-item"><input type="checkbox" name="order_id_method[]" value="cpf" /><div class="check-box"></div><span class="check-label">CPF</span></label>
+            <label class="check-item"><input type="checkbox" name="order_id_method[]" value="email" /><div class="check-box"></div><span class="check-label">E-mail</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Volume atual: contatos por mês no WhatsApp <span class="req">*</span></label>
+          <p class="q-hint">Contatos = pessoas diferentes que mandam mensagem, não o total de mensagens. Usado para definir o plano ideal.</p>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="ec_volume_mensal" value="ate100" /><div class="radio-box"></div><span class="radio-label">Até 100 contatos/mês</span></label>
+            <label class="radio-item"><input type="radio" name="ec_volume_mensal" value="100_300" /><div class="radio-box"></div><span class="radio-label">100–300 contatos/mês</span></label>
+            <label class="radio-item"><input type="radio" name="ec_volume_mensal" value="300_600" /><div class="radio-box"></div><span class="radio-label">300–600 contatos/mês</span></label>
+            <label class="radio-item"><input type="radio" name="ec_volume_mensal" value="600plus" /><div class="radio-box"></div><span class="radio-label">Mais de 600 contatos/mês</span></label>
+            <label class="radio-item"><input type="radio" name="ec_volume_mensal" value="nao_uso" /><div class="radio-box"></div><span class="radio-label">Não uso WhatsApp para atendimento ainda</span></label>
+          </div>
+        </div>
+        <div class="section-footer">
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEÇÃO EC-C — Trocas e devoluções ── -->
+    <div class="section-card" id="sec-ecC" data-sec="ecC" data-biz="ecommerce" style="display:none">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-head-left">
+          <div class="section-num">C</div>
+          <div>
+            <div class="section-title">Trocas e devoluções</div>
+            <div class="section-subtitle">Geralmente o maior volume de atendimento</div>
+          </div>
+        </div>
+        <span class="section-chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-box orange">
+          A troca de numeração é a dúvida nº1 em loja de calçado. Quanto mais clara a sua política aqui, melhor o agente resolve sem precisar te acionar.
+        </div>
+        <div class="question">
+          <label class="q-label">Prazo para solicitar troca/devolução <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="troca_prazo_dias" value="7" /><div class="radio-box"></div><span class="radio-label">7 dias</span></label>
+            <label class="radio-item"><input type="radio" name="troca_prazo_dias" value="15" /><div class="radio-box"></div><span class="radio-label">15 dias</span></label>
+            <label class="radio-item"><input type="radio" name="troca_prazo_dias" value="30" /><div class="radio-box"></div><span class="radio-label">30 dias</span></label>
+            <label class="radio-item"><input type="radio" name="troca_prazo_dias" value="outro" /><div class="radio-box"></div><span class="radio-label">Outro / depende</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Quem paga o frete da troca? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="troca_frete_quem_paga" value="loja" /><div class="radio-box"></div><span class="radio-label">A loja paga</span></label>
+            <label class="radio-item"><input type="radio" name="troca_frete_quem_paga" value="cliente" /><div class="radio-box"></div><span class="radio-label">O cliente paga</span></label>
+            <label class="radio-item"><input type="radio" name="troca_frete_quem_paga" value="depende" /><div class="radio-box"></div><span class="radio-label">Depende do motivo (defeito x arrependimento)</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Como funciona o envio do produto novo na troca? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="troca_modo" value="apos_devolucao" /><div class="radio-box"></div><span class="radio-label">Envio a nova numeração <strong>depois</strong> de receber a devolução</span></label>
+            <label class="radio-item"><input type="radio" name="troca_modo" value="expressa" /><div class="radio-box"></div><span class="radio-label">Troca expressa: envio a nova <strong>antes</strong> de receber a devolução</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Como você faz a logística reversa (coleta da devolução)? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="logistica_reversa" value="melhor_envio" /><div class="radio-box"></div><span class="radio-label">Melhor Envio</span></label>
+            <label class="radio-item"><input type="radio" name="logistica_reversa" value="correios" /><div class="radio-box"></div><span class="radio-label">Contrato direto com os Correios</span></label>
+            <label class="radio-item"><input type="radio" name="logistica_reversa" value="outra" /><div class="radio-box"></div><span class="radio-label">Outra</span></label>
+            <label class="radio-item"><input type="radio" name="logistica_reversa" value="nao_tenho" /><div class="radio-box"></div><span class="radio-label">Ainda não tenho</span></label>
+          </div>
+        </div>
+        <div class="section-footer">
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEÇÃO EC-D — Pagamento na conversa ── -->
+    <div class="section-card" id="sec-ecD" data-sec="ecD" data-biz="ecommerce" style="display:none">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-head-left">
+          <div class="section-num">D</div>
+          <div>
+            <div class="section-title">Pagamento na conversa</div>
+            <div class="section-subtitle">Como o cliente paga pelo WhatsApp</div>
+          </div>
+        </div>
+        <span class="section-chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="question">
+          <label class="q-label">Quer habilitar Pix dentro da conversa do WhatsApp? <span class="req">*</span></label>
+          <p class="q-hint">O agente gera a cobrança Pix e envia na conversa (recurso opcional, requer integração de pagamento).</p>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="pix_enabled" value="sim" /><div class="radio-box"></div><span class="radio-label">Sim, quero Pix no WhatsApp</span></label>
+            <label class="radio-item"><input type="radio" name="pix_enabled" value="nao" /><div class="radio-box"></div><span class="radio-label">Não por enquanto</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Formas de pagamento / parcelamento que você aceita</label>
+          <input type="text" name="ec_formas_pagamento" placeholder="Ex: cartão até 12x, Pix com desconto, boleto" />
+        </div>
+        <div class="section-footer">
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 6 ── -->
-    <div class="section-card" id="sec-6" data-sec="6">
-      <div class="section-head" onclick="toggleSection(6)">
+
+    <div class="section-card" id="sec-6" data-sec="6" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">6</div>
           <div>
@@ -700,14 +907,14 @@
           <textarea name="guardrails" rows="3" placeholder="Liste temas ou situações que o agente deve evitar..."></textarea>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(6)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 7 ── -->
-    <div class="section-card" id="sec-7" data-sec="7">
-      <div class="section-head" onclick="toggleSection(7)">
+    <div class="section-card" id="sec-7" data-sec="7" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">7</div>
           <div>
@@ -744,14 +951,14 @@
           <input type="text" name="nome_assistente" placeholder="Deixe em branco para usar Luma" />
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(7)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 8 ── -->
-    <div class="section-card" id="sec-8" data-sec="8">
-      <div class="section-head" onclick="toggleSection(8)">
+    <div class="section-card" id="sec-8" data-sec="8" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">8</div>
           <div>
@@ -779,14 +986,14 @@
           </div>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(8)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 9 ── -->
-    <div class="section-card" id="sec-9" data-sec="9">
-      <div class="section-head" onclick="toggleSection(9)">
+    <div class="section-card" id="sec-9" data-sec="9" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">9</div>
           <div>
@@ -809,14 +1016,14 @@
           <input type="text" name="responsavel_grupo" required placeholder="Nome da pessoa" />
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next" onclick="nextSection(9)">Próxima seção →</button>
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
       </div>
     </div>
 
     <!-- ── SEÇÃO 10 ── -->
-    <div class="section-card" id="sec-10" data-sec="10">
-      <div class="section-head" onclick="toggleSection(10)">
+    <div class="section-card" id="sec-10" data-sec="10" data-biz="both">
+      <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">10</div>
           <div>
@@ -833,7 +1040,7 @@
           <textarea name="exemplos_mensagens" rows="5" placeholder='Ex:&#10;"Boa tarde, queria saber quanto custa um implante, tenho convênio Unimed"&#10;"Olá! Vcs atendem sábado? Preciso de urgência"&#10;"Quero marcar uma avaliação para segunda de manhã"'></textarea>
         </div>
         <div class="section-footer">
-          <button type="button" class="btn-next done-btn" onclick="nextSection(10)">✓ Concluir e enviar</button>
+          <button type="button" class="btn-next done-btn" onclick="nextSection(this)">✓ Concluir e enviar</button>
         </div>
       </div>
     </div>
@@ -869,11 +1076,16 @@
 </div>
 
 <script>
-  const TOTAL_SECTIONS = 10;
-  const sectionState = {}; // 1–10: 'open' | 'done'
+  // ── State ──
+  let businessType = '';
   let selectedPlan = '';
+  let sectionState = {}; // keyed by card id: 'pending' | 'open' | 'done'
 
-  // ── Prefill from payment token ──
+  function visibleCards() {
+    return Array.from(document.querySelectorAll('.section-card')).filter(c => c.style.display !== 'none');
+  }
+
+  // ── Prefill from payment token (service checkouts) ──
   (async function prefillFromToken() {
     const params = new URLSearchParams(window.location.search);
     const t = params.get('t');
@@ -883,138 +1095,159 @@
       if (!res.ok) return;
       const data = await res.json();
       if (!data.ok) return;
-
-      // Pre-fill responsavel (nome)
-      if (data.nome) {
-        const respField = document.querySelector('[name="responsavel"]');
-        if (respField && !respField.value) respField.value = data.nome;
-      }
-      // Pre-fill email
-      if (data.email) {
-        const emailField = document.querySelector('[name="client_email"]');
-        if (emailField && !emailField.value) emailField.value = data.email;
-      }
-      // Pre-fill WhatsApp
-      if (data.telefone) {
-        const waField = document.querySelector('[name="numero_whatsapp"]');
-        if (waField && !waField.value) waField.value = data.telefone;
-      }
-      // Auto-select plan
-      if (data.plano && ['atende','cresce','escala'].includes(data.plano)) {
-        selectPlan(data.plano);
-      }
-    } catch(e) { /* silently ignore — form still works without prefill */ }
+      selectBusinessType('servico'); // paid prefill tokens are service plans
+      if (data.nome) { const f = document.querySelector('[name="responsavel"]'); if (f && !f.value) f.value = data.nome; }
+      if (data.email) { const f = document.querySelector('[name="client_email"]'); if (f && !f.value) f.value = data.email; }
+      if (data.telefone) { const f = document.querySelector('[name="numero_whatsapp"]'); if (f && !f.value) f.value = data.telefone; }
+      if (data.plano && ['atende','cresce','escala'].includes(data.plano)) selectPlan(data.plano);
+    } catch (e) { /* form still works without prefill */ }
   })();
 
-  // ── Plan picker ──
-  const PLAN_LABELS = {
-    atende: 'Atende', cresce: 'Cresce', escala: 'Escala'
-  };
+  // ── Business type toggle ──
+  function selectBusinessType(bt) { applyBusinessType(bt); }
 
+  function applyBusinessType(bt) {
+    businessType = bt;
+    document.getElementById('business_type_input').value = bt;
+    document.querySelectorAll('.biz-pill').forEach(p => p.classList.remove('selected'));
+    const pill = document.getElementById('biz-' + bt);
+    if (pill) pill.classList.add('selected');
+
+    document.querySelectorAll('.section-card').forEach(c => {
+      const show = c.dataset.biz === 'both' || c.dataset.biz === bt;
+      c.style.display = show ? '' : 'none';
+    });
+
+    sectionState = {};
+    const vis = visibleCards();
+    vis.forEach((c, i) => {
+      c.classList.remove('open', 'active', 'done');
+      sectionState[c.id] = i === 0 ? 'open' : 'pending';
+      if (i === 0) c.classList.add('open', 'active');
+    });
+    const sc = document.getElementById('submitCard');
+    if (sc) sc.style.display = 'none';
+
+    renumber();
+    buildDots();
+    updateProgress();
+    maybeUnlock();
+  }
+
+  // ── Plan picker ──
   function selectPlan(plan) {
     selectedPlan = plan;
     document.getElementById('plano_contratado_input').value = plan;
-
-    // Highlight selected pill
     document.querySelectorAll('.plan-pill').forEach(p => p.classList.remove('selected'));
-    document.getElementById('pill-' + plan).classList.add('selected');
+    const pp = document.getElementById('pill-' + plan);
+    if (pp) pp.classList.add('selected');
 
-    // Unlock sections
-    const wrap = document.getElementById('sections-wrap');
-    wrap.classList.remove('sections-locked');
-    const notice = document.getElementById('plan-lock-notice');
-    if (notice) notice.style.display = 'none';
-
-    // Show/hide agenda blocks + set single preferencia_agendamento value
     const prefMap = { atende: 'coletar_encaminhar', cresce: 'coletar_encaminhar', escala: 'automatico' };
     document.getElementById('pref_agend_input').value = prefMap[plan] || 'coletar_encaminhar';
-    // Clear link_agenda when switching away from Cresce (prevents stale link polluting other plans' prompts)
-    if (plan !== 'cresce') {
-      const linkInput = document.querySelector('input[name="link_agenda"]');
-      if (linkInput) linkInput.value = '';
-    }
+    if (plan !== 'cresce') { const li = document.querySelector('input[name="link_agenda"]'); if (li) li.value = ''; }
 
-    ['atende','cresce','escala'].forEach(id => {
-      const el = document.getElementById('agenda-' + id);
-      if (el) el.classList.remove('visible');
-    });
-    if (plan === 'atende') document.getElementById('agenda-atende').classList.add('visible');
-    else if (plan === 'cresce') document.getElementById('agenda-cresce').classList.add('visible');
-    else if (plan === 'escala') document.getElementById('agenda-escala').classList.add('visible');
+    ['atende','cresce','escala'].forEach(id => { const el = document.getElementById('agenda-' + id); if (el) el.classList.remove('visible'); });
+    const ab = document.getElementById('agenda-' + plan); if (ab) ab.classList.add('visible');
+
+    maybeUnlock();
   }
 
-  // Show notice on load
-  window.addEventListener('DOMContentLoaded', function() {
+  function maybeUnlock() {
+    const wrap = document.getElementById('sections-wrap');
+    const notice = document.getElementById('plan-lock-notice');
+    if (businessType && selectedPlan) {
+      wrap.classList.remove('sections-locked');
+      if (notice) notice.style.display = 'none';
+    } else {
+      wrap.classList.add('sections-locked');
+      if (notice) {
+        notice.style.display = 'block';
+        notice.textContent = !businessType
+          ? '↑ Selecione o tipo de negócio e o plano acima para preencher'
+          : '↑ Selecione seu plano acima para preencher o formulário';
+      }
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
     const notice = document.getElementById('plan-lock-notice');
     if (notice) notice.style.display = 'block';
   });
 
-  // Show qual-sistema if "sistema" selected
-  document.addEventListener('change', function(e) {
+  // ── Conditional sub-fields ──
+  document.addEventListener('change', function (e) {
     if (e.target && e.target.name === 'sistema_agenda') {
-      const wrap = document.getElementById('qual-sistema-wrap');
-      if (wrap) wrap.style.display = e.target.value === 'sistema' ? 'block' : 'none';
+      const w = document.getElementById('qual-sistema-wrap');
+      if (w) w.style.display = e.target.value === 'sistema' ? 'block' : 'none';
+    }
+    if (e.target && e.target.name === 'plataforma') {
+      const w = document.getElementById('plataforma-outra-wrap');
+      if (w) w.style.display = e.target.value === 'outra' ? 'block' : 'none';
     }
   });
 
-  for (let i = 1; i <= TOTAL_SECTIONS; i++) sectionState[i] = i === 1 ? 'open' : 'pending';
+  // ── Numbering / dots / progress ──
+  function renumber() {
+    visibleCards().forEach((c, i) => { const n = c.querySelector('.section-num'); if (n) n.textContent = i + 1; });
+  }
 
-  // ── Build section dots ──
-  const dotsWrap = document.getElementById('sectionDots');
-  for (let i = 1; i <= TOTAL_SECTIONS; i++) {
-    const d = document.createElement('div');
-    d.className = 'section-dot' + (i === 1 ? ' active' : '');
-    d.id = `dot-${i}`;
-    dotsWrap.appendChild(d);
+  function buildDots() {
+    const w = document.getElementById('sectionDots');
+    w.innerHTML = '';
+    visibleCards().forEach(c => { const d = document.createElement('div'); d.className = 'section-dot'; d.dataset.card = c.id; w.appendChild(d); });
   }
 
   function updateProgress() {
-    const done = Object.values(sectionState).filter(s => s === 'done').length;
-    const pct = Math.round((done / TOTAL_SECTIONS) * 100);
+    const vis = visibleCards();
+    const total = vis.length;
+    const done = vis.filter(c => sectionState[c.id] === 'done').length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
     document.getElementById('progressBar').style.width = pct + '%';
     document.getElementById('progressCount').textContent = pct + '% concluído';
-    const openSec = Object.keys(sectionState).find(k => sectionState[k] === 'open');
-    document.getElementById('progressLabel').textContent = `Seção ${openSec || TOTAL_SECTIONS} de ${TOTAL_SECTIONS}`;
-
-    for (let i = 1; i <= TOTAL_SECTIONS; i++) {
-      const dot = document.getElementById(`dot-${i}`);
+    let openIdx = vis.findIndex(c => sectionState[c.id] === 'open');
+    if (openIdx < 0) openIdx = Math.min(done, total - 1);
+    document.getElementById('progressLabel').textContent = 'Seção ' + (openIdx + 1) + ' de ' + total;
+    const dotsWrap = document.getElementById('sectionDots');
+    vis.forEach((c, i) => {
+      const dot = dotsWrap.children[i];
+      if (!dot) return;
       dot.className = 'section-dot';
-      if (sectionState[i] === 'done') dot.classList.add('done');
-      else if (sectionState[i] === 'open') dot.classList.add('active');
-    }
+      if (sectionState[c.id] === 'done') dot.classList.add('done');
+      else if (sectionState[c.id] === 'open') dot.classList.add('active');
+    });
   }
 
-  function toggleSection(n) {
-    const card = document.getElementById(`sec-${n}`);
+  // ── Section open/close ──
+  function toggleSection(head) {
+    const card = head.closest('.section-card');
     const isOpen = card.classList.contains('open');
     if (isOpen) {
       card.classList.remove('open');
     } else {
-      // Close all others
-      for (let i = 1; i <= TOTAL_SECTIONS; i++) {
-        document.getElementById(`sec-${i}`).classList.remove('open');
-      }
+      visibleCards().forEach(c => {
+        c.classList.remove('open');
+        if (sectionState[c.id] === 'open') sectionState[c.id] = 'pending';
+      });
       card.classList.add('open');
-      sectionState[n] = 'open';
+      sectionState[card.id] = 'open';
       updateProgress();
     }
   }
 
-  function nextSection(n) {
-    const card = document.getElementById(`sec-${n}`);
+  function nextSection(btn) {
+    const card = btn.closest('.section-card');
     card.classList.remove('open', 'active');
     card.classList.add('done');
-    sectionState[n] = 'done';
-
-    if (n < TOTAL_SECTIONS) {
-      const next = document.getElementById(`sec-${n + 1}`);
-      // Close all
-      for (let i = 1; i <= TOTAL_SECTIONS; i++) document.getElementById(`sec-${i}`).classList.remove('open');
+    sectionState[card.id] = 'done';
+    const vis = visibleCards();
+    const idx = vis.indexOf(card);
+    const next = vis[idx + 1];
+    vis.forEach(c => c.classList.remove('open'));
+    if (next) {
       next.classList.add('open', 'active');
-      sectionState[n + 1] = 'open';
+      sectionState[next.id] = 'open';
       next.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-      // Show submit
       document.getElementById('submitCard').style.display = 'block';
       document.getElementById('submitCard').scrollIntoView({ behavior: 'smooth' });
     }
@@ -1030,7 +1263,6 @@
       input.closest('.radio-item').classList.add('selected');
     });
   });
-
   document.querySelectorAll('.check-item input').forEach(input => {
     input.addEventListener('change', () => {
       input.closest('.check-item').classList.toggle('selected', input.checked);
@@ -1042,15 +1274,28 @@
   document.getElementById('onboardingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (submitting) return;
-    if (!selectedPlan) {
-      document.querySelector('.plan-picker-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.querySelector('.plan-picker-title').style.color = '#ef4444';
-      setTimeout(() => document.querySelector('.plan-picker-title').style.color = '', 2000);
+
+    // Require business type
+    if (!businessType) {
+      const w = document.querySelector('.plan-picker-wrap');
+      w.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const title = w.querySelector('.plan-picker-title');
+      if (title) { title.style.color = '#ef4444'; setTimeout(() => title.style.color = '', 2000); }
       return;
     }
+    // Require plan
+    if (!selectedPlan) {
+      const planWrap = document.querySelectorAll('.plan-picker-wrap')[1];
+      planWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const title = planWrap.querySelector('.plan-picker-title');
+      if (title) { title.style.color = '#ef4444'; setTimeout(() => title.style.color = '', 2000); }
+      return;
+    }
+
     const form = e.target;
-    // Validate link_agenda for Cresce (required to inject link into bot prompt)
-    if (selectedPlan === 'cresce') {
+
+    // link_agenda required only for service Cresce
+    if (businessType === 'servico' && selectedPlan === 'cresce') {
       const linkVal = (form.querySelector('input[name="link_agenda"]') || {}).value || '';
       if (!linkVal.trim()) {
         const linkInput = form.querySelector('input[name="link_agenda"]');
@@ -1063,17 +1308,15 @@
         return;
       }
     }
-    // Validate Termos acceptance (required)
+
+    // Termos acceptance
     const aceiteBox = document.getElementById('aceite_termos');
     if (!aceiteBox || !aceiteBox.checked) {
       const wrap = document.getElementById('aceiteWrap');
-      if (wrap) {
-        wrap.style.color = '#ef4444';
-        wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => wrap.style.color = '', 3000);
-      }
+      if (wrap) { wrap.style.color = '#ef4444'; wrap.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => wrap.style.color = '', 3000); }
       return;
     }
+
     const submitBtn = form.querySelector('.btn-submit');
     submitting = true;
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
@@ -1082,7 +1325,10 @@
     try {
       const fields = Object.fromEntries(data);
       const objetivos = data.getAll('objetivo[]');
+      const orderIdMethod = data.getAll('order_id_method[]');
       const payload = {
+        // shared
+        business_type:         businessType || '',
         nome_empresa:          fields.nome_empresa || '',
         cidade_bairro:         fields.cidade_bairro || '',
         numero_whatsapp:       (fields.numero_whatsapp || '').replace(/[^0-9]/g, ''),
@@ -1091,12 +1337,6 @@
         horario_atendimento:   fields.horario_atendimento || '',
         descricao_empresa:     fields.descricao_empresa || '',
         instagram_site:        fields.instagram_site || '',
-        servicos_prioritarios: fields.servicos_prioritarios || '',
-        formas_pagamento:      fields.formas_pagamento || '',
-        politica_cancelamento: fields.politica_cancelamento || '',
-        sistema_agenda:        fields.sistema_agenda || 'nao',
-        qual_sistema:          fields.qual_sistema || '',
-        horarios_prioritarios: fields.horarios_prioritarios || '',
         faq:                   fields.faq || '',
         urgencia:              fields.urgencia || '',
         guardrails:            fields.guardrails || '',
@@ -1110,9 +1350,29 @@
         responsavel_grupo:     fields.responsavel_grupo || '',
         exemplos_mensagens:    fields.exemplos_mensagens || '',
         situacao_chip:         fields.situacao_chip || '',
-        objetivos:             objetivos,
         plano_contratado:      fields.plano_contratado || '',
+        volume_mensal:         fields.ec_volume_mensal || fields.volume_mensal || '',
+        formas_pagamento:      fields.ec_formas_pagamento || fields.formas_pagamento || '',
+        // service-only
+        servicos_prioritarios: fields.servicos_prioritarios || '',
+        politica_cancelamento: fields.politica_cancelamento || '',
+        sistema_agenda:        fields.sistema_agenda || 'nao',
+        qual_sistema:          fields.qual_sistema || '',
+        horarios_prioritarios: fields.horarios_prioritarios || '',
         link_agenda:           fields.link_agenda || '',
+        objetivos:             objetivos,
+        // e-commerce-only
+        plataforma:            fields.plataforma || '',
+        plataforma_outra:      fields.plataforma_outra || '',
+        nicho_categorias:      fields.nicho_categorias || '',
+        catalogo_url:          fields.catalogo_url || '',
+        order_id_method:       orderIdMethod.join(', '),
+        troca_prazo_dias:      fields.troca_prazo_dias || '',
+        troca_frete_quem_paga: fields.troca_frete_quem_paga || '',
+        troca_modo:            fields.troca_modo || '',
+        logistica_reversa:     fields.logistica_reversa || '',
+        pix_enabled:           fields.pix_enabled || '',
+        // meta
         aceite_termos:         true,
         termos_versao:         '2026-06-20',
         prefill_token:         new URLSearchParams(window.location.search).get('t') || '',
@@ -1135,7 +1395,11 @@
     }
   });
 
+  // ── Init ──
+  visibleCards().forEach((c, i) => { sectionState[c.id] = i === 0 ? 'open' : 'pending'; });
+  buildDots();
   updateProgress();
+
 </script>
 
 </body>
