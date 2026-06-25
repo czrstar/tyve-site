@@ -1079,15 +1079,24 @@
       <div class="sec-label" data-i18n="faq_label">Dúvidas</div>
       <h2 class="section-title section-title-dark" data-i18n="faq_h2">Perguntas frequentes</h2>
     </div>
+    <div class="biz-toggle" id="faq-biz-toggle" style="margin-bottom:22px">
+      <button class="biz-toggle-btn active" data-faqbiz="servico" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+      <button class="biz-toggle-btn" data-faqbiz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+    </div>
     <div class="faq-list">
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q1">Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a1">Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q2">Quanto tempo até estar funcionando? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a2">De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q3">Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a3">Não. A Tyve funciona no número que você já usa. É só conectar via QR code — menos de 5 minutos e tá feito.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q4">E se o agente falar alguma coisa errada? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a4">O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q5">O que é o follow-up automático? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a5">Quando um cliente conversa com o agente mas não agenda, não compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ele conseguiu o que precisava. Nos planos Escala, manda de novo 3 dias depois se ainda não houve retorno. Tudo sem você precisar lembrar de ninguém.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q6">O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a6">Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q7">Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a7">Sem fidelidade. É mês a mês — cancela quando quiser, com aviso de 15 dias e sem multa. E você ainda tem 7 dias de garantia: se não gostar, devolvemos 100%.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-i18n-html="faq_q8">Precisa de WhatsApp Business? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a8">Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q1">Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a1">Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q2">Quanto tempo até estar funcionando? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a2">De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q3">Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a3">Não. A Tyve funciona no número que você já usa. É só conectar via QR code — menos de 5 minutos e tá feito.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q4">E se o agente falar alguma coisa errada? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a4">O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q5">O que é o follow-up automático? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a5">Quando um cliente conversa com o agente mas não agenda, não compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ele conseguiu o que precisava. Nos planos Escala, manda de novo 3 dias depois se ainda não houve retorno. Tudo sem você precisar lembrar de ninguém.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q6">O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a6">Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q7">Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a7">Sem fidelidade. É mês a mês — cancela quando quiser, com aviso de 15 dias e sem multa. E você ainda tem 7 dias de garantia: se não gostar, devolvemos 100%.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q8">Precisa de WhatsApp Business? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a8">Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q9">A Tyve funciona com a minha loja (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a9">Sim. A Tyve integra com Shopify, Nuvemshop, Bling, WooCommerce e Tiny. A conexão é em poucos cliques, com a sua autorização — você não troca de sistema nem instala nada complicado.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q10">A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a10">Sim, nos planos Cresce e Escala. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q11">A Tyve faz a troca sozinha? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a11">No plano Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q12">O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a12">Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q13">Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a13">O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.</p></div></div>
     </div>
   </div>
 </section>
@@ -1296,6 +1305,16 @@ var T = {
     faq_a7:'Sem fidelidade. É mês a mês — cancela quando quiser, com aviso de 15 dias e sem multa. E você ainda tem 7 dias de garantia: se não gostar, devolvemos 100%.',
     faq_q8:'Precisa de WhatsApp Business? <span class="faq-icon">+</span>',
     faq_a8:'Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.',
+    faq_q9:'A Tyve funciona com a minha loja (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span>',
+    faq_a9:'Sim. A Tyve integra com Shopify, Nuvemshop, Bling, WooCommerce e Tiny. A conexão é em poucos cliques, com a sua autorização — você não troca de sistema nem instala nada complicado.',
+    faq_q10:'A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span>',
+    faq_a10:'Sim, nos planos Cresce e Escala. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.',
+    faq_q11:'A Tyve faz a troca sozinha? <span class="faq-icon">+</span>',
+    faq_a11:'No plano Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.',
+    faq_q12:'O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span>',
+    faq_a12:'Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.',
+    faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
+    faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
     cta_h2:'Chega de perder cliente<br/>no WhatsApp!',
     cta_p:'Em 20 minutinhos a gente mostra ao vivo como fica seu negócio,<br/>sem compromisso nenhum.',
     cta_btn:'Agendar demo grátis',
@@ -1464,6 +1483,16 @@ var T = {
     faq_a7:'No lock-in. It is month-to-month — cancel anytime with 15 days notice, no penalty. Plus a 7-day guarantee: if you are not happy, we refund 100%.',
     faq_q8:'Do I need WhatsApp Business? <span class="faq-icon">+</span>',
     faq_a8:'Yes — Tyve works exclusively with WhatsApp Business, ensuring compliance with WhatsApp\'s terms.',
+    faq_q9:'Does Tyve work with my store (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span>',
+    faq_a9:'Yes. Tyve integrates with Shopify, Nuvemshop, Bling, WooCommerce and Tiny. Connecting takes a few clicks with your authorization — no system change, nothing complicated to install.',
+    faq_q10:'Does Tyve really check my order status? <span class="faq-icon">+</span>',
+    faq_a10:'Yes, on the Cresce and Escala plans. It pulls the status and tracking code straight from your store and answers instantly — it does not make things up. When the order has tracking, it sends the link too.',
+    faq_q11:'Does Tyve handle exchanges on its own? <span class="faq-icon">+</span>',
+    faq_a11:'On the Escala plan, yes: Tyve handles size exchanges in WhatsApp — it checks the order, the new size availability and generates the return code. Edge cases (defects, out of window, out of stock) go to your team with full context ready.',
+    faq_q12:'Does the Pix money go to my account? <span class="faq-icon">+</span>',
+    faq_a12:'Yes. On the Escala plan, Tyve generates the order Pix inside the conversation and the money goes straight to your store account. Tyve is not in the middle of the payment.',
+    faq_q13:'Do you have access to my customers data? Is it safe? <span class="faq-icon">+</span>',
+    faq_a13:'Access is granted by you through an official, secure connection (OAuth), read-only for what is needed (orders) and compliant with LGPD. You can revoke access whenever you want.',
     cta_h2:'Stop losing customers<br/>on WhatsApp!',
     cta_p:'In 20 minutes we\'ll show you live how your business would look,<br/>with no commitment whatsoever.',
     cta_btn:'Book free demo',
@@ -1599,6 +1628,23 @@ window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visi
     el.addEventListener('click', function(){ setBiz('ecommerce'); });
   });
   if (location.hash === '#planos-ecommerce') { setBiz('ecommerce'); }
+})();
+
+// Toggle FAQ Servicos <-> E-commerce
+(function(){
+  function setFaqBiz(b){
+    document.querySelectorAll('#faq .faq-item').forEach(function(it){
+      var db = it.getAttribute('data-biz');
+      it.style.display = (db==='both'||db===b) ? '' : 'none';
+    });
+    document.querySelectorAll('#faq-biz-toggle .biz-toggle-btn').forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-faqbiz')===b);
+    });
+  }
+  document.querySelectorAll('#faq-biz-toggle .biz-toggle-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setFaqBiz(btn.getAttribute('data-faqbiz')); });
+  });
+  setFaqBiz('servico');
 })();
 
 // Toggle Mensal <-> Anual (2 meses grátis · BR only) — apenas grid Serviços
