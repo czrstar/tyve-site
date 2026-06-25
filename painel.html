@@ -420,6 +420,7 @@
 <div class="tabs-bar" id="tabsBar" style="display:none">
   <div class="tabs">
     <button class="tab-btn active" data-tab="resultados" onclick="switchTab('resultados')">📊 Resultados</button>
+    <button class="tab-btn" data-tab="trocas" id="tabBtnTrocas" onclick="switchTab('trocas')" style="display:none">🔄 Trocas</button>
     <button class="tab-btn" data-tab="config" onclick="switchTab('config')">⚙️ Configurações</button>
   </div>
 </div>
@@ -633,6 +634,16 @@
 
     </div><!-- /tab-config -->
 
+    <!-- ══ TAB: TROCAS ═════════════════════════════════════════ -->
+    <div id="tab-trocas" style="display:none">
+      <div class="card">
+        <div class="sec-label" style="margin-bottom:12px">Trocas</div>
+        <div class="card-title">Fila de trocas de numeração</div>
+        <div class="card-sub">As trocas elegíveis são registradas automaticamente pelo agente. As que aguardam confirmação ficam aqui — aprove ou recuse com um clique. Você também recebe um e-mail com os mesmos botões.</div>
+        <div id="trocasList" style="margin-top:16px"></div>
+      </div>
+    </div><!-- /tab-trocas -->
+
   </div><!-- /content -->
 </main>
 
@@ -651,6 +662,8 @@ const FAQ_SAVE  = N8N + '/tyve-faq-save';
 const FAQ_EDIT  = N8N + '/tyve-faq-edit';
 const FAQ_TOGGLE= N8N + '/tyve-faq-toggle';
 const CFG_SAVE  = N8N + '/tyve-config-save';
+const EXCH_LIST = N8N + '/tyve-exchange-list';
+const EXCH_ACT  = N8N + '/tyve-exchange-action';
 const REFRESH_MS = 5 * 60 * 1000;
 
 let TOKEN = '', CONFIG = {}, FAQ = [], chart = null;
@@ -677,12 +690,65 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.getElementById('tab-resultados').style.display = tab === 'resultados' ? '' : 'none';
   document.getElementById('tab-config').style.display     = tab === 'config'     ? '' : 'none';
+  const tr = document.getElementById('tab-trocas');
+  if (tr) tr.style.display = tab === 'trocas' ? '' : 'none';
+  if (tab === 'trocas') loadTrocas();
   history.replaceState(null,'', location.pathname + location.search + '#' + tab);
 }
 
 function initTab() {
   const hash = location.hash.replace('#','') || 'resultados';
-  switchTab(['resultados','config'].includes(hash) ? hash : 'resultados');
+  switchTab(['resultados','config','trocas'].includes(hash) ? hash : 'resultados');
+}
+
+// ── TROCAS ───────────────────────────────────────────
+const EXCH_LABEL = {
+  awaiting_staff:{t:'Aguardando aprovação',c:'#b45309',bg:'#fef3c7'},
+  approved:{t:'Aprovada',c:'#15803d',bg:'#dcfce7'},
+  processed:{t:'Confirmada',c:'#15803d',bg:'#dcfce7'},
+  auto_processed:{t:'Confirmada (auto)',c:'#15803d',bg:'#dcfce7'},
+  rejected:{t:'Recusada',c:'#6b7280',bg:'#f3f4f6'},
+  error:{t:'Erro',c:'#b91c1c',bg:'#fee2e2'}
+};
+async function loadTrocas() {
+  const box = document.getElementById('trocasList');
+  if (!box) return;
+  box.innerHTML = '<p style="color:#888;font-size:14px">Carregando trocas…</p>';
+  try {
+    const d = await fetch(EXCH_LIST + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json());
+    renderTrocas(d.exchanges || []);
+  } catch(e) { box.innerHTML = '<p style="color:#b91c1c;font-size:14px">Não foi possível carregar as trocas agora.</p>'; }
+}
+function renderTrocas(list) {
+  const box = document.getElementById('trocasList');
+  if (!list.length) { box.innerHTML = '<p style="color:#888;font-size:14px">Nenhuma troca registrada ainda. Quando um cliente solicitar uma troca elegível, ela aparece aqui.</p>'; return; }
+  box.innerHTML = list.map(e => {
+    const s = EXCH_LABEL[e.status] || {t:e.status,c:'#374151',bg:'#f3f4f6'};
+    const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+    const diff = Number(e.diff||0);
+    const actions = e.status === 'awaiting_staff'
+      ? '<div style="display:flex;gap:8px;margin-top:10px">'
+        + '<button class="btn btn-primary btn-sm" onclick="actExchange('+e.id+',\'approve\',this)">Aprovar</button>'
+        + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'reject\',this)">Recusar</button></div>'
+      : '';
+    return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+      + '<div><div style="font-weight:600">'+esc(e.product_title||'Produto')+'</div>'
+      + '<div style="font-size:13px;color:#666;margin-top:2px">Tamanho '+esc(e.from||'?')+' → <b>'+esc(e.to||'?')+'</b>'
+      + ' &nbsp;·&nbsp; '+esc(e.chat_id||'')+(diff?(' &nbsp;·&nbsp; dif. '+esc(e.currency||'BRL')+' '+diff.toFixed(2)):'')+'</div>'
+      + (dt?'<div style="font-size:12px;color:#999;margin-top:2px">'+dt+'</div>':'')+'</div>'
+      + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
+      + '</div>' + actions + '</div>';
+  }).join('');
+}
+async function actExchange(id, action, btn) {
+  if (action === 'reject' && !confirm('Recusar esta troca? A conversa será encaminhada para atendimento humano.')) return;
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  try {
+    const d = await postJSON(EXCH_ACT, {token:TOKEN, id:id, action:action});
+    if (d.ok) { toast(action === 'approve' ? 'Troca aprovada' : 'Troca recusada'); loadTrocas(); }
+    else { toast(d.error || 'Não foi possível concluir', false); loadTrocas(); }
+  } catch(e) { toast('Erro de conexão', false); if (btn) btn.disabled = false; }
 }
 
 // ── LOAD ─────────────────────────────────────────────
@@ -700,7 +766,11 @@ async function reload() {
     FAQ    = cfg.faq_entries || [];
     renderDash(dash);
     renderConfig();
+    const exchOn = String(CONFIG.exchange_enabled||'') === 'true';
+    const tbt = document.getElementById('tabBtnTrocas');
+    if (tbt) tbt.style.display = exchOn ? '' : 'none';
     showState('ok');
+    initTab();
   } catch(e) { showState('error'); }
 }
 
