@@ -661,6 +661,7 @@ const UNLOCK    = N8N + '/tyve-unlock-bot';
 const FAQ_SAVE  = N8N + '/tyve-faq-save';
 const FAQ_EDIT  = N8N + '/tyve-faq-edit';
 const FAQ_TOGGLE= N8N + '/tyve-faq-toggle';
+const FAQ_DELETE= N8N + '/tyve-faq-delete';
 const CFG_SAVE  = N8N + '/tyve-config-save';
 const EXCH_LIST = N8N + '/tyve-exchange-list';
 const EXCH_ACT  = N8N + '/tyve-exchange-action';
@@ -1034,14 +1035,14 @@ async function toggleFAQ(id, enabled, checkbox) {
 }
 
 async function removeFAQ(id) {
-  if (!confirm('Remover esta entrada do FAQ?')) return;
+  if (!confirm('Remover esta entrada do FAQ? Ela será apagada de vez.')) return;
   const el = document.getElementById('faq-' + id);
-  const f = FAQ.find(x=>x.id===id);
   try {
-    const d = await postJSON(FAQ_TOGGLE, {token:TOKEN, id, enabled:false});
+    const d = await postJSON(FAQ_DELETE, {token:TOKEN, id});
     if (d.ok) {
-      if (f) f.enabled = false;
-      if (el) el.style.display = 'none';
+      const idx = FAQ.findIndex(x=>x.id===id);
+      if (idx>=0) FAQ.splice(idx,1);
+      if (el) el.remove();
       document.getElementById('faqCountLbl').textContent =
         FAQ.filter(f=>f.enabled!==false).length + ' ativas de ' + FAQ.length + ' entradas';
       toast('Entrada removida');
