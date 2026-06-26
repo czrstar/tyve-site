@@ -764,9 +764,9 @@
         <div class="info-box blue">
           O agente consulta o status do pedido para o cliente ("cadê meu pedido?"). Para isso, ele precisa saber como o cliente costuma se identificar.
         </div>
-        <div class="question">
+        <div class="question" data-plan-q="cresce,escala">
           <label class="q-label">Como o cliente costuma identificar o pedido? <span class="req">*</span></label>
-          <p class="q-hint">Marque todas que se aplicam.</p>
+          <p class="q-hint">Marque todas que se aplicam. <em>(Consulta de pedido — planos Cresce e Escala.)</em></p>
           <div class="checkbox-group">
             <label class="check-item"><input type="checkbox" name="order_id_method[]" value="telefone" /><div class="check-box"></div><span class="check-label">Telefone / WhatsApp do comprador</span></label>
             <label class="check-item"><input type="checkbox" name="order_id_method[]" value="numero_pedido" /><div class="check-box"></div><span class="check-label">Número do pedido</span></label>
@@ -824,6 +824,8 @@
             <label class="radio-item"><input type="radio" name="troca_frete_quem_paga" value="depende" /><div class="radio-box"></div><span class="radio-label">Depende do motivo (defeito x arrependimento)</span></label>
           </div>
         </div>
+        <div data-plan-q="escala">
+        <div class="info-box orange" style="margin-bottom:14px">As opções abaixo configuram a <strong>troca automática</strong> (plano Escala). Nos planos Atende e Cresce, basta a política acima.</div>
         <div class="question">
           <label class="q-label">Como funciona o envio do produto novo na troca? <span class="req">*</span></label>
           <div class="radio-group">
@@ -840,6 +842,7 @@
             <label class="radio-item"><input type="radio" name="logistica_reversa" value="nao_tenho" /><div class="radio-box"></div><span class="radio-label">Ainda não tenho</span></label>
           </div>
         </div>
+        </div><!-- /data-plan-q escala (troca operacional) -->
         <div class="section-footer">
           <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
@@ -847,7 +850,7 @@
     </div>
 
     <!-- ── SEÇÃO EC-D — Pagamento na conversa ── -->
-    <div class="section-card" id="sec-ecD" data-sec="ecD" data-biz="ecommerce" style="display:none">
+    <div class="section-card" id="sec-ecD" data-sec="ecD" data-biz="ecommerce" data-plan="escala" style="display:none">
       <div class="section-head" onclick="toggleSection(this)">
         <div class="section-head-left">
           <div class="section-num">D</div>
@@ -1113,11 +1116,27 @@
     const pill = document.getElementById('biz-' + bt);
     if (pill) pill.classList.add('selected');
 
-    document.querySelectorAll('.section-card').forEach(c => {
-      const show = c.dataset.biz === 'both' || c.dataset.biz === bt;
-      c.style.display = show ? '' : 'none';
-    });
+    applyVisibility();
+    maybeUnlock();
+  }
 
+  // Plan gating: feature por plano (alinhado ao site — WISMO=Cresce+, Troca/Pix=Escala)
+  function planAllowed(list) {
+    if (!list) return true;
+    return list.split(',').map(s => s.trim()).includes(selectedPlan);
+  }
+
+  function applyVisibility() {
+    // Seções: por tipo de negócio E por plano
+    document.querySelectorAll('.section-card').forEach(c => {
+      const bizOk = c.dataset.biz === 'both' || c.dataset.biz === businessType;
+      c.style.display = (bizOk && planAllowed(c.dataset.plan)) ? '' : 'none';
+    });
+    // Perguntas/blocos com gating de plano dentro de seções visíveis
+    document.querySelectorAll('[data-plan-q]').forEach(q => {
+      q.style.display = planAllowed(q.dataset.planQ) ? '' : 'none';
+    });
+    // Recalcula estado das seções visíveis
     sectionState = {};
     const vis = visibleCards();
     vis.forEach((c, i) => {
@@ -1127,11 +1146,9 @@
     });
     const sc = document.getElementById('submitCard');
     if (sc) sc.style.display = 'none';
-
     renumber();
     buildDots();
     updateProgress();
-    maybeUnlock();
   }
 
   // ── Plan picker ──
@@ -1149,6 +1166,7 @@
     ['atende','cresce','escala'].forEach(id => { const el = document.getElementById('agenda-' + id); if (el) el.classList.remove('visible'); });
     const ab = document.getElementById('agenda-' + plan); if (ab) ab.classList.add('visible');
 
+    if (businessType) applyVisibility();
     maybeUnlock();
   }
 
