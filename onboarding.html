@@ -842,6 +842,12 @@
             <label class="radio-item"><input type="radio" name="logistica_reversa" value="nao_tenho" /><div class="radio-box"></div><span class="radio-label">Ainda não tenho</span></label>
           </div>
         </div>
+        <div class="question">
+          <label class="q-label">Endereço de devolução da loja (para onde o cliente envia a troca) <span class="req">*</span></label>
+          <input type="text" name="cep_devolucao" placeholder="CEP (ex: 14400-000)" />
+          <textarea name="endereco_devolucao" rows="2" placeholder="Rua, número, bairro, cidade e UF"></textarea>
+          <input type="text" name="cnpj_loja" placeholder="CNPJ da loja" />
+        </div>
         </div><!-- /data-plan-q escala (troca operacional) -->
         <div class="section-footer">
           <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
@@ -1389,6 +1395,9 @@
         troca_frete_quem_paga: fields.troca_frete_quem_paga || '',
         troca_modo:            fields.troca_modo || '',
         logistica_reversa:     fields.logistica_reversa || '',
+        cep_devolucao:         fields.cep_devolucao || '',
+        endereco_devolucao:    fields.endereco_devolucao || '',
+        cnpj_loja:             fields.cnpj_loja || '',
         pix_enabled:           fields.pix_enabled || '',
         // meta
         aceite_termos:         true,
