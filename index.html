@@ -151,7 +151,7 @@
   .section-title-light { color: white; }
   .section-title-dark { color: var(--txt); }
   .problem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-  .problem-card { background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.09); border-radius: 14px; padding: 32px 26px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease; cursor: default; }
+  .problem-card { background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.09); border-radius: 14px; padding: 32px 26px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease; cursor: default; text-align: center; }
   .problem-card:hover { transform: translateY(-14px); box-shadow: 0 28px 60px rgba(0,0,0,.55); border-color: rgba(0,232,223,.6); background: rgba(255,255,255,.09); }
   .problem-icon { font-size: 32px; margin-bottom: 16px; }
   .problem-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: white; }
@@ -514,7 +514,7 @@
       </span>
       <span data-i18n="hero_badge">WhatsApp Cloud API oficial</span>
     </div>
-    <h1 data-i18n-html="hero_h1">Seu WhatsApp vira seu<br/>melhor atendente. <span class="accent">24h por dia!</span></h1>
+    <h1 data-i18n-html="hero_h1">Seu WhatsApp vira seu<br/>melhor atendente.<br/><span class="accent">24h por dia!</span></h1>
     <p class="hero-sub" data-i18n="hero_sub">Feita para responder. Feita para resolver.</p>
     <p class="hero-br" data-i18n="hero_br">🇧🇷 Feito no Brasil, suporte em português</p>
     <a href="#planos" class="btn-cta" data-i18n="hero_cta">Começar agora</a>
@@ -630,12 +630,12 @@
       <h2 class="section-title section-title-dark" data-i18n-html="fw_h2">Pra quem tem negócio local<br/>e WhatsApp que não para de tocar</h2>
     </div>
     <div class="for-who-grid">
-      <div class="segment-card"><div class="segment-icon">🦷</div><h3 data-i18n="fw_c1">Clínicas e Consultórios</h3></div>
-      <div class="segment-card"><div class="segment-icon">💆</div><h3 data-i18n="fw_c2">Estética e Beleza</h3></div>
-      <div class="segment-card"><div class="segment-icon">🏠</div><h3 data-i18n="fw_c3">Imobiliárias</h3></div>
-      <div class="segment-card"><div class="segment-icon">🚗</div><h3 data-i18n="fw_c4">Oficinas e Auto</h3></div>
-      <div class="segment-card"><div class="segment-icon">⚖️</div><h3 data-i18n="fw_c5">Advogados e Contadores</h3></div>
-      <div class="segment-card"><div class="segment-icon">🏋️</div><h3 data-i18n="fw_c6">Academias e Escolas</h3></div>
+      <a href="#planos" class="segment-card" data-servico-trigger><div class="segment-icon">🦷</div><h3 data-i18n="fw_c1">Clínicas e Consultórios</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card" data-servico-trigger><div class="segment-icon">💆</div><h3 data-i18n="fw_c2">Estética e Beleza</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card" data-servico-trigger><div class="segment-icon">🏠</div><h3 data-i18n="fw_c3">Imobiliárias</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card" data-servico-trigger><div class="segment-icon">🚗</div><h3 data-i18n="fw_c4">Oficinas e Auto</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card" data-servico-trigger><div class="segment-icon">⚖️</div><h3 data-i18n="fw_c5">Advogados e Contadores</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card" data-servico-trigger><div class="segment-icon">🏋️</div><h3 data-i18n="fw_c6">Academias e Escolas</h3><span class="segment-link">Ver planos →</span></a>
       <a href="#planos-ecommerce" class="segment-card" data-ecom-trigger><div class="segment-icon">🛒</div><h3 data-i18n="fw_c7">E-commerce / Loja online</h3><span class="segment-link">Ver planos →</span></a>
     </div>
   </div>
@@ -1159,7 +1159,7 @@ var T = {
     nav_how:'Como funciona', nav_segments:'Segmentos', nav_faq:'FAQ',
     nav_plans:'Planos e Preços', nav_demo:'⚡ Ver demo ao vivo',
     hero_badge:'WhatsApp Cloud API oficial',
-    hero_h1:'Seu WhatsApp vira seu<br/>melhor atendente. <span class="accent">24h por dia!</span>',
+    hero_h1:'Seu WhatsApp vira seu<br/>melhor atendente.<br/><span class="accent">24h por dia!</span>',
     hero_sub:'Feita para responder. Feita para resolver.',
     hero_br:'🇧🇷 Feito no Brasil, suporte em português',
     hero_cta:'Começar agora',
@@ -1630,6 +1630,9 @@ window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visi
   });
   document.querySelectorAll('[data-ecom-trigger]').forEach(function(el){
     el.addEventListener('click', function(){ setBiz('ecommerce'); });
+  });
+  document.querySelectorAll('[data-servico-trigger]').forEach(function(el){
+    el.addEventListener('click', function(){ setBiz('servicos'); });
   });
   if (location.hash === '#planos-ecommerce') { setBiz('ecommerce'); }
 })();
