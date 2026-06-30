@@ -21,12 +21,12 @@
     :root {
       --green:        #f84100;
       --green-dark:   #d13600;
-      --blue-primary: #00e8df;
-      --blue-hover:   #00c4bc;
-      --blue-deep:    #004a47;
-      --blue-dark:    #00e8df;
-      --blue-pale:    #e0fffe;
-      --blue-light:   #b3faf7;
+      --blue-primary: #25D366;
+      --blue-hover:   #1FAE57;
+      --blue-deep:    #064E3B;
+      --blue-dark:    #0F7A42;
+      --blue-pale:    #E7F8ED;
+      --blue-light:   #B9EECB;
       --white:        #FFFFFF;
       --grey-50:      #F8FAFC;
       --grey-100:     #F1F5F9;
@@ -76,10 +76,10 @@
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(3,105,161,.15); color: var(--blue-light);
+      background: rgba(37,211,102,.15); color: var(--blue-light);
       font-size: 12px; font-weight: 600; letter-spacing: .5px;
       padding: 4px 14px; border-radius: 999px;
-      border: 1px solid rgba(3,105,161,.25);
+      border: 1px solid rgba(37,211,102,.25);
       margin-bottom: 20px;
     }
     .hero h1 {
@@ -87,7 +87,7 @@
       color: var(--white); line-height: 1.2; margin-bottom: 16px;
     }
     .hero h1 span {
-      background: linear-gradient(135deg, #f84100, #00e8df);
+      background: linear-gradient(135deg, #f84100, #25D366);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
@@ -220,7 +220,7 @@
     }
     input:focus, textarea:focus, select:focus {
       border-color: var(--blue-primary);
-      box-shadow: 0 0 0 3px rgba(3,105,161,.12);
+      box-shadow: 0 0 0 3px rgba(37,211,102,.12);
     }
     textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 
@@ -377,8 +377,9 @@
   </div>
 
   <p style="font-size:13px;opacity:.7;margin-top:14px;">Dica: use o botão "Próxima seção →" para avançar entre as etapas.</p>
+  <p style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:24px;margin-bottom:10px;">Passo a passo da sua ativação</p>
   <div class="steps-row">
-    <div class="step-pill"><span class="step-num">1</span>Preencha o form (8 min)</div>
+    <div class="step-pill"><span class="step-num">1</span>Preencha o formulário (20–30 min)</div>
     <div class="step-pill"><span class="step-num">2</span>Configuramos o assistente</div>
     <div class="step-pill"><span class="step-num">3</span>Você aprova antes de ir ao ar</div>
   </div>
@@ -403,7 +404,6 @@
 
     <!-- ── TIPO DE NEGÓCIO ── -->
     <div class="plan-picker-wrap">
-      <div class="plan-picker-label">Passo 0</div>
       <div class="plan-picker-title">Qual o tipo do seu negócio?</div>
       <div class="plan-picker-hint">Isso adapta o formulário para o que faz sentido no seu caso.</div>
       <div class="plan-picker-grid">
@@ -427,7 +427,6 @@
 
     <!-- ── SELETOR DE PLANO ── -->
     <div class="plan-picker-wrap">
-      <div class="plan-picker-label">Passo 0</div>
       <div class="plan-picker-title">Qual plano você contratou?</div>
       <div class="plan-picker-hint">Selecione seu plano para personalizar o formulário de acordo com o que será configurado.</div>
       <div class="plan-picker-grid">
