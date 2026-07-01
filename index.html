@@ -208,13 +208,16 @@
   .ecom-enterprise-note { text-align: center; margin-top: 18px; font-size: 13px; color: #666; }
   .plan-name .plan-seg { font-size: 11px; color: var(--orange); font-weight: 700; }
   .plan {
-    background: #fff; border: 1.5px solid rgba(0,232,223,.35);
-    border-radius: 18px; padding: 28px 24px; position: relative;
-    box-shadow: 0 2px 16px rgba(0,232,223,.08);
-    transition: box-shadow .2s, transform .2s; display: flex; flex-direction: column;
+    background: #fff; border: 1px solid #e8e8e8;
+    border-radius: 16px; padding: 30px 26px; position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    transition: border-color .2s, box-shadow .2s, transform .2s; display: flex; flex-direction: column;
   }
-  .plan:hover { box-shadow: 0 12px 40px rgba(0,232,223,.18); transform: translateY(-2px); }
+  .plan:hover { border-color: #d5d5d5; box-shadow: 0 6px 20px rgba(0,0,0,.06); transform: translateY(-1px); }
   .plan.featured { border-color: var(--orange); background: #fff8f5; box-shadow: 0 4px 24px rgba(248,65,0,.12); }
+  .plan.featured:hover { box-shadow: 0 8px 30px rgba(248,65,0,.16); }
+  .price-was { font-size: 13px; color: #aaa; text-decoration: line-through; margin-bottom: 2px; display: none; }
+  .price-was.show { display: block; }
   .plan-badge-top {
     position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
     background: var(--orange); color: white; font-size: 11px; font-weight: 700;
@@ -691,6 +694,7 @@
     <div class="pricing-grid">
       <div class="plan">
         <p class="plan-name" data-i18n="plan_atende">Atende</p>
+        <p class="price-was" data-was></p>
         <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-annual-note" style="display:none"></p>
         <p class="plan-tagline" data-i18n="atende_tagline">Até 200 contatos atendidos/mês</p>
@@ -713,6 +717,7 @@
       <div class="plan featured">
         <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
         <p class="plan-name" data-i18n="plan_cresce">Cresce</p>
+        <p class="price-was" data-was></p>
         <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-annual-note" style="display:none"></p>
         <p class="plan-tagline" data-i18n="cresce_tagline">Até 500 contatos atendidos/mês</p>
@@ -731,6 +736,7 @@
 
       <div class="plan">
         <p class="plan-name" data-i18n="plan_escala">Escala</p>
+        <p class="price-was" data-was></p>
         <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
         <p class="plan-annual-note" style="display:none"></p>
         <p class="plan-tagline" data-i18n="escala_tagline">Até 1.000 contatos/mês</p>
@@ -778,6 +784,7 @@
       <div class="pricing-grid">
         <div class="plan">
           <p class="plan-name">Atende <span class="plan-seg">E-commerce</span></p>
+          <p class="price-was" data-was></p>
           <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period">/mês</span></div>
           <p class="plan-annual-note" style="display:none"></p>
           <p class="plan-tagline">Até 200 contatos atendidos/mês</p>
@@ -799,6 +806,7 @@
         <div class="plan featured">
           <div class="plan-badge-top">MAIS POPULAR</div>
           <p class="plan-name">Cresce <span class="plan-seg">E-commerce</span></p>
+          <p class="price-was" data-was></p>
           <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period">/mês</span></div>
           <p class="plan-annual-note" style="display:none"></p>
           <p class="plan-tagline">Até 500 contatos atendidos/mês</p>
@@ -817,6 +825,7 @@
 
         <div class="plan">
           <p class="plan-name">Escala <span class="plan-seg">E-commerce</span></p>
+          <p class="price-was" data-was></p>
           <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period">/mês</span></div>
           <p class="plan-annual-note" style="display:none"></p>
           <p class="plan-tagline">Até 1.000 contatos/mês</p>
@@ -1674,6 +1683,7 @@ function renderCycle(){
       if (!amtEl) return;
       var perEl = card.querySelector('.plan-period');
       var noteEl = card.querySelector('.plan-annual-note');
+      var wasEl = card.querySelector('.price-was');
       var btn = card.querySelector('.btn-plan');
       var brl = parseInt(amtEl.getAttribute('data-brl'), 10);
       var nome = '';
@@ -1687,6 +1697,7 @@ function renderCycle(){
           noteEl.style.display = 'block';
           noteEl.innerHTML = 'R$' + formatBRL(total) + '/ano em 12x sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
         }
+        if (wasEl) { wasEl.textContent = 'R$' + formatBRL(brl) + '/mês'; wasEl.classList.add('show'); }
         if (btn) {
           if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar/plano-' + mm[1] + '?ciclo=anual'); }
           else { btn.setAttribute('href', waEcom(nome, true)); }
@@ -1695,6 +1706,7 @@ function renderCycle(){
         amtEl.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
         if (perEl) perEl.textContent = (T[currentLang] && T[currentLang].per_month) || '/mês';
         if (noteEl) noteEl.style.display = 'none';
+        if (wasEl) wasEl.classList.remove('show');
         if (btn) {
           if (kind === 'servicos') { var mm2 = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm2) btn.setAttribute('href', '/assinar/plano-' + mm2[1]); }
           else { btn.setAttribute('href', waEcom(nome, false)); }
