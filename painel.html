@@ -724,28 +724,50 @@ async function loadTrocas() {
     renderTrocas(d.exchanges || []);
   } catch(e) { box.innerHTML = '<p style="color:#b91c1c;font-size:14px">Não foi possível carregar as trocas agora.</p>'; }
 }
-function renderTrocas(list) {
+let TROCAS_ALL = [], TROCAS_PAGE = 0; const TROCAS_PER = 8;
+function trocaCard(e) {
+  const s = EXCH_LABEL[e.status] || {t:e.status,c:'#374151',bg:'#f3f4f6'};
+  const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+  const diff = Number(e.diff||0);
+  const actions = e.status === 'awaiting_staff'
+    ? '<div style="display:flex;gap:8px;margin-top:10px">'
+      + '<button class="btn btn-primary btn-sm" onclick="actExchange('+e.id+',\'approve\',this)">Aprovar (cliente posta)</button>'
+      + '<button class="btn btn-sm" style="background:#0ea5e9;color:#fff" onclick="actExchange('+e.id+',\'approvefree\',this)">Devolução grátis</button>'
+      + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'reject\',this)">Recusar</button></div>'
+    : '';
+  return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+    + '<div><div style="font-weight:600">'+esc(e.product_title||'Produto')+'</div>'
+    + '<div style="font-size:13px;color:#666;margin-top:2px">Tamanho '+esc(e.from||'?')+' → <b>'+esc(e.to||'?')+'</b>'
+    + ' &nbsp;·&nbsp; '+esc(e.chat_id||'')+(diff?(' &nbsp;·&nbsp; dif. '+esc(e.currency||'BRL')+' '+diff.toFixed(2)):'')+'</div>'
+    + (dt?'<div style="font-size:12px;color:#999;margin-top:2px">'+dt+'</div>':'')+'</div>'
+    + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
+    + '</div>' + actions + '</div>';
+}
+function renderTrocas(list) { TROCAS_ALL = list || []; TROCAS_PAGE = 0; renderTrocasPage(); }
+function renderTrocasPage() {
   const box = document.getElementById('trocasList');
+  if (!box) return;
+  const list = TROCAS_ALL;
   if (!list.length) { box.innerHTML = '<p style="color:#888;font-size:14px">Nenhuma troca registrada ainda. Quando um cliente solicitar uma troca elegível, ela aparece aqui.</p>'; return; }
-  box.innerHTML = list.map(e => {
-    const s = EXCH_LABEL[e.status] || {t:e.status,c:'#374151',bg:'#f3f4f6'};
-    const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
-    const diff = Number(e.diff||0);
-    const actions = e.status === 'awaiting_staff'
-      ? '<div style="display:flex;gap:8px;margin-top:10px">'
-        + '<button class="btn btn-primary btn-sm" onclick="actExchange('+e.id+',\'approve\',this)">Aprovar (cliente posta)</button>'
-        + '<button class="btn btn-sm" style="background:#0ea5e9;color:#fff" onclick="actExchange('+e.id+',\'approvefree\',this)">Devolução grátis</button>'
-        + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'reject\',this)">Recusar</button></div>'
-      : '';
-    return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee">'
-      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
-      + '<div><div style="font-weight:600">'+esc(e.product_title||'Produto')+'</div>'
-      + '<div style="font-size:13px;color:#666;margin-top:2px">Tamanho '+esc(e.from||'?')+' → <b>'+esc(e.to||'?')+'</b>'
-      + ' &nbsp;·&nbsp; '+esc(e.chat_id||'')+(diff?(' &nbsp;·&nbsp; dif. '+esc(e.currency||'BRL')+' '+diff.toFixed(2)):'')+'</div>'
-      + (dt?'<div style="font-size:12px;color:#999;margin-top:2px">'+dt+'</div>':'')+'</div>'
-      + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
-      + '</div>' + actions + '</div>';
-  }).join('');
+  const total = list.length, pages = Math.ceil(total / TROCAS_PER);
+  if (TROCAS_PAGE > pages - 1) TROCAS_PAGE = pages - 1;
+  if (TROCAS_PAGE < 0) TROCAS_PAGE = 0;
+  const start = TROCAS_PAGE * TROCAS_PER, end = Math.min(start + TROCAS_PER, total);
+  const cards = list.slice(start, end).map(trocaCard).join('');
+  let pager = '';
+  if (pages > 1) {
+    pager = '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px">'
+      + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" '+(TROCAS_PAGE===0?'disabled':'')+' onclick="trocasPage(-1)">← Anteriores</button>'
+      + '<span style="font-size:12px;color:#888">'+(start+1)+'–'+end+' de '+total+'</span>'
+      + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" '+(TROCAS_PAGE>=pages-1?'disabled':'')+' onclick="trocasPage(1)">Próximas →</button>'
+      + '</div>';
+  }
+  box.innerHTML = cards + pager;
+}
+function trocasPage(delta) {
+  TROCAS_PAGE += delta; renderTrocasPage();
+  const b = document.getElementById('trocasList'); if (b && b.scrollIntoView) b.scrollIntoView({behavior:'smooth', block:'start'});
 }
 async function actExchange(id, action, btn) {
   if (action === 'reject' && !confirm('Recusar esta troca? A conversa será encaminhada para atendimento humano.')) return;
