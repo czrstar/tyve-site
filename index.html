@@ -200,7 +200,7 @@
   .cycle-btn { background: #f0f0f0; border: 1px solid #e2e2e2; color: var(--txt); padding: 9px 20px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
   .cycle-btn:hover { border-color: var(--orange); }
   .cycle-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
-  .cycle-badge { background: var(--orange); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 100px; }
+  .cycle-badge { background: rgba(0,232,223,.15); color: #079b94; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 100px; }
   .cycle-btn.active .cycle-badge { background: #fff; color: var(--orange); }
   .plan-annual-note { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--orange); line-height: 1.4; }
   .plan-annual-note .save { display: block; color: rgba(0,0,0,.45); font-weight: 500; font-size: 12px; margin-top: 2px; }
@@ -234,14 +234,12 @@
   .plan-features li { font-size: 13px; color: var(--txt-mid); line-height: 1.5; padding-left: 20px; position: relative; }
   .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
   .plan-features li.feature-all {
-    padding-left: 0; color: var(--orange); font-weight: 700; font-size: 13px;
-    background: rgba(248,65,0,.08); border: 1.5px solid var(--orange);
-    border-radius: 8px; padding: 6px 12px; text-align: center;
+    padding-left: 0; color: var(--txt); font-weight: 700; font-size: 13px;
   }
   .plan-features li.feature-all::before { content: none; }
   .btn-plan {
     display: block; width: 100%; padding: 13px;
-    background: #25D366; color: #fff;
+    background: var(--orange); color: #fff;
     font-family: var(--font); font-size: 14px; font-weight: 700;
     border-radius: 100px; text-align: center; text-decoration: none; border: none; cursor: pointer;
     transition: opacity .2s; margin-top: auto;
