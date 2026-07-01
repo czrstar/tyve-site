@@ -262,6 +262,12 @@
     .plan-pill-name { font-size: 14px; font-weight: 800; color: #111e1d; }
     .plan-pill-price { font-size: 12px; color: #64748b; margin-top: 2px; }
     .plan-pill.selected .plan-pill-name { color: #f84100; }
+    .plan-confirmed-box { display: flex; align-items: center; gap: 12px; background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 16px 18px; flex-wrap: wrap; }
+    .plan-confirmed-check { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; background: #16a34a; color: #fff; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+    .plan-confirmed-text { font-size: 14px; color: #111e1d; flex: 1; min-width: 160px; }
+    .plan-confirmed-text strong { color: #15803d; }
+    .plan-confirmed-change { background: none; border: 1px solid #bbf7d0; color: #15803d; font-size: 12px; font-weight: 700; padding: 7px 14px; border-radius: 100px; cursor: pointer; font-family: inherit; }
+    .plan-confirmed-change:hover { background: #dcfce7; }
     .sections-locked { opacity: .4; pointer-events: none; filter: grayscale(1); }
     .plan-lock-notice { text-align: center; padding: 24px; font-size: 14px; color: #64748b; background: #f8fafc; border-radius: 12px; margin-bottom: 12px; display: none; }
 
@@ -429,23 +435,30 @@
     </div>
 
     <!-- ── SELETOR DE PLANO ── -->
-    <div class="plan-picker-wrap">
-      <div class="plan-picker-title">Qual plano você contratou?</div>
-      <div class="plan-picker-hint">Selecione seu plano para personalizar o formulário de acordo com o que será configurado.</div>
-      <div class="plan-picker-grid">
-        <div class="plan-pill" onclick="selectPlan('atende')" id="pill-atende">
-          <div class="plan-pill-name">Atende</div>
-          <div class="plan-pill-price">R$497/mês</div>
-        </div>
-        <div class="plan-pill" onclick="selectPlan('cresce')" id="pill-cresce">
-          <div class="plan-pill-name">Cresce</div>
-          <div class="plan-pill-price">R$697/mês</div>
-        </div>
-        <div class="plan-pill" onclick="selectPlan('escala')" id="pill-escala">
-          <div class="plan-pill-name">Escala</div>
-          <div class="plan-pill-price">R$997/mês</div>
-        </div>
+    <div class="plan-picker-wrap" id="plan-picker-wrap-plano">
+      <div id="plan-confirmed-box" class="plan-confirmed-box" style="display:none">
+        <div class="plan-confirmed-check">✓</div>
+        <div class="plan-confirmed-text">Identificamos seu plano automaticamente: <strong id="plan-confirmed-name">Cresce</strong></div>
+        <button type="button" class="plan-confirmed-change" onclick="showPlanPicker()">Não é esse? Trocar</button>
+      </div>
+      <div id="plan-picker-open">
+        <div class="plan-picker-title">Qual plano você contratou?</div>
+        <div class="plan-picker-hint">Selecione seu plano para personalizar o formulário de acordo com o que será configurado.</div>
+        <div class="plan-picker-grid">
+          <div class="plan-pill" onclick="selectPlan('atende')" id="pill-atende">
+            <div class="plan-pill-name">Atende</div>
+            <div class="plan-pill-price">R$497/mês</div>
+          </div>
+          <div class="plan-pill" onclick="selectPlan('cresce')" id="pill-cresce">
+            <div class="plan-pill-name">Cresce</div>
+            <div class="plan-pill-price">R$697/mês</div>
+          </div>
+          <div class="plan-pill" onclick="selectPlan('escala')" id="pill-escala">
+            <div class="plan-pill-name">Escala</div>
+            <div class="plan-pill-price">R$997/mês</div>
+          </div>
 
+        </div>
       </div>
       <input type="hidden" name="plano_contratado" id="plano_contratado_input" value="" />
     </div>
@@ -1111,9 +1124,31 @@
       if (data.nome) { const f = document.querySelector('[name="responsavel"]'); if (f && !f.value) f.value = data.nome; }
       if (data.email) { const f = document.querySelector('[name="client_email"]'); if (f && !f.value) f.value = data.email; }
       if (data.telefone) { const f = document.querySelector('[name="numero_whatsapp"]'); if (f && !f.value) f.value = data.telefone; }
-      if (data.plano && ['atende','cresce','escala'].includes(data.plano)) selectPlan(data.plano);
+      if (data.plano && ['atende','cresce','escala'].includes(data.plano)) {
+        selectPlan(data.plano);
+        showPlanConfirmed(data.plano);
+      }
     } catch (e) { /* form still works without prefill */ }
   })();
+
+  // ── Confirmed-plan banner (shown when the plan came from a valid checkout token) ──
+  const PLAN_LABELS = { atende: 'Atende (R$497/mês)', cresce: 'Cresce (R$697/mês)', escala: 'Escala (R$997/mês)' };
+  function showPlanConfirmed(plan) {
+    const box = document.getElementById('plan-confirmed-box');
+    const open = document.getElementById('plan-picker-open');
+    const name = document.getElementById('plan-confirmed-name');
+    if (!box || !open) return;
+    if (name) name.textContent = PLAN_LABELS[plan] || plan;
+    box.style.display = 'flex';
+    open.style.display = 'none';
+  }
+  function showPlanPicker() {
+    const box = document.getElementById('plan-confirmed-box');
+    const open = document.getElementById('plan-picker-open');
+    if (!box || !open) return;
+    box.style.display = 'none';
+    open.style.display = 'block';
+  }
 
   // ── Business type toggle ──
   function selectBusinessType(bt) { applyBusinessType(bt); }
