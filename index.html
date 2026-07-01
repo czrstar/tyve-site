@@ -192,14 +192,14 @@
   .pricing { padding: 24px 0 88px; background: var(--light); }
   .pricing-header { text-align: center; margin-bottom: 48px; }
   .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; align-items: stretch; }
-  .biz-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
-  .biz-toggle-btn { background: #f0f0f0; border: 1px solid #e2e2e2; color: var(--txt); padding: 10px 22px; border-radius: 100px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all .2s; }
-  .biz-toggle-btn:hover { border-color: var(--orange); }
-  .biz-toggle-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
-  .cycle-toggle { display: flex; justify-content: center; align-items: center; gap: 8px; margin: -8px 0 26px; flex-wrap: wrap; }
-  .cycle-btn { background: #f0f0f0; border: 1px solid #e2e2e2; color: var(--txt); padding: 9px 20px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
-  .cycle-btn:hover { border-color: var(--orange); }
-  .cycle-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+  .biz-toggle { display: flex; justify-content: center; margin-bottom: 28px; flex-wrap: wrap; }
+  .biz-toggle-track { display: inline-flex; background: #f0f0f0; border: 1px solid #e2e2e2; border-radius: 100px; padding: 4px; gap: 2px; flex-wrap: wrap; }
+  .biz-toggle-btn { background: transparent; border: none; color: var(--txt-dim); padding: 10px 22px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .biz-toggle-btn.active { background: var(--dark); color: #fff; }
+  .cycle-toggle { display: flex; justify-content: center; align-items: center; margin: -8px 0 26px; flex-wrap: wrap; }
+  .cycle-toggle-track { display: inline-flex; align-items: center; background: #f0f0f0; border: 1px solid #e2e2e2; border-radius: 100px; padding: 4px; gap: 2px; }
+  .cycle-btn { background: transparent; border: none; color: var(--txt-dim); padding: 9px 20px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+  .cycle-btn.active { background: var(--dark); color: #fff; }
   .cycle-badge { background: rgba(0,232,223,.15); color: #079b94; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 100px; }
   .cycle-btn.active .cycle-badge { background: #fff; color: var(--orange); }
   .plan-annual-note { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--orange); line-height: 1.4; }
@@ -234,12 +234,14 @@
   .plan-features li { font-size: 13px; color: var(--txt-mid); line-height: 1.5; padding-left: 20px; position: relative; }
   .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
   .plan-features li.feature-all {
-    padding-left: 0; color: var(--txt); font-weight: 700; font-size: 13px;
+    padding-left: 0; color: var(--orange); font-weight: 700; font-size: 13px;
+    background: rgba(248,65,0,.08); border: 1.5px solid var(--orange);
+    border-radius: 8px; padding: 6px 12px; text-align: center;
   }
   .plan-features li.feature-all::before { content: none; }
   .btn-plan {
     display: block; width: 100%; padding: 13px;
-    background: var(--orange); color: #fff;
+    background: #25D366; color: #fff;
     font-family: var(--font); font-size: 14px; font-weight: 700;
     border-radius: 100px; text-align: center; text-decoration: none; border: none; cursor: pointer;
     transition: opacity .2s; margin-top: auto;
@@ -680,14 +682,18 @@
     </div>
 
     <div class="biz-toggle" id="planos-ecommerce">
-      <button class="biz-toggle-btn active" data-biz="servicos" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
-      <button class="biz-toggle-btn" data-biz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+      <div class="biz-toggle-track">
+        <button class="biz-toggle-btn active" data-biz="servicos" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+        <button class="biz-toggle-btn" data-biz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+      </div>
     </div>
 
     <div id="grid-servicos">
     <div class="cycle-toggle" id="cycle-toggle">
-      <button class="cycle-btn active" data-ciclo="mensal" type="button">Mensal</button>
-      <button class="cycle-btn" data-ciclo="anual" type="button">Anual <span class="cycle-badge">2 meses grátis</span></button>
+      <div class="cycle-toggle-track">
+        <button class="cycle-btn active" data-ciclo="mensal" type="button">Mensal</button>
+        <button class="cycle-btn" data-ciclo="anual" type="button">Anual <span class="cycle-badge">2 meses grátis</span></button>
+      </div>
     </div>
     <div class="pricing-grid">
       <div class="plan">
@@ -776,8 +782,10 @@
         <strong>Qual plano é o seu?</strong> O <b>Atende</b> responde as dúvidas da sua loja (frete, prazo, troca, numeração, pagamento) e encaminha o resto. O <b>Cresce</b> vai além e responde <b>"cadê meu pedido?" sozinho</b> — consultando status e rastreio de verdade, integrado à sua loja. O <b>Escala</b> automatiza o mais pesado: <b>troca de numeração</b> e <b>Pix dentro da conversa</b>.
       </div>
       <div class="cycle-toggle" id="cycle-toggle-ecom">
-        <button class="cycle-btn active" data-ciclo="mensal" type="button">Mensal</button>
-        <button class="cycle-btn" data-ciclo="anual" type="button">Anual <span class="cycle-badge">2 meses grátis</span></button>
+        <div class="cycle-toggle-track">
+          <button class="cycle-btn active" data-ciclo="mensal" type="button">Mensal</button>
+          <button class="cycle-btn" data-ciclo="anual" type="button">Anual <span class="cycle-badge">2 meses grátis</span></button>
+        </div>
       </div>
       <div class="pricing-grid">
         <div class="plan">
@@ -1091,8 +1099,10 @@
       <h2 class="section-title section-title-dark" data-i18n="faq_h2">Perguntas frequentes</h2>
     </div>
     <div class="biz-toggle" id="faq-biz-toggle" style="margin-bottom:22px">
-      <button class="biz-toggle-btn active" data-faqbiz="servico" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
-      <button class="biz-toggle-btn" data-faqbiz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+      <div class="biz-toggle-track">
+        <button class="biz-toggle-btn active" data-faqbiz="servico" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+        <button class="biz-toggle-btn" data-faqbiz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+      </div>
     </div>
     <div class="faq-list">
       <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q1">Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a1">Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.</p></div></div>
