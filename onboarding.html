@@ -839,6 +839,11 @@
             <label class="radio-item"><input type="radio" name="troca_frete_quem_paga" value="depende" /><div class="radio-box"></div><span class="radio-label">Depende do motivo (defeito x arrependimento)</span></label>
           </div>
         </div>
+        <div class="question">
+          <label class="q-label">Reembolso: quando vocês fazem e como funciona?</label>
+          <p style="margin:0 0 10px;font-size:.92rem;color:#6b6b6b">Em quais casos há reembolso, forma do estorno (Pix ou cartão), prazo e condições. O agente usa isso para explicar o procedimento em linhas gerais e encaminhar para vocês (nunca promete valor nem prazo exato).</p>
+          <textarea name="reembolso_politica" rows="3" placeholder="Ex.: Reembolso após recebermos e conferirmos a peça sem uso; estorno pelo mesmo meio de pagamento (Pix ou cartão); a equipe confirma o prazo."></textarea>
+        </div>
         <div data-plan-q="escala">
         <div class="info-box orange" style="margin-bottom:14px">As opções abaixo configuram a <strong>troca automática</strong> (plano Escala). Nos planos Atende e Cresce, basta a política acima.</div>
         <div class="question">
@@ -1430,6 +1435,7 @@
         catalogo_url:          fields.catalogo_url || '',
         order_id_method:       orderIdMethod.join(', '),
         troca_prazo_dias:      fields.troca_prazo_dias || '',
+        reembolso_politica:    fields.reembolso_politica || '',
         troca_frete_quem_paga: fields.troca_frete_quem_paga || '',
         troca_modo:            fields.troca_modo || '',
         logistica_reversa:     fields.logistica_reversa || '',
