@@ -501,14 +501,14 @@
           <div class="kpi-sub">últimos 30 dias</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-icon">📲</div>
-          <div class="kpi-label">Follow-ups enviados</div>
+          <div class="kpi-icon" id="kpiIcon3">📲</div>
+          <div class="kpi-label" id="kpiLabel3">Follow-ups enviados</div>
           <div class="kpi-value" id="kpiFollowups">–</div>
           <div class="kpi-sub">últimos 30 dias</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-icon">✅</div>
-          <div class="kpi-label">Agendamentos confirmados</div>
+          <div class="kpi-icon" id="kpiIcon4">✅</div>
+          <div class="kpi-label" id="kpiLabel4">Agendamentos confirmados</div>
           <div class="kpi-value orange" id="kpiBookings">–</div>
           <div class="kpi-sub">últimos 30 dias</div>
         </div>
@@ -832,8 +832,19 @@ function renderDash(d) {
 
   document.getElementById('kpiContacts').textContent  = fmt(d.contacts_this_month);
   document.getElementById('kpiHandoffs').textContent  = fmt(d.total_handoffs);
-  document.getElementById('kpiFollowups').textContent = fmt((+d.followups_d1||0)+(+d.followups_d3||0));
-  document.getElementById('kpiBookings').textContent  = fmt(d.bookings_confirmed);
+  // Cards 3 e 4: e-commerce mostra Consultas de pedido + Trocas; serviço mantém Follow-ups + Agendamentos
+  const ecom = String((CONFIG||{}).order_lookup_enabled||'') === 'true' || String((CONFIG||{}).exchange_enabled||'') === 'true';
+  if (ecom) {
+    const ic3=document.getElementById('kpiIcon3'), lb3=document.getElementById('kpiLabel3');
+    const ic4=document.getElementById('kpiIcon4'), lb4=document.getElementById('kpiLabel4');
+    if (ic3) ic3.textContent='📦'; if (lb3) lb3.textContent='Consultas de pedido';
+    if (ic4) ic4.textContent='🔄'; if (lb4) lb4.textContent='Trocas';
+    document.getElementById('kpiFollowups').textContent = fmt(d.order_lookups_30d);
+    document.getElementById('kpiBookings').textContent  = fmt(d.exchanges_30d);
+  } else {
+    document.getElementById('kpiFollowups').textContent = fmt((+d.followups_d1||0)+(+d.followups_d3||0));
+    document.getElementById('kpiBookings').textContent  = fmt(d.bookings_confirmed);
+  }
 
   const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
   const trendTotal = trend.reduce((s,r) => s + Number(r.contacts), 0);
