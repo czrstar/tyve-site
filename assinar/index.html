@@ -202,13 +202,20 @@
   .sum-feats li.feat-toggle { flex-direction: column; align-items: stretch; gap: 0; }
   .feat-toggle-row {
     display: flex; align-items: center; gap: 10px;
-    cursor: pointer; user-select: none; background: none; border: none;
-    font-family: inherit; font-size: 15px; font-weight: 500; color: rgba(17,30,29,0.85);
-    padding: 0; text-align: left; width: 100%;
+    cursor: pointer; user-select: none;
+    background: rgba(0,232,223,0.09); border: 1px solid rgba(0,232,223,0.25);
+    border-radius: 10px; padding: 9px 12px; margin: -1px 0;
+    font-family: inherit; font-size: 15px; font-weight: 700; color: var(--dark);
+    text-align: left; width: 100%; transition: background .2s, border-color .2s;
   }
+  .feat-toggle-row:hover { background: rgba(0,232,223,0.16); border-color: rgba(0,232,223,0.4); }
   .feat-toggle-row span { flex: 1; }
-  .feat-toggle-row .chevron { flex-shrink: 0; transition: transform .2s; opacity: .45; }
-  .feat-toggle-row.open .chevron { transform: rotate(180deg); }
+  .feat-toggle-row .chevron { flex-shrink: 0; transition: transform .2s; color: var(--orange); animation: chevronNudge 1.6s ease-in-out infinite; }
+  .feat-toggle-row.open .chevron { transform: rotate(180deg); animation: none; }
+  @keyframes chevronNudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
   .sum-subfeats {
     list-style: none; display: none; flex-direction: column; gap: 9px;
     margin: 12px 0 0 27px;
