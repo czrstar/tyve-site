@@ -502,7 +502,7 @@
         </div>
         <div class="kpi-card">
           <div class="kpi-icon" id="kpiIcon3">📲</div>
-          <div class="kpi-label" id="kpiLabel3">Follow-ups enviados</div>
+          <div class="kpi-label" id="kpiLabel3">Lembretes enviados</div>
           <div class="kpi-value" id="kpiFollowups">–</div>
           <div class="kpi-sub">últimos 30 dias</div>
         </div>
@@ -516,7 +516,7 @@
 
       <!-- Chart -->
       <div class="card">
-        <div class="card-title">Contatos únicos por dia</div>
+        <div class="card-title">Uso diário do assistente</div>
         <div class="card-sub">Últimos 30 dias</div>
         <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
       </div>
@@ -733,8 +733,13 @@ function switchTab(tab) {
 }
 
 function initTab() {
-  const hash = location.hash.replace('#','') || 'resultados';
-  switchTab(['resultados','config','trocas'].includes(hash) ? hash : 'resultados');
+  let tab = location.hash.replace('#','');
+  if (!tab) {
+    if (/\/configuracoes\/?$/.test(location.pathname)) tab = 'config';
+    else if (/\/resultados\/?$/.test(location.pathname)) tab = 'resultados';
+  }
+  tab = tab || 'resultados';
+  switchTab(['resultados','config','trocas'].includes(tab) ? tab : 'resultados');
 }
 
 // ── TROCAS ───────────────────────────────────────────
