@@ -7,6 +7,7 @@
     { "source": "/conectar-whatsapp", "destination": "/embedded-signup" },
     { "source": "/conectar-instagram", "destination": "/instagram-connect" },
     { "source": "/painel/resultados", "destination": "/painel" },
-    { "source": "/painel/configuracoes", "destination": "/painel" }
+    { "source": "/painel/configuracoes", "destination": "/painel" },
+    { "source": "/guia-painel", "destination": "/guia-painel.pdf" }
   ]
 }
