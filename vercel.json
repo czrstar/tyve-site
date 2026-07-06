@@ -2,6 +2,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/assinar/plano-:plano", "destination": "/assinar?plano=:plano" }
+    { "source": "/assinar/plano-:plano", "destination": "/assinar?plano=:plano" },
+    { "source": "/privacidade", "destination": "/privacy" },
+    { "source": "/conectar-whatsapp", "destination": "/embedded-signup" },
+    { "source": "/conectar-instagram", "destination": "/instagram-connect" }
   ]
 }
