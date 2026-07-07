@@ -985,7 +985,7 @@ function renderHmList(list) {
   if (!list.length) { el.innerHTML = ''; return; }
   const rows = list.map(c => {
     const num = hmEscape(fmtPhone(c.chat_id));
-    const sum = (String(c.contact_name||'').trim()) || (String(c.last_summary||'').trim()) || 'Conversa em atendimento';
+    const sum = (String(c.contact_name||'').trim()) || (String(c.last_summary||'').replace(/\[NEXT\]/g,' ').replace(/\{[^}]*\}/g,'').replace(/\s+/g,' ').trim()) || 'Conversa em atendimento';
     return '<div class="hm-row"><div class="hm-info"><div class="hm-num">' + num + '</div>' +
            '<div class="hm-sum">' + hmEscape(sum) + '</div></div>' +
            '<button class="hm-rel" onclick="releaseChat(\'' + hmEscape(c.chat_id) + '\', this)">Liberar</button></div>';
