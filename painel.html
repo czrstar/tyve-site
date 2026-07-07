@@ -215,6 +215,18 @@
     }
     .unlock-btn:hover{background:rgba(180,83,9,0.14)}
     .unlock-btn.success{background:var(--orange-dim);border-color:rgba(248,65,0,0.25);color:var(--orange)}
+    /* human-mode conversation list */
+    .hm-list{margin:-14px 0 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(17,30,29,0.05)}
+    .hm-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;border-top:1px solid var(--border)}
+    .hm-row:first-child{border-top:none}
+    .hm-info{min-width:0}
+    .hm-num{font-size:14px;font-weight:700;color:var(--text)}
+    .hm-sum{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44vw;margin-top:1px}
+    .hm-rel{flex:none;background:rgba(180,83,9,0.08);border:1px solid rgba(180,83,9,0.25);color:var(--amber);font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:var(--font)}
+    .hm-rel:hover{background:rgba(180,83,9,0.14)}
+    .hm-rel:disabled{opacity:.55;cursor:default}
+    .hm-rel-all{display:block;width:100%;background:transparent;border:none;border-top:1px solid var(--border);color:var(--muted);font-weight:600;font-size:13px;padding:13px;cursor:pointer;font-family:var(--font)}
+    .hm-rel-all:hover{color:var(--text)}
 
     /* ── PLAN BANNER ─────────────────────────────────────────── */
     .plan-banner{
@@ -469,8 +481,9 @@
             <div style="font-size:12px;color:var(--muted)" id="botSub">Nenhuma em atendimento humano no momento</div>
           </div>
         </div>
-        <button class="unlock-btn" id="unlockBtn" onclick="unlockBot()" style="display:none">🤖 Liberar agente</button>
+        <button class="unlock-btn" id="hmToggleBtn" onclick="toggleHmList()" style="display:none">Ver conversas</button>
       </div>
+      <div class="hm-list" id="hmList" style="display:none"></div>
 
       <!-- Plan banner -->
       <div class="plan-banner">
@@ -919,43 +932,92 @@ function renderDash(d) {
 }
 
 function updateBotStatus(d) {
-  const human = d.human_mode_active === true || d.human_mode_active === 1;
-  const count = Number(d.human_mode_count || 0);
-  const dot   = document.getElementById('botDot');
-  const lbl   = document.getElementById('botLabel');
-  const sub   = document.getElementById('botSub');
-  const btn   = document.getElementById('unlockBtn');
+  const list = Array.isArray(d.human_mode_list) ? d.human_mode_list : [];
+  const count = Number(d.human_mode_count || 0) || list.length;
+  const human = count > 0;
+  const dot    = document.getElementById('botDot');
+  const lbl    = document.getElementById('botLabel');
+  const sub    = document.getElementById('botSub');
+  const toggle = document.getElementById('hmToggleBtn');
+  const listEl = document.getElementById('hmList');
   if (human) {
     dot.className = 'bot-dot human';
     lbl.textContent = count === 1
       ? '1 conversa em atendimento humano'
       : count + ' conversas em atendimento humano';
     sub.textContent = 'Agente pausado — sua equipe está no controle';
-    btn.style.display = 'inline-flex';
-    btn.disabled = false;
-    btn.className = 'unlock-btn';
-    btn.innerHTML = '🤖 Liberar agente';
+    toggle.style.display = 'inline-flex';
+    renderHmList(list);
+    const open = listEl.style.display && listEl.style.display !== 'none';
+    toggle.textContent = open ? 'Ocultar conversas' : 'Ver conversas';
   } else {
     dot.className = 'bot-dot active';
     lbl.textContent = 'Conversas';
     sub.textContent = 'Nenhuma em atendimento humano no momento';
-    btn.style.display = 'none';
+    toggle.style.display = 'none';
+    listEl.style.display = 'none';
+    listEl.innerHTML = '';
   }
 }
 
-async function unlockBot() {
-  const btn = document.getElementById('unlockBtn');
-  btn.disabled = true; btn.innerHTML = '⏳ Liberando…';
+function toggleHmList() {
+  const el = document.getElementById('hmList');
+  const btn = document.getElementById('hmToggleBtn');
+  const hidden = el.style.display === 'none' || !el.style.display;
+  el.style.display = hidden ? 'block' : 'none';
+  btn.textContent = hidden ? 'Ocultar conversas' : 'Ver conversas';
+}
+
+function fmtPhone(raw) {
+  let d = String(raw||'').replace(/\D/g,'');
+  if (d.length >= 12 && d.slice(0,2) === '55') d = d.slice(2);
+  if (d.length === 11) return '(' + d.slice(0,2) + ') ' + d.slice(2,7) + '-' + d.slice(7);
+  if (d.length === 10) return '(' + d.slice(0,2) + ') ' + d.slice(2,6) + '-' + d.slice(6);
+  return String(raw||'');
+}
+
+function hmEscape(s) {
+  return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderHmList(list) {
+  const el = document.getElementById('hmList');
+  if (!list.length) { el.innerHTML = ''; return; }
+  const rows = list.map(c => {
+    const num = hmEscape(fmtPhone(c.chat_id));
+    const sum = (String(c.contact_name||'').trim()) || (String(c.last_summary||'').trim()) || 'Conversa em atendimento';
+    return '<div class="hm-row"><div class="hm-info"><div class="hm-num">' + num + '</div>' +
+           '<div class="hm-sum">' + hmEscape(sum) + '</div></div>' +
+           '<button class="hm-rel" onclick="releaseChat(\'' + hmEscape(c.chat_id) + '\', this)">Liberar</button></div>';
+  }).join('');
+  el.innerHTML = rows + '<button class="hm-rel-all" onclick="releaseAll(this)">Liberar todas</button>';
+}
+
+async function releaseChat(chatId, btn) {
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const d = await postJSON(UNLOCK, {token: TOKEN, chat_id: chatId});
+    if (d && d.success) {
+      toast(Number(d.unlocked) > 0 ? 'Conversa liberada' : 'Essa conversa já não estava em atendimento humano', true);
+      refreshDash();
+    } else { btn.disabled = false; btn.textContent = 'Liberar'; toast('Erro ao liberar', false); }
+  } catch(e) { btn.disabled = false; btn.textContent = 'Liberar'; toast('Erro de conexão', false); }
+}
+
+async function releaseAll(btn) {
+  btn.disabled = true; btn.textContent = 'Liberando…';
   try {
     const d = await postJSON(UNLOCK, {token: TOKEN});
-    if (d.success) {
-      btn.className = 'unlock-btn success'; btn.innerHTML = '✅ Agente liberado';
-      document.getElementById('botDot').className = 'bot-dot active';
-      document.getElementById('botLabel').textContent = 'Conversas';
-      document.getElementById('botSub').textContent = 'Nenhuma em atendimento humano no momento';
-      setTimeout(() => btn.style.display = 'none', 2000);
-    } else { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; toast('Erro ao liberar agente',false); }
-  } catch(e) { btn.disabled=false; btn.innerHTML='🤖 Liberar agente'; }
+    if (d && d.success) { toast('Conversas liberadas', true); refreshDash(); }
+    else { btn.disabled = false; btn.textContent = 'Liberar todas'; toast('Erro ao liberar', false); }
+  } catch(e) { btn.disabled = false; btn.textContent = 'Liberar todas'; toast('Erro de conexão', false); }
+}
+
+async function refreshDash() {
+  try {
+    const dash = await fetch(DASH_API + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json());
+    if (dash && dash.contacts_this_month !== undefined) renderDash(dash);
+  } catch(e) {}
 }
 
 function renderNPS(d) {
