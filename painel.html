@@ -784,11 +784,18 @@ function trocaCard(e) {
       + '<button class="btn btn-sm" style="background:#0ea5e9;color:#fff" onclick="actExchange('+e.id+',\'approvefree\',this)">Devolução grátis</button>'
       + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'reject\',this)">Recusar</button></div>'
     : '';
+  const ped = e.order_id ? ('<span style="color:var(--orange);font-weight:700">Pedido '+esc(e.order_id)+'</span> &nbsp;·&nbsp; ') : '';
+  const cli = [];
+  if (e.ship_name) cli.push(esc(e.ship_name));
+  const _ph = e.ship_phone || e.chat_id || '';
+  if (_ph) cli.push(esc(fmtPhone(_ph)));
+  if (e.ship_cpf) cli.push('CPF '+esc(e.ship_cpf));
   return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee">'
     + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
-    + '<div><div style="font-weight:600">'+esc(e.product_title||'Produto')+'</div>'
+    + '<div><div style="font-weight:600">'+ped+esc(e.product_title||'Produto')+'</div>'
     + '<div style="font-size:13px;color:#666;margin-top:2px">Tamanho '+esc(e.from||'?')+' → <b>'+esc(e.to||'?')+'</b>'
-    + ' &nbsp;·&nbsp; '+esc(e.chat_id||'')+(diff?(' &nbsp;·&nbsp; dif. '+esc(e.currency||'BRL')+' '+diff.toFixed(2)):'')+'</div>'
+    + (diff?(' &nbsp;·&nbsp; dif. '+esc(e.currency||'BRL')+' '+diff.toFixed(2)):'')+'</div>'
+    + (cli.length?'<div style="font-size:12px;color:#888;margin-top:3px">Cliente: '+cli.join(' &nbsp;·&nbsp; ')+'</div>':'')
     + (dt?'<div style="font-size:12px;color:#999;margin-top:2px">'+dt+'</div>':'')+'</div>'
     + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
     + '</div>' + actions + '</div>';
