@@ -726,6 +726,7 @@
           <li data-i18n="atende_f3">Respostas automáticas 24h/7d</li>
           <li data-i18n="atende_f4">Entende mensagens de texto, voz e imagens 🎙️📷</li>
           <li data-i18n="atende_f5">Triagem e qualificação de leads</li>
+          <li data-i18n="atende_f8b">Painel de resultados com link</li>
           <li data-i18n="atende_f6">Alerta com resumo completo da conversa</li>
           <li data-i18n="atende_f7">Detecta clientes frustrados e alerta com prioridade ⚠️</li>
           <li data-i18n="atende_f8">Lembrete automático se o cliente esperar +12h sem retorno</li>
@@ -764,8 +765,6 @@
         <hr class="plan-divider"/>
         <ul class="plan-features">
           <li class="feature-all" data-i18n="escala_all">Tudo do Cresce</li>
-          <li data-i18n="escala_f1">Follow-up D+1 e D+3</li>
-          <li data-i18n="escala_f2">Painel de resultados com link</li>
           <li data-i18n="escala_f3">Agendamento nativo no WhatsApp</li>
           <li data-i18n="escala_f4">Múltiplos fluxos e segmentações</li>
           <li data-i18n="escala_f5">Relatório mensal PDF com análise completa</li>
@@ -917,7 +916,7 @@
     <!-- Panel 1 -->
     <div class="slider-panel" id="panel-1">
       <div class="sp-text">
-        <span class="sp-badge" data-i18n="p1_badge">Plano Escala</span>
+        <span class="sp-badge" data-i18n="p1_badge">Incluído em todos os planos</span>
         <h3 class="sp-title" data-i18n="p1_h3">Painel de resultados que você acessa de qualquer lugar</h3>
         <p class="sp-desc" data-i18n="p1_desc">Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.</p>
       </div>
@@ -944,9 +943,9 @@
     <!-- Panel 2 -->
     <div class="slider-panel" id="panel-2">
       <div class="sp-text">
-        <span class="sp-badge" data-i18n="p2_badge">Cresce: D+1 · Escala: D+1 + D+3</span>
+        <span class="sp-badge" data-i18n="p2_badge">Cresce e Escala</span>
         <h3 class="sp-title" data-i18n="p2_h3">Follow-up automático para quem não voltou</h3>
-        <p class="sp-desc" data-i18n="p2_desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática 1 dia depois para ver se o cliente conseguiu o que precisava. No Escala, vai mais uma no D+3. Você não precisa fazer nada.</p>
+        <p class="sp-desc" data-i18n="p2_desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.</p>
       </div>
       <div class="sp-visual">
         <div class="fc-chat">
@@ -1261,12 +1260,12 @@ var T = {
     atende_f9:'1 ajuste por mês', atende_f10:'Suporte via WhatsApp (retorno em até 8h)',
     atende_cta:'Assinar Atende',
     cresce_tagline:'Até 500 contatos atendidos/mês', cresce_all:'Tudo do Atende',
-    cresce_f1:'Follow-up automático D+1', cresce_f2:'Pesquisa de satisfação automática (NPS)',
+    cresce_f1:'Follow-up automático no dia seguinte', cresce_f2:'Pesquisa de satisfação automática (NPS)',
     cresce_f3:'1 ajuste por semana', cresce_f4:'Resumo semanal por email',
     cresce_f5:'O agente envia link da sua agenda', cresce_f6:'Suporte prioritário (retorno em até 4h)',
     cresce_cta:'Assinar Cresce',
     escala_tagline:'Até 1.000 contatos/mês', escala_all:'Tudo do Cresce',
-    escala_f1:'Follow-up D+1 e D+3', escala_f2:'Painel de resultados com link',
+    escala_f1:'', escala_f2:'',
     escala_f3:'Agendamento nativo no WhatsApp', escala_f4:'Múltiplos fluxos e segmentações',
     escala_f5:'Relatório mensal PDF com análise completa', escala_f6:'Reunião mensal de resultados',
     escala_f7:'Gerente de conta dedicado (retorno em até 2h)', escala_cta:'Assinar Escala',
@@ -1280,12 +1279,12 @@ var T = {
     p0_badge:'Incluído em todos os planos',
     p0_h3:'Você recebe um alerta quando o agente precisar de você',
     p0_desc:'Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.',
-    p1_badge:'Plano Escala',
+    p1_badge:'Incluído em todos os planos', atende_f8b:'Painel de resultados com link',
     p1_h3:'Painel de resultados que você acessa de qualquer lugar',
     p1_desc:'Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.',
-    p2_badge:'Cresce: D+1 · Escala: D+1 + D+3',
+    p2_badge:'Cresce e Escala',
     p2_h3:'Follow-up automático para quem não voltou',
-    p2_desc:'Depois que o agente encaminha um cliente, ele manda uma mensagem automática 1 dia depois para ver se o cliente conseguiu o que precisava. No Escala, vai mais uma no D+3. Você não precisa fazer nada.',
+    p2_desc:'Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.',
     p2_bot1:'Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊',
     p2_client:'Sim! Já agendei, obrigado!',
     p2_bot2:'Ótimo! Qualquer coisa estamos aqui. Até logo! 👋',
@@ -1459,12 +1458,12 @@ var T = {
     atende_f9:'1 adjustment per month', atende_f10:'WhatsApp support (SLA 8h)',
     atende_cta:'Subscribe Atende',
     cresce_tagline:'Up to 500 contacts/month', cresce_all:'Everything in Atende',
-    cresce_f1:'Automatic D+1 follow-up', cresce_f2:'Automatic satisfaction survey (NPS)',
+    cresce_f1:'Automatic next-day follow-up', cresce_f2:'Automatic satisfaction survey (NPS)',
     cresce_f3:'1 adjustment per week', cresce_f4:'Weekly email summary',
     cresce_f5:'Agent sends your booking link', cresce_f6:'Priority support (SLA 4h)',
     cresce_cta:'Subscribe Cresce',
     escala_tagline:'Up to 1,000 contacts/month', escala_all:'Everything in Cresce',
-    escala_f1:'D+1 and D+3 follow-up', escala_f2:'Results dashboard with link',
+    escala_f1:'', escala_f2:'',
     escala_f3:'Native WhatsApp scheduling', escala_f4:'Multiple flows and segments',
     escala_f5:'Monthly PDF report with full analysis', escala_f6:'Monthly results meeting',
     escala_f7:'Dedicated account manager (SLA 2h)', escala_cta:'Subscribe Escala',
@@ -1478,12 +1477,12 @@ var T = {
     p0_badge:'Included in all plans',
     p0_h3:'You get an alert when the agent needs you',
     p0_desc:'When a customer has an urgent need or a question only a human can solve, Tyve sends you a WhatsApp notification instantly — with the customer\'s name and a conversation summary. You jump in directly, no scrolling needed.',
-    p1_badge:'Escala plan',
+    p1_badge:'Included in every plan', atende_f8b:'Results dashboard with link',
     p1_h3:'A results dashboard you can access from anywhere',
     p1_desc:'See how many sessions the agent handled, how many times it needed you, how many follow-ups were sent. Accessible by link, no install needed.',
-    p2_badge:'Cresce: D+1 · Escala: D+1 + D+3',
+    p2_badge:'Cresce and Escala',
     p2_h3:'Automatic follow-up for customers who didn\'t return',
-    p2_desc:'After the agent hands off a customer, it sends an automatic message 1 day later to check if they got what they needed. On Escala, another one goes out on D+3. You don\'t have to do anything.',
+    p2_desc:'After the agent hands off a customer, it sends an automatic message the next day to check if they got what they needed. You don\'t have to do anything.',
     p2_bot1:'Hi, Renato! Just checking in to see if you got what you needed 😊',
     p2_client:'Yes! Already booked, thanks!',
     p2_bot2:'Great! We\'re here whenever you need us. Bye! 👋',
