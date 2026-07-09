@@ -307,6 +307,7 @@
   .sp-badge { display: inline-block; background: rgba(248,65,0,.1); color: var(--orange); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: .05em; }
   .sp-title { font-size: clamp(18px, 1.8vw, 24px); font-weight: 800; line-height: 1.3; margin-bottom: 14px; color: var(--txt); }
   .sp-desc { font-size: 14px; color: var(--txt-mid); line-height: 1.7; }
+  .sp-note { margin-top: 12px; font-size: 12px; color: #999; line-height: 1.6; border-left: 2px solid rgba(248,65,0,.25); padding-left: 10px; }
   @media (max-width: 768px) {
     .slider-tabs { flex-direction: column; }
     .slider-tab { border-right: none; border-bottom: 1px solid #e0e0e0; }
@@ -361,6 +362,8 @@
   .avb-badge-bot { background: rgba(255,255,255,.08); color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .1em; }
   .avb-badge-agent { background: rgba(248,65,0,.18); color: var(--orange); border: 1px solid rgba(248,65,0,.4); }
   .avb-icon { font-size: 26px; }
+  .avb-icon-tyve { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; color: var(--orange); }
+  .avb-bolt { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(248,65,0,.45)); }
   .avb-list { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 32px; }
   .avb-list li { font-size: 14.5px; display: flex; align-items: flex-start; gap: 10px; line-height: 1.45; }
   .avb-bot .avb-list li { color: rgba(255,255,255,.4); }
@@ -946,6 +949,7 @@
         <span class="sp-badge" data-i18n="p2_badge">Cresce e Escala</span>
         <h3 class="sp-title" data-i18n="p2_h3">Follow-up automático para quem não voltou</h3>
         <p class="sp-desc" data-i18n="p2_desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.</p>
+        <p class="sp-note" data-i18n="p2_note">Opcional. A Tyve não revende mensagem: quando o WhatsApp cobra pelo envio, a cobrança é de centavos e vai direto da Meta pra você.</p>
       </div>
       <div class="sp-visual">
         <div class="fc-chat">
@@ -1015,7 +1019,7 @@
       <div class="avb-card avb-agent">
         <div class="avb-card-header">
           <span class="avb-badge avb-badge-agent" data-i18n="avb_badge_agent">Agente Tyve</span>
-          <span class="avb-icon">✨</span>
+          <span class="avb-icon avb-icon-tyve"><svg class="avb-bolt" viewBox="66.6 292 147 294.5" xmlns="http://www.w3.org/2000/svg" aria-label="Tyve" role="img"><path d="M164.5,307.6l-86.4,143.1s-11.1,17.2-1.9,23.4c9.2,6.2,47.3-6.2,47.3-1.5s-23.5,91.1-24.6,95.4c0,0,0,.2,0,.3-.3,1.1-2.9,9.8,2.6,11.9,5.3,2,10.2-6.9,11.1-8.6s.2-.4.3-.6l89.4-141.1c0-.1.2-.3.3-.4,1.1-1.5,9.6-13.9,1.6-20.7-6.7-5.7-35.9-.6-39.6-.5-3.7.1-7.8-1.6-4.7-10.1,3-8.2,21.1-83.5,22.5-89.2,0-.2,0-.4.1-.5.3-1.1,1.8-6.3-2.4-9s-1.9-.9-2.9-1c-5-.8-7.5,2-12.6,9.3h0Z" fill="currentColor"/></svg></span>
         </div>
         <ul class="avb-list">
           <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f1">Lê e interpreta qualquer mensagem</span></li>
@@ -1047,7 +1051,8 @@
     <div class="vs-table-wrap"><table class="vs-table">
       <thead><tr><th></th><th class="col-tyve">Tyve</th><th data-i18n="vs_th2">App de automação</th><th data-i18n="vs_th3">Montar do zero</th></tr></thead>
       <tbody>
-        <tr><td data-i18n="vs_r1l">Tempo de resposta do agente</td><td data-i18n-html="vs_r1c1"><span class="check">✓</span> &lt;15s em média</td><td data-i18n-html="vs_r1c2"><span class="partial">Depende da configuração</span></td><td data-i18n-html="vs_r1c3"><span class="partial">Variável</span></td></tr>
+        <tr><td data-i18n="vs_r1l">Responde certo na primeira</td><td data-i18n-html="vs_r1c1"><span class="check">✓</span> Entende o que o cliente escreveu</td><td data-i18n-html="vs_r1c2"><span class="cross">✗</span> Repete o menu</td><td data-i18n-html="vs_r1c3"><span class="partial">Depende do que você previu</span></td></tr>
+        <tr><td data-i18n="vs_r0l">Quem responde às 22h de domingo</td><td data-i18n-html="vs_r0c1"><span class="check">✓</span> O agente, e ele resolve</td><td data-i18n-html="vs_r0c2"><span class="partial">Um menu</span></td><td data-i18n-html="vs_r0c3"><span class="cross">✗</span> Você</td></tr>
         <tr><td data-i18n="vs_r2l">Configurado pro seu negócio</td><td data-i18n-html="vs_r2c1"><span class="check">✓</span></td><td data-i18n-html="vs_r2c2"><span class="cross">✗</span> você configura</td><td data-i18n-html="vs_r2c3"><span class="cross">✗</span> você faz tudo</td></tr>
         <tr><td data-i18n="vs_r3l">Sem virar técnico de TI</td><td data-i18n-html="vs_r3c1"><span class="check">✓</span></td><td data-i18n-html="vs_r3c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r3c3"><span class="cross">✗</span></td></tr>
         <tr><td data-i18n="vs_r4l">A gente mantém. Você só usa.</td><td data-i18n-html="vs_r4c1"><span class="check">✓</span></td><td data-i18n-html="vs_r4c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r4c3"><span class="cross">✗</span></td></tr>
@@ -1135,6 +1140,7 @@
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q10">A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a10">Sim, nos planos Cresce e Escala. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q11">A Tyve faz a troca sozinha? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a11">No plano Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q12">O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a12">Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q14">O follow-up automático tem custo? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a14"></p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q13">Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a13">O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.</p></div></div>
     </div>
   </div>
@@ -1285,6 +1291,7 @@ var T = {
     p2_badge:'Cresce e Escala',
     p2_h3:'Follow-up automático para quem não voltou',
     p2_desc:'Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.',
+    p2_note:'Opcional. A Tyve não revende mensagem: quando o WhatsApp cobra pelo envio, a cobrança é de centavos e vai direto da Meta pra você.',
     p2_bot1:'Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊',
     p2_client:'Sim! Já agendei, obrigado!',
     p2_bot2:'Ótimo! Qualquer coisa estamos aqui. Até logo! 👋',
@@ -1308,10 +1315,14 @@ var T = {
     avb_agent_a:'Oi! 😊 Consulta de urgência tem atendimento prioritário, a partir de R$150. Quer que eu verifique os horários disponíveis ainda hoje?',
     vs_label:'Comparativo', vs_h2:'Tyve vs as outras opções',
     vs_th2:'App de automação', vs_th3:'Montar do zero',
-    vs_r1l:'Tempo de resposta do agente',
-    vs_r1c1:'<span class="check">✓</span> &lt;15s em média',
-    vs_r1c2:'<span class="partial">Depende da configuração</span>',
-    vs_r1c3:'<span class="partial">Variável</span>',
+    vs_r1l:'Responde certo na primeira',
+    vs_r0l:'Quem responde às 22h de domingo',
+    vs_r0c1:'<span class="check">✓</span> O agente, e ele resolve',
+    vs_r0c2:'<span class="partial">Um menu</span>',
+    vs_r0c3:'<span class="cross">✗</span> Você',
+    vs_r1c1:'<span class="check">✓</span> Entende o que o cliente escreveu',
+    vs_r1c2:'<span class="cross">✗</span> Repete o menu',
+    vs_r1c3:'<span class="partial">Depende do que você previu</span>',
     vs_r2l:'Configurado pro seu negócio',
     vs_r2c1:'<span class="check">✓</span>',
     vs_r2c2:'<span class="cross">✗</span> você configura',
@@ -1372,6 +1383,8 @@ var T = {
     faq_a11:'No plano Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.',
     faq_q12:'O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span>',
     faq_a12:'Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.',
+    faq_q14:'O follow-up automático tem custo? <span class="faq-icon">+</span>',
+    faq_a14:'O follow-up é <b>opcional</b> e está incluído no seu plano — a Tyve não cobra nada a mais por ele.<br><br>O que existe é uma cobrança do <b>WhatsApp</b>, não da Tyve. O WhatsApp mantém uma janela de 24 horas depois da última mensagem do seu cliente: dentro dela, qualquer mensagem que você mande é <b>gratuita</b>. Fora dela, a Meta cobra <b>centavos</b> por mensagem enviada. A Tyve procura sempre enviar o follow-up dentro da janela.<br><br><b>Quando há cobrança, ela não passa pela Tyve.</b> Ela vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business do seu negócio — a mesma conta que você conecta na hora da ativação. A Tyve não revende mensagem e não põe margem nisso. Somos a ponte que torna o follow-up possível; quem cobra o envio é o WhatsApp, no preço dele.',
     faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
     faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
     cta_h2:'Chega de perder cliente<br/>no WhatsApp!',
@@ -1483,6 +1496,7 @@ var T = {
     p2_badge:'Cresce and Escala',
     p2_h3:'Automatic follow-up for customers who didn\'t return',
     p2_desc:'After the agent hands off a customer, it sends an automatic message the next day to check if they got what they needed. You don\'t have to do anything.',
+    p2_note:'Optional. Tyve does not resell messages: when WhatsApp charges for the delivery, it is cents and it goes straight from Meta to you.',
     p2_bot1:'Hi, Renato! Just checking in to see if you got what you needed 😊',
     p2_client:'Yes! Already booked, thanks!',
     p2_bot2:'Great! We\'re here whenever you need us. Bye! 👋',
@@ -1506,10 +1520,14 @@ var T = {
     avb_agent_a:'Hi! 😊 Urgent appointments have priority care, starting at R$150. Would you like me to check available slots for today?',
     vs_label:'Comparison', vs_h2:'Tyve vs the alternatives',
     vs_th2:'Automation app', vs_th3:'Build from scratch',
-    vs_r1l:'Agent response time',
-    vs_r1c1:'<span class="check">✓</span> &lt;15s on average',
-    vs_r1c2:'<span class="partial">Depends on your setup</span>',
-    vs_r1c3:'<span class="partial">Variable</span>',
+    vs_r1l:'Gets it right the first time',
+    vs_r0l:'Who answers at 10pm on a Sunday',
+    vs_r0c1:'<span class="check">✓</span> The agent, and it resolves it',
+    vs_r0c2:'<span class="partial">A menu</span>',
+    vs_r0c3:'<span class="cross">✗</span> You',
+    vs_r1c1:'<span class="check">✓</span> Understands what the customer wrote',
+    vs_r1c2:'<span class="cross">✗</span> Repeats the menu',
+    vs_r1c3:'<span class="partial">Depends on what you anticipated</span>',
     vs_r2l:'Configured for your business',
     vs_r2c1:'<span class="check">✓</span>',
     vs_r2c2:'<span class="cross">✗</span> you configure it',
@@ -1570,6 +1588,8 @@ var T = {
     faq_a11:'On the Escala plan, yes: Tyve handles size exchanges in WhatsApp — it checks the order, the new size availability and generates the return code. Edge cases (defects, out of window, out of stock) go to your team with full context ready.',
     faq_q12:'Does the Pix money go to my account? <span class="faq-icon">+</span>',
     faq_a12:'Yes. On the Escala plan, Tyve generates the order Pix inside the conversation and the money goes straight to your store account. Tyve is not in the middle of the payment.',
+    faq_q14:'Does the automatic follow-up cost anything? <span class="faq-icon">+</span>',
+    faq_a14:'The follow-up is <b>optional</b> and included in your plan — Tyve charges nothing extra for it.<br><br>What exists is a charge from <b>WhatsApp</b>, not from Tyve. WhatsApp keeps a 24-hour window after your customer\'s last message: inside it, any message you send is <b>free</b>. Outside it, Meta charges <b>cents</b> per message sent. Tyve always tries to send the follow-up inside the window.<br><br><b>When there is a charge, it does not go through Tyve.</b> It goes straight from Meta to you, on the card registered in your business\'s WhatsApp Business account — the same account you connect during activation. Tyve does not resell messages and adds no margin. We are the bridge that makes the follow-up possible; WhatsApp is who charges for the delivery, at its own price.',
     faq_q13:'Do you have access to my customers data? Is it safe? <span class="faq-icon">+</span>',
     faq_a13:'Access is granted by you through an official, secure connection (OAuth), read-only for what is needed (orders) and compliant with LGPD. You can revoke access whenever you want.',
     cta_h2:'Stop losing customers<br/>on WhatsApp!',
