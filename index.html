@@ -949,7 +949,6 @@
         <span class="sp-badge" data-i18n="p2_badge">Cresce e Escala</span>
         <h3 class="sp-title" data-i18n="p2_h3">Follow-up automático para quem não voltou</h3>
         <p class="sp-desc" data-i18n="p2_desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.</p>
-        <p class="sp-note" data-i18n="p2_note">Opcional. A Tyve não revende mensagem: quando o WhatsApp cobra pelo envio, a cobrança é de centavos e vai direto da Meta pra você.</p>
       </div>
       <div class="sp-visual">
         <div class="fc-chat">
@@ -1140,7 +1139,7 @@
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q10">A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a10">Sim, nos planos Cresce e Escala. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q11">A Tyve faz a troca sozinha? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a11">No plano Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q12">O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a12">Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.</p></div></div>
-      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q14">O follow-up automático tem custo? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a14"></p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q14">O follow-up automático tem custo? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a14"><b>Na maioria dos casos, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O WhatsApp mantém uma janela de 24 horas depois da última mensagem do seu cliente. Dentro dela, qualquer mensagem é <b>gratuita</b> — e a Tyve envia o follow-up dentro dessa janela.<br><br>A exceção é o <b>lembrete de agendamento na véspera</b> (adicional de Agenda e plano Escala): como a consulta foi marcada dias antes, a janela já fechou, e o WhatsApp cobra <b>centavos</b> por esse envio. <b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business do seu negócio, a mesma que você conecta na ativação. A Tyve não revende mensagem e não põe margem nisso.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q13">Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a13">O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.</p></div></div>
     </div>
   </div>
@@ -1291,7 +1290,6 @@ var T = {
     p2_badge:'Cresce e Escala',
     p2_h3:'Follow-up automático para quem não voltou',
     p2_desc:'Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.',
-    p2_note:'Opcional. A Tyve não revende mensagem: quando o WhatsApp cobra pelo envio, a cobrança é de centavos e vai direto da Meta pra você.',
     p2_bot1:'Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊',
     p2_client:'Sim! Já agendei, obrigado!',
     p2_bot2:'Ótimo! Qualquer coisa estamos aqui. Até logo! 👋',
@@ -1384,7 +1382,7 @@ var T = {
     faq_q12:'O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span>',
     faq_a12:'Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.',
     faq_q14:'O follow-up automático tem custo? <span class="faq-icon">+</span>',
-    faq_a14:'O follow-up é <b>opcional</b> e está incluído no seu plano — a Tyve não cobra nada a mais por ele.<br><br>O que existe é uma cobrança do <b>WhatsApp</b>, não da Tyve. O WhatsApp mantém uma janela de 24 horas depois da última mensagem do seu cliente: dentro dela, qualquer mensagem que você mande é <b>gratuita</b>. Fora dela, a Meta cobra <b>centavos</b> por mensagem enviada. A Tyve procura sempre enviar o follow-up dentro da janela.<br><br><b>Quando há cobrança, ela não passa pela Tyve.</b> Ela vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business do seu negócio — a mesma conta que você conecta na hora da ativação. A Tyve não revende mensagem e não põe margem nisso. Somos a ponte que torna o follow-up possível; quem cobra o envio é o WhatsApp, no preço dele.',
+    faq_a14:'<b>Na maioria dos casos, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O WhatsApp mantém uma janela de 24 horas depois da última mensagem do seu cliente. Dentro dela, qualquer mensagem é <b>gratuita</b> — e a Tyve envia o follow-up dentro dessa janela.<br><br>A exceção é o <b>lembrete de agendamento na véspera</b> (adicional de Agenda e plano Escala): como a consulta foi marcada dias antes, a janela já fechou, e o WhatsApp cobra <b>centavos</b> por esse envio. <b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business do seu negócio, a mesma que você conecta na ativação. A Tyve não revende mensagem e não põe margem nisso.',
     faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
     faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
     cta_h2:'Chega de perder cliente<br/>no WhatsApp!',
@@ -1496,7 +1494,6 @@ var T = {
     p2_badge:'Cresce and Escala',
     p2_h3:'Automatic follow-up for customers who didn\'t return',
     p2_desc:'After the agent hands off a customer, it sends an automatic message the next day to check if they got what they needed. You don\'t have to do anything.',
-    p2_note:'Optional. Tyve does not resell messages: when WhatsApp charges for the delivery, it is cents and it goes straight from Meta to you.',
     p2_bot1:'Hi, Renato! Just checking in to see if you got what you needed 😊',
     p2_client:'Yes! Already booked, thanks!',
     p2_bot2:'Great! We\'re here whenever you need us. Bye! 👋',
@@ -1589,7 +1586,7 @@ var T = {
     faq_q12:'Does the Pix money go to my account? <span class="faq-icon">+</span>',
     faq_a12:'Yes. On the Escala plan, Tyve generates the order Pix inside the conversation and the money goes straight to your store account. Tyve is not in the middle of the payment.',
     faq_q14:'Does the automatic follow-up cost anything? <span class="faq-icon">+</span>',
-    faq_a14:'The follow-up is <b>optional</b> and included in your plan — Tyve charges nothing extra for it.<br><br>What exists is a charge from <b>WhatsApp</b>, not from Tyve. WhatsApp keeps a 24-hour window after your customer\'s last message: inside it, any message you send is <b>free</b>. Outside it, Meta charges <b>cents</b> per message sent. Tyve always tries to send the follow-up inside the window.<br><br><b>When there is a charge, it does not go through Tyve.</b> It goes straight from Meta to you, on the card registered in your business\'s WhatsApp Business account — the same account you connect during activation. Tyve does not resell messages and adds no margin. We are the bridge that makes the follow-up possible; WhatsApp is who charges for the delivery, at its own price.',
+    faq_a14:'<b>In most cases, zero.</b> The follow-up is included in your plan and Tyve charges nothing extra for it.<br><br>WhatsApp keeps a 24-hour window after your customer\'s last message. Inside it, any message is <b>free</b> — and Tyve sends the follow-up inside that window.<br><br>The exception is the <b>appointment reminder the day before</b> (Scheduling add-on and Escala plan): since the appointment was booked days earlier, the window has closed, and WhatsApp charges <b>cents</b> for that delivery. <b>That charge does not go through Tyve</b> — it goes straight from Meta to you, on the card registered in your business\'s WhatsApp Business account, the same one you connect during activation. Tyve does not resell messages and adds no margin.',
     faq_q13:'Do you have access to my customers data? Is it safe? <span class="faq-icon">+</span>',
     faq_a13:'Access is granted by you through an official, secure connection (OAuth), read-only for what is needed (orders) and compliant with LGPD. You can revoke access whenever you want.',
     cta_h2:'Stop losing customers<br/>on WhatsApp!',
