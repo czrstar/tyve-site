@@ -970,14 +970,13 @@
       </div>
       <div class="sp-visual">
         <div class="sched-mockup">
-          <div class="sched-hdr" data-i18n="p3_sched_hdr">📅 Agendar consulta</div>
+          <div class="sched-hdr" data-i18n="p3_sched_hdr">📦 Status do pedido #1234</div>
           <div class="sched-opts">
-            <div class="sched-opt sel">Seg 07/04 às 09h</div>
-            <div class="sched-opt">Seg 07/04 às 10h</div>
-            <div class="sched-opt">Ter 08/04 às 14h</div>
-            <div class="sched-opt">Qua 09/04 às 11h</div>
+            <div class="sched-opt sel">🚚 Saiu para entrega — hoje</div>
+            <div class="sched-opt">Rastreio: BR123456789BR</div>
+            <div class="sched-opt">Previsão: chega amanhã</div>
           </div>
-          <button class="sched-btn" data-i18n="p3_sched_btn">Confirmar horário</button>
+          <button class="sched-btn" data-i18n="p3_sched_btn">Acompanhar entrega</button>
         </div>
       </div>
     </div>
@@ -1282,7 +1281,7 @@ var T = {
     addon_cta_atende:'Atende + Agenda', addon_cta_cresce:'Cresce + Agenda',
 
     nd_label:'Na prática', nd_h2:'Veja como funciona no seu dia a dia',
-    tabs_t0:'Alerta de transição', tabs_t1:'Painel de resultados', tabs_t2:'Follow-up automático', tabs_t3:'Agendamento',
+    tabs_t0:'Alerta de transição', tabs_t1:'Painel de resultados', tabs_t2:'Follow-up automático', tabs_t3:'Consulta de pedido',
     p0_badge:'Incluído em todos os planos',
     p0_h3:'Você recebe um alerta quando o agente precisar de você',
     p0_desc:'Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.',
@@ -1295,10 +1294,10 @@ var T = {
     p2_bot1:'Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊',
     p2_client:'Sim! Já agendei, obrigado!',
     p2_bot2:'Ótimo! Qualquer coisa estamos aqui. Até logo! 👋',
-    p3_badge:'Incluso no Escala · Adicional para Atende e Cresce',
-    p3_h3:'Cliente escolhe o horário sem sair do WhatsApp',
-    p3_desc:'O agente consulta sua agenda em tempo real e apresenta os horários disponíveis direto na conversa. O cliente escolhe, o evento é criado no Google Calendar automaticamente, com lembrete D-1.',
-    p3_sched_hdr:'📅 Agendar consulta', p3_sched_btn:'Confirmar horário',
+    p3_badge:'Incluído em todos os planos',
+    p3_h3:'"Cadê meu pedido?" respondido na hora, com rastreio real',
+    p3_desc:'O agente consulta o status e o rastreio do pedido direto na sua loja (Shopify, Nuvemshop, Bling, Woo, Tiny) e responde na conversa — sem inventar, sem "vou verificar e te retorno".',
+    p3_sched_hdr:'📦 Status do pedido #1234', p3_sched_btn:'Acompanhar entrega',
     avb_label:'Por que faz diferença',
     avb_h2:'Agente de IA não é<br>o mesmo que chatbot',
     avb_sub:'A maioria das automações usa regras simples — se o cliente escrever a palavra certa, funciona. O agente Tyve lê, interpreta e raciocina como um atendente de verdade.',
@@ -1308,11 +1307,11 @@ var T = {
     avb_bot_f5:'Não decide — segue script fixo', avb_bot_f6:'Cliente percebe a frieza na hora',
     avb_agent_f1:'Lê e interpreta qualquer mensagem', avb_agent_f2:'Entende linguagem informal, erros e abreviações',
     avb_agent_f3:'Lembra toda a conversa — responde com continuidade', avb_agent_f4:'Tom e linguagem do seu negócio',
-    avb_agent_f5:'Raciocina — decide quando escalar ou agendar', avb_agent_f6:'Experiência natural, como falar com um atendente',
-    avb_bot_ex_label:'Exemplo real', avb_bot_q:'"qual o preço pra consulta de urgencia"',
-    avb_bot_a:'Desculpe, não entendi. Digite: <strong>CONSULTA</strong> ou <strong>AGENDAR</strong>',
-    avb_agent_ex_label:'Mesmo exemplo', avb_agent_q:'"qual o preço pra consulta de urgencia"',
-    avb_agent_a:'Oi! 😊 Consulta de urgência tem atendimento prioritário, a partir de R$150. Quer que eu verifique os horários disponíveis ainda hoje?',
+    avb_agent_f5:'Raciocina — decide quando escalar ou resolver o pedido', avb_agent_f6:'Experiência natural, como falar com um atendente',
+    avb_bot_ex_label:'Exemplo real', avb_bot_q:'meu pedido 1234 tá atrasado, quero cancelar',
+    avb_bot_a:'Desculpe, não entendi. Digite: <strong>STATUS</strong> ou <strong>TROCA</strong>',
+    avb_agent_ex_label:'Mesmo exemplo', avb_agent_q:'meu pedido 1234 tá atrasado, quero cancelar',
+    avb_agent_a:'Oi! 😊 Deixa eu ver o pedido 1234... saiu pra entrega hoje 🚚 chega amanhã. Se ainda quiser cancelar, eu resolvo por aqui — quer?',
     vs_label:'Comparativo', vs_h2:'Tyve vs as outras opções',
     vs_th2:'App de automação', vs_th3:'Montar do zero',
     vs_r1l:'Responde certo na primeira',
@@ -1486,7 +1485,7 @@ var T = {
     addon_cta_atende:'Atende + Scheduling', addon_cta_cresce:'Cresce + Scheduling',
 
     nd_label:'In practice', nd_h2:'See how it works in your day-to-day',
-    tabs_t0:'Transfer alert', tabs_t1:'Results dashboard', tabs_t2:'Automatic follow-up', tabs_t3:'Scheduling',
+    tabs_t0:'Transfer alert', tabs_t1:'Results dashboard', tabs_t2:'Automatic follow-up', tabs_t3:'Order lookup',
     p0_badge:'Included in all plans',
     p0_h3:'You get an alert when the agent needs you',
     p0_desc:'When a customer has an urgent need or a question only a human can solve, Tyve sends you a WhatsApp notification instantly — with the customer\'s name and a conversation summary. You jump in directly, no scrolling needed.',
@@ -1499,10 +1498,10 @@ var T = {
     p2_bot1:'Hi, Renato! Just checking in to see if you got what you needed 😊',
     p2_client:'Yes! Already booked, thanks!',
     p2_bot2:'Great! We\'re here whenever you need us. Bye! 👋',
-    p3_badge:'Included in Escala · Add-on for Atende and Cresce',
-    p3_h3:'Customer picks a time without leaving WhatsApp',
-    p3_desc:'The agent checks your calendar in real time and presents available slots directly in the conversation. The customer picks, the event is created in Google Calendar automatically, with a D-1 reminder.',
-    p3_sched_hdr:'📅 Book appointment', p3_sched_btn:'Confirm time',
+    p3_badge:'Included in every plan',
+    p3_h3:'"Where is my order?" answered instantly, with real tracking',
+    p3_desc:'The agent checks the order status and tracking straight from your store (Shopify, Nuvemshop, Bling, Woo, Tiny) and answers in the chat — no making things up, no "let me check and get back to you".',
+    p3_sched_hdr:'📦 Order #1234 status', p3_sched_btn:'Track delivery',
     avb_label:'Why it matters',
     avb_h2:'An AI agent is not<br>the same as a chatbot',
     avb_sub:'Most automations use simple rules — if the customer types the right word, it works. The Tyve agent reads, interprets and reasons like a real attendant.',
@@ -1512,11 +1511,11 @@ var T = {
     avb_bot_f5:'Doesn\'t decide — follows a fixed script', avb_bot_f6:'Customer notices the coldness immediately',
     avb_agent_f1:'Reads and interprets any message', avb_agent_f2:'Understands informal language, typos and abbreviations',
     avb_agent_f3:'Remembers the full conversation — replies with continuity', avb_agent_f4:'Your business\'s tone and language',
-    avb_agent_f5:'Reasons — decides when to escalate or schedule', avb_agent_f6:'Natural experience, like talking to a real attendant',
-    avb_bot_ex_label:'Real example', avb_bot_q:'"what\'s the price for an urgent appointment"',
-    avb_bot_a:'Sorry, I didn\'t understand. Type: <strong>CONSULT</strong> or <strong>BOOK</strong>',
-    avb_agent_ex_label:'Same example', avb_agent_q:'"what\'s the price for an urgent appointment"',
-    avb_agent_a:'Hi! 😊 Urgent appointments have priority care, starting at R$150. Would you like me to check available slots for today?',
+    avb_agent_f5:'Reasons — decides when to escalate or resolve the order', avb_agent_f6:'Natural experience, like talking to a real attendant',
+    avb_bot_ex_label:'Real example', avb_bot_q:'my order 1234 is late, I want to cancel',
+    avb_bot_a:'Sorry, I did not understand. Type: <strong>STATUS</strong> or <strong>EXCHANGE</strong>',
+    avb_agent_ex_label:'Same example', avb_agent_q:'my order 1234 is late, I want to cancel',
+    avb_agent_a:'Hi! 😊 Let me check order 1234... it shipped today 🚚 arriving tomorrow. If you still want to cancel, I can handle it right here — shall I?',
     vs_label:'Comparison', vs_h2:'Tyve vs the alternatives',
     vs_th2:'Automation app', vs_th3:'Build from scratch',
     vs_r1l:'Gets it right the first time',
