@@ -866,7 +866,18 @@
           <label class="q-label">Endereço da SUA loja para receber as devoluções <span class="req">*</span></label>
           <p style="margin:0 0 10px;font-size:.92rem;color:#6b6b6b">É o seu endereço fixo, para onde o cliente envia a troca de volta. O endereço de cada cliente vem automático do pedido — você não precisa informar.</p>
           <input type="text" name="cep_devolucao" placeholder="CEP da loja (ex: 14400-000)" />
-          <textarea name="endereco_devolucao" rows="2" placeholder="Rua, número, bairro, cidade e UF da loja"></textarea>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <input type="text" name="end_logradouro" placeholder="Rua / logradouro" style="flex:2;min-width:180px;margin:0" />
+            <input type="text" name="end_numero" placeholder="Número" style="flex:1;min-width:80px;margin:0" />
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <input type="text" name="end_complemento" placeholder="Complemento (opcional)" style="flex:1;min-width:120px;margin:0" />
+            <input type="text" name="end_bairro" placeholder="Bairro" style="flex:1;min-width:120px;margin:0" />
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <input type="text" name="end_cidade" placeholder="Cidade" style="flex:2;min-width:140px;margin:0" />
+            <input type="text" name="end_uf" placeholder="UF" maxlength="2" style="flex:1;min-width:60px;margin:0;text-transform:uppercase" />
+          </div>
           <input type="text" name="cnpj_loja" placeholder="CNPJ da loja" />
         </div>
         </div><!-- /data-plan-q escala (troca operacional) -->
