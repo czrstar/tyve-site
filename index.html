@@ -827,7 +827,7 @@
             <li data-i18n="ecom_a_f8">Detecta clientes frustrados e prioriza ⚠️</li>
             <li data-i18n="ecom_a_f9">1 ajuste por mês · Suporte (retorno em até 8h)</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Atende%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="ecom_cta_a">Quero o Atende</a>
+          <a href="/assinar/plano-atende" class="btn-plan" data-i18n="ecom_cta_a">Quero o Atende</a>
         </div>
 
         <div class="plan featured">
@@ -847,7 +847,7 @@
             <li data-i18n="ecom_c_f5">1 ajuste por semana</li>
             <li data-i18n="ecom_c_f6">Suporte prioritário (retorno em até 4h)</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Cresce%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="ecom_cta_c">Quero o Cresce</a>
+          <a href="/assinar/plano-cresce" class="btn-plan" data-i18n="ecom_cta_c">Quero o Cresce</a>
         </div>
 
         <div class="plan">
@@ -865,7 +865,7 @@
             <li data-i18n="ecom_e_f4">Múltiplos fluxos e segmentações</li>
             <li data-i18n="ecom_e_f5">Reunião mensal · Gerente dedicado (retorno em até 2h)</li>
           </ul>
-          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Escala%20E-commerce%20(site)!" class="btn-plan" target="_blank" rel="noopener" data-i18n="ecom_cta_e">Quero o Escala</a>
+          <a href="/assinar/plano-escala" class="btn-plan" data-i18n="ecom_cta_e">Quero o Escala</a>
         </div>
       </div>
       <p class="ecom-enterprise-note" data-i18n-html="ecom_enterprise">Passou do limite do plano? O atendimento não para — <b>R$ 0,50 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 35</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.</p>
@@ -1785,7 +1785,7 @@ function renderCycle(){
         if (wasEl) { wasEl.textContent = 'R$' + formatBRL(brl) + '/mês'; wasEl.classList.add('show'); }
         if (btn) {
           if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar/plano-' + mm[1] + '?ciclo=anual'); }
-          else { btn.setAttribute('href', waEcom(nome, true)); }
+          else { btn.setAttribute('href', '/assinar/plano-' + nome.toLowerCase() + '?ciclo=anual'); }
         }
       } else {
         amtEl.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
@@ -1794,7 +1794,7 @@ function renderCycle(){
         if (wasEl) wasEl.classList.remove('show');
         if (btn) {
           if (kind === 'servicos') { var mm2 = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm2) btn.setAttribute('href', '/assinar/plano-' + mm2[1]); }
-          else { btn.setAttribute('href', waEcom(nome, false)); }
+          else { btn.setAttribute('href', '/assinar/plano-' + nome.toLowerCase()); }
         }
       }
     });

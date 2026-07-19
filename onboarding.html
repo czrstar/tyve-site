@@ -1136,25 +1136,29 @@
       if (!res.ok) return;
       const data = await res.json();
       if (!data.ok) return;
-      selectBusinessType('servico'); // paid prefill tokens are service plans
+      var rawPlano = (data.plano || '').toLowerCase();
+      var isEcom = rawPlano.indexOf('-ecom') !== -1;
+      var basePlano = rawPlano.replace('-ecom-anual','').replace('-ecom','');
+      selectBusinessType(isEcom ? 'ecommerce' : 'servico');
       if (data.nome) { const f = document.querySelector('[name="responsavel"]'); if (f && !f.value) f.value = data.nome; }
       if (data.email) { const f = document.querySelector('[name="client_email"]'); if (f && !f.value) f.value = data.email; }
       if (data.telefone) { const f = document.querySelector('[name="numero_whatsapp"]'); if (f && !f.value) f.value = data.telefone; }
-      if (data.plano && ['atende','cresce','escala'].includes(data.plano)) {
-        selectPlan(data.plano);
-        showPlanConfirmed(data.plano);
+      if (basePlano && ['atende','cresce','escala'].includes(basePlano)) {
+        selectPlan(basePlano);
+        showPlanConfirmed(basePlano, isEcom);
       }
     } catch (e) { /* form still works without prefill */ }
   })();
 
   // ── Confirmed-plan banner (shown when the plan came from a valid checkout token) ──
   const PLAN_LABELS = { atende: 'Atende (R$497/mês)', cresce: 'Cresce (R$697/mês)', escala: 'Escala (R$997/mês)' };
-  function showPlanConfirmed(plan) {
+  const PLAN_LABELS_ECOM = { atende: 'Atende E-commerce (R$497/mês)', cresce: 'Cresce E-commerce (R$797/mês)', escala: 'Escala E-commerce (R$1.297/mês)' };
+  function showPlanConfirmed(plan, isEcom) {
     const box = document.getElementById('plan-confirmed-box');
     const open = document.getElementById('plan-picker-open');
     const name = document.getElementById('plan-confirmed-name');
     if (!box || !open) return;
-    if (name) name.textContent = PLAN_LABELS[plan] || plan;
+    if (name) name.textContent = (isEcom ? PLAN_LABELS_ECOM : PLAN_LABELS)[plan] || plan;
     box.style.display = 'flex';
     open.style.display = 'none';
   }
