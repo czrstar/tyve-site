@@ -1094,18 +1094,23 @@
         <p class="roi-sub" data-i18n="roi_sub">Baseado em pesquisas do Sebrae e dados reais de negócios como o seu.</p>
       </div>
       <div class="roi-calc">
-        <label class="roi-input-label" data-i18n="roi_input_label">Mensagens no WhatsApp por dia</label>
+        <label class="roi-input-label" data-i18n="roi_input_label">Pedidos por mês</label>
         <div class="roi-slider-row">
-          <input type="range" id="roiSlider" min="30" max="300" value="80" step="10" class="roi-slider" />
-          <span class="roi-slider-value" id="roiValue">80</span>
+          <input type="range" id="roiSlider" min="50" max="2000" value="300" step="50" class="roi-slider" />
+          <span class="roi-slider-value" id="roiValue">300</span>
         </div>
-        <div class="roi-slider-hints"><span data-i18n="roi_hint1">30/dia</span><span data-i18n="roi_hint2">Clínica média: ~80</span><span data-i18n="roi_hint3">300/dia</span></div>
+        <div class="roi-slider-hints"><span data-i18n="roi_hint1">50</span><span data-i18n="roi_hint2">Loja média: ~300</span><span data-i18n="roi_hint3">2.000</span></div>
+        <label class="roi-input-label" data-i18n="roi_ticket_label" style="margin-top:16px;display:block">Ticket médio (R$)</label>
+        <div class="roi-slider-row">
+          <input type="range" id="roiTicket" min="50" max="500" value="150" step="10" class="roi-slider" />
+          <span class="roi-slider-value" id="roiTicketValue">150</span>
+        </div>
         <div class="roi-results">
-          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c1_label">Tempo manual por mês</span><span class="roi-card-value" id="roiManual">93h</span><span class="roi-card-detail" data-i18n="roi_c1_detail">~3,5 min por mensagem × 20 dias úteis</span></div>
-          <div class="roi-card roi-card-highlight"><span class="roi-card-label" data-i18n="roi_c2_label">Horas liberadas com a Tyve</span><span class="roi-card-value" id="roiSaved">70h</span><span class="roi-card-detail" data-i18n="roi_c2_detail">75% das interações resolvidas pela IA</span></div>
-          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c3_label">Dias de trabalho de volta</span><span class="roi-card-value" id="roiDays">9 dias</span><span class="roi-card-detail" data-i18n="roi_c3_detail">Tempo que sua equipe ganha pra focar no que importa</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c1_label">"Cadê meu pedido?" por mês</span><span class="roi-card-value" id="roiManual">360</span><span class="roi-card-detail" data-i18n="roi_c1_detail">o agente responde na hora, com rastreio real</span></div>
+          <div class="roi-card roi-card-highlight"><span class="roi-card-label" data-i18n="roi_c2_label">Vendas salvas por mês</span><span class="roi-card-value" id="roiSaved">9</span><span class="roi-card-detail" data-i18n="roi_c2_detail">~3% dos pedidos que virariam reembolso ou cliente perdido</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c3_label">Recuperado por mês</span><span class="roi-card-value" id="roiDays">R$1.350</span><span class="roi-card-detail" data-i18n="roi_c3_detail">vendas salvas × seu ticket médio</span></div>
         </div>
-        <p class="roi-bonus" id="roiBonus">São <strong id="roiSavedText">70 horas</strong> que sua equipe ganha de volta por mês — sem contar atendimento 24h e follow-up automático.</p>
+        <p class="roi-bonus" id="roiBonus">São <strong id="roiSavedText">R$1.350</strong> em vendas que ficam na sua loja por mês — sem contar as trocas convertidas em vez de reembolso e o atendimento 24h.</p>
         <p class="roi-footnote" data-i18n="roi_footnote">Estimativa com base em pesquisas do Sebrae. Cada negócio pode variar.</p>
       </div>
     </div>
@@ -1344,17 +1349,17 @@ var T = {
     tst_label:'Quem já usa',
     tst_text:'"Metade do meu WhatsApp era \'cadê meu pedido?\'. Agora o agente puxa o rastreio na hora, resolve a troca de numeração sozinho e só me chama quando precisa. Sobrou tempo pra vender de verdade."',
     tst_name:'Loja de calçados', tst_role:'Piloto e-commerce Tyve',
-    roi_label:'Calculadora de economia',
-    roi_h2:'Quanto tempo sua equipe<br>ganha com a Tyve?',
-    roi_sub:'Baseado em pesquisas do Sebrae e dados reais de negócios como o seu.',
-    roi_input_label:'Mensagens no WhatsApp por dia',
-    roi_hint1:'30/dia', roi_hint2:'Loja média: ~80', roi_hint3:'300/dia',
-    roi_c1_label:'Tempo manual por mês', roi_c1_detail:'~3,5 min por mensagem × 20 dias úteis',
-    roi_c2_label:'Horas liberadas com a Tyve', roi_c2_detail:'75% das interações resolvidas pela IA',
-    roi_c3_label:'Dias de trabalho de volta', roi_c3_detail:'Tempo que sua equipe ganha pra focar no que importa',
-    roi_footnote:'Estimativa com base em pesquisas do Sebrae. Cada negócio pode variar.',
+    roi_label:'Calculadora de venda recuperada',
+    roi_h2:'Quanto sua loja recupera<br>com a Tyve?',
+    roi_sub:'Uma estimativa de quanto o pós-venda automático mantém em vendas na sua loja.',
+    roi_input_label:'Pedidos por mês', roi_ticket_label:'Ticket médio (R$)',
+    roi_hint1:'50', roi_hint2:'Loja média: ~300', roi_hint3:'2.000',
+    roi_c1_label:'"Cadê meu pedido?" por mês', roi_c1_detail:'o agente responde na hora, com rastreio real',
+    roi_c2_label:'Vendas salvas por mês', roi_c2_detail:'~3% dos pedidos que virariam reembolso ou cliente perdido',
+    roi_c3_label:'Recuperado por mês', roi_c3_detail:'vendas salvas × seu ticket médio',
+    roi_footnote:'Estimativa ilustrativa. Cada loja varia conforme volume, nicho e ticket.',
     roi_unit_days:' dias',
-    roi_bonus_pre:'São ', roi_bonus_mid:' horas', roi_bonus_post:' que sua equipe ganha de volta por mês — sem contar atendimento 24h e follow-up automático.',
+    roi_bonus_pre:'São ', roi_bonus_mid:' horas', roi_bonus_post:' em vendas que ficam na sua loja por mês — sem contar as trocas convertidas em vez de reembolso e o atendimento 24h.',
     faq_label:'Dúvidas', faq_h2:'Perguntas frequentes',
     faq_q1:'Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span>',
     faq_a1:'Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.',
@@ -1548,17 +1553,17 @@ var T = {
     tst_label:'Who\'s using it',
     tst_text:'"Half my WhatsApp was where is my order. Now the agent pulls tracking instantly, resolves size exchanges on its own and only calls me when needed. I got time back to actually sell."',
     tst_name:'Footwear store', tst_role:'Tyve e-commerce pilot',
-    roi_label:'Savings calculator',
-    roi_h2:'How much time does your team<br>gain with Tyve?',
-    roi_sub:'Based on research and real data from businesses like yours.',
-    roi_input_label:'WhatsApp messages per day',
-    roi_hint1:'30/day', roi_hint2:'Average store: ~80', roi_hint3:'300/day',
-    roi_c1_label:'Manual time per month', roi_c1_detail:'~3.5 min per message × 20 working days',
-    roi_c2_label:'Hours freed with Tyve', roi_c2_detail:'75% of interactions resolved by AI',
-    roi_c3_label:'Working days back', roi_c3_detail:'Time your team gains to focus on what matters',
-    roi_footnote:'Estimate based on research. Each business may vary.',
+    roi_label:'Recovered-sales calculator',
+    roi_h2:'How much your store recovers<br>with Tyve?',
+    roi_sub:'An estimate of how much automatic post-sale keeps in sales at your store.',
+    roi_input_label:'Orders per month', roi_ticket_label:'Average ticket (R$)',
+    roi_hint1:'50', roi_hint2:'Average store: ~300', roi_hint3:'2,000',
+    roi_c1_label:'"Where is my order?" per month', roi_c1_detail:'the agent answers instantly, with real tracking',
+    roi_c2_label:'Sales saved per month', roi_c2_detail:'~3% of orders that would become a refund or a lost customer',
+    roi_c3_label:'Recovered per month', roi_c3_detail:'sales saved × your average ticket',
+    roi_footnote:'Illustrative estimate. Each store varies by volume, niche and ticket.',
     roi_unit_days:' days',
-    roi_bonus_pre:'That\'s ', roi_bonus_mid:' hours', roi_bonus_post:' your team gets back per month — not counting 24h coverage and automatic follow-up.',
+    roi_bonus_pre:'That is ', roi_bonus_mid:' hours', roi_bonus_post:' in sales that stay at your store each month — not counting exchanges converted instead of refunds and 24/7 service.',
     faq_label:'Questions', faq_h2:'Frequently asked questions',
     faq_q1:'Will my customers notice it\'s an AI agent? <span class="faq-icon">+</span>',
     faq_a1:'Most of the time, no. The agent is configured with your business\'s tone and language — it reads the message, understands the context and responds naturally. When personalized attention is needed, it hands the conversation to your team with a complete summary of everything that happened.',
@@ -1672,20 +1677,24 @@ function showSlide(i) {
 
 /* ─── ROI ────────────────────────────────────────────────── */
 var rs = document.getElementById('roiSlider');
+var rt = document.getElementById('roiTicket');
 function calcROI() {
-  var m = parseInt(rs.value);
-  document.getElementById('roiValue').textContent = m;
-  var manual = Math.round(m*3.5*20/60);
-  var saved = Math.round(manual*.75);
-  var days = Math.round(saved/8);
+  var ped = parseInt(rs.value);
+  var tk = rt ? parseInt(rt.value) : 150;
+  document.getElementById('roiValue').textContent = ped;
+  if (rt) document.getElementById('roiTicketValue').textContent = tk;
+  var perguntas = Math.round(ped*1.2);
+  var vendas = Math.max(1, Math.round(ped*0.03));
+  var recuperado = vendas*tk;
   var L = T[currentLang];
-  document.getElementById('roiManual').textContent = manual+'h';
-  document.getElementById('roiSaved').textContent = saved+'h';
-  document.getElementById('roiDays').textContent = days + L.roi_unit_days;
+  var fmt = 'R$' + recuperado.toLocaleString('pt-BR');
+  document.getElementById('roiManual').textContent = perguntas;
+  document.getElementById('roiSaved').textContent = vendas;
+  document.getElementById('roiDays').textContent = fmt;
   var bonus = document.getElementById('roiBonus');
-  if (bonus) bonus.innerHTML = L.roi_bonus_pre + '<strong>' + saved + '</strong>' + L.roi_bonus_mid + L.roi_bonus_post;
+  if (bonus) bonus.innerHTML = L.roi_bonus_pre + '<strong>' + fmt + '</strong>' + L.roi_bonus_post;
 }
-if (rs) { rs.addEventListener('input', calcROI); calcROI(); }
+if (rs) { rs.addEventListener('input', calcROI); if (rt) rt.addEventListener('input', calcROI); calcROI(); }
 
 /* ─── FAQ ────────────────────────────────────────────────── */
 document.querySelectorAll('.faq-question').forEach(function(btn) {
