@@ -1180,11 +1180,22 @@
     const pill = document.getElementById('biz-' + bt);
     if (pill) pill.classList.add('selected');
 
+    updatePlanPrices();
     applyVisibility();
     maybeUnlock();
   }
 
-  // Plan gating: feature por plano (alinhado ao site — WISMO=Cresce+, Troca/Pix=Escala)
+  // Preço das pills muda por tipo de negócio (serviço: 697/997 · e-commerce: 797/1.297)
+  function updatePlanPrices() {
+    var ecom = businessType === 'ecommerce';
+    var px = { atende: 'R$497/mês', cresce: ecom ? 'R$797/mês' : 'R$697/mês', escala: ecom ? 'R$1.297/mês' : 'R$997/mês' };
+    ['atende','cresce','escala'].forEach(function(p){
+      var el = document.querySelector('#pill-'+p+' .plan-pill-price');
+      if (el) el.textContent = px[p];
+    });
+  }
+
+  // Plan gating: feature por plano (alinhado ao site — WISMO=todos, Troca=Cresce+, Pix=Escala)
   function planAllowed(list) {
     if (!list) return true;
     return list.split(',').map(s => s.trim()).includes(selectedPlan);
