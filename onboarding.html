@@ -779,9 +779,9 @@
         <div class="info-box blue">
           O agente consulta o status do pedido para o cliente ("cadê meu pedido?"). Para isso, ele precisa saber como o cliente costuma se identificar.
         </div>
-        <div class="question" data-plan-q="cresce,escala">
+        <div class="question" data-plan-q="atende,cresce,escala">
           <label class="q-label">Como o cliente costuma identificar o pedido? <span class="req">*</span></label>
-          <p class="q-hint">Marque todas que se aplicam. <em>(Consulta de pedido — planos Cresce e Escala.)</em></p>
+          <p class="q-hint">Marque todas que se aplicam. <em>(Consulta de pedido — todos os planos.)</em></p>
           <div class="checkbox-group">
             <label class="check-item"><input type="checkbox" name="order_id_method[]" value="telefone" /><div class="check-box"></div><span class="check-label">Telefone / WhatsApp do comprador</span></label>
             <label class="check-item"><input type="checkbox" name="order_id_method[]" value="numero_pedido" /><div class="check-box"></div><span class="check-label">Número do pedido</span></label>
@@ -844,8 +844,8 @@
           <p style="margin:0 0 10px;font-size:.92rem;color:#6b6b6b">Em quais casos há reembolso, forma do estorno (Pix ou cartão), prazo e condições. O agente usa isso para explicar o procedimento em linhas gerais e encaminhar para vocês (nunca promete valor nem prazo exato).</p>
           <textarea name="reembolso_politica" rows="3" placeholder="Ex.: Reembolso após recebermos e conferirmos a peça sem uso; estorno pelo mesmo meio de pagamento (Pix ou cartão); a equipe confirma o prazo."></textarea>
         </div>
-        <div data-plan-q="escala">
-        <div class="info-box orange" style="margin-bottom:14px">As opções abaixo configuram a <strong>troca automática</strong> (plano Escala). Nos planos Atende e Cresce, basta a política acima.</div>
+        <div data-plan-q="cresce,escala">
+        <div class="info-box orange" style="margin-bottom:14px">As opções abaixo configuram a <strong>troca automática</strong> (planos Cresce e Escala). No plano Atende, basta a política acima.</div>
         <div class="question">
           <label class="q-label">Como funciona o envio do produto novo na troca? <span class="req">*</span></label>
           <div class="radio-group">
@@ -880,7 +880,7 @@
           </div>
           <input type="text" name="cnpj_loja" placeholder="CNPJ da loja" />
         </div>
-        </div><!-- /data-plan-q escala (troca operacional) -->
+        </div><!-- /data-plan-q cresce,escala (troca operacional) -->
         <div class="section-footer">
           <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
