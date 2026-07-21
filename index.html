@@ -203,6 +203,12 @@
   /* ─── PRICING (08) — WHITE ─────────────────────────────── */
   .pricing { padding: 24px 0 88px; background: var(--light); }
   .pricing-header { text-align: center; margin-bottom: 48px; }
+  .plans-sub { color: #666; font-size: 16px; line-height: 1.6; max-width: 560px; margin: 14px auto 0; }
+  .plans-trust { color: var(--laranja, #f84100); font-size: 13.5px; font-weight: 600; margin: 12px auto 0; letter-spacing: .2px; }
+  .vs-callout { margin-top: 22px; background: #fff7f3; border-left: 3px solid #f84100; border-radius: 10px; padding: 16px 20px; font-size: 14.5px; line-height: 1.65; color: #444; }
+  .hero-secondary { display: inline-block; margin-left: 18px; color: rgba(255,255,255,.85); font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
+  .hero-secondary:hover { color: #fff; }
+  .final-cta-content p.cta-garantia { margin: 16px 0 0; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.92); }
   .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; align-items: stretch; }
   .biz-toggle { display: flex; justify-content: center; margin-bottom: 28px; flex-wrap: wrap; }
   .biz-toggle-track { display: inline-flex; background: #f0f0f0; border: 1px solid #e2e2e2; border-radius: 100px; padding: 4px; gap: 2px; flex-wrap: wrap; }
@@ -537,10 +543,10 @@
       </span>
       <span data-i18n="hero_badge">WhatsApp Cloud API oficial</span>
     </div>
-    <h1 data-i18n-html="hero_h1">Atendimento e pós-venda com inteligência e resolução.<br/><span class="accent">24h por dia!</span></h1>
-    <p class="hero-sub" data-i18n="hero_sub">Feita para responder. Feita para resolver.</p>
+    <h1 data-i18n-html="hero_h1">"Cadê meu pedido?" respondido sozinho.<br/><span class="accent">Troca resolvida no WhatsApp.</span></h1>
+    <p class="hero-sub" data-i18n="hero_sub">A Luma atende a sua loja 24h — consulta o pedido de verdade (Shopify, Nuvemshop, Bling), resolve a troca de numeração e só te chama quando precisa.</p>
     <p class="hero-br" data-i18n="hero_br">🇧🇷 Feito no Brasil, suporte em português</p>
-    <a href="#planos" class="btn-cta" data-i18n="hero_cta">Começar agora</a>
+    <a href="#planos" class="btn-cta js-open-demo" data-i18n="hero_cta">⚡ Ver demo ao vivo</a><a href="#planos" class="hero-secondary" data-i18n="hero_cta2">Ver planos →</a>
   </div>
 </section>
 
@@ -700,6 +706,8 @@
     <div class="pricing-header">
       <div class="sec-label" data-i18n="plans_label">Planos</div>
       <h2 class="section-title section-title-dark" data-i18n="plans_h2">Investimento direto. Resultado real.</h2>
+      <p class="plans-sub" data-i18n="plans_sub">Menos de um terço do custo de um atendente — respondendo 24h, todo dia, sem férias.</p>
+      <p class="plans-trust" data-i18n="plans_trust">⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias</p>
     </div>
 
     <div class="biz-toggle" id="planos-ecommerce">
@@ -1062,6 +1070,7 @@
         <tr><td data-i18n="vs_r7l">IA treinada no seu negócio</td><td data-i18n-html="vs_r7c1"><span class="check">✓</span></td><td data-i18n-html="vs_r7c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r7c3"><span class="partial">Depende de você</span></td></tr>
       </tbody>
     </table></div>
+    <div class="vs-callout" data-i18n-html="vs_callout"><strong>Já usa um app de rastreio (Sak, Rastreio.net)?</strong> Ele avisa "saiu para entrega" — e fica mudo quando o cliente responde "mas cadê?". A Tyve responde quem pergunta, resolve a troca e gera o Pix, no mesmo fio da conversa.</div>
   </div>
 </section>
 
@@ -1157,12 +1166,13 @@
 <section class="final-cta">
   <div class="container">
     <div class="final-cta-content">
-      <h2 data-i18n-html="cta_h2">Chega de perder cliente<br/>no WhatsApp!</h2>
-      <p data-i18n-html="cta_p">Em 20 minutinhos a gente mostra ao vivo como fica seu negócio,<br/>sem compromisso nenhum.</p>
+      <h2 data-i18n-html="cta_h2">Chega de passar o dia<br/>respondendo "cadê meu pedido?"</h2>
+      <p data-i18n-html="cta_p">Em 20 minutinhos a gente mostra ao vivo como fica na sua loja,<br/>sem compromisso nenhum.</p>
       <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20uma%20demo%20da%20Tyve%20(site)!" class="btn-cta-teal" target="_blank" rel="noopener">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         <span data-i18n="cta_btn">Agendar demo grátis</span>
       </a>
+      <p class="cta-garantia" data-i18n="cta_garantia">Garantia de 7 dias — não gostou, devolvemos 100%.</p>
     </div>
   </div>
 </section>
@@ -1206,10 +1216,11 @@ var T = {
     nav_how:'Como funciona', nav_segments:'Segmentos', nav_faq:'FAQ',
     nav_plans:'Planos e Preços', nav_demo:'⚡ Ver demo ao vivo',
     hero_badge:'WhatsApp Cloud API oficial',
-    hero_h1:'Atendimento e pós-venda com inteligência e resolução.<br/><span class="accent">24h por dia!</span>',
-    hero_sub:'Feita para responder. Feita para resolver.',
+    hero_h1:'"Cadê meu pedido?" respondido sozinho.<br/><span class="accent">Troca resolvida no WhatsApp.</span>',
+    hero_sub:'A Luma atende a sua loja 24h — consulta o pedido de verdade (Shopify, Nuvemshop, Bling), resolve a troca de numeração e só te chama quando precisa.',
     hero_br:'🇧🇷 Feito no Brasil, suporte em português',
-    hero_cta:'Começar agora',
+    hero_cta:'⚡ Ver demo ao vivo',
+    hero_cta2:'Ver planos →',
     showcase_name:'Luma — Loja Street Style', showcase_online:'online',
     chat_m1_user:'Oi! Cadê meu pedido? Comprei semana passada e ainda não chegou',
     chat_m1_bot:'Oi! 😊 Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.',
@@ -1244,6 +1255,8 @@ var T = {
     fw_c7:'Moda íntima e fitness', fw_more:'Saiba mais →',
     biz_servicos:'Serviços e Negócios locais', biz_ecommerce:'🛒 E-commerce / Loja online',
     plans_label:'Planos', plans_h2:'Investimento direto. Resultado real.',
+    plans_sub:'Menos de um terço do custo de um atendente — respondendo 24h, todo dia, sem férias.',
+    plans_trust:'⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias',
     plans_popular:'MAIS POPULAR', plans_volume:'MAIS VOLUME', per_month:'/mês',
     plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
     cycle_monthly:'Mensal', cycle_annual:'Anual', cycle_badge:'2 meses grátis',
@@ -1321,6 +1334,7 @@ var T = {
     avb_agent_ex_label:'Mesmo exemplo', avb_agent_q:'meu pedido 1234 tá atrasado, quero cancelar',
     avb_agent_a:'Oi! 😊 Deixa eu ver o pedido 1234... saiu pra entrega hoje 🚚 chega amanhã. Se ainda quiser cancelar, eu resolvo por aqui — quer?',
     vs_label:'Comparativo', vs_h2:'Tyve vs as outras opções',
+    vs_callout:'<strong>Já usa um app de rastreio (Sak, Rastreio.net)?</strong> Ele avisa "saiu para entrega" — e fica mudo quando o cliente responde "mas cadê?". A Tyve responde quem pergunta, resolve a troca e gera o Pix, no mesmo fio da conversa.',
     vs_th2:'App de automação', vs_th3:'Montar do zero',
     vs_r1l:'Responde certo na primeira',
     vs_r0l:'Quem responde às 22h de domingo',
@@ -1394,9 +1408,10 @@ var T = {
     faq_a14:'<b>Na maioria dos casos, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O WhatsApp mantém uma janela de 24 horas depois da última mensagem do seu cliente. Dentro dela, qualquer mensagem é <b>gratuita</b> — e a Tyve envia o follow-up dentro dessa janela.<br><br>A exceção são mensagens enviadas <b>fora</b> dessa janela de 24 horas (por exemplo, um aviso proativo alguns dias depois): nesse caso o WhatsApp cobra <b>centavos</b> pelo envio. <b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business da sua loja, a mesma que você conecta na ativação. A Tyve não revende mensagem e não põe margem nisso.',
     faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
     faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
-    cta_h2:'Chega de perder cliente<br/>no WhatsApp!',
-    cta_p:'Em 20 minutinhos a gente mostra ao vivo como fica seu negócio,<br/>sem compromisso nenhum.',
+    cta_h2:'Chega de passar o dia<br/>respondendo "cadê meu pedido?"',
+    cta_p:'Em 20 minutinhos a gente mostra ao vivo como fica na sua loja,<br/>sem compromisso nenhum.',
     cta_btn:'Agendar demo grátis',
+    cta_garantia:'Garantia de 7 dias — não gostou, devolvemos 100%.',
     footer_terms:'Termos de Serviço', footer_privacy:'Privacidade',
     footer_copy:'© 2026 Tyve. Todos os direitos reservados.',
     footer_disclaimer:'Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.',
@@ -1412,10 +1427,11 @@ var T = {
     nav_how:'How it works', nav_segments:'Segments', nav_faq:'FAQ',
     nav_plans:'Plans & Pricing', nav_demo:'⚡ See live demo',
     hero_badge:'Official WhatsApp Cloud API',
-    hero_h1:'Customer service and post-sale,<br/>with intelligence and resolution.<br/><span class="accent">24/7!</span>',
-    hero_sub:'Built to respond. Built to resolve.',
+    hero_h1:'"Where is my order?" answered on its own.<br/><span class="accent">Exchanges resolved on WhatsApp.</span>',
+    hero_sub:'Luma runs your store support 24/7 — checks real order status (Shopify, Nuvemshop, Bling), resolves size exchanges and only calls you when needed.',
     hero_br:'🇧🇷 Made in Brazil, support in Portuguese',
-    hero_cta:'Get started',
+    hero_cta:'⚡ See live demo',
+    hero_cta2:'See plans →',
     showcase_name:'Luma — Street Style Store', showcase_online:'online',
     chat_m1_user:'Hi! Where is my order? I bought last week and it has not arrived',
     chat_m1_bot:'Hi! 😊 Send me your order number or your ID and I will check the status right now.',
@@ -1450,6 +1466,8 @@ var T = {
     fw_c7:'Lingerie & fitness', fw_more:'Learn more →',
     biz_servicos:'Services & Local business', biz_ecommerce:'🛒 E-commerce / Online store',
     plans_label:'Plans', plans_h2:'Straightforward pricing. Real results.',
+    plans_sub:'Less than a third of the cost of a support rep — replying 24/7, every day, no vacations.',
+    plans_trust:'⚡ Live in 3–7 days · 🔓 No lock-in · ✓ 7-day guarantee',
     plans_popular:'MOST POPULAR', plans_volume:'MORE VOLUME', per_month:'/mo',
     plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala', plan_convstd:'Converts Standard', plan_convpro:'Converts Pro',
     cycle_monthly:'Monthly', cycle_annual:'Annual', cycle_badge:'2 months free',
@@ -1527,6 +1545,7 @@ var T = {
     avb_agent_ex_label:'Same example', avb_agent_q:'my order 1234 is late, I want to cancel',
     avb_agent_a:'Hi! 😊 Let me check order 1234... it shipped today 🚚 arriving tomorrow. If you still want to cancel, I can handle it right here — shall I?',
     vs_label:'Comparison', vs_h2:'Tyve vs the alternatives',
+    vs_callout:'<strong>Already using a tracking app (Sak, Rastreio.net)?</strong> It fires "out for delivery" — and goes silent when the customer replies "but where is it?". Tyve answers the person, resolves the exchange and generates the Pix, in the same conversation thread.',
     vs_th2:'Automation app', vs_th3:'Build from scratch',
     vs_r1l:'Gets it right the first time',
     vs_r0l:'Who answers at 10pm on a Sunday',
@@ -1600,9 +1619,10 @@ var T = {
     faq_a14:'<b>In most cases, zero.</b> The follow-up is included in your plan and Tyve charges nothing extra for it.<br><br>WhatsApp keeps a 24-hour window after the last message from your customer. Inside it, any message is <b>free</b> — and Tyve sends the follow-up inside that window.<br><br>The exception is messages sent <b>outside</b> that 24-hour window (for example, a proactive notice a few days later): in that case WhatsApp charges <b>a few cents</b> for the send. <b>That charge does not go through Tyve</b> — it goes straight from Meta to you, on the card registered in your store WhatsApp Business account, the same one you connect at activation. Tyve does not resell messages or add margin.',
     faq_q13:'Do you have access to my customers data? Is it safe? <span class="faq-icon">+</span>',
     faq_a13:'Access is granted by you through an official, secure connection (OAuth), read-only for what is needed (orders) and compliant with LGPD. You can revoke access whenever you want.',
-    cta_h2:'Stop losing customers<br/>on WhatsApp!',
-    cta_p:'In 20 minutes we\'ll show you live how your business would look,<br/>with no commitment whatsoever.',
+    cta_h2:'Stop spending your day<br/>answering "where is my order?"',
+    cta_p:'In 20 minutes we\'ll show you live how it looks in your store,<br/>with no commitment whatsoever.',
     cta_btn:'Book a demo',
+    cta_garantia:'7-day guarantee — not happy, 100% refunded.',
     footer_terms:'Terms of Service', footer_privacy:'Privacy',
     footer_copy:'© 2026 Tyve. All rights reserved.',
     footer_disclaimer:'Tyve is not affiliated with Meta, Facebook or WhatsApp. Integrated with the official WhatsApp Cloud API.',
@@ -1969,6 +1989,7 @@ renderCycle();
   }
   var ob=document.getElementById("open-demo-btn");
   if(ob)ob.addEventListener("click",function(e){e.preventDefault();showChoose();open();});
+  document.querySelectorAll(".js-open-demo").forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();showChoose();open();});});
   document.querySelectorAll(".demo-card").forEach(function(c){c.addEventListener("click",function(){start(c.getAttribute("data-demo"));});});
   document.getElementById("demo-x").addEventListener("click",close);
   document.getElementById("demo-back").addEventListener("click",showChoose);
