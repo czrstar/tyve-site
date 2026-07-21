@@ -1152,7 +1152,7 @@
 
   // ── Confirmed-plan banner (shown when the plan came from a valid checkout token) ──
   const PLAN_LABELS = { atende: 'Atende (R$497/mês)', cresce: 'Cresce (R$697/mês)', escala: 'Escala (R$997/mês)' };
-  const PLAN_LABELS_ECOM = { atende: 'Atende E-commerce (R$497/mês)', cresce: 'Cresce E-commerce (R$797/mês)', escala: 'Escala E-commerce (R$1.297/mês)' };
+  const PLAN_LABELS_ECOM = { atende: 'Atende E-commerce (R$497/mês)', cresce: 'Cresce E-commerce (R$797/mês)', escala: 'Escala E-commerce (R$1.097/mês)' };
   function showPlanConfirmed(plan, isEcom) {
     const box = document.getElementById('plan-confirmed-box');
     const open = document.getElementById('plan-picker-open');
@@ -1185,10 +1185,10 @@
     maybeUnlock();
   }
 
-  // Preço das pills muda por tipo de negócio (serviço: 697/997 · e-commerce: 797/1.297)
+  // Preço das pills muda por tipo de negócio (serviço: 697/997 · e-commerce: 797/1.097)
   function updatePlanPrices() {
     var ecom = businessType === 'ecommerce';
-    var px = { atende: 'R$497/mês', cresce: ecom ? 'R$797/mês' : 'R$697/mês', escala: ecom ? 'R$1.297/mês' : 'R$997/mês' };
+    var px = { atende: 'R$497/mês', cresce: ecom ? 'R$797/mês' : 'R$697/mês', escala: ecom ? 'R$1.097/mês' : 'R$997/mês' };
     ['atende','cresce','escala'].forEach(function(p){
       var el = document.querySelector('#pill-'+p+' .plan-pill-price');
       if (el) el.textContent = px[p];
