@@ -1402,6 +1402,39 @@
       }
     }
 
+    // Validação real dos campos required (form é novalidate — fix 21/07/2026)
+    // Campo "aplicável" = nenhum ancestral escondido, EXCETO .section-body (accordion fechado ainda conta)
+    function fieldApplicable(el) {
+      let n = el.parentElement;
+      while (n && n !== form) {
+        const cs = window.getComputedStyle(n);
+        if (cs.display === 'none' && !n.classList.contains('section-body')) return false;
+        n = n.parentElement;
+      }
+      return true;
+    }
+    const seenRadioGroups = {};
+    const missing = Array.from(form.querySelectorAll('[required]')).filter(el => {
+      if (!fieldApplicable(el)) return false;
+      if (el.type === 'radio') {
+        if (seenRadioGroups[el.name]) return false;
+        seenRadioGroups[el.name] = true;
+        return !form.querySelector('input[name="' + el.name + '"]:checked');
+      }
+      return !(el.value || '').trim();
+    });
+    if (missing.length) {
+      const first = missing[0];
+      const missCard = first.closest('.section-card');
+      if (missCard && !missCard.classList.contains('open')) { missCard.classList.add('open'); sectionState[missCard.id] = 'open'; }
+      const target = first.type === 'radio' ? (first.closest('.question') || first.closest('.radio-group') || first) : first;
+      target.style.outline = '2px solid #ef4444'; target.style.outlineOffset = '4px'; target.style.borderRadius = '8px';
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (first.type !== 'radio') { try { first.focus({ preventScroll: true }); } catch (_) {} }
+      setTimeout(() => { target.style.outline = ''; target.style.outlineOffset = ''; }, 3500);
+      return;
+    }
+
     // Termos acceptance
     const aceiteBox = document.getElementById('aceite_termos');
     if (!aceiteBox || !aceiteBox.checked) {
@@ -1419,6 +1452,11 @@
       const fields = Object.fromEntries(data);
       const objetivos = data.getAll('objetivo[]');
       const orderIdMethod = data.getAll('order_id_method[]');
+      // Endereço de devolução: montado a partir dos campos end_* (fix 21/07/2026 — antes o dado se perdia)
+      const _t = v => (v || '').trim();
+      const endLinha1 = [_t(fields.end_logradouro), _t(fields.end_numero)].filter(Boolean).join(', ');
+      const endCidadeUf = [_t(fields.end_cidade), _t(fields.end_uf).toUpperCase()].filter(Boolean).join('/');
+      const enderecoDevolucao = [endLinha1, _t(fields.end_complemento), _t(fields.end_bairro), endCidadeUf].filter(Boolean).join(' — ');
       const payload = {
         // shared
         business_type:         businessType || '',
@@ -1466,7 +1504,13 @@
         troca_modo:            fields.troca_modo || '',
         logistica_reversa:     fields.logistica_reversa || '',
         cep_devolucao:         fields.cep_devolucao || '',
-        endereco_devolucao:    fields.endereco_devolucao || '',
+        endereco_devolucao:    enderecoDevolucao,
+        end_logradouro:        _t(fields.end_logradouro),
+        end_numero:            _t(fields.end_numero),
+        end_complemento:       _t(fields.end_complemento),
+        end_bairro:            _t(fields.end_bairro),
+        end_cidade:            _t(fields.end_cidade),
+        end_uf:                _t(fields.end_uf).toUpperCase(),
         cnpj_loja:             fields.cnpj_loja || '',
         pix_enabled:           fields.pix_enabled || '',
         // meta

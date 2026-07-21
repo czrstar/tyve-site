@@ -363,9 +363,9 @@
       <div class="badge" id="sum-badge" style="display:none">MAIS POPULAR</div>
       <p class="sum-label" id="sum-label">Seu plano</p>
       <p class="sum-name" id="sum-name">Cresce</p>
-      <p class="sum-tag" id="sum-tag">Até 500 contatos atendidos/mês</p>
+      <p class="sum-tag" id="sum-tag">Até 600 contatos atendidos/mês</p>
       <div class="sum-price">
-        <span class="cur">R$</span><span class="amt" id="sum-amt">697</span><span class="per" id="sum-per">/mês</span>
+        <span class="cur">R$</span><span class="amt" id="sum-amt">797</span><span class="per" id="sum-per">/mês</span>
       </div>
       <p class="sum-annual-line" id="sum-annual-line" style="display:none"></p>
       <hr class="sum-div" />
@@ -566,7 +566,7 @@
     btn.setAttribute('href', plan.asaasAnual);
     document.title = 'Confirme seu plano ' + plan.name + ' anual · Tyve ⚡';
   } else {
-    document.getElementById('sum-amt').textContent = plan.amt;
+    document.getElementById('sum-amt').textContent = fmtBR(mensal);
     document.getElementById('trust-commit').textContent = 'Sem fidelidade — cancela quando quiser, sem multa';
     btn.setAttribute('href', plan.asaas);
     document.title = 'Confirme seu plano ' + plan.name + ' · Tyve ⚡';

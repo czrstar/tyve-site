@@ -198,7 +198,7 @@ const SECTIONS = [
         id: 2, pri: "critico",
         title: "Estágio 1 — Luma pede nome + WhatsApp",
         steps: [
-          "Após a primeira resposta da Luma, demonstre interesse (ex: \"tenho uma clínica e quero automatizar o WhatsApp\")",
+          "Após a primeira resposta da Luma, demonstre interesse (ex: \"tenho uma loja online e quero automatizar o WhatsApp\")",
           "Aguarde a resposta"
         ],
         expected: "Antes de avançar, a Luma pede seu NOME e seu WHATSAPP (Estágio 1). Se você não fornecer, ela insiste 1x educadamente."
@@ -225,7 +225,7 @@ const SECTIONS = [
           "Pergunte \"quais os planos e valores?\"",
           "Aguarde a resposta"
         ],
-        expected: "Luma cita os valores CORRETOS: Atende R$497, Cresce R$697, Escala R$997. Não inventa preço. Pode citar add-on Agenda +R$79."
+        expected: "Luma cita os valores CORRETOS (escada e-commerce): Atende R$497 (250 contatos), Cresce R$797 (600 contatos), Escala R$1.097 (1.200 contatos). Não inventa preço e NÃO cita os preços legados de serviço (697/997)."
       },
       {
         id: 5, pri: "medio",
@@ -234,7 +234,7 @@ const SECTIONS = [
           "Pergunte \"qual a diferença do Cresce pro Escala?\"",
           "Aguarde a resposta"
         ],
-        expected: "Luma explica certo: Cresce = follow-up D+1, até 500 contatos; Escala = D+1 e D+3, dashboard, PDF mensal, agendamento nativo, SLA menor. Sem informação inventada."
+        expected: "Luma explica certo (e-commerce): Cresce = troca de numeração automática + follow-up D+1 + NPS, até 600 contatos; Escala = tudo do Cresce + Pix na conversa, até 1.200 contatos, relatório mensal em PDF e gerente dedicado. Sem citar D+3 (descontinuado) nem informação inventada."
       },
       {
         id: 6, pri: "critico",
@@ -298,7 +298,7 @@ const SECTIONS = [
         id: 10, pri: "medio",
         title: "Buffer — várias mensagens rápidas → 1 resposta só",
         steps: [
-          "Envie 3-4 mensagens em menos de 10s (ex: \"oi\", \"tenho uma clínica\", \"quero automatizar\", \"quanto custa?\")",
+          "Envie 3-4 mensagens em menos de 10s (ex: \"oi\", \"tenho uma loja de calçados online\", \"quero automatizar\", \"quanto custa?\")",
           "Aguarde a resposta"
         ],
         expected: "Luma envia UMA resposta considerando todas as mensagens juntas — não responde 4 vezes separadas."
@@ -346,10 +346,10 @@ const SECTIONS = [
         id: 14, pri: "medio",
         title: "Continuidade de contexto",
         steps: [
-          "Depois de algumas mensagens, refira-se a algo que você disse antes (ex: \"e pro meu caso da clínica, qual plano?\")",
+          "Depois de algumas mensagens, refira-se a algo que você disse antes (ex: \"e pro meu caso da loja, qual plano?\")",
           "Aguarde a resposta"
         ],
-        expected: "Luma lembra do contexto (segmento clínica) e responde coerente. Memória de sessão funcionando."
+        expected: "Luma lembra do contexto (segmento loja online) e responde coerente. Memória de sessão funcionando."
       },
       {
         id: 15, pri: "medio",
