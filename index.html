@@ -99,7 +99,7 @@
     background-size: auto 60%; background-repeat: repeat-x;
     background-position: center 70%; opacity: .10; pointer-events: none;
   }
-  .hero-content { position: relative; z-index: 2; text-align: center; max-width: 800px; padding: 64px 24px 60px; }
+  .hero-content { position: relative; z-index: 2; text-align: center; max-width: 880px; padding: 64px 24px 60px; }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 10px;
     border: 1.5px solid rgba(255,255,255,.25); border-radius: 100px;
@@ -107,7 +107,7 @@
   }
   .badge-wa { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .badge-wa svg { width: 24px; height: 24px; }
-  .hero h1 { font-size: clamp(38px, 5vw, 60px); font-weight: 800; line-height: 1.13; color: white; margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(32px, 4.6vw, 48px); font-weight: 800; line-height: 1.13; color: white; margin-bottom: 20px; }
   .hero h1 .accent { color: var(--orange); }
   .hero-sub { font-size: clamp(16px, 1.5vw, 19px); color: rgba(255,255,255,.65); margin-bottom: 14px; }
   .hero-br { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 40px; }
@@ -475,6 +475,10 @@
   .footer-links a:hover { color: white; }
   .footer-copy { color: rgba(255,255,255,.45); font-size: 12px; }
   .footer-disclaimer { color: rgba(255,255,255,.3); font-size: 11px; }
+  .footer-social { display: flex; gap: 14px; margin-top: 2px; }
+  .footer-social a { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.14); color: rgba(255,255,255,.6); transition: color .2s, border-color .2s, background .2s; }
+  .footer-social a:hover { color: #fff; border-color: var(--orange); background: rgba(248,65,0,.12); }
+  .footer-social svg { width: 17px; height: 17px; }
 
   /* ─── WA FLOAT ─────────────────────────────────────────── */
   .whatsapp-float {
@@ -543,8 +547,8 @@
       </span>
       <span data-i18n="hero_badge">WhatsApp Cloud API oficial</span>
     </div>
-    <h1 data-i18n-html="hero_h1">"Cadê meu pedido?" respondido sozinho.<br/><span class="accent">Troca resolvida no WhatsApp.</span></h1>
-    <p class="hero-sub" data-i18n="hero_sub">A Luma atende a sua loja 24h — consulta o pedido de verdade (Shopify, Nuvemshop, Bling), resolve a troca de numeração e só te chama quando precisa.</p>
+    <h1 data-i18n-html="hero_h1">Atendimento que resolve,<br/><span class="accent">24 horas por dia</span> no seu WhatsApp.</h1>
+    <p class="hero-sub" data-i18n-html="hero_sub">Chega de "cadê meu pedido?" sem resposta. Nosso agente resolve na hora!<br/>Pedido, troca, dúvida e só te chama quando precisa.</p>
     <p class="hero-br" data-i18n="hero_br">🇧🇷 Feito no Brasil, suporte em português</p>
     <a href="#planos" class="btn-cta js-open-demo" data-i18n="hero_cta">⚡ Ver demo ao vivo</a><a href="#planos" class="hero-secondary" data-i18n="hero_cta2">Ver planos →</a>
   </div>
@@ -574,10 +578,10 @@
         </div>
         <div class="chat-messages">
           <div class="msg msg-user"><span data-i18n="chat_m1_user">Oi! Cadê meu pedido? Comprei semana passada e ainda não chegou</span><div class="msg-time">21:42</div></div>
-          <div class="msg msg-bot"><span data-i18n="chat_m1_bot">Oi! 😊 Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.</span><div class="msg-time">21:42</div></div>
-          <div class="msg msg-bot"><span data-i18n="chat_m1_bot2">Pode mandar aqui mesmo que eu já verifico 😁</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m1_bot">Oi! Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m1_bot2">Pode mandar aqui mesmo que eu já verifico.</span><div class="msg-time">21:42</div></div>
           <div class="msg msg-user"><span data-i18n="chat_m2_user">Pedido 1234</span><div class="msg-time">21:43</div></div>
-          <div class="msg msg-bot"><span data-i18n="chat_m2_bot">Achei aqui! 📦 Seu pedido #1234 saiu pra entrega hoje 🚚 Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?</span><div class="msg-time">21:43</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m2_bot">Achei aqui! Seu pedido #1234 saiu pra entrega hoje. Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?</span><div class="msg-time">21:43</div></div>
           <div class="msg msg-user"><span data-i18n="chat_m3_user">Quero! E se não servir, dá pra trocar a numeração?</span><div class="msg-time">21:44</div></div>
           <div class="typing"><span></span><span></span><span></span></div>
         </div>
@@ -593,7 +597,7 @@
     <div class="problem-header">
       <div class="sec-label" data-i18n="prob_label">O problema</div>
       <h2 class="section-title section-title-light" data-i18n-html="prob_h2">Quantas vendas sua loja perde por dia<br/>no "cadê meu pedido?"</h2>
-      <p class="avb-subtitle" data-i18n="prob_sub">Sua equipe perde o dia colando código de rastreio, a troca vira novela manual e o cliente sem resposta compra na concorrência.</p>
+      <p class="avb-subtitle" data-i18n="prob_sub">Sua equipe passa o dia respondendo pedido, troca e dúvida na mão e quem espera acaba comprando na concorrência.</p>
     </div>
     <div class="problem-grid">
       <div class="problem-card"><div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div><h3 data-i18n="prob_c1h">Pedido às 22h sem ninguém</h3><p data-i18n="prob_c1p">O cliente pergunta do pedido à noite. De manhã já abriu reclamação ou pediu reembolso.</p></div>
@@ -647,7 +651,7 @@
 <!-- ══ 06 TARJA FRASE — orange ══ -->
 <section class="tarja">
   <div class="container">
-    <p class="tarja-text" data-i18n-html="tarja_text">Existem ferramentas para quem quer aprender a fazer.<br/>Tyve é para quem quer que funcione.</p>
+    <p class="tarja-text" data-i18n-html="tarja_text">Existem ferramentas para quem quer aprender a fazer.<br/>Tyve foi criada para resolver!</p>
   </div>
 </section>
 
@@ -657,7 +661,7 @@
   <div class="container">
     <div class="for-who-header">
       <div class="sec-label" data-i18n="fw_label">Para quem é</div>
-      <h2 class="section-title section-title-dark" data-i18n-html="fw_h2">Pra loja online que vende de verdade<br/>e vive respondendo "cadê meu pedido?"</h2>
+      <h2 class="section-title section-title-dark" data-i18n-html="fw_h2">Pra negócio que vende de verdade<br/>e trata o pós-venda como parte da venda.</h2>
     </div>
     <div class="for-who-grid">
       <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div><h3 data-i18n="fw_c1">Moda e calçados</h3><span class="segment-link">Ver planos →</span></a>
@@ -706,7 +710,7 @@
     <div class="pricing-header">
       <div class="sec-label" data-i18n="plans_label">Planos</div>
       <h2 class="section-title section-title-dark" data-i18n="plans_h2">Investimento direto. Resultado real.</h2>
-      <p class="plans-sub" data-i18n="plans_sub">Menos de um terço do custo de um atendente — respondendo 24h, todo dia, sem férias.</p>
+      <p class="plans-sub" data-i18n="plans_sub">Menos de um terço do custo de um atendente, respondendo 24h, todo dia, sem férias.</p>
       <p class="plans-trust" data-i18n="plans_trust">⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias</p>
     </div>
 
@@ -714,9 +718,6 @@
 
 
     <div id="grid-ecommerce">
-      <div class="ecom-explainer" data-i18n-html="ecom_explainer">
-        <strong>Qual plano é o seu?</strong> O <b>Atende</b> responde <b>"cadê meu pedido?" sozinho</b> e tira as dúvidas da loja (frete, prazo, troca, numeração, pagamento). O <b>Cresce</b> vai além e resolve a <b>troca de numeração automática</b> — o cliente troca no WhatsApp — além de follow-up automático e NPS. O <b>Escala</b> automatiza o topo: <b>Pix dentro da conversa</b>, mais volume e gerente dedicado.
-      </div>
       <div class="cycle-toggle" id="cycle-toggle-ecom">
         <div class="cycle-toggle-track">
           <button class="cycle-btn active" data-ciclo="mensal" type="button" data-i18n="cycle_monthly">Mensal</button>
@@ -1097,6 +1098,11 @@
       <a href="/privacidade" data-i18n="footer_privacy">Privacidade</a>
       <a href="https://wa.me/5516994247541?text=Oi%20(site)!" target="_blank">WhatsApp</a>
     </div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/tyve.ai/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="https://www.youtube.com/@tyve.oficial" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a href="https://www.tiktok.com/@tyve.ai" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3a5.6 5.6 0 0 0 4.5 4.9v2.7a8.3 8.3 0 0 1-4.5-1.3v6.1a5.9 5.9 0 1 1-5.9-5.9c.3 0 .6 0 .9.1v2.8a3.1 3.1 0 1 0 2.2 3V3h2.8z"/></svg></a>
+    </div>
     <p class="footer-copy" data-i18n="footer_copy">© 2026 Tyve. Todos os direitos reservados.</p>
     <p class="footer-disclaimer" data-i18n="footer_disclaimer">Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.</p>
   </div>
@@ -1124,21 +1130,21 @@ var T = {
     nav_how:'Como funciona', nav_segments:'Segmentos', nav_faq:'FAQ',
     nav_plans:'Planos e Preços', nav_demo:'⚡ Ver demo ao vivo',
     hero_badge:'WhatsApp Cloud API oficial',
-    hero_h1:'"Cadê meu pedido?" respondido sozinho.<br/><span class="accent">Troca resolvida no WhatsApp.</span>',
-    hero_sub:'A Luma atende a sua loja 24h — consulta o pedido de verdade (Shopify, Nuvemshop, Bling), resolve a troca de numeração e só te chama quando precisa.',
+    hero_h1:'Atendimento que resolve,<br/><span class="accent">24 horas por dia</span> no seu WhatsApp.',
+    hero_sub:'Chega de "cadê meu pedido?" sem resposta. Nosso agente resolve na hora!<br/>Pedido, troca, dúvida e só te chama quando precisa.',
     hero_br:'🇧🇷 Feito no Brasil, suporte em português',
     hero_cta:'⚡ Ver demo ao vivo',
     hero_cta2:'Ver planos →',
     showcase_name:'Luma — Loja Street Style', showcase_online:'online',
     chat_m1_user:'Oi! Cadê meu pedido? Comprei semana passada e ainda não chegou',
-    chat_m1_bot:'Oi! 😊 Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.',
-    chat_m1_bot2:'Pode mandar aqui mesmo que eu já verifico 😁',
+    chat_m1_bot:'Oi! Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.',
+    chat_m1_bot2:'Pode mandar aqui mesmo que eu já verifico.',
     chat_m2_user:'Pedido 1234',
-    chat_m2_bot:'Achei aqui! 📦 Seu pedido #1234 saiu pra entrega hoje 🚚 Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?',
+    chat_m2_bot:'Achei aqui! Seu pedido #1234 saiu pra entrega hoje. Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?',
     chat_m3_user:'Quero! E se não servir, dá pra trocar a numeração?',
     prob_label:'O problema',
     prob_h2:'Quantas vendas sua loja perde por dia<br/>no "cadê meu pedido?"',
-    prob_sub:'Sua equipe perde o dia colando código de rastreio, a troca vira novela manual e o cliente sem resposta compra na concorrência.',
+    prob_sub:'Sua equipe passa o dia respondendo pedido, troca e dúvida na mão e quem espera acaba comprando na concorrência.',
     prob_c1h:'Pedido às 22h sem ninguém', prob_c1p:'O cliente pergunta do pedido à noite. De manhã já abriu reclamação ou pediu reembolso.',
     prob_c2h:'"Cadê meu pedido?" o dia todo', prob_c2p:'Metade do WhatsApp da loja é rastreio. Sua equipe copia e cola link o dia inteiro.',
     prob_c3h:'Troca virou novela manual', prob_c3p:'Confere pedido, vê estoque da numeração, gera devolução. Cada troca trava a venda de novo.',
@@ -1155,21 +1161,20 @@ var T = {
     how_s3badge:'Passo 3', how_s3h:'Você recebe só o que precisa de você',
     how_s3m1:'🔁 TROCA — Loja Street Style',
     how_s3m2:'Cliente: Ana. Pedido #1234, tênis 38 → 39. Fora do estoque padrão. Resumo pronto.',
-    tarja_text:'Existem ferramentas para quem quer aprender a fazer.<br/>Tyve é para quem quer que funcione.',
+    tarja_text:'Existem ferramentas para quem quer aprender a fazer.<br/>Tyve foi criada para resolver!',
     fw_label:'Para quem é',
-    fw_h2:'Pra loja online que vende de verdade<br/>e vive respondendo "cadê meu pedido?"',
+    fw_h2:'Pra negócio que vende de verdade<br/>e trata o pós-venda como parte da venda.',
     fw_c1:'Moda e calçados', fw_c2:'Cosméticos e beleza', fw_c3:'Suplementos e saúde',
     fw_c4:'Eletrônicos e acessórios', fw_c5:'Pet shop online', fw_c6:'Casa e decoração',
     fw_c7:'Moda íntima e fitness', fw_more:'Saiba mais →',
     biz_servicos:'Serviços e Negócios locais', biz_ecommerce:'🛒 E-commerce / Loja online',
     plans_label:'Planos', plans_h2:'Investimento direto. Resultado real.',
-    plans_sub:'Menos de um terço do custo de um atendente — respondendo 24h, todo dia, sem férias.',
+    plans_sub:'Menos de um terço do custo de um atendente, respondendo 24h, todo dia, sem férias.',
     plans_trust:'⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias',
     plans_popular:'MAIS POPULAR', plans_volume:'MAIS VOLUME', per_month:'/mês',
     plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
     cycle_monthly:'Mensal', cycle_annual:'Anual', cycle_badge:'2 meses grátis',
     demo_note:'É uma demonstração real — respostas geradas na hora pela IA da Tyve.',
-    ecom_explainer:'<strong>Qual plano é o seu?</strong> O <b>Atende</b> responde <b>"cadê meu pedido?" sozinho</b> e tira as dúvidas da loja (frete, prazo, troca, numeração, pagamento). O <b>Cresce</b> vai além e resolve a <b>troca de numeração automática</b> — o cliente troca no WhatsApp — além de follow-up automático e NPS. O <b>Escala</b> automatiza o topo: <b>Pix dentro da conversa</b>, mais volume e gerente dedicado.',
     ecom_a_tag:'Até 250 contatos atendidos/mês', ecom_c_tag:'Até 600 contatos atendidos/mês', ecom_e_tag:'Até 1.200 contatos/mês',
     ecom_a_fw:'⭐ Consulta de pedido e rastreio ao vivo (Shopify, Nuvemshop, Bling, Woo e Tiny)', ecom_a_f1:'1 número WhatsApp', ecom_a_f2:'Fluxo configurado pra sua loja', ecom_a_f3:'Respostas automáticas 24h/7d',
     ecom_a_f4:'Entende mensagens de texto, voz e imagens 🎙️📷',
@@ -1335,21 +1340,21 @@ var T = {
     nav_how:'How it works', nav_segments:'Segments', nav_faq:'FAQ',
     nav_plans:'Plans & Pricing', nav_demo:'⚡ See live demo',
     hero_badge:'Official WhatsApp Cloud API',
-    hero_h1:'"Where is my order?" answered on its own.<br/><span class="accent">Exchanges resolved on WhatsApp.</span>',
-    hero_sub:'Luma runs your store support 24/7 — checks real order status (Shopify, Nuvemshop, Bling), resolves size exchanges and only calls you when needed.',
+    hero_h1:'Support that resolves,<br/><span class="accent">24 hours a day</span> on your WhatsApp.',
+    hero_sub:'No more "where is my order?" left unanswered. Our agent resolves it on the spot!<br/>Orders, exchanges, questions — and only calls you when needed.',
     hero_br:'🇧🇷 Made in Brazil, support in Portuguese',
     hero_cta:'⚡ See live demo',
     hero_cta2:'See plans →',
     showcase_name:'Luma — Street Style Store', showcase_online:'online',
     chat_m1_user:'Hi! Where is my order? I bought last week and it has not arrived',
-    chat_m1_bot:'Hi! 😊 Send me your order number or your ID and I will check the status right now.',
-    chat_m1_bot2:'You can send it right here and I will check it 😁',
+    chat_m1_bot:'Hi! Send me your order number or your ID and I will check the status right now.',
+    chat_m1_bot2:'You can send it right here and I will check it.',
     chat_m2_user:'Order 1234',
-    chat_m2_bot:'Found it! 📦 Your order #1234 shipped today 🚚 Tracking: BR123456789BR — arriving tomorrow. Want the tracking link?',
+    chat_m2_bot:'Found it! Your order #1234 shipped today. Tracking: BR123456789BR — arriving tomorrow. Want the tracking link?',
     chat_m3_user:'Yes! And if it does not fit, can I exchange the size?',
     prob_label:'The problem',
     prob_h2:'How much revenue does your store lose every day<br/>to "where is my order?"',
-    prob_sub:'Your team spends the day pasting tracking codes, every exchange turns into manual back-and-forth, and customers left waiting buy from the competitor.',
+    prob_sub:'Your team spends the day answering orders, exchanges and questions by hand, and customers left waiting buy from the competitor.',
     prob_c1h:'Order question at 10pm, nobody around', prob_c1p:'A customer asks about their order at night. By morning they have filed a complaint or asked for a refund.',
     prob_c2h:'"Where is my order?" all day long', prob_c2p:'Half of the store WhatsApp is tracking. Your team copies and pastes links all day.',
     prob_c3h:'Exchanges became a manual soap opera', prob_c3p:'Check the order, check size stock, generate the return label. Each exchange stalls the sale again.',
@@ -1366,22 +1371,21 @@ var T = {
     how_s3badge:'Step 3', how_s3h:'You only get what needs you',
     how_s3m1:'🔁 EXCHANGE — Street Style Store',
     how_s3m2:'Customer: Ana. Order #1234, sneakers 38 → 39. Out of standard stock. Summary ready.',
-    tarja_text:'There are tools for those who want to learn how to build.<br/>Tyve is for those who want it to just work.',
+    tarja_text:'There are tools for those who want to learn how to build.<br/>Tyve was built to resolve!',
     fw_label:'Who it\'s for',
-    fw_h2:'For online stores that really sell<br/>and keep answering "where is my order?"',
+    fw_h2:'For businesses that really sell<br/>and treat after-sales as part of the sale.',
     fw_c1:'Fashion & footwear', fw_c2:'Cosmetics & beauty', fw_c3:'Supplements & health',
     fw_c4:'Electronics & accessories', fw_c5:'Online pet shop', fw_c6:'Home & decor',
     fw_c7:'Lingerie & fitness', fw_more:'Learn more →',
     biz_servicos:'Services & Local business', biz_ecommerce:'🛒 E-commerce / Online store',
     plans_label:'Plans', plans_h2:'Straightforward pricing. Real results.',
-    plans_sub:'Less than a third of the cost of a support rep — replying 24/7, every day, no vacations.',
+    plans_sub:'Less than a third of the cost of a support rep, replying 24/7, every day, no vacations.',
     plans_trust:'⚡ Live in 3–7 days · 🔓 No lock-in · ✓ 7-day guarantee',
     plans_popular:'MOST POPULAR', plans_volume:'MORE VOLUME', per_month:'/mo',
     plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
     cycle_monthly:'Monthly', cycle_annual:'Annual', cycle_badge:'2 months free',
     ecom_a_fw:'⭐ Live order lookup & tracking (Shopify, Nuvemshop, Bling, Woo and Tiny)',
     demo_note:'This is a real demo \u2014 every reply is generated live by Tyve\u2019s AI.',
-    ecom_explainer:'<strong>Which plan is yours?</strong> <b>Atende</b> answers <b>"where is my order?" on its own</b> and covers your store questions (shipping, delivery, exchanges, sizing, payment). <b>Cresce</b> goes further and resolves <b>size exchanges automatically</b> — the customer swaps sizes on WhatsApp — plus automatic follow-up and NPS. <b>Escala</b> automates the top tier: <b>Pix inside the conversation</b>, more volume and a dedicated manager.',
     ecom_a_tag:'Up to 250 contacts served/month', ecom_c_tag:'Up to 600 contacts served/month', ecom_e_tag:'Up to 1,200 contacts/month',
     ecom_a_f1:'1 WhatsApp number', ecom_a_f2:'Flow configured for your store', ecom_a_f3:'Automatic replies 24/7',
     ecom_a_f4:'Understands text, voice and image messages 🎙️📷',
