@@ -768,7 +768,9 @@ const EXCH_LABEL = {
   processed:{t:'Confirmada',c:'#15803d',bg:'#dcfce7'},
   auto_processed:{t:'Confirmada (auto)',c:'#15803d',bg:'#dcfce7'},
   rejected:{t:'Recusada',c:'#6b7280',bg:'#f3f4f6'},
-  error:{t:'Erro',c:'#b91c1c',bg:'#fee2e2'}
+  error:{t:'Erro',c:'#b91c1c',bg:'#fee2e2'},
+  atendimento:{t:'Em atendimento',c:'#0369a1',bg:'#e0f2fe'},
+  resolvido:{t:'Resolvida',c:'#15803d',bg:'#dcfce7'}
 };
 async function loadTrocas() {
   const box = document.getElementById('trocasList');
@@ -780,7 +782,29 @@ async function loadTrocas() {
   } catch(e) { box.innerHTML = '<p style="color:#b91c1c;font-size:14px">Não foi possível carregar as trocas agora.</p>'; }
 }
 let TROCAS_ALL = [], TROCAS_PAGE = 0; const TROCAS_PER = 8;
+function trocaCardHandoff(e) {
+  const s = EXCH_LABEL[e.status] || {t:e.status,c:'#0369a1',bg:'#e0f2fe'};
+  const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+  const RMAP = {defeito:'Defeito no produto', cor:'Cor do produto', item_errado:'Item errado / veio diferente', reembolso:'Reembolso', troca:'Troca / devolução'};
+  const motivo = RMAP[e.from] || 'Troca / devolução';
+  const _ph = e.ship_phone || e.chat_id || '';
+  const cli = _ph ? ('<div style="font-size:12px;color:#888;margin-top:3px">Cliente: '+esc(fmtPhone(_ph))+'</div>') : '';
+  const resolved = e.status === 'resolvido';
+  const actions = !resolved
+    ? '<div style="margin-top:10px"><button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'resolve\',this)">Marcar como resolvido</button></div>'
+    : '';
+  return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee;border-left:3px solid #0ea5e9">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+    + '<div><div style="font-size:11px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">💬 Atendimento humano</div>'
+    + '<div style="font-weight:600">'+esc(motivo)+'</div>'
+    + '<div style="font-size:13px;color:#666;margin-top:2px">Solicitação de troca/devolução — a equipe atende pela conversa no WhatsApp</div>'
+    + cli
+    + (dt?'<div style="font-size:12px;color:#999;margin-top:2px">'+dt+'</div>':'')+'</div>'
+    + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
+    + '</div>' + actions + '</div>';
+}
 function trocaCard(e) {
+  if (e.gate === 'handoff_only') return trocaCardHandoff(e);
   const s = EXCH_LABEL[e.status] || {t:e.status,c:'#374151',bg:'#f3f4f6'};
   const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
   const diff = Number(e.diff||0);
@@ -834,10 +858,11 @@ function trocasPage(delta) {
 async function actExchange(id, action, btn) {
   if (action === 'reject' && !confirm('Recusar esta troca? A conversa será encaminhada para atendimento humano.')) return;
   if (action === 'approvefree' && !confirm('Aprovar com devolução GRÁTIS? A loja gera o código de postagem reverso (a loja custeia o frete da devolução). Use para casos críticos / direito do consumidor.')) return;
+  if (action === 'resolve' && !confirm('Marcar esta solicitação como resolvida? Ela sai da lista de pendências.')) return;
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   try {
     const d = await postJSON(EXCH_ACT, {token:TOKEN, id:id, action:action});
-    if (d.ok) { toast(action === 'reject' ? 'Troca recusada' : (action === 'approvefree' ? 'Troca aprovada (devolução grátis)' : 'Troca aprovada')); loadTrocas(); }
+    if (d.ok) { toast(action === 'reject' ? 'Troca recusada' : (action === 'approvefree' ? 'Troca aprovada (devolução grátis)' : (action === 'resolve' ? 'Marcada como resolvida' : 'Troca aprovada'))); loadTrocas(); }
     else { toast(d.error || 'Não foi possível concluir', false); loadTrocas(); }
   } catch(e) { toast('Erro de conexão', false); if (btn) btn.disabled = false; }
 }
