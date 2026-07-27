@@ -935,9 +935,12 @@ function renderDash(d) {
   // Botão "Conectar transportadora" (Melhor Envio) — só p/ quem tem troca automática ativa
   try {
     const exOn = String((CONFIG||{}).exchange_enabled||'') === 'true';
+    const rck = String((CONFIG||{}).reverse_carrier_key||'');
+    const hasOtherCarrier = rck && !/melhorenvio/i.test(rck);
+    const isHandoffOnly = String((CONFIG||{}).exchange_mode||'') === 'handoff_only';
     const rc = document.getElementById('reverseConnectCard');
     const rb = document.getElementById('reverseConnectBtn');
-    if (rc && rb && exOn && TOKEN) {
+    if (rc && rb && exOn && TOKEN && !hasOtherCarrier && !isHandoffOnly) {
       rb.href = 'https://n8n.tyve.com.br/webhook/melhorenvio-oauth-start?token=' + encodeURIComponent(TOKEN);
       rc.style.display = '';
     }
