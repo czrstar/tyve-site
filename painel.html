@@ -816,11 +816,18 @@ function trocaCardProc(e) {
   const _ph = e.ship_phone || e.chat_id || '';
   if (_ph) cli.push(esc(fmtPhone(_ph)));
   if (e.ship_cpf) cli.push('CPF '+esc(e.ship_cpf));
+  const freeLabel = !!e.posting_code;
   const trk = e.tracking
     ? '<div style="font-size:13px;margin-top:4px">Rastreio da devolução: <b>'+esc(e.tracking)+'</b></div>'
-    : '<div style="font-size:13px;color:#666;margin-top:4px">Cliente recebeu o endereço e o passo a passo. Aguardando ele postar e enviar o código de rastreio.</div>';
+    : (freeLabel
+      ? '<div style="font-size:13px;margin-top:4px">Devolução <b>por conta da loja</b> — código de postagem: <b>'+esc(e.posting_code)+'</b></div>'
+      : '<div style="font-size:13px;color:#666;margin-top:4px">Cliente recebeu o endereço e o passo a passo. Aguardando ele postar e enviar o código de rastreio.</div>');
+  const btnFree = (!resolved && !freeLabel && !e.tracking)
+    ? '<button class="btn btn-sm" style="background:#0ea5e9;color:#fff" onclick="actExchange('+e.id+',\'freelabel\',this)">Gerar etiqueta grátis</button>'
+    : '';
   const actions = !resolved
-    ? '<div style="margin-top:10px"><button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'resolve\',this)">Marcar como resolvido</button></div>'
+    ? '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+btnFree
+      + '<button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'resolve\',this)">Marcar como resolvido</button></div>'
     : '';
   return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee;border-left:3px solid #f59e0b">'
     + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
@@ -889,10 +896,15 @@ async function actExchange(id, action, btn) {
   if (action === 'reject' && !confirm('Recusar esta troca? A conversa será encaminhada para atendimento humano.')) return;
   if (action === 'approvefree' && !confirm('Aprovar com devolução GRÁTIS? A loja gera o código de postagem reverso (a loja custeia o frete da devolução). Use para casos críticos / direito do consumidor.')) return;
   if (action === 'resolve' && !confirm('Marcar esta solicitação como resolvida? Ela sai da lista de pendências.')) return;
+  if (action === 'freelabel' && !confirm('Gerar etiqueta de devolução GRÁTIS? A loja passa a custear o frete da devolução e o cliente recebe o código de postagem dos Correios no WhatsApp.')) return;
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   try {
     const d = await postJSON(EXCH_ACT, {token:TOKEN, id:id, action:action});
-    if (d.ok) { toast(action === 'reject' ? 'Troca recusada' : (action === 'approvefree' ? 'Troca aprovada (devolução grátis)' : (action === 'resolve' ? 'Marcada como resolvida' : 'Troca aprovada'))); loadTrocas(); }
+    if (d.ok && action === 'freelabel') {
+      toast(d.warning ? d.warning : ('Etiqueta gerada — código ' + (d.posting_code || '') + ' enviado ao cliente'), !d.warning);
+      loadTrocas();
+    }
+    else if (d.ok) { toast(action === 'reject' ? 'Troca recusada' : (action === 'approvefree' ? 'Troca aprovada (devolução grátis)' : (action === 'resolve' ? 'Marcada como resolvida' : 'Troca aprovada'))); loadTrocas(); }
     else { toast(d.error || 'Não foi possível concluir', false); loadTrocas(); }
   } catch(e) { toast('Erro de conexão', false); if (btn) btn.disabled = false; }
 }
