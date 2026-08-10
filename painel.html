@@ -662,11 +662,11 @@
       <div class="card">
         <div class="sec-label" style="margin-bottom:12px">Trocas</div>
         <div class="card-title">Trocas e devoluções</div>
-        <div class="card-sub">As solicitações registradas pelo agente ficam aqui. As trocas de numeração você aprova ou recusa com um clique (também chegam por e-mail); as que foram para atendimento humano aparecem com o botão “marcar como resolvido”.</div>
+        <div class="card-sub" id="trocasSub">As solicitações registradas pelo agente ficam aqui. As trocas de numeração você aprova ou recusa com um clique (também chegam por e-mail); as que foram para atendimento humano aparecem com o botão “marcar como resolvido”.</div>
         <div id="trocasList" style="margin-top:16px"></div>
       </div>
 
-      <div class="card" style="margin-top:16px">
+      <div class="card" style="margin-top:16px" id="trocasExplainer">
         <div class="card-title">Entenda os botões</div>
         <div class="card-sub">O que cada opção faz quando uma troca chega pra você aprovar. Os botões decidem só quem paga o <strong>frete reverso</strong> (a logística reversa — mandar o par antigo de volta).</div>
         <div style="margin-top:16px;display:flex;flex-direction:column;gap:16px">
@@ -981,6 +981,18 @@ function renderDash(d) {
     const hasOtherCarrier = rck && !/melhorenvio/i.test(rck);
     const _exMode = String((CONFIG||{}).exchange_mode||'');
     const isHandoffOnly = _exMode === 'handoff_only' || _exMode === 'procedimento';
+    if (_exMode === 'procedimento') {
+      const ts = document.getElementById('trocasSub');
+      if (ts) ts.textContent = 'As solicitações registradas pelo agente ficam aqui, com o número do pedido, o produto e os dados do cliente. A troca elegível segue sozinha (sem aprovação): o cliente recebe o endereço e o passo a passo, devolve, e o status muda de "Aguardando devolução" para "Devolução postada" quando ele manda o código de rastreio.';
+      const ex = document.getElementById('trocasExplainer');
+      if (ex) ex.innerHTML = '<div class="card-title">Entenda os botões</div>'
+        + '<div class="card-sub">Na sua loja a troca é <strong>devolução primeiro</strong>: o cliente devolve, vocês conferem a peça e só então o novo modelo é combinado com ele pelo WhatsApp. Não existe botão de aprovar ou recusar — só estes dois:</div>'
+        + '<div style="margin-top:16px;display:flex;flex-direction:column;gap:16px">'
+        + '<div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:0 0 auto;width:12px;height:12px;border-radius:50%;background:#0ea5e9;margin-top:5px"></span><div><div style="font-weight:700;margin-bottom:2px">Gerar etiqueta grátis</div><div style="font-size:13.5px;color:#555;line-height:1.55"><strong>A sua loja passa a custear o frete da devolução</strong> daquela troca. Um clique gera o código de postagem dos Correios e o agente já envia ao comprador — ele posta sem pagar nada. Use quando decidirem absorver o frete (por exemplo, cliente reclamando do custo, defeito, direito do consumidor).</div></div></div>'
+        + '<div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:0 0 auto;width:12px;height:12px;border-radius:50%;background:#15803d;margin-top:5px"></span><div><div style="font-weight:700;margin-bottom:2px">Marcar como resolvido</div><div style="font-size:13.5px;color:#555;line-height:1.55">Quando a peça chegou, foi conferida e o novo par foi combinado e enviado, um clique tira a troca da fila.</div></div></div>'
+        + '</div>'
+        + '<div style="margin-top:16px;padding:11px 13px;background:#fff4ef;border-radius:8px;font-size:13px;color:#7a3b26;line-height:1.5">Por padrão o <strong>frete da devolução é do cliente</strong> e o envio do <strong>par novo é da loja</strong>. Se o cliente questionar o frete na conversa, o agente encaminha na hora para a equipe — e aí vocês decidem: mantêm a regra ou clicam em “Gerar etiqueta grátis”.</div>';
+    }
     const rc = document.getElementById('reverseConnectCard');
     const rb = document.getElementById('reverseConnectBtn');
     if (rc && rb && exOn && TOKEN && !hasOtherCarrier && !isHandoffOnly) {
