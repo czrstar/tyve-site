@@ -548,7 +548,7 @@
       <span data-i18n="hero_badge">WhatsApp Cloud API oficial</span>
     </div>
     <h1 data-i18n-html="hero_h1">Atendimento que resolve,<br/><span class="accent">24 horas por dia</span> no seu WhatsApp.</h1>
-    <p class="hero-sub" data-i18n-html="hero_sub">Chega de "cadê meu pedido?" sem resposta. Nosso agente resolve na hora!<br/>Pedido, troca, dúvida e só te chama quando precisa.</p>
+    <p class="hero-sub" data-i18n-html="hero_sub">Chega de mensagem sem resposta. Nosso agente resolve na hora, dúvida, pedido, agendamento, reclamação, seja o que for. E só te chama quando precisa!</p>
     <p class="hero-br" data-i18n="hero_br">🇧🇷 Feito no Brasil, suporte em português</p>
     <a href="#planos" class="btn-cta js-open-demo" data-i18n="hero_cta">⚡ Ver demo ao vivo</a><a href="#planos" class="hero-secondary" data-i18n="hero_cta2">Ver planos →</a>
   </div>
@@ -596,7 +596,7 @@
   <div class="container">
     <div class="problem-header">
       <div class="sec-label" data-i18n="prob_label">O problema</div>
-      <h2 class="section-title section-title-light" data-i18n-html="prob_h2">Quantas vendas sua loja perde por dia<br/>no "cadê meu pedido?"</h2>
+      <h2 class="section-title section-title-light" data-i18n-html="prob_h2">Quantas vendas sua loja perde por dia<br/>por falta de atendimento?</h2>
       <p class="avb-subtitle" data-i18n="prob_sub">Sua equipe passa o dia respondendo pedido, troca e dúvida na mão e quem espera acaba comprando na concorrência.</p>
     </div>
     <div class="problem-grid">
@@ -714,8 +714,100 @@
       <p class="plans-trust" data-i18n="plans_trust">⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias</p>
     </div>
 
-    <div id="planos-ecommerce"></div>
+    <div class="biz-toggle" id="planos-ecommerce">
+      <div class="biz-toggle-track">
+        <button class="biz-toggle-btn" data-biz="servicos" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+        <button class="biz-toggle-btn active" data-biz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+      </div>
+    </div>
 
+    <div id="grid-servicos" style="display:none">
+    <div class="cycle-toggle" id="cycle-toggle-servicos">
+      <div class="cycle-toggle-track">
+        <button class="cycle-btn active" data-ciclo="mensal" type="button" data-i18n="cycle_monthly">Mensal</button>
+        <button class="cycle-btn" data-ciclo="anual" type="button"><span data-i18n="cycle_annual">Anual</span> <span class="cycle-badge" data-i18n="cycle_badge">2 meses grátis</span></button>
+      </div>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan">
+        <p class="plan-name" data-i18n="plan_atende">Atende</p>
+        <p class="price-was" data-was></p>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
+        <p class="plan-tagline" data-i18n="atende_tagline">Até 200 contatos atendidos/mês</p>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li data-i18n="atende_f1">1 número WhatsApp</li>
+          <li data-i18n="atende_f2">Fluxo configurado pro seu negócio</li>
+          <li data-i18n="atende_f3">Respostas automáticas 24h/7d</li>
+          <li data-i18n="atende_f4">Entende mensagens de texto, voz e imagens 🎙️📷</li>
+          <li data-i18n="atende_f5">Triagem e qualificação de leads</li>
+          <li data-i18n="atende_f8b">Painel de resultados com link</li>
+          <li data-i18n="atende_f6">Alerta com resumo completo da conversa</li>
+          <li data-i18n="atende_f7">Detecta clientes frustrados e alerta com prioridade ⚠️</li>
+          <li data-i18n="atende_f8">Lembrete automático se o cliente esperar +12h sem retorno</li>
+          <li data-i18n="atende_f9">1 ajuste por mês</li>
+          <li data-i18n="atende_f10">Suporte via WhatsApp (retorno em até 8h)</li>
+        </ul>
+        <a href="/assinar/plano-atende?tipo=servico" class="btn-plan" data-i18n="atende_cta">Assinar Atende</a>
+      </div>
+
+      <div class="plan featured">
+        <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
+        <p class="plan-name" data-i18n="plan_cresce">Cresce</p>
+        <p class="price-was" data-was></p>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
+        <p class="plan-tagline" data-i18n="cresce_tagline">Até 500 contatos atendidos/mês</p>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li class="feature-all" data-i18n="cresce_all">Tudo do Atende</li>
+          <li data-i18n="cresce_f1">Follow-up automático no dia seguinte</li>
+          <li data-i18n="cresce_f2">Pesquisa de satisfação automática (NPS)</li>
+          <li data-i18n="cresce_f3">1 ajuste por semana</li>
+          <li data-i18n="cresce_f4">Resumo semanal por email</li>
+          <li data-i18n="cresce_f5">O agente envia link da sua agenda</li>
+          <li data-i18n="cresce_f6">Suporte prioritário (retorno em até 4h)</li>
+        </ul>
+        <a href="/assinar/plano-cresce?tipo=servico" class="btn-plan" data-i18n="cresce_cta">Assinar Cresce</a>
+      </div>
+
+      <div class="plan">
+        <p class="plan-name" data-i18n="plan_escala">Escala</p>
+        <p class="price-was" data-was></p>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
+        <p class="plan-tagline" data-i18n="escala_tagline">Até 1.000 contatos/mês</p>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li class="feature-all" data-i18n="escala_all">Tudo do Cresce</li>
+          <li data-i18n="escala_f3">Agendamento nativo no WhatsApp</li>
+          <li data-i18n="escala_f4">Múltiplos fluxos e segmentações</li>
+          <li data-i18n="escala_f5">Relatório mensal PDF com análise completa</li>
+          <li data-i18n="escala_f6">Reunião mensal de resultados</li>
+          <li data-i18n="escala_f7">Gerente de conta dedicado (retorno em até 2h)</li>
+        </ul>
+        <a href="/assinar/plano-escala?tipo=servico" class="btn-plan" data-i18n="escala_cta">Assinar Escala</a>
+      </div>
+    </div>
+
+    <div class="addon-box">
+      <div class="addon-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div>
+      <div class="addon-content">
+        <p class="addon-title" data-i18n="addon_title">Adicional: Agendamento automático via WhatsApp</p>
+        <p class="addon-desc" data-i18n-html="addon_desc">O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Atende%20com%20adicional%20de%20agendamento%20(site)!" class="btn-plan-outline" style="font-size:12px;padding:8px 16px;display:inline-block;width:auto;" target="_blank" rel="noopener" data-i18n="addon_cta_atende">Atende + Agenda</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Cresce%20com%20adicional%20de%20agendamento%20(site)!" class="btn-plan-outline" style="font-size:12px;padding:8px 16px;display:inline-block;width:auto;" target="_blank" rel="noopener" data-i18n="addon_cta_cresce">Cresce + Agenda</a>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--teal);padding:8px 16px;background:rgba(0,232,223,.08);border-radius:100px;" data-i18n="addon_note2">✓ Incluso no Escala</span>
+        </div>
+      </div>
+      <div class="addon-price" style="text-align:center;">
+        <span class="addon-amount" data-addon-brl="79">+R$79</span><span class="addon-period" data-i18n="per_month">/mês</span>
+        <p class="addon-note" data-i18n="addon_note1">Para Atende e Cresce</p>
+      </div>
+    </div>
+    </div><!-- /grid-servicos -->
 
     <div id="grid-ecommerce">
       <div class="cycle-toggle" id="cycle-toggle-ecom">
@@ -1075,7 +1167,7 @@
 <section class="final-cta">
   <div class="container">
     <div class="final-cta-content">
-      <h2 data-i18n-html="cta_h2">Chega de passar o dia<br/>respondendo "cadê meu pedido?"</h2>
+      <h2 data-i18n-html="cta_h2">Chega de mensagem sem resposta. Nosso agente resolve na hora!</h2>
       <p data-i18n-html="cta_p">Em 20 minutinhos a gente mostra ao vivo como fica na sua loja,<br/>sem compromisso nenhum.</p>
       <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20uma%20demo%20da%20Tyve%20(site)!" class="btn-cta-teal" target="_blank" rel="noopener">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1131,7 +1223,7 @@ var T = {
     nav_plans:'Planos e Preços', nav_demo:'⚡ Ver demo ao vivo',
     hero_badge:'WhatsApp Cloud API oficial',
     hero_h1:'Atendimento que resolve,<br/><span class="accent">24 horas por dia</span> no seu WhatsApp.',
-    hero_sub:'Chega de "cadê meu pedido?" sem resposta. Nosso agente resolve na hora!<br/>Pedido, troca, dúvida e só te chama quando precisa.',
+    hero_sub:'Chega de mensagem sem resposta. Nosso agente resolve na hora, dúvida, pedido, agendamento, reclamação, seja o que for. E só te chama quando precisa!',
     hero_br:'🇧🇷 Feito no Brasil, suporte em português',
     hero_cta:'⚡ Ver demo ao vivo',
     hero_cta2:'Ver planos →',
@@ -1143,7 +1235,7 @@ var T = {
     chat_m2_bot:'Achei aqui! Seu pedido #1234 saiu pra entrega hoje. Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?',
     chat_m3_user:'Quero! E se não servir, dá pra trocar a numeração?',
     prob_label:'O problema',
-    prob_h2:'Quantas vendas sua loja perde por dia<br/>no "cadê meu pedido?"',
+    prob_h2:'Quantas vendas sua loja perde por dia<br/>por falta de atendimento?',
     prob_sub:'Sua equipe passa o dia respondendo pedido, troca e dúvida na mão e quem espera acaba comprando na concorrência.',
     prob_c1h:'Pedido às 22h sem ninguém', prob_c1p:'O cliente pergunta do pedido à noite. De manhã já abriu reclamação ou pediu reembolso.',
     prob_c2h:'"Cadê meu pedido?" o dia todo', prob_c2p:'Metade do WhatsApp da loja é rastreio. Sua equipe copia e cola link o dia inteiro.',
@@ -1321,7 +1413,7 @@ var T = {
     faq_a14:'<b>Na maioria dos casos, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O WhatsApp mantém uma janela de 24 horas depois da última mensagem do seu cliente. Dentro dela, qualquer mensagem é <b>gratuita</b> — e a Tyve envia o follow-up dentro dessa janela.<br><br>A exceção são mensagens enviadas <b>fora</b> dessa janela de 24 horas (por exemplo, um aviso proativo alguns dias depois): nesse caso o WhatsApp cobra <b>centavos</b> pelo envio. <b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business da sua loja, a mesma que você conecta na ativação. A Tyve não revende mensagem e não põe margem nisso.',
     faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
     faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
-    cta_h2:'Chega de passar o dia<br/>respondendo "cadê meu pedido?"',
+    cta_h2:'Chega de mensagem sem resposta. Nosso agente resolve na hora!',
     cta_p:'Em 20 minutinhos a gente mostra ao vivo como fica na sua loja,<br/>sem compromisso nenhum.',
     cta_btn:'Agendar demo grátis',
     cta_garantia:'Garantia de 7 dias — não gostou, devolvemos 100%.',
@@ -1655,7 +1747,28 @@ window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visi
   if (saved && saved !== 'pt') setLang(saved);
 })();
 
-// Pivô e-commerce (21/07/2026): grid de serviços removido — só existe o grid e-commerce.
+// Toggle tipo de negócio (Serviços <-> E-commerce) — restaurado 10/08/2026, e-commerce como padrão
+(function(){
+  function setBiz(b){
+    var s=document.getElementById('grid-servicos'), e=document.getElementById('grid-ecommerce');
+    if(!s||!e) return;
+    var ecom = (b==='ecommerce');
+    s.style.display = ecom ? 'none' : '';
+    e.style.display = ecom ? '' : 'none';
+    document.querySelectorAll('.biz-toggle-btn[data-biz]').forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-biz')===b); });
+  }
+  window.setBiz = setBiz;
+  document.querySelectorAll('.biz-toggle-btn[data-biz]').forEach(function(btn){
+    btn.addEventListener('click', function(){ setBiz(btn.getAttribute('data-biz')); });
+  });
+  document.querySelectorAll('[data-ecom-trigger]').forEach(function(el){
+    el.addEventListener('click', function(){ setBiz('ecommerce'); });
+  });
+  document.querySelectorAll('[data-servico-trigger]').forEach(function(el){
+    el.addEventListener('click', function(){ setBiz('servicos'); });
+  });
+  if (location.hash === '#planos-servicos') { setBiz('servicos'); }
+})();
 
 // Toggle FAQ Servicos <-> E-commerce
 (function(){
@@ -1706,7 +1819,7 @@ function renderCycle(){
         }
         if (wasEl) { wasEl.textContent = 'R$' + formatBRL(brl) + '/mês'; wasEl.classList.add('show'); }
         if (btn) {
-          if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar/plano-' + mm[1] + '?ciclo=anual'); }
+          if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar/plano-' + mm[1] + '?tipo=servico&ciclo=anual'); }
           else { btn.setAttribute('href', '/assinar/plano-' + nome.toLowerCase() + '?ciclo=anual'); }
         }
       } else {
@@ -1715,12 +1828,13 @@ function renderCycle(){
         if (noteEl) noteEl.style.display = 'none';
         if (wasEl) wasEl.classList.remove('show');
         if (btn) {
-          if (kind === 'servicos') { var mm2 = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm2) btn.setAttribute('href', '/assinar/plano-' + mm2[1]); }
+          if (kind === 'servicos') { var mm2 = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm2) btn.setAttribute('href', '/assinar/plano-' + mm2[1] + '?tipo=servico'); }
           else { btn.setAttribute('href', '/assinar/plano-' + nome.toLowerCase()); }
         }
       }
     });
   }
+  applyCards('#grid-servicos .pricing-grid .plan', 'servicos');
   applyCards('#grid-ecommerce .pricing-grid .plan', 'ecom');
 }
 document.querySelectorAll('.cycle-btn').forEach(function(b){
@@ -1907,10 +2021,7 @@ renderCycle();
 })();
 </script>
 
-<!-- E-commerce: view padrão (100% e-commerce — grid de serviços removido 21/07/2026) -->
-<style id="mock-ecom">
-  #faq-biz-toggle{display:none!important}
-</style>
+<!-- Duas trilhas restauradas 10/08/2026 (Serviços + E-commerce) — e-commerce como aba padrão -->
 <script>
   document.addEventListener('DOMContentLoaded',function(){
     try{setLang('pt');}catch(e){}

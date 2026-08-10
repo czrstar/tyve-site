@@ -498,17 +498,81 @@
     }
   };
 
+  // Planos de Serviços e Negócios locais — restaurados 10/08/2026 (arquivados em 21/07/2026 no pivô e-commerce).
+  // Selecionados via ?tipo=servico pra não colidir com as URLs /assinar/plano-X do e-commerce acima.
+  var SERVICO_PLANS = {
+    atende: {
+      name: 'Atende',
+      amt: '497',
+      tag: 'Até 200 contatos atendidos/mês',
+      popular: false,
+      feats: [
+        '1 número de WhatsApp respondendo 24h por dia',
+        'Entende mensagens de texto, voz e imagens',
+        'Triagem e qualificação de cada lead',
+        'Alerta com resumo completo da conversa',
+        '1 ajuste por mês + suporte via WhatsApp'
+      ],
+      asaas: 'https://www.asaas.com/c/k31h5eo13jee7aps',
+      asaasAnual: 'https://www.asaas.com/c/i6c0rxnbuhs87yfz'
+    },
+    cresce: {
+      name: 'Cresce',
+      amt: '697',
+      tag: 'Até 500 contatos atendidos/mês',
+      popular: true,
+      includesLabel: 'Tudo do Atende',
+      includesFeats: [
+        '1 número de WhatsApp respondendo 24h por dia',
+        'Entende mensagens de texto, voz e imagens',
+        'Triagem e qualificação de cada lead',
+        'Alerta com resumo completo da conversa',
+        '1 ajuste por mês + suporte via WhatsApp'
+      ],
+      feats: [
+        'Lembrete automático pra clientes no dia seguinte',
+        'Pesquisa de satisfação pós-atendimento (NPS)',
+        'Resumo semanal por e-mail',
+        '1 ajuste por semana + suporte prioritário (retorno em até 4h)'
+      ],
+      asaas: 'https://www.asaas.com/c/kwj0xhyvv5z8zptl',
+      asaasAnual: 'https://www.asaas.com/c/i5lmav7f0egxurij'
+    },
+    escala: {
+      name: 'Escala',
+      amt: '997',
+      tag: 'Até 1.000 contatos atendidos/mês',
+      popular: false,
+      includesLabel: 'Tudo do Cresce',
+      includesFeats: [
+        'Lembrete automático pra clientes no dia seguinte',
+        'Pesquisa de satisfação pós-atendimento (NPS)',
+        'Resumo semanal por e-mail',
+        '1 ajuste por semana + suporte prioritário (retorno em até 4h)'
+      ],
+      feats: [
+        'Lembretes automáticos no dia seguinte e 3 dias depois',
+        'Painel de resultados + relatório mensal em PDF',
+        'Agendamento nativo no WhatsApp',
+        'Gerente de conta dedicado (retorno em até 2h)'
+      ],
+      asaas: 'https://www.asaas.com/c/nbu4h9mut7icws97',
+      asaasAnual: 'https://www.asaas.com/c/fy2yys06g6s3tcnz'
+    }
+  };
+
   function getParam(n){ return (new URLSearchParams(window.location.search).get(n) || '').toLowerCase().trim(); }
   function getPlanoFromPath(){
     var m = window.location.pathname.match(/\/assinar\/plano-([a-z]+)/i);
     return m ? m[1].toLowerCase() : '';
   }
-  function getPlano(){ var p = getPlanoFromPath() || getParam('plano'); return PLANS[p] ? p : 'cresce'; }
+  function isServico(){ return getParam('tipo') === 'servico'; }
+  function getPlano(){ var p = getPlanoFromPath() || getParam('plano'); var src = isServico() ? SERVICO_PLANS : PLANS; return src[p] ? p : 'cresce'; }
   function isAnual(){ return getParam('ciclo') === 'anual'; }
   function fmtBR(n, dec){ return n.toLocaleString('pt-BR', { minimumFractionDigits: dec||0, maximumFractionDigits: dec||0 }); }
 
   var key = getPlano();
-  var plan = PLANS[key];
+  var plan = (isServico() ? SERVICO_PLANS : PLANS)[key];
   var anual = isAnual();
 
   var ul = document.getElementById('sum-feats');
