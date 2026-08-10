@@ -847,6 +847,15 @@
         <div data-plan-q="cresce,escala">
         <div class="info-box orange" style="margin-bottom:14px">As opções abaixo configuram a <strong>troca automática</strong> (planos Cresce e Escala). No plano Atende, basta a política acima.</div>
         <div class="question">
+          <label class="q-label">Como você quer que o agente conduza a troca? <span class="req">*</span></label>
+          <p style="margin:0 0 10px;font-size:.92rem;color:#6b6b6b">Em todos os casos o agente confere o pedido na sua loja e registra a solicitação no painel. O que muda é até onde ele vai sozinho.</p>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="troca_estilo" value="numeracao" /><div class="radio-box"></div><span class="radio-label"><strong>Escolha na hora</strong> — o agente mostra as numerações disponíveis e o cliente já escolhe a nova. Melhor para quem tem estoque folgado e reposição rápida.</span></label>
+            <label class="radio-item"><input type="radio" name="troca_estilo" value="procedimento" /><div class="radio-box"></div><span class="radio-label"><strong>Devolução primeiro</strong> — o agente manda o endereço e o passo a passo, sem oferecer modelo. Você confere a peça e só então combina a nova com o cliente. Melhor para quem trabalha com pouco estoque ou reposição demorada.</span></label>
+            <label class="radio-item"><input type="radio" name="troca_estilo" value="humano" /><div class="radio-box"></div><span class="radio-label"><strong>Sempre com a minha equipe</strong> — o agente acolhe, registra no painel e passa toda troca para uma pessoa. Melhor para peças únicas, sob medida ou de alto valor.</span></label>
+          </div>
+        </div>
+        <div class="question" data-troca-estilo="numeracao">
           <label class="q-label">Como funciona o envio do produto novo na troca? <span class="req">*</span></label>
           <div class="radio-group">
             <label class="radio-item"><input type="radio" name="troca_modo" value="apos_devolucao" /><div class="radio-box"></div><span class="radio-label">Envio a nova numeração <strong>depois</strong> de receber a devolução</span></label>
@@ -1501,6 +1510,7 @@
         troca_prazo_dias:      fields.troca_prazo_dias || '',
         reembolso_politica:    fields.reembolso_politica || '',
         troca_frete_quem_paga: fields.troca_frete_quem_paga || '',
+        troca_estilo:          fields.troca_estilo || 'numeracao',
         troca_modo:            fields.troca_modo || '',
         logistica_reversa:     fields.logistica_reversa || '',
         cep_devolucao:         fields.cep_devolucao || '',
@@ -1542,6 +1552,25 @@
   updateProgress();
 
 </script>
+<script>
+// troca_estilo: a pergunta "envio do produto novo" só faz sentido no modo "escolha na hora"
+(function(){
+  function syncTrocaEstilo(){
+    var sel = document.querySelector('input[name="troca_estilo"]:checked');
+    var v = sel ? sel.value : '';
+    document.querySelectorAll('[data-troca-estilo]').forEach(function(el){
+      var show = !v || el.getAttribute('data-troca-estilo').split(',').indexOf(v) >= 0;
+      el.style.display = show ? '' : 'none';
+      el.querySelectorAll('input').forEach(function(i){ if(!show) i.checked = false; });
+    });
+  }
+  document.addEventListener('change', function(e){
+    if (e.target && e.target.name === 'troca_estilo') syncTrocaEstilo();
+  });
+  document.addEventListener('DOMContentLoaded', syncTrocaEstilo);
+})();
+</script>
+
 
 </body>
 </html>
