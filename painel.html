@@ -770,6 +770,7 @@ const EXCH_LABEL = {
   rejected:{t:'Recusada',c:'#6b7280',bg:'#f3f4f6'},
   error:{t:'Erro',c:'#b91c1c',bg:'#fee2e2'},
   atendimento:{t:'Em atendimento',c:'#0369a1',bg:'#e0f2fe'},
+  aguardando_devolucao:{t:'Aguardando devolução',c:'#b45309',bg:'#fef3c7'},
   resolvido:{t:'Resolvida',c:'#15803d',bg:'#dcfce7'}
 };
 async function loadTrocas() {
@@ -803,8 +804,37 @@ function trocaCardHandoff(e) {
     + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
     + '</div>' + actions + '</div>';
 }
+function trocaCardProc(e) {
+  const posted = e.reverse_status === 'customer_posted' || !!e.tracking;
+  const resolved = e.status === 'resolvido';
+  const s = resolved ? EXCH_LABEL.resolvido
+    : (posted ? {t:'Devolução postada',c:'#0369a1',bg:'#e0f2fe'} : (EXCH_LABEL[e.status] || {t:'Aguardando devolução',c:'#b45309',bg:'#fef3c7'}));
+  const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+  const ped = e.order_id ? ('<span style="color:var(--orange);font-weight:700">Pedido '+esc(e.order_id)+'</span> &nbsp;·&nbsp; ') : '';
+  const cli = [];
+  if (e.ship_name) cli.push(esc(e.ship_name));
+  const _ph = e.ship_phone || e.chat_id || '';
+  if (_ph) cli.push(esc(fmtPhone(_ph)));
+  if (e.ship_cpf) cli.push('CPF '+esc(e.ship_cpf));
+  const trk = e.tracking
+    ? '<div style="font-size:13px;margin-top:4px">Rastreio da devolução: <b>'+esc(e.tracking)+'</b></div>'
+    : '<div style="font-size:13px;color:#666;margin-top:4px">Cliente recebeu o endereço e o passo a passo. Aguardando ele postar e enviar o código de rastreio.</div>';
+  const actions = !resolved
+    ? '<div style="margin-top:10px"><button class="btn btn-sm" style="background:#f3f4f6;color:#374151" onclick="actExchange('+e.id+',\'resolve\',this)">Marcar como resolvido</button></div>'
+    : '';
+  return '<div class="card" style="padding:14px 16px;margin-bottom:10px;border:1px solid #eee;border-left:3px solid #f59e0b">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+    + '<div><div style="font-size:11px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">🔁 Troca — devolução primeiro</div>'
+    + '<div style="font-weight:600">'+ped+esc(e.product_title||'Produto')+'</div>'
+    + trk
+    + (cli.length?'<div style="font-size:12px;color:#888;margin-top:3px">Cliente: '+cli.join(' &nbsp;·&nbsp; ')+'</div>':'')
+    + (dt?'<div style="font-size:12px;color:#999;margin-top:2px">'+dt+'</div>':'')+'</div>'
+    + '<span style="font-size:12px;font-weight:600;color:'+s.c+';background:'+s.bg+';padding:4px 10px;border-radius:999px;white-space:nowrap">'+s.t+'</span>'
+    + '</div>' + actions + '</div>';
+}
 function trocaCard(e) {
   if (e.gate === 'handoff_only') return trocaCardHandoff(e);
+  if (e.gate === 'procedimento') return trocaCardProc(e);
   const s = EXCH_LABEL[e.status] || {t:e.status,c:'#374151',bg:'#f3f4f6'};
   const dt = e.created_at ? new Date(e.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
   const diff = Number(e.diff||0);
@@ -937,7 +967,8 @@ function renderDash(d) {
     const exOn = String((CONFIG||{}).exchange_enabled||'') === 'true';
     const rck = String((CONFIG||{}).reverse_carrier_key||'');
     const hasOtherCarrier = rck && !/melhorenvio/i.test(rck);
-    const isHandoffOnly = String((CONFIG||{}).exchange_mode||'') === 'handoff_only';
+    const _exMode = String((CONFIG||{}).exchange_mode||'');
+    const isHandoffOnly = _exMode === 'handoff_only' || _exMode === 'procedimento';
     const rc = document.getElementById('reverseConnectCard');
     const rb = document.getElementById('reverseConnectBtn');
     if (rc && rb && exOn && TOKEN && !hasOtherCarrier && !isHandoffOnly) {
