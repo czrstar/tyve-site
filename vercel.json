@@ -5,17 +5,45 @@
     {
       "source": "/((?!assets/).*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/assinar/plano-:plano", "destination": "/assinar?plano=:plano" },
-    { "source": "/privacidade", "destination": "/privacy" },
-    { "source": "/conectar-whatsapp", "destination": "/embedded-signup" },
-    { "source": "/conectar-instagram", "destination": "/instagram-connect" },
-    { "source": "/painel/resultados", "destination": "/painel" },
-    { "source": "/painel/configuracoes", "destination": "/painel" },
-    { "source": "/guia-painel", "destination": "/guia-painel.pdf" }
+    {
+      "source": "/assinar/plano-:plano",
+      "destination": "/assinar?plano=:plano"
+    },
+    {
+      "source": "/privacidade",
+      "destination": "/privacy"
+    },
+    {
+      "source": "/conectar-whatsapp",
+      "destination": "/embedded-signup"
+    },
+    {
+      "source": "/conectar-instagram",
+      "destination": "/instagram-connect"
+    },
+    {
+      "source": "/painel/resultados",
+      "destination": "/painel"
+    },
+    {
+      "source": "/painel/configuracoes",
+      "destination": "/painel"
+    },
+    {
+      "source": "/painel/:token(street_[A-Za-z0-9]+|[a-z0-9]+_[A-Za-z0-9]{8,})",
+      "destination": "/painel?token=:token"
+    },
+    {
+      "source": "/guia-painel",
+      "destination": "/guia-painel.pdf"
+    }
   ]
 }
