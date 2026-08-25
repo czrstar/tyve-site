@@ -558,6 +558,61 @@
             </label>
           </div>
         </div>
+        <div class="info-box blue">
+          <strong>📋 O que a Meta vai pedir na hora de conectar (leva 2 min, mas prepare antes):</strong>
+          <ol style="margin:8px 0 0 18px;padding:0;line-height:1.6">
+            <li>Um <strong>Gerenciador de Negócios da Meta</strong> (business.facebook.com) <strong>em nome da sua empresa</strong>, com o mesmo nome do CNPJ, e você como <strong>administrador</strong>. Se não tem, crie antes de conectar. Não use um Business de terceiros ou de outro negócio.</li>
+            <li>Login numa <strong>conta pessoal do Facebook já existente</strong> (não recém-criada) que seja admin desse Gerenciador.</li>
+            <li>Uma <strong>página comercial no Facebook</strong> e um <strong>site</strong> com nome, CNPJ e endereço da empresa (a Meta confere).</li>
+            <li>O <strong>nome de exibição</strong> do WhatsApp Business já do jeito que você quer: a Meta congela esse nome depois da conexão.</li>
+          </ol>
+          <p style="margin:8px 0 0">A <strong>verificação da empresa</strong> (com CNPJ) não é obrigatória para ativar, mas sem ela a Meta limita o número a 250 conversas iniciadas por dia. A gente te orienta nesse passo.</p>
+        </div>
+        <div class="question">
+          <label class="q-label">Sua empresa já tem um Gerenciador de Negócios da Meta (business.facebook.com)? <span class="req">*</span></label>
+          <div class="radio-group" id="rg-meta-bm">
+            <label class="radio-item">
+              <input type="radio" name="meta_business_status" value="tem_verificado" required />
+              <div class="radio-box"></div>
+              <span class="radio-label">Sim, e a empresa já está verificada (CNPJ aprovado pela Meta)</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="meta_business_status" value="tem_nao_verificado" />
+              <div class="radio-box"></div>
+              <span class="radio-label">Sim, mas ainda não fizemos a verificação da empresa</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="meta_business_status" value="nao_tem" />
+              <div class="radio-box"></div>
+              <span class="radio-label">Não temos, vamos precisar criar</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="meta_business_status" value="nao_sei" />
+              <div class="radio-box"></div>
+              <span class="radio-label">Não sei dizer</span>
+            </label>
+          </div>
+        </div>
+        <div class="question">
+          <label class="q-label">Quem vai clicar em "conectar" é administrador desse Gerenciador de Negócios, com conta pessoal do Facebook?</label>
+          <div class="radio-group" id="rg-meta-admin">
+            <label class="radio-item">
+              <input type="radio" name="meta_fb_admin" value="sim" />
+              <div class="radio-box"></div>
+              <span class="radio-label">Sim</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="meta_fb_admin" value="nao" />
+              <div class="radio-box"></div>
+              <span class="radio-label">Não / vamos precisar dar acesso a alguém</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="meta_fb_admin" value="nao_sei" />
+              <div class="radio-box"></div>
+              <span class="radio-label">Não sei dizer</span>
+            </label>
+          </div>
+        </div>
         <div class="section-footer">
           <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
         </div>
@@ -1490,6 +1545,8 @@
         responsavel_grupo:     fields.responsavel_grupo || '',
         exemplos_mensagens:    fields.exemplos_mensagens || '',
         situacao_chip:         fields.situacao_chip || '',
+        meta_business_status:  fields.meta_business_status || '',
+        meta_fb_admin:         fields.meta_fb_admin || '',
         plano_contratado:      fields.plano_contratado || '',
         volume_mensal:         fields.ec_volume_mensal || fields.volume_mensal || '',
         formas_pagamento:      fields.ec_formas_pagamento || fields.formas_pagamento || '',

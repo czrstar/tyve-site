@@ -402,7 +402,32 @@
       .faq-actions{margin-top:8px}
       .nps-row{grid-template-columns:1fr}
     }
-  </style>
+  
+  /* ── Conversas ── */
+  .conv-layout { display:grid; grid-template-columns: 320px 1fr; gap:16px; margin-top:16px; align-items:start; }
+  @media (max-width: 860px) { .conv-layout { grid-template-columns: 1fr; } }
+  .conv-item { padding:10px 10px; border-radius:10px; cursor:pointer; border:1px solid transparent; }
+  .conv-item:hover { background:#faf7f2; }
+  .conv-item.active { background:#fff4ef; border-color:#f5cdbb; }
+  .conv-item .ci-top { display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:700; }
+  .conv-item .ci-when { font-weight:500; color:#888; font-size:12px; white-space:nowrap; }
+  .conv-item .ci-last { font-size:12.5px; color:#666; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .conv-item .ci-meta { font-size:11.5px; color:#999; margin-top:3px; }
+  .msg { max-width:88%; padding:9px 12px; border-radius:12px; font-size:13.5px; line-height:1.5; margin:6px 0; white-space:pre-wrap; word-break:break-word; }
+  .msg.in  { background:#f3f4f6; color:#111; border-bottom-left-radius:4px; margin-right:auto; }
+  .msg.out { background:#e7f7ef; color:#0f3d2a; border-bottom-right-radius:4px; margin-left:auto; }
+  .msg.out.src-equipe-bg { background:#fff4ef; color:#5a2a12; }
+  .msg .m-meta { display:flex; gap:8px; align-items:center; font-size:11px; color:#777; margin-top:5px; }
+  .src-tag { display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:100px; }
+  .src-faq { background:#dbeafe; color:#1e40af; }
+  .src-pedido { background:#dcfce7; color:#166534; }
+  .src-troca { background:#fef3c7; color:#92400e; }
+  .src-ia { background:#ede9fe; color:#5b21b6; }
+  .src-ia_fallback { background:#ede9fe; color:#5b21b6; }
+  .src-equipe { background:#ffe4d6; color:#9a3412; }
+  .src-canned, .src-menu, .src-pix { background:#f3f4f6; color:#374151; }
+  .conv-empty { font-size:13.5px; color:#777; padding:14px 4px; }
+</style>
 </head>
 <body>
 
@@ -437,6 +462,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-tab="resultados" onclick="switchTab('resultados')">📊 Resultados</button>
     <button class="tab-btn" data-tab="trocas" id="tabBtnTrocas" onclick="switchTab('trocas')" style="display:none">🔄 Trocas</button>
+    <button class="tab-btn" data-tab="conversas" onclick="switchTab('conversas')">💬 Conversas</button>
     <button class="tab-btn" data-tab="config" onclick="switchTab('config')">⚙️ Configurações</button>
   </div>
 </div>
@@ -552,10 +578,10 @@
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon o">🕐</div>
+          <div class="stat-icon o">🤖</div>
           <div>
-            <div class="stat-num">24/7</div>
-            <div class="stat-desc">Atendimento ativo</div>
+            <div class="stat-num" id="statResolved" title="Contatos dos últimos 30 dias que o agente resolveu sem encaminhar para a equipe">–</div>
+            <div class="stat-desc" id="statResolvedDesc">Resolvidos sem a equipe</div>
           </div>
         </div>
         <div class="stat-card">
@@ -698,6 +724,26 @@
       </div>
     </div><!-- /tab-trocas -->
 
+    <!-- ══ TAB: CONVERSAS ════════════════════════════════════ -->
+    <div id="tab-conversas" style="display:none">
+      <div class="card">
+        <div class="sec-label" style="margin-bottom:12px">Conversas</div>
+        <div class="card-title">O que o agente respondeu, e de onde veio cada resposta</div>
+        <div class="card-sub">Últimos 30 dias. Cada resposta do agente traz uma etiqueta: <span class="src-tag src-faq">FAQ</span> veio de uma pergunta cadastrada nas Configurações, <span class="src-tag src-pedido">Pedido</span> veio da consulta ao vivo na sua loja, <span class="src-tag src-troca">Troca</span> do fluxo de troca, <span class="src-tag src-ia">IA</span> foi gerada pela inteligência artificial com base no que você configurou, <span class="src-tag src-equipe">Equipe</span> é quando a conversa foi encaminhada pra vocês. Viu uma resposta <span class="src-tag src-ia">IA</span> que você preferia diferente? Cadastre a pergunta na FAQ e ela passa a responder sempre igual.</div>
+        <div id="convSummary" style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div class="conv-layout">
+        <div class="card conv-list-card">
+          <div class="card-title" style="font-size:14px">Contatos recentes</div>
+          <div id="convList" style="margin-top:10px"></div>
+        </div>
+        <div class="card conv-thread-card">
+          <div id="convThreadHead" class="card-title" style="font-size:14px">Selecione um contato</div>
+          <div id="convThread" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </div><!-- /tab-conversas -->
+
   </div><!-- /content -->
 </main>
 
@@ -719,6 +765,7 @@ const FAQ_DELETE= N8N + '/tyve-faq-delete';
 const CFG_SAVE  = N8N + '/tyve-config-save';
 const EXCH_LIST = N8N + '/tyve-exchange-list';
 const EXCH_ACT  = N8N + '/tyve-exchange-action';
+const CONV_API  = N8N + '/tyve-conversations';
 const REFRESH_MS = 5 * 60 * 1000;
 
 let TOKEN = '', CONFIG = {}, FAQ = [], chart = null;
@@ -747,7 +794,10 @@ function switchTab(tab) {
   document.getElementById('tab-config').style.display     = tab === 'config'     ? '' : 'none';
   const tr = document.getElementById('tab-trocas');
   if (tr) tr.style.display = tab === 'trocas' ? '' : 'none';
+  const cv = document.getElementById('tab-conversas');
+  if (cv) cv.style.display = tab === 'conversas' ? '' : 'none';
   if (tab === 'trocas') loadTrocas();
+  if (tab === 'conversas') loadConversas();
   history.replaceState(null,'', location.pathname + location.search + '#' + tab);
 }
 
@@ -758,7 +808,61 @@ function initTab() {
     else if (/\/resultados\/?$/.test(location.pathname)) tab = 'resultados';
   }
   tab = tab || 'resultados';
-  switchTab(['resultados','config','trocas'].includes(tab) ? tab : 'resultados');
+  switchTab(['resultados','config','trocas','conversas'].includes(tab) ? tab : 'resultados');
+}
+
+
+// ── CONVERSAS ───────────────────────────────────────
+const SRC_LABEL = { faq:'FAQ', pedido:'Pedido', troca:'Troca', ia:'IA', ia_fallback:'IA', equipe:'Equipe', canned:'Resposta pronta', menu:'Menu', pix:'Pix' };
+let CONV_LOADED = false, CONV_ACTIVE = '';
+function srcTag(src) { const k = String(src||'ia'); return '<span class="src-tag src-' + esc(k) + '">' + esc(SRC_LABEL[k] || k) + '</span>'; }
+function fmtWhen(iso) {
+  if (!iso) return '';
+  const d = new Date(iso); const diff = Date.now() - d.getTime(); const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), dd = Math.floor(diff/86400000);
+  if (m < 60) return m <= 1 ? 'agora' : m + ' min';
+  if (h < 24) return h + 'h';
+  if (dd < 7) return dd + 'd';
+  return d.toLocaleDateString('pt-BR');
+}
+async function loadConversas(chat) {
+  const list = document.getElementById('convList'), sum = document.getElementById('convSummary');
+  if (!CONV_LOADED) list.innerHTML = '<div class="conv-empty">Carregando…</div>';
+  try {
+    const d = await fetch(CONV_API + '?token=' + encodeURIComponent(TOKEN) + (chat ? '&chat=' + encodeURIComponent(chat) : '')).then(r=>r.json());
+    if (!d || !d.ok) { list.innerHTML = '<div class="conv-empty">Não foi possível carregar as conversas.</div>'; return; }
+    if (!CONV_LOADED) {
+      const bs = d.by_source || {}; const tot = Object.values(bs).reduce((a,b)=>a+Number(b||0),0);
+      sum.innerHTML = tot ? Object.keys(bs).sort((a,b)=>bs[b]-bs[a]).map(k => '<span style="font-size:12.5px;color:#555">' + srcTag(k) + ' ' + fmt(bs[k]) + ' (' + Math.round(100*bs[k]/tot) + '%)</span>').join('') : '<span style="font-size:12.5px;color:#888">As etiquetas de fonte começam a aparecer nas respostas a partir de agora.</span>';
+      const cv = d.convos || [];
+      list.innerHTML = cv.length ? cv.map(c => {
+        const name = c.contact_name ? esc(c.contact_name) : fmtPhone(c.chat_id);
+        const meta = fmt(c.msgs_in) + ' msg' + (c.msgs_in==1?'':'s') + (c.handoff_records ? ' · encaminhada' : '');
+        return '<div class="conv-item" data-chat="' + esc(c.chat_id) + '" onclick="openConv(\'' + esc(c.chat_id) + '\')"><div class="ci-top"><span>' + name + '</span><span class="ci-when">' + fmtWhen(c.last_at) + '</span></div><div class="ci-last">' + esc(c.last_text) + '</div><div class="ci-meta">' + meta + '</div></div>';
+      }).join('') : '<div class="conv-empty">Nenhuma conversa nos últimos 30 dias.</div>';
+      CONV_LOADED = true;
+    }
+    if (chat) renderThread(d);
+  } catch(e) { list.innerHTML = '<div class="conv-empty">Não foi possível carregar as conversas.</div>'; }
+}
+function openConv(chat) {
+  CONV_ACTIVE = chat;
+  document.querySelectorAll('.conv-item').forEach(el => el.classList.toggle('active', el.dataset.chat === chat));
+  document.getElementById('convThreadHead').textContent = 'Carregando…';
+  document.getElementById('convThread').innerHTML = '';
+  loadConversas(chat);
+  if (window.innerWidth < 860) document.querySelector('.conv-thread-card').scrollIntoView({behavior:'smooth'});
+}
+function renderThread(d) {
+  const th = d.thread || []; const head = document.getElementById('convThreadHead'), box = document.getElementById('convThread');
+  head.textContent = 'Conversa com ' + fmtPhone(d.chat);
+  if (!th.length) { box.innerHTML = '<div class="conv-empty">Sem mensagens registradas nos últimos 30 dias.</div>'; return; }
+  box.innerHTML = th.map(m => {
+    const t = new Date(m.at).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    if (m.dir === 'in') return '<div class="msg in">' + esc(m.text || '[' + (m.source||'mídia') + ']') + '<div class="m-meta">' + t + '</div></div>';
+    const k = String(m.source||'ia');
+    const det = m.detail ? '<span title="' + esc(m.detail) + '">' + esc(String(m.detail).substring(0,40)) + '</span>' : '';
+    return '<div class="msg out' + (k === 'equipe' ? ' src-equipe-bg' : '') + '">' + esc(m.text) + '<div class="m-meta">' + srcTag(k) + det + '<span>' + t + '</span></div></div>';
+  }).join('');
 }
 
 // ── TROCAS ───────────────────────────────────────────
@@ -1004,6 +1108,18 @@ function renderDash(d) {
   const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
   const trendTotal = trend.reduce((s,r) => s + Number(r.contacts), 0);
   document.getElementById('statAvg').textContent = trend.length ? (trendTotal/trend.length).toFixed(1) : '0';
+  // % resolvido sem humano (30d): contatos únicos - contatos que foram encaminhados
+  try {
+    const rEl = document.getElementById('statResolved'), rDesc = document.getElementById('statResolvedDesc');
+    if (rEl) {
+      if (d.resolved_pct === null || d.resolved_pct === undefined || !Number(d.contacts_30d)) {
+        rEl.textContent = '–'; if (rDesc) rDesc.textContent = 'Resolvidos sem a equipe (sem dados ainda)';
+      } else {
+        rEl.textContent = Math.round(Number(d.resolved_pct)) + '%';
+        if (rDesc) rDesc.textContent = 'Resolvidos sem a equipe · ' + fmt(Math.max(0, Number(d.contacts_30d) - Number(d.handoff_contacts_30d||0))) + ' de ' + fmt(d.contacts_30d) + ' contatos (30 dias)';
+      }
+    }
+  } catch(e) {}
 
   // Última mensagem
   const lastMsgEl = document.getElementById('statLastMsg');

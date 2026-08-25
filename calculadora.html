@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora: quanto custa o "cadê meu pedido" na sua loja | Tyve</title>
+  <meta name="description" content="Descubra em 30 segundos quantas horas e quantos reais a sua loja gasta por mês respondendo 'cadê meu pedido' no WhatsApp, e quanto sobra com o pós-venda automático da Tyve." />
+  <link rel="canonical" href="https://tyve.com.br/calculadora" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />
+  <meta property="og:title" content="Quanto custa o 'cadê meu pedido' na sua loja?" />
+  <meta property="og:description" content="Calculadora gratuita: horas e reais gastos por mês com WISMO no WhatsApp da sua loja." />
+  <meta property="og:image" content="https://tyve.com.br/og-image-v4.png" />
+  <meta property="og:url" content="https://tyve.com.br/calculadora" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Medium.woff2') format('woff2'); font-weight:500; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight:600; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
+    @font-face { font-family:'Grift'; src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2'); font-weight:800; font-display:swap; }
+    :root {
+      --orange:#f84100; --dark:#111e1d; --beige:#f0ebe3; --teal:#00e8df; --light:#fff; --light2:#f6f6f6;
+      --txt:#111e1d; --txt-mid:#555; --txt-dim:#888; --font:'Grift','DM Sans',sans-serif;
+      --sh-1: 0 1px 2px rgba(20,10,0,.04), 0 6px 16px rgba(20,10,0,.06), 0 16px 30px rgba(20,10,0,.05);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--font); background:var(--light); color:var(--txt); -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+    .nav { height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid #eee; background:#fff; position:sticky; top:0; z-index:10; }
+    .nav img { height:26px; display:block; }
+    .nav a.back { font-size:14px; font-weight:600; color:var(--txt-mid); text-decoration:none; }
+    .nav a.back:hover { color:var(--orange); }
+    .wrap { max-width:1040px; margin:0 auto; padding:48px 20px 80px; }
+    .label { display:inline-block; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--orange); margin-bottom:12px; }
+    h1 { font-size:clamp(30px,4.6vw,46px); line-height:1.08; font-weight:800; letter-spacing:-.02em; max-width:760px; }
+    .sub { font-size:17px; color:var(--txt-mid); line-height:1.6; max-width:680px; margin:16px 0 40px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start; }
+    @media (max-width:820px) { .grid { grid-template-columns:1fr; } }
+    .card { background:#fff; border:1px solid #ececec; border-radius:18px; padding:28px; box-shadow:var(--sh-1); }
+    .card h2 { font-size:18px; font-weight:800; margin-bottom:18px; }
+    .field { margin-bottom:20px; }
+    .field label { display:block; font-size:14px; font-weight:700; margin-bottom:6px; }
+    .field .hint { font-size:12.5px; color:var(--txt-dim); margin-top:6px; line-height:1.45; }
+    .field input[type=number] { width:100%; font:inherit; font-size:18px; font-weight:700; padding:12px 14px; border:1.5px solid #ddd; border-radius:12px; outline:none; }
+    .field input[type=number]:focus { border-color:var(--orange); }
+    .row { display:flex; gap:14px; align-items:center; }
+    .row input[type=range] { flex:1; accent-color:var(--orange); }
+    .row .val { min-width:64px; text-align:right; font-weight:800; font-size:18px; }
+    .result { background:var(--dark); color:#fff; border-radius:18px; padding:28px; position:sticky; top:84px; }
+    .result h2 { font-size:14px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--teal); margin-bottom:18px; }
+    .big { font-size:clamp(38px,6vw,56px); font-weight:800; letter-spacing:-.03em; line-height:1; }
+    .big small { font-size:16px; font-weight:600; color:#cfd6d5; letter-spacing:0; margin-left:6px; }
+    .sub-r { color:#cfd6d5; font-size:14px; margin-top:6px; line-height:1.5; }
+    .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:24px 0; }
+    .stat { background:rgba(255,255,255,.06); border-radius:12px; padding:14px; }
+    .stat .n { font-size:24px; font-weight:800; }
+    .stat .l { font-size:12.5px; color:#b9c2c1; margin-top:2px; line-height:1.4; }
+    .plan { border:1px solid rgba(0,232,223,.35); background:rgba(0,232,223,.06); border-radius:12px; padding:14px 16px; font-size:14px; line-height:1.55; }
+    .plan b { color:var(--teal); }
+    .saving { margin-top:14px; font-size:15px; line-height:1.55; }
+    .saving b { font-size:20px; }
+    .cta { display:block; text-align:center; background:var(--orange); color:#fff; font-weight:800; font-size:16px; text-decoration:none; border-radius:100px; padding:16px 20px; margin-top:22px; transition:.15s; }
+    .cta:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    .cta2 { display:block; text-align:center; color:#cfd6d5; font-size:13.5px; text-decoration:underline; margin-top:12px; }
+    .note { font-size:12px; color:#9aa5a4; margin-top:18px; line-height:1.5; }
+    .how { margin-top:56px; }
+    .how h3 { font-size:22px; font-weight:800; margin-bottom:10px; }
+    .how p { color:var(--txt-mid); line-height:1.65; max-width:760px; margin-bottom:12px; }
+    footer { border-top:1px solid #eee; padding:24px 20px; text-align:center; font-size:12.5px; color:var(--txt-dim); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/"><img src="/assets/logo-tyve.svg" alt="Tyve" /></a>
+    <a class="back" href="/#planos">Ver planos →</a>
+  </nav>
+
+  <div class="wrap">
+    <span class="label">Calculadora gratuita</span>
+    <h1>Quanto custa o "cadê meu pedido" na sua loja?</h1>
+    <p class="sub">Coloque os números da sua loja e veja quantas horas por mês a sua equipe gasta respondendo status de pedido, rastreio e troca no WhatsApp, e quanto isso custa. Leva 30 segundos, não pede e-mail.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Os números da sua loja</h2>
+
+        <div class="field">
+          <label for="pedidos">Pedidos por mês</label>
+          <input type="number" id="pedidos" min="0" step="10" value="600" inputmode="numeric" />
+          <div class="hint">Média dos últimos 3 meses, contando todos os canais.</div>
+        </div>
+
+        <div class="field">
+          <label>Pedidos que geram mensagem no WhatsApp (status, rastreio, troca)</label>
+          <div class="row"><input type="range" id="pct" min="5" max="80" step="5" value="40" /><span class="val" id="pctVal">40%</span></div>
+          <div class="hint">Em loja de moda e calçado costuma ficar entre 30% e 50%. Ajuste pelo que você vê na sua caixa de entrada.</div>
+        </div>
+
+        <div class="field">
+          <label>Minutos gastos por atendimento</label>
+          <div class="row"><input type="range" id="min" min="2" max="20" step="1" value="7" /><span class="val" id="minVal">7 min</span></div>
+          <div class="hint">Abrir o pedido na plataforma, achar o rastreio, responder e voltar quando o cliente responde de novo.</div>
+        </div>
+
+        <div class="field">
+          <label for="hora">Custo da hora de quem atende (R$)</label>
+          <input type="number" id="hora" min="0" step="1" value="20" inputmode="numeric" />
+          <div class="hint">Salário mais encargos dividido pelas horas do mês. Se é você mesmo que responde, coloque quanto vale a sua hora.</div>
+        </div>
+      </div>
+
+      <div class="result" id="result">
+        <h2>O que a sua loja gasta hoje</h2>
+        <div class="big"><span id="custoMes">R$ 0</span><small>/mês</small></div>
+        <div class="sub-r">só respondendo "cadê meu pedido", rastreio e troca no WhatsApp. <span id="custoAno"></span> por ano.</div>
+
+        <div class="stats">
+          <div class="stat"><div class="n" id="msgs">0</div><div class="l">conversas de pós-venda por mês</div></div>
+          <div class="stat"><div class="n" id="horas">0h</div><div class="l">horas da equipe por mês</div></div>
+          <div class="stat"><div class="n" id="dias">0</div><div class="l">dias úteis de trabalho, só nisso</div></div>
+          <div class="stat"><div class="n">15s</div><div class="l">tempo de resposta com a Tyve, 24h por dia</div></div>
+        </div>
+
+        <div class="plan" id="planBox"></div>
+        <div class="saving" id="saving"></div>
+
+        <a class="cta" id="cta" href="#" target="_blank" rel="noopener">Quero isso automático na minha loja</a>
+        <a class="cta2" href="/#planos">Ver os planos e o que cada um inclui</a>
+        <div class="note">Estimativa com base nos números que você digitou. A Tyve consulta o pedido direto na sua loja (Shopify, Nuvemshop, Bling, Woo, Tiny) e responde na hora, sem inventar. O que foge do padrão vai pra sua equipe com resumo.</div>
+      </div>
+    </div>
+
+    <div class="how">
+      <h3>Como a conta é feita</h3>
+      <p><b>Conversas por mês</b> = pedidos × % que geram mensagem. <b>Horas</b> = conversas × minutos por atendimento ÷ 60. <b>Custo</b> = horas × custo da hora. O plano sugerido segue o número de contatos atendidos por mês: Atende até 250, Cresce até 600, Escala até 1.200.</p>
+      <p>O que a calculadora não mede, e pesa mais: o cliente que esperou 3 horas por um "já saiu, chega quinta" e não voltou a comprar. A Tyve responde em segundos, de madrugada e no domingo, com o rastreio real do pedido.</p>
+    </div>
+  </div>
+
+  <footer>Tyve · <a href="/">tyve.com.br</a> · <a href="/privacidade">Privacidade</a> · Tyve não é afiliada a Meta, Facebook ou WhatsApp.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const brl = n => 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+    const PLANS = [
+      { name:'Atende', limit:250,  price:497,  url:'/#planos' },
+      { name:'Cresce', limit:600,  price:797,  url:'/#planos' },
+      { name:'Escala', limit:1200, price:1097, url:'/#planos' }
+    ];
+    function calc() {
+      const pedidos = Math.max(0, +$('pedidos').value || 0);
+      const pct = +$('pct').value; const min = +$('min').value; const hora = Math.max(0, +$('hora').value || 0);
+      $('pctVal').textContent = pct + '%'; $('minVal').textContent = min + ' min';
+      const msgs = Math.round(pedidos * pct / 100);
+      const horas = msgs * min / 60;
+      const custo = horas * hora;
+      $('msgs').textContent = msgs.toLocaleString('pt-BR');
+      $('horas').textContent = (Math.round(horas * 10) / 10).toLocaleString('pt-BR') + 'h';
+      $('dias').textContent = (Math.round(horas / 8 * 10) / 10).toLocaleString('pt-BR');
+      $('custoMes').textContent = brl(custo);
+      $('custoAno').textContent = brl(custo * 12);
+      let plan = PLANS.find(p => msgs <= p.limit);
+      let planTxt;
+      if (!plan) {
+        planTxt = 'Com <b>' + msgs.toLocaleString('pt-BR') + ' contatos/mês</b> a sua loja entra no <b>Escala Enterprise</b>, sob medida. Fala com a gente.';
+        plan = { name:'Escala Enterprise', price:null };
+      } else {
+        planTxt = 'Para <b>' + msgs.toLocaleString('pt-BR') + ' contatos/mês</b> o plano indicado é o <b>' + plan.name + '</b> (' + brl(plan.price) + '/mês, até ' + plan.limit.toLocaleString('pt-BR') + ' contatos).';
+      }
+      $('planBox').innerHTML = planTxt;
+      if (plan.price) {
+        const diff = custo - plan.price;
+        $('saving').innerHTML = diff > 0
+          ? 'Sobram <b>' + brl(diff) + '/mês</b> (' + brl(diff * 12) + ' por ano) e ' + (Math.round(horas)).toLocaleString('pt-BR') + ' horas da equipe livres pra vender.'
+          : 'Neste volume a conta ainda não fecha só pelo custo de hora, mas a resposta em 15 segundos, 24h por dia, costuma valer mais que a economia. Fala com a gente e a gente olha o seu caso.';
+      } else { $('saving').innerHTML = ''; }
+      const msg = 'Oi! Fiz a calculadora no site: ' + pedidos + ' pedidos/mês, ' + msgs + ' contatos de pós-venda, ~' + Math.round(horas) + 'h/mês (' + brl(custo) + '). Quero saber mais sobre o plano ' + plan.name + '.';
+      $('cta').href = 'https://wa.me/5516994247541?text=' + encodeURIComponent(msg);
+    }
+    ['pedidos','pct','min','hora'].forEach(id => $(id).addEventListener('input', calc));
+    calc();
+  </script>
+</body>
+</html>

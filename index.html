@@ -439,6 +439,9 @@
   .faq { padding: 80px 0; background: var(--light); }
   .faq-header { text-align: center; margin-bottom: 40px; }
   .faq-list { max-width: 720px; margin: 0 auto; }
+  .plans-calc { text-align:center; margin-top:10px; font-size:14px; } .plans-calc a { color: var(--orange); font-weight:700; text-decoration:none; border-bottom:1.5px solid rgba(248,65,0,.35); } .plans-calc a:hover { border-bottom-color: var(--orange); }
+  .meta-ast { color: var(--orange, #f84100); font-weight: 800; text-decoration: none; margin-left: 2px; }
+  .ecom-meta-note { font-size: 12.5px; color: #6b6b6b; line-height: 1.55; max-width: 760px; margin: 18px auto 6px; text-align: center; }
   .faq-item { border-bottom: 1px solid #efefef; }
   .faq-question {
     width: 100%; background: none; border: none; text-align: left;
@@ -713,6 +716,7 @@
       <h2 class="section-title section-title-dark" data-i18n="plans_h2">Investimento direto. Resultado real.</h2>
       <p class="plans-sub" data-i18n="plans_sub">Menos de um terço do custo de um atendente, respondendo 24h, todo dia, sem férias.</p>
       <p class="plans-trust" data-i18n="plans_trust">⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias</p>
+      <p class="plans-calc"><a href="/calculadora" data-i18n="plans_calc">🧮 Quanto custa o "cadê meu pedido" na sua loja hoje? Calcule em 30 segundos</a></p>
     </div>
 
     <div class="biz-toggle" id="planos-ecommerce">
@@ -763,8 +767,8 @@
         <hr class="plan-divider"/>
         <ul class="plan-features">
           <li class="feature-all" data-i18n="cresce_all">Tudo do Atende</li>
-          <li data-i18n="cresce_f1">Follow-up automático no dia seguinte</li>
-          <li data-i18n="cresce_f2">Pesquisa de satisfação automática (NPS)</li>
+          <li data-i18n-html="cresce_f1">Follow-up automático no dia seguinte <a href="#nota-meta-serv" class="meta-ast">*</a></li>
+          <li data-i18n-html="cresce_f2">Pesquisa de satisfação automática (NPS) <a href="#nota-meta-serv" class="meta-ast">*</a></li>
           <li data-i18n="cresce_f3">1 ajuste por semana</li>
           <li data-i18n="cresce_f4">Resumo semanal por email</li>
           <li data-i18n="cresce_f5">O agente envia link da sua agenda</li>
@@ -808,6 +812,7 @@
         <p class="addon-note" data-i18n="addon_note1">Para Atende e Cresce</p>
       </div>
     </div>
+    <p class="ecom-meta-note" id="nota-meta-serv" data-i18n-html="serv_meta_note">* <b>Mensagens que o seu negócio inicia</b> (follow-up, pesquisa de satisfação, lembrete de agendamento) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp do negócio: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade, normalmente menos de R$ 30 por mês. A Tyve não cobra nada por elas. As respostas do agente na conversa não têm esse custo.</p>
     </div><!-- /grid-servicos -->
 
     <div id="grid-ecommerce">
@@ -852,8 +857,9 @@
           <ul class="plan-features">
             <li class="feature-all" data-i18n="cresce_all">Tudo do Atende</li>
             <li data-i18n="ecom_c_ftroca">⭐ Troca de numeração automática — o cliente resolve no WhatsApp 👟🔁</li>
-            <li data-i18n="ecom_c_f1">Follow-up automático no dia seguinte — reengaja quem conversou e sumiu</li>
-            <li data-i18n="ecom_c_f2">Pesquisa de satisfação automática (NPS)</li>
+            <li data-i18n-html="ecom_c_fship">📦 Aviso automático de pedido enviado, com rastreio <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
+            <li data-i18n-html="ecom_c_f1">Follow-up automático no dia seguinte — reengaja quem conversou e sumiu <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
+            <li data-i18n-html="ecom_c_f2">Pesquisa de satisfação automática (NPS) <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
             <li data-i18n="ecom_c_f3">O agente envia link de pagamento e orienta 2ª via</li>
             <li data-i18n="ecom_c_f4">Resumo semanal por email</li>
             <li data-i18n="ecom_c_f5">1 ajuste por semana</li>
@@ -872,6 +878,7 @@
           <ul class="plan-features">
             <li class="feature-all" data-i18n="escala_all">Tudo do Cresce</li>
             <li data-i18n="ecom_e_f2">⭐ Pix gerado dentro da conversa</li>
+            <li data-i18n-html="ecom_e_fship">📦 Avisos de pedido confirmado, enviado e entregue, no tom da sua loja <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
             <li data-i18n="ecom_e_f3">Painel de resultados + relatório mensal PDF</li>
             <li data-i18n="ecom_e_f4">Múltiplos fluxos e segmentações</li>
             <li data-i18n="ecom_e_f5">Reunião mensal · Gerente dedicado (retorno em até 2h)</li>
@@ -879,7 +886,8 @@
           <a href="/assinar/plano-escala" class="btn-plan" data-i18n="ecom_cta_e">Quero o Escala</a>
         </div>
       </div>
-      <p class="ecom-enterprise-note" data-i18n-html="ecom_enterprise">Passou do limite do plano? O atendimento não para — <b>R$ 0,50 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 35</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.</p>
+      <p class="ecom-meta-note" id="nota-meta" data-i18n-html="ecom_meta_note">* <b>Mensagens que a loja inicia</b> (aviso de pedido, follow-up, pesquisa de satisfação) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp da loja: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade (300 avisos de envio no mês ≈ R$ 12). A Tyve não cobra nada por elas e você liga e desliga cada uma quando quiser. As respostas do agente na conversa não têm esse custo.</p>
+      <p class="ecom-enterprise-note" data-i18n-html="ecom_enterprise">Passou do limite do plano? O atendimento não para — <b>R$ 0,50 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 45</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.</p>
     </div>
 
   </div>
@@ -1153,6 +1161,7 @@
       <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q6">O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a6">Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada.</p></div></div>
       <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q7">Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a7">Sem fidelidade. É mês a mês — cancela quando quiser, sem aviso prévio e sem multa. E você ainda tem 7 dias de garantia: se não gostar, devolvemos 100%.</p></div></div>
       <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q8">Precisa de WhatsApp Business? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a8">Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q8b">O que a Meta pede na hora de conectar o número? Preciso verificar minha empresa? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a8b">A conexão é feita numa janela oficial da Meta e leva uns 2 minutos, mas ela pede três coisas que vale deixar prontas: <b>(1)</b> um <b>Gerenciador de Negócios da Meta</b> (business.facebook.com) em nome da sua empresa, com você como administrador; <b>(2)</b> login numa <b>conta pessoal do Facebook</b> já existente, que seja admin desse Gerenciador; <b>(3)</b> uma página comercial no Facebook e um site com nome, CNPJ e endereço da empresa. A <b>verificação da empresa</b> (com CNPJ) não é obrigatória para ativar, mas sem ela a Meta limita o número a 250 conversas iniciadas por dia e não libera o selo. A gente te orienta em cada passo antes de você conectar.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q9">A Tyve funciona com a minha loja (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a9">Sim. A Tyve integra com Shopify, Nuvemshop, Bling, WooCommerce e Tiny. A conexão é em poucos cliques, com a sua autorização — você não troca de sistema nem instala nada complicado.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q10">A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a10">Sim, em todos os planos. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q11">A Tyve faz a troca sozinha? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a11">Nos planos Cresce e Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.</p></div></div>
@@ -1276,14 +1285,20 @@ var T = {
     ecom_a_f7:'Triagem e encaminhamento com resumo', ecom_a_fp:'Painel de resultados com link', ecom_a_f8:'Detecta clientes frustrados e prioriza ⚠️',
     ecom_a_f9:'1 ajuste por mês · Suporte (retorno em até 8h)',
     ecom_c_ftroca:'⭐ Troca de numeração automática — o cliente resolve no WhatsApp 👟🔁',
-    ecom_c_f1:'Follow-up automático no dia seguinte — reengaja quem conversou e sumiu',
-    ecom_c_f2:'Pesquisa de satisfação automática (NPS)', ecom_c_f3:'O agente envia link de pagamento e orienta 2ª via',
+    ecom_c_f1:'Follow-up automático no dia seguinte — reengaja quem conversou e sumiu <a href="#nota-meta" class="meta-ast">*</a>',
+    serv_meta_note:'* <b>Mensagens que o seu negócio inicia</b> (follow-up, pesquisa de satisfação, lembrete de agendamento) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp do negócio: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade, normalmente menos de R$ 30 por mês. A Tyve não cobra nada por elas. As respostas do agente na conversa não têm esse custo.',
+    plans_calc:'🧮 Quanto custa o "cadê meu pedido" na sua loja hoje? Calcule em 30 segundos',
+    faq_q8b:'O que a Meta pede na hora de conectar o número? Preciso verificar minha empresa? <span class="faq-icon">+</span>',
+    faq_a8b:'A conexão é feita numa janela oficial da Meta e leva uns 2 minutos, mas ela pede três coisas que vale deixar prontas: <b>(1)</b> um <b>Gerenciador de Negócios da Meta</b> (business.facebook.com) em nome da sua empresa, com você como administrador; <b>(2)</b> login numa <b>conta pessoal do Facebook</b> já existente, que seja admin desse Gerenciador; <b>(3)</b> uma página comercial no Facebook e um site com nome, CNPJ e endereço da empresa. A <b>verificação da empresa</b> (com CNPJ) não é obrigatória para ativar, mas sem ela a Meta limita o número a 250 conversas iniciadas por dia e não libera o selo. A gente te orienta em cada passo antes de você conectar.',
+    ecom_c_fship:'📦 Aviso automático de pedido enviado, com rastreio <a href="#nota-meta" class="meta-ast">*</a>', ecom_e_fship:'📦 Avisos de pedido confirmado, enviado e entregue, no tom da sua loja <a href="#nota-meta" class="meta-ast">*</a>',
+    ecom_meta_note:'* <b>Mensagens que a loja inicia</b> (aviso de pedido, follow-up, pesquisa de satisfação) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp da loja: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade (300 avisos de envio no mês ≈ R$ 12). A Tyve não cobra nada por elas e você liga e desliga cada uma quando quiser. As respostas do agente na conversa não têm esse custo.',
+    ecom_c_f2:'Pesquisa de satisfação automática (NPS) <a href="#nota-meta" class="meta-ast">*</a>', ecom_c_f3:'O agente envia link de pagamento e orienta 2ª via',
     ecom_c_f4:'Resumo semanal por email', ecom_c_f5:'1 ajuste por semana', ecom_c_f6:'Suporte prioritário (retorno em até 4h)',
     ecom_e_f1:'⭐ Troca de numeração automática — o cliente resolve a troca no WhatsApp 👟🔁',
     ecom_e_f2:'⭐ Pix gerado dentro da conversa', ecom_e_f3:'Painel de resultados + relatório mensal PDF',
     ecom_e_f4:'Múltiplos fluxos e segmentações', ecom_e_f5:'Reunião mensal · Gerente dedicado (retorno em até 2h)',
     ecom_cta_a:'Quero o Atende', ecom_cta_c:'Quero o Cresce', ecom_cta_e:'Quero o Escala',
-    ecom_enterprise:'Passou do limite do plano? O atendimento não para — <b>R$ 0,50 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 35</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.',
+    ecom_enterprise:'Passou do limite do plano? O atendimento não para — <b>R$ 0,50 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 45</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.',
     atende_tagline:'Até 200 contatos atendidos/mês',
     atende_f1:'1 número WhatsApp', atende_f2:'Fluxo configurado pro seu negócio',
     atende_f3:'Respostas automáticas 24h/7d', atende_f4:'Entende mensagens de texto, voz e imagens 🎙️📷',
@@ -1293,7 +1308,7 @@ var T = {
     atende_f9:'1 ajuste por mês', atende_f10:'Suporte via WhatsApp (retorno em até 8h)',
     atende_cta:'Assinar Atende',
     cresce_tagline:'Até 500 contatos atendidos/mês', cresce_all:'Tudo do Atende',
-    cresce_f1:'Follow-up automático no dia seguinte', cresce_f2:'Pesquisa de satisfação automática (NPS)',
+    cresce_f1:'Follow-up automático no dia seguinte <a href="#nota-meta-serv" class="meta-ast">*</a>', cresce_f2:'Pesquisa de satisfação automática (NPS) <a href="#nota-meta-serv" class="meta-ast">*</a>',
     cresce_f3:'1 ajuste por semana', cresce_f4:'Resumo semanal por email',
     cresce_f5:'O agente envia link da sua agenda', cresce_f6:'Suporte prioritário (retorno em até 4h)',
     cresce_cta:'Assinar Cresce',
@@ -1487,14 +1502,20 @@ var T = {
     ecom_a_f7:'Screening and handoff with a summary', ecom_a_fp:'Results dashboard via link', ecom_a_f8:'Detects frustrated customers and prioritizes them ⚠️',
     ecom_a_f9:'1 adjustment per month · Support (reply within 8h)',
     ecom_c_ftroca:'⭐ Automatic size exchange — the customer resolves it on WhatsApp 👟🔁',
-    ecom_c_f1:'Automatic next-day follow-up — re-engages shoppers who chatted and went quiet',
-    ecom_c_f2:'Automatic satisfaction survey (NPS)', ecom_c_f3:'The agent sends the payment link and guides re-issues',
+    ecom_c_f1:'Automatic next-day follow-up — re-engages shoppers who chatted and went quiet <a href="#nota-meta" class="meta-ast">*</a>',
+    serv_meta_note:'* <b>Messages your business initiates</b> (follow-up, satisfaction survey, appointment reminder) are billed by <b>Meta</b> directly to the business\'s WhatsApp account: about <b>R$ 0.04 per message</b> in the utility category, usually under R$ 30 a month. Tyve charges nothing for them. The agent\'s replies inside the conversation carry no such cost.',
+    plans_calc:'🧮 How much does "where is my order" cost your store today? Calculate in 30 seconds',
+    faq_q8b:'What does Meta ask for when connecting the number? Do I need to verify my business? <span class="faq-icon">+</span>',
+    faq_a8b:'The connection happens in an official Meta window and takes about 2 minutes, but it asks for three things worth having ready: <b>(1)</b> a <b>Meta Business Manager</b> (business.facebook.com) in your company\'s name, with you as admin; <b>(2)</b> login with an existing <b>personal Facebook account</b> that is an admin of that Business Manager; <b>(3)</b> a Facebook business page and a website showing the company name, tax ID and address. <b>Business verification</b> is not required to activate, but without it Meta caps the number at 250 business-initiated conversations per day and won\'t grant the badge. We guide you through each step before you connect.',
+    ecom_c_fship:'📦 Automatic "order shipped" notice with tracking <a href="#nota-meta" class="meta-ast">*</a>', ecom_e_fship:'📦 Order confirmed, shipped and delivered notices, in your store\'s tone <a href="#nota-meta" class="meta-ast">*</a>',
+    ecom_meta_note:'* <b>Store-initiated messages</b> (order notices, follow-up, satisfaction survey) are billed by <b>Meta</b> directly to the store\'s WhatsApp account: about <b>R$ 0.04 per message</b> in the utility category (300 shipping notices a month ≈ R$ 12). Tyve charges nothing for them and you can switch each one on or off. The agent\'s replies inside the conversation carry no such cost.',
+    ecom_c_f2:'Automatic satisfaction survey (NPS) <a href="#nota-meta" class="meta-ast">*</a>', ecom_c_f3:'The agent sends the payment link and guides re-issues',
     ecom_c_f4:'Weekly summary by email', ecom_c_f5:'1 adjustment per week', ecom_c_f6:'Priority support (reply within 4h)',
     ecom_e_f1:'⭐ Automatic size exchange \u2014 the customer resolves it on WhatsApp 👟🔁',
     ecom_e_f2:'⭐ Pix generated inside the conversation', ecom_e_f3:'Results dashboard + monthly PDF report',
     ecom_e_f4:'Multiple flows and segmentation', ecom_e_f5:'Monthly meeting · Dedicated manager (reply within 2h)',
     ecom_cta_a:'I want Atende', ecom_cta_c:'I want Cresce', ecom_cta_e:'I want Escala',
-    ecom_enterprise:'Over your plan limit? Service never stops \u2014 <b>R$ 0.50 per extra contact</b>, prorated. Prefer to prepay? <b>100-contact pack for R$ 35</b>. Very high, recurring volume? Talk to us: there is a tailor-made <b>Escala Enterprise</b>.',
+    ecom_enterprise:'Over your plan limit? Service never stops \u2014 <b>R$ 0.50 per extra contact</b>, prorated. Prefer to prepay? <b>100-contact pack for R$ 45</b>. Very high, recurring volume? Talk to us: there is a tailor-made <b>Escala Enterprise</b>.',
     atende_tagline:'Up to 200 contacts/month',
     atende_f1:'1 WhatsApp number', atende_f2:'Flow configured for your business',
     atende_f3:'Automatic responses 24/7', atende_f4:'Understands text, voice and image messages 🎙️📷',
@@ -1504,7 +1525,7 @@ var T = {
     atende_f9:'1 adjustment per month', atende_f10:'WhatsApp support (SLA 8h)',
     atende_cta:'Subscribe Atende',
     cresce_tagline:'Up to 500 contacts/month', cresce_all:'Everything in Atende',
-    cresce_f1:'Automatic next-day follow-up', cresce_f2:'Automatic satisfaction survey (NPS)',
+    cresce_f1:'Automatic next-day follow-up <a href="#nota-meta-serv" class="meta-ast">*</a>', cresce_f2:'Automatic satisfaction survey (NPS) <a href="#nota-meta-serv" class="meta-ast">*</a>',
     cresce_f3:'1 adjustment per week', cresce_f4:'Weekly email summary',
     cresce_f5:'Agent sends your booking link', cresce_f6:'Priority support (SLA 4h)',
     cresce_cta:'Subscribe Cresce',
