@@ -632,6 +632,15 @@
         </div>
       </div>
 
+      <!-- Mensagens que a loja inicia (opt-in) — 25/08/2026 -->
+      <div class="card" id="proactiveCard">
+        <div class="sec-label" style="margin-bottom:12px">Mensagens automáticas</div>
+        <div class="card-title">Mensagens que o seu negócio inicia</div>
+        <div class="card-sub">As respostas do agente não têm custo extra. As mensagens abaixo são iniciadas pelo seu negócio e por isso a <strong>Meta cobra cerca de R$ 0,04 cada</strong>, direto na sua conta do WhatsApp (categoria utilidade). A Tyve não cobra nada por elas. Ligue só o que quiser.</div>
+        <div id="proactiveList" style="margin-top:14px"></div>
+        <div id="proactiveNote" class="card-sub" style="margin-top:10px;display:none"></div>
+      </div>
+
       <!-- FAQ -->
       <div class="card">
         <div class="sec-label" style="margin-bottom:12px">Base de conhecimento</div>
@@ -1309,7 +1318,39 @@ function makeHourOptions(selected) {
 function renderConfig() {
   document.getElementById('hoursStart').innerHTML = makeHourOptions(CONFIG.hours_start ?? 8);
   document.getElementById('hoursEnd').innerHTML   = makeHourOptions(CONFIG.hours_end   ?? 18);
+  renderProactive();
   renderFAQ();
+}
+
+// ── Mensagens que o negócio inicia (opt-in) ─────────────────
+const PROACTIVE = [
+  { key:'order_notif_enabled', label:'📦 Aviso de pedido enviado, com rastreio', desc:'Assim que a loja despacha, o cliente recebe o código de rastreio. Reduz o "cadê meu pedido" antes de ele acontecer.', ecom:true, plans:['cresce','escala'] },
+  { key:'followup_d1_enabled', label:'🔁 Follow-up no dia seguinte', desc:'Quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu.', ecom:false, plans:['cresce','escala'] },
+  { key:'nps_enabled', label:'⭐ Pesquisa de satisfação (0 a 10)', desc:'Enviada no dia seguinte a cada atendimento da equipe. As notas aparecem na aba Resultados.', ecom:false, plans:['cresce','escala'] },
+];
+function renderProactive() {
+  const box = document.getElementById('proactiveList'), note = document.getElementById('proactiveNote'); if (!box) return;
+  const plan = String(CONFIG.plan || '').toLowerCase();
+  const ecom = String(CONFIG.order_lookup_enabled||'') === 'true' || String(CONFIG.exchange_enabled||'') === 'true';
+  const items = PROACTIVE.filter(p => (!p.ecom || ecom));
+  const allowed = items.filter(p => p.plans.includes(plan));
+  if (!allowed.length) {
+    box.innerHTML = '';
+    note.style.display = ''; note.innerHTML = 'No plano <strong>Atende</strong> o agente só responde; as mensagens automáticas (aviso de pedido, follow-up, pesquisa) fazem parte do <strong>Cresce</strong> e do <strong>Escala</strong>. Quer ativar? <a href="https://wa.me/5516994247541?text=Quero+ativar+as+mensagens+autom%C3%A1ticas+na+minha+loja" target="_blank" rel="noopener">Fala com a gente</a>.';
+    return;
+  }
+  note.style.display = 'none';
+  box.innerHTML = allowed.map(p => {
+    const on = String(CONFIG[p.key]||'') === 'true';
+    return '<div class="faq-item" style="padding:10px 0"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div></div></div></div>';
+  }).join('');
+}
+async function toggleProactive(key, on, el) {
+  try {
+    const r = await postJSON(CFG_SAVE, {token:TOKEN, key:key, value: on ? 'true' : 'false'});
+    if (r && r.ok) { CONFIG[key] = on ? 'true' : 'false'; toast(on ? 'Ativado. A cobrança da Meta vale a partir de agora.' : 'Desativado.'); }
+    else { el.checked = !on; toast('Não foi possível salvar', false); }
+  } catch(e) { el.checked = !on; toast('Erro de conexão', false); }
 }
 
 async function saveHours() {

@@ -1096,6 +1096,38 @@
       </div>
     </div>
 
+    <!-- ── SEÇÃO OPT-IN (mensagens que a loja inicia) — 25/08/2026 ── -->
+    <div class="section-card" id="sec-optin" data-sec="8b" data-biz="both" data-plan="cresce,escala">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-head-left">
+          <div class="section-num">8</div>
+          <div>
+            <div class="section-title">Mensagens que o seu negócio inicia</div>
+            <div class="section-subtitle">Opcionais do seu plano. Você liga só o que quiser.</div>
+          </div>
+        </div>
+        <span class="section-chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-box blue">
+          <strong>Como funciona a cobrança:</strong> as respostas do agente aos seus clientes não têm custo extra. Já as mensagens que <strong>o seu negócio inicia</strong> (o cliente não mandou nada antes) são cobradas pela <strong>Meta</strong>, direto na conta do WhatsApp do seu negócio, na categoria "utilidade": cerca de <strong>R$ 0,04 por mensagem</strong>. A Tyve não cobra nada por elas. Exemplo: 300 avisos de pedido enviado no mês ≈ R$ 12. Para usar, você cadastra um cartão na sua conta da Meta (a gente orienta). Pode ligar ou desligar cada uma depois, no painel.
+        </div>
+        <div class="question">
+          <label class="q-label">Quais dessas você quer ativar? <span style="font-weight:500;color:#888">(opcional)</span></label>
+          <div class="checkbox-group" id="cg-optin">
+            <label class="check-item" data-biz-q="ecommerce"><input type="checkbox" name="optin_order_notif" value="sim" /><div class="check-box"></div><span class="check-label">📦 <strong>Aviso de pedido enviado, com rastreio</strong>: assim que a loja despacha, o cliente recebe o código. É o que mais reduz o "cadê meu pedido". <em>(incluso no Cresce e no Escala)</em></span></label>
+            <label class="check-item" data-biz-q="ecommerce" data-plan-q="escala"><input type="checkbox" name="optin_order_delivered" value="sim" /><div class="check-box"></div><span class="check-label">✅ <strong>Aviso de pedido entregue</strong>: quando a transportadora confirma a entrega. <em>(só no Escala)</em></span></label>
+            <label class="check-item"><input type="checkbox" name="optin_followup" value="sim" /><div class="check-box"></div><span class="check-label">🔁 <strong>Follow-up no dia seguinte</strong>: quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu. <em>(incluso no Cresce e no Escala)</em></span></label>
+            <label class="check-item"><input type="checkbox" name="optin_nps" value="sim" /><div class="check-box"></div><span class="check-label">⭐ <strong>Pesquisa de satisfação (nota de 0 a 10)</strong>: enviada no dia seguinte a cada atendimento da equipe. As notas aparecem no seu painel. <em>(incluso no Cresce e no Escala)</em></span></label>
+          </div>
+          <p class="q-hint">Deixou tudo desmarcado? Sem problema: o agente continua respondendo normalmente, só não manda mensagem por conta própria. Dá pra ativar depois.</p>
+        </div>
+        <div class="section-footer">
+          <button type="button" class="btn-next" onclick="nextSection(this)">Próxima seção →</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── SEÇÃO 9 ── -->
     <div class="section-card" id="sec-9" data-sec="9" data-biz="both">
       <div class="section-head" onclick="toggleSection(this)">
@@ -1274,6 +1306,12 @@
     // Perguntas/blocos com gating de plano dentro de seções visíveis
     document.querySelectorAll('[data-plan-q]').forEach(q => {
       q.style.display = planAllowed(q.dataset.planQ) ? '' : 'none';
+    });
+    // Perguntas com gating por tipo de negócio (data-biz-q) — combinado com o gating de plano
+    document.querySelectorAll('[data-biz-q]').forEach(q => {
+      const bizOk = q.dataset.bizQ === businessType;
+      const planOk = q.dataset.planQ ? planAllowed(q.dataset.planQ) : true;
+      q.style.display = (bizOk && planOk) ? '' : 'none';
     });
     // Recalcula estado das seções visíveis
     sectionState = {};
@@ -1545,6 +1583,10 @@
         responsavel_grupo:     fields.responsavel_grupo || '',
         exemplos_mensagens:    fields.exemplos_mensagens || '',
         situacao_chip:         fields.situacao_chip || '',
+        optin_order_notif:     fields.optin_order_notif || '',
+        optin_order_delivered: fields.optin_order_delivered || '',
+        optin_followup:        fields.optin_followup || '',
+        optin_nps:             fields.optin_nps || '',
         meta_business_status:  fields.meta_business_status || '',
         meta_fb_admin:         fields.meta_fb_admin || '',
         plano_contratado:      fields.plano_contratado || '',

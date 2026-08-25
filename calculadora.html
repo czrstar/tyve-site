@@ -106,6 +106,12 @@
         </div>
 
         <div class="field">
+          <label for="ticket">Ticket médio (R$)</label>
+          <input type="number" id="ticket" min="0" step="10" value="150" inputmode="numeric" />
+          <div class="hint">Usado só na estimativa de vendas salvas (clientes que não pediriam reembolso nem sumiriam com resposta em segundos).</div>
+        </div>
+
+        <div class="field">
           <label for="hora">Custo da hora de quem atende (R$)</label>
           <input type="number" id="hora" min="0" step="1" value="20" inputmode="numeric" />
           <div class="hint">Salário mais encargos dividido pelas horas do mês. Se é você mesmo que responde, coloque quanto vale a sua hora.</div>
@@ -121,7 +127,7 @@
           <div class="stat"><div class="n" id="msgs">0</div><div class="l">conversas de pós-venda por mês</div></div>
           <div class="stat"><div class="n" id="horas">0h</div><div class="l">horas da equipe por mês</div></div>
           <div class="stat"><div class="n" id="dias">0</div><div class="l">dias úteis de trabalho, só nisso</div></div>
-          <div class="stat"><div class="n">15s</div><div class="l">tempo de resposta com a Tyve, 24h por dia</div></div>
+          <div class="stat"><div class="n" id="salvas">R$ 0</div><div class="l">em vendas salvas por mês (estimativa: ~3% dos pedidos × ticket)</div></div>
         </div>
 
         <div class="plan" id="planBox"></div>
@@ -135,7 +141,7 @@
 
     <div class="how">
       <h3>Como a conta é feita</h3>
-      <p><b>Conversas por mês</b> = pedidos × % que geram mensagem. <b>Horas</b> = conversas × minutos por atendimento ÷ 60. <b>Custo</b> = horas × custo da hora. O plano sugerido segue o número de contatos atendidos por mês: Atende até 250, Cresce até 600, Escala até 1.200.</p>
+      <p><b>Conversas por mês</b> = pedidos × % que geram mensagem. <b>Horas</b> = conversas × minutos por atendimento ÷ 60. <b>Custo</b> = horas × custo da hora. <b>Vendas salvas</b> = 3% dos pedidos × ticket médio (estimativa conservadora de clientes que, com resposta em segundos, não pedem reembolso nem somem). O plano sugerido segue o número de contatos atendidos por mês: Atende até 250, Cresce até 600, Escala até 1.200.</p>
       <p>O que a calculadora não mede, e pesa mais: o cliente que esperou 3 horas por um "já saiu, chega quinta" e não voltou a comprar. A Tyve responde em segundos, de madrugada e no domingo, com o rastreio real do pedido.</p>
     </div>
   </div>
@@ -152,7 +158,7 @@
     ];
     function calc() {
       const pedidos = Math.max(0, +$('pedidos').value || 0);
-      const pct = +$('pct').value; const min = +$('min').value; const hora = Math.max(0, +$('hora').value || 0);
+      const pct = +$('pct').value; const min = +$('min').value; const hora = Math.max(0, +$('hora').value || 0); const ticket = Math.max(0, +$('ticket').value || 0);
       $('pctVal').textContent = pct + '%'; $('minVal').textContent = min + ' min';
       const msgs = Math.round(pedidos * pct / 100);
       const horas = msgs * min / 60;
@@ -162,6 +168,8 @@
       $('dias').textContent = (Math.round(horas / 8 * 10) / 10).toLocaleString('pt-BR');
       $('custoMes').textContent = brl(custo);
       $('custoAno').textContent = brl(custo * 12);
+      const salvas = Math.max(0, Math.round(pedidos * 0.03)) * ticket;
+      $('salvas').textContent = brl(salvas);
       let plan = PLANS.find(p => msgs <= p.limit);
       let planTxt;
       if (!plan) {
@@ -172,15 +180,15 @@
       }
       $('planBox').innerHTML = planTxt;
       if (plan.price) {
-        const diff = custo - plan.price;
+        const diff = custo + salvas - plan.price;
         $('saving').innerHTML = diff > 0
-          ? 'Sobram <b>' + brl(diff) + '/mês</b> (' + brl(diff * 12) + ' por ano) e ' + (Math.round(horas)).toLocaleString('pt-BR') + ' horas da equipe livres pra vender.'
+          ? 'Somando o custo de hora e as vendas salvas, sobram <b>' + brl(diff) + '/mês</b> (' + brl(diff * 12) + ' por ano) depois de pagar o plano, mais ' + (Math.round(horas)).toLocaleString('pt-BR') + ' horas da equipe livres pra vender.'
           : 'Neste volume a conta ainda não fecha só pelo custo de hora, mas a resposta em 15 segundos, 24h por dia, costuma valer mais que a economia. Fala com a gente e a gente olha o seu caso.';
       } else { $('saving').innerHTML = ''; }
       const msg = 'Oi! Fiz a calculadora no site: ' + pedidos + ' pedidos/mês, ' + msgs + ' contatos de pós-venda, ~' + Math.round(horas) + 'h/mês (' + brl(custo) + '). Quero saber mais sobre o plano ' + plan.name + '.';
       $('cta').href = 'https://wa.me/5516994247541?text=' + encodeURIComponent(msg);
     }
-    ['pedidos','pct','min','hora'].forEach(id => $(id).addEventListener('input', calc));
+    ['pedidos','pct','min','hora','ticket'].forEach(id => $(id).addEventListener('input', calc));
     calc();
   </script>
 </body>
