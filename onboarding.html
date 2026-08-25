@@ -1111,6 +1111,10 @@
       <div class="section-body">
         <div class="info-box blue">
           <strong>Como funciona a cobrança:</strong> as respostas do agente aos seus clientes não têm custo extra. Já as mensagens que <strong>o seu negócio inicia</strong> (o cliente não mandou nada antes) são cobradas pela <strong>Meta</strong>, direto na conta do WhatsApp do seu negócio, na categoria "utilidade": cerca de <strong>R$ 0,04 por mensagem</strong>. A Tyve não cobra nada por elas. Exemplo: 300 avisos de pedido enviado no mês ≈ R$ 12. Para usar, você cadastra um cartão na sua conta da Meta (a gente orienta). Pode ligar ou desligar cada uma depois, no painel.
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.08)">
+            <strong>Já incluso e sem opção de desligar:</strong> o <strong>aviso de encaminhamento para a sua equipe</strong> (quando o agente passa uma conversa pra vocês, o responsável recebe uma mensagem no WhatsApp com o resumo e os botões de liberar/manter). Ela também é iniciada pelo seu número, então a Meta cobra os mesmos ~R$ 0,04 por encaminhamento.<br>
+            <strong>Aviso para o futuro:</strong> a Meta anunciou que, a partir de <strong>01/10/2026</strong>, passa a cobrar também as respostas normais do agente dentro da conversa, na faixa de R$ 0,04 por mensagem, na conta do seu negócio. A Tyve continua sem cobrar nada por mensagem. Vamos avisar por e-mail quando a tarifa oficial sair.
+          </div>
         </div>
         <div class="question">
           <label class="q-label">Quais dessas você quer ativar? <span style="font-weight:500;color:#888">(opcional)</span></label>
@@ -1119,6 +1123,8 @@
             <label class="check-item" data-biz-q="ecommerce" data-plan-q="escala"><input type="checkbox" name="optin_order_delivered" value="sim" /><div class="check-box"></div><span class="check-label">✅ <strong>Aviso de pedido entregue</strong>: quando a transportadora confirma a entrega. <em>(só no Escala)</em></span></label>
             <label class="check-item"><input type="checkbox" name="optin_followup" value="sim" /><div class="check-box"></div><span class="check-label">🔁 <strong>Follow-up no dia seguinte</strong>: quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu. <em>(incluso no Cresce e no Escala)</em></span></label>
             <label class="check-item"><input type="checkbox" name="optin_nps" value="sim" /><div class="check-box"></div><span class="check-label">⭐ <strong>Pesquisa de satisfação (nota de 0 a 10)</strong>: enviada no dia seguinte a cada atendimento da equipe. As notas aparecem no seu painel. <em>(incluso no Cresce e no Escala)</em></span></label>
+            <label class="check-item" data-biz-q="servico"><input type="checkbox" name="optin_reminder" value="sim" /><div class="check-box"></div><span class="check-label">📅 <strong>Lembrete do agendamento na véspera</strong>: quem marcou horário recebe um lembrete no dia anterior, às 19h. Reduz falta. <em>(só com o adicional de agendamento ou no Escala)</em></span></label>
+            <label class="check-item"><input type="checkbox" name="optin_weekly_report" value="sim" checked /><div class="check-box"></div><span class="check-label">📧 <strong>Resumo semanal por e-mail</strong>: contatos, encaminhamentos e pedidos consultados na semana. <em>Sem custo (é e-mail, não WhatsApp).</em></span></label>
           </div>
           <p class="q-hint">Deixou tudo desmarcado? Sem problema: o agente continua respondendo normalmente, só não manda mensagem por conta própria. Dá pra ativar depois.</p>
         </div>
@@ -1587,6 +1593,8 @@
         optin_order_delivered: fields.optin_order_delivered || '',
         optin_followup:        fields.optin_followup || '',
         optin_nps:             fields.optin_nps || '',
+        optin_reminder:        fields.optin_reminder || '',
+        optin_weekly_report:   fields.optin_weekly_report || '',
         meta_business_status:  fields.meta_business_status || '',
         meta_fb_admin:         fields.meta_fb_admin || '',
         plano_contratado:      fields.plano_contratado || '',

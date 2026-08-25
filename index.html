@@ -1127,11 +1127,11 @@
           <span class="roi-slider-value" id="roiTicketValue">150</span>
         </div>
         <div class="roi-results">
-          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c1_label">"Cadê meu pedido?" por mês</span><span class="roi-card-value" id="roiManual">360</span><span class="roi-card-detail" data-i18n="roi_c1_detail">o agente responde na hora, com rastreio real</span></div>
-          <div class="roi-card roi-card-highlight"><span class="roi-card-label" data-i18n="roi_c2_label">Vendas salvas por mês</span><span class="roi-card-value" id="roiSaved">9</span><span class="roi-card-detail" data-i18n="roi_c2_detail">~3% dos pedidos que virariam reembolso ou cliente perdido</span></div>
-          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c3_label">Recuperado por mês</span><span class="roi-card-value" id="roiDays">R$1.350</span><span class="roi-card-detail" data-i18n="roi_c3_detail">vendas salvas × seu ticket médio</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c1_label">"Cadê meu pedido?" por mês</span><span class="roi-card-value" id="roiManual">240</span><span class="roi-card-detail" data-i18n="roi_c1_detail">o agente responde na hora, com rastreio real</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c2_label">Horas da equipe por mês</span><span class="roi-card-value" id="roiSaved">28h</span><span class="roi-card-detail" data-i18n="roi_c2_detail">~3% dos pedidos que virariam reembolso ou cliente perdido</span></div>
+          <div class="roi-card roi-card-highlight"><span class="roi-card-label" data-i18n="roi_c3_label">Custo + vendas salvas por mês</span><span class="roi-card-value" id="roiDays">R$3.260</span><span class="roi-card-detail" data-i18n="roi_c3_detail">vendas salvas × seu ticket médio</span></div>
         </div>
-        <p class="roi-bonus" id="roiBonus">São <strong id="roiSavedText">R$1.350</strong> em vendas que ficam na sua loja por mês — sem contar as trocas convertidas em vez de reembolso e o atendimento 24h.</p>
+        <p class="roi-bonus" id="roiBonus">São <strong id="roiSavedText">R$3.260</strong> por mês entre horas da equipe e vendas salvas, e o plano indicado é o <strong>Atende</strong>.</p>
         <p class="roi-footnote" data-i18n="roi_footnote">Estimativa ilustrativa. Cada loja varia conforme volume, nicho e ticket.</p>
         <p class="roi-footnote" style="margin-top:6px"><a href="/calculadora" data-i18n="roi_full" style="color:var(--orange);font-weight:700;text-decoration:none;border-bottom:1.5px solid rgba(248,65,0,.35)">Ver a conta completa: horas da equipe, custo por mês e o plano certo pra sua loja →</a></p>
       </div>
@@ -1397,12 +1397,12 @@ var T = {
     roi_sub:'Uma estimativa de quanto o pós-venda automático mantém em vendas na sua loja.',
     roi_input_label:'Pedidos por mês', roi_ticket_label:'Ticket médio (R$)',
     roi_hint1:'50', roi_hint2:'Loja média: ~300', roi_hint3:'2.000',
-    roi_c1_label:'"Cadê meu pedido?" por mês', roi_c1_detail:'o agente responde na hora, com rastreio real',
-    roi_c2_label:'Vendas salvas por mês', roi_c2_detail:'~3% dos pedidos que virariam reembolso ou cliente perdido',
-    roi_c3_label:'Recuperado por mês', roi_c3_detail:'vendas salvas × seu ticket médio',
+    roi_c1_label:'"Cadê meu pedido?" por mês', roi_c1_detail:'~40% dos pedidos geram contato; o agente responde na hora, com rastreio real',
+    roi_c2_label:'Horas da equipe por mês', roi_c2_detail:'~7 min por contato; a R$ 20/h vira o custo abaixo',
+    roi_c3_label:'Custo + vendas salvas por mês', roi_c3_detail:'horas × R$ 20 + ~3% dos pedidos × ticket (estimativa)',
     roi_footnote:'Estimativa ilustrativa. Cada loja varia conforme volume, nicho e ticket.',
     roi_unit_days:' dias',
-    roi_bonus_pre:'São ', roi_bonus_mid:' horas', roi_bonus_post:' em vendas que ficam na sua loja por mês — sem contar as trocas convertidas em vez de reembolso e o atendimento 24h.',
+    roi_bonus_pre:'São ', roi_bonus_mid:' e o plano indicado é o ', roi_bonus_post:' por mês entre horas da equipe e vendas salvas',
     faq_label:'Dúvidas', faq_h2:'Perguntas frequentes',
     faq_q1:'Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span>',
     faq_a1:'Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.',
@@ -1616,12 +1616,12 @@ var T = {
     roi_sub:'An estimate of how much automatic post-sale keeps in sales at your store.',
     roi_input_label:'Orders per month', roi_ticket_label:'Average ticket (R$)',
     roi_hint1:'50', roi_hint2:'Average store: ~300', roi_hint3:'2,000',
-    roi_c1_label:'"Where is my order?" per month', roi_c1_detail:'the agent answers instantly, with real tracking',
-    roi_c2_label:'Sales saved per month', roi_c2_detail:'~3% of orders that would become a refund or a lost customer',
-    roi_c3_label:'Recovered per month', roi_c3_detail:'sales saved × your average ticket',
+    roi_c1_label:'"Where is my order?" per month', roi_c1_detail:'~40% of orders generate a contact; the agent answers instantly, with real tracking',
+    roi_c2_label:'Team hours per month', roi_c2_detail:'~7 min per contact; at R$ 20/h it becomes the cost below',
+    roi_c3_label:'Cost + saved sales per month', roi_c3_detail:'hours × R$ 20 + ~3% of orders × ticket (estimate)',
     roi_footnote:'Illustrative estimate. Each store varies by volume, niche and ticket.',
     roi_unit_days:' days',
-    roi_bonus_pre:'That is ', roi_bonus_mid:' hours', roi_bonus_post:' in sales that stay at your store each month — not counting exchanges converted instead of refunds and 24/7 service.',
+    roi_bonus_pre:'That is ', roi_bonus_mid:' and the suggested plan is ', roi_bonus_post:' per month between team hours and saved sales',
     faq_label:'Questions', faq_h2:'Frequently asked questions',
     faq_q1:'Will my customers notice it\'s an AI agent? <span class="faq-icon">+</span>',
     faq_a1:'Most of the time, no. The agent is configured with your business\'s tone and language — it reads the message, understands the context and responds naturally. When personalized attention is needed, it hands the conversation to your team with a complete summary of everything that happened.',
@@ -1738,20 +1738,24 @@ function showSlide(i) {
 var rs = document.getElementById('roiSlider');
 var rt = document.getElementById('roiTicket');
 function calcROI() {
+  // Mesma conta de /calculadora: 40% dos pedidos geram contato, 7 min por contato, R$20/h, vendas salvas = 3% x ticket
   var ped = parseInt(rs.value);
   var tk = rt ? parseInt(rt.value) : 150;
   document.getElementById('roiValue').textContent = ped;
   if (rt) document.getElementById('roiTicketValue').textContent = tk;
-  var perguntas = Math.round(ped*0.4); // (25/08) 40% dos pedidos geram contato; antes era 120%, sem base
-  var vendas = Math.max(1, Math.round(ped*0.03));
-  var recuperado = vendas*tk;
+  var contatos = Math.round(ped*0.4);
+  var horas = contatos*7/60;
+  var custo = horas*20;
+  var salvas = Math.round(ped*0.03)*tk;
+  var total = Math.round(custo + salvas);
+  var plano = contatos <= 250 ? 'Atende' : contatos <= 600 ? 'Cresce' : contatos <= 1200 ? 'Escala' : 'Escala Enterprise';
   var L = T[currentLang];
-  var fmt = 'R$' + recuperado.toLocaleString('pt-BR');
-  document.getElementById('roiManual').textContent = perguntas;
-  document.getElementById('roiSaved').textContent = vendas;
+  var fmt = 'R$' + total.toLocaleString('pt-BR');
+  document.getElementById('roiManual').textContent = contatos.toLocaleString('pt-BR');
+  document.getElementById('roiSaved').textContent = (Math.round(horas*10)/10).toLocaleString('pt-BR') + 'h';
   document.getElementById('roiDays').textContent = fmt;
   var bonus = document.getElementById('roiBonus');
-  if (bonus) bonus.innerHTML = L.roi_bonus_pre + '<strong>' + fmt + '</strong>' + L.roi_bonus_post;
+  if (bonus) bonus.innerHTML = L.roi_bonus_pre + '<strong>' + fmt + '</strong>' + L.roi_bonus_post + L.roi_bonus_mid + '<strong>' + plano + '</strong>.';
 }
 if (rs) { rs.addEventListener('input', calcROI); if (rt) rt.addEventListener('input', calcROI); calcROI(); }
 
