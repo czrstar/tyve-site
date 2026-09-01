@@ -684,6 +684,11 @@
             <label>Resposta</label>
             <textarea id="newA" placeholder="Ex: Atendemos de segunda a sexta, das 8h às 18h."></textarea>
           </div>
+          <div class="add-field">
+            <label>Anexo em PDF (opcional) — o bot envia o arquivo junto com a resposta</label>
+            <input type="url" id="newFileUrl" placeholder="https://... (link público do PDF: cardápio, tabela de medidas, ficha)" />
+            <input type="text" id="newFileName" placeholder="Nome do arquivo (ex.: Cardapio.pdf)" style="margin-top:6px" />
+          </div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary btn-sm" onclick="saveFAQ()">Salvar</button>
             <button class="btn btn-ghost btn-sm" onclick="toggleAddForm()">Cancelar</button>
@@ -1454,7 +1459,7 @@ function renderFAQ() {
           <span class="toggle-slider"></span>
         </label>
         <div class="faq-content">
-          <div class="faq-q" id="faq-q-${f.id}">${esc(f.question)}</div>
+          <div class="faq-q" id="faq-q-${f.id}">${esc(f.question)}${f.file_url?' <span title="Envia um PDF junto com a resposta: '+esc(f.file_name||'arquivo')+'">📎</span>':''}</div>
           <div class="faq-a" id="faq-a-${f.id}">${esc(f.answer)}</div>
           ${f.tags&&f.tags.length?'<div class="faq-tags">'+f.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')+'</div>':''}
         </div>
@@ -1528,7 +1533,8 @@ async function saveEdit(id) {
   const a = document.getElementById('ea-'+id).value.trim();
   if (!q||!a) { toast('Preencha pergunta e resposta',false); return; }
   try {
-    const d = await postJSON(FAQ_EDIT, {token:TOKEN, id, question:q, answer:a});
+    const _f = FAQ.find(x=>x.id===id) || {};
+    const d = await postJSON(FAQ_EDIT, {token:TOKEN, id, question:q, answer:a, file_url:_f.file_url||'', file_name:_f.file_name||''});
     if (d.ok && d.entry) {
       const f = FAQ.find(x=>x.id===id);
       if (f) { f.question=q; f.answer=a; }
@@ -1554,9 +1560,13 @@ async function saveFAQ() {
   const a = document.getElementById('newA').value.trim();
   if (!q||!a) { toast('Preencha pergunta e resposta',false); return; }
   try {
-    const d = await postJSON(FAQ_SAVE, {token:TOKEN, question:q, answer:a});
+    const fu = (document.getElementById('newFileUrl')?.value || '').trim();
+    const fn = (document.getElementById('newFileName')?.value || '').trim();
+    if (fu && !/^https:\/\//.test(fu)) { toast('O link do PDF precisa começar com https://', false); return; }
+    const d = await postJSON(FAQ_SAVE, {token:TOKEN, question:q, answer:a, file_url:fu, file_name:fn});
     if (d.ok && d.entry) {
-      FAQ.push({id:d.entry.id, question:q, answer:a, enabled:true});
+      FAQ.push({id:d.entry.id, question:q, answer:a, enabled:true, file_url:fu||null, file_name:fn||null});
+      if (document.getElementById('newFileUrl')) { document.getElementById('newFileUrl').value=''; document.getElementById('newFileName').value=''; }
       renderFAQ();
       toggleAddForm();
       toast('Pergunta adicionada');
