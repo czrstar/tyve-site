@@ -1472,6 +1472,11 @@ function renderFAQ() {
       <div class="faq-edit-form" id="edit-${f.id}">
         <div class="edit-field"><label>Pergunta</label><input type="text" id="eq-${f.id}" value="${esc(f.question)}" /></div>
         <div class="edit-field"><label>Resposta</label><textarea id="ea-${f.id}">${esc(f.answer)}</textarea></div>
+        <div class="edit-field"><label>Anexo em PDF (opcional)</label>
+          <input type="url" id="ef-url-${f.id}" value="${esc(f.file_url||'')}" placeholder="https://... (link público do PDF)" />
+          <input type="text" id="ef-name-${f.id}" value="${esc(f.file_name||'')}" placeholder="Nome do arquivo (ex.: Cardapio.pdf)" style="margin-top:6px" />
+          <div style="font-size:12px;color:var(--muted);line-height:1.55;margin-top:7px">Apague o link para <strong>remover</strong> o anexo. O link precisa ser público e direto para o arquivo — links de "visualizar" do Drive ou Dropbox não funcionam.</div>
+        </div>
         <div class="edit-actions">
           <button class="btn btn-primary btn-sm" onclick="saveEdit(${f.id})">Salvar</button>
           <button class="btn btn-ghost btn-sm" onclick="closeEdit(${f.id})">Cancelar</button>
@@ -1535,12 +1540,20 @@ async function saveEdit(id) {
   if (!q||!a) { toast('Preencha pergunta e resposta',false); return; }
   try {
     const _f = FAQ.find(x=>x.id===id) || {};
-    const d = await postJSON(FAQ_EDIT, {token:TOKEN, id, question:q, answer:a, file_url:_f.file_url||'', file_name:_f.file_name||''});
+    // (01/09) anexo editável: campo vazio remove (a API faz NULLIF), preenchido troca.
+    const _eu = document.getElementById('ef-url-'+id);
+    const _en = document.getElementById('ef-name-'+id);
+    const fu = _eu ? _eu.value.trim() : (_f.file_url||'');
+    let fn = _en ? _en.value.trim() : (_f.file_name||'');
+    if (fu && !/^https:\/\//.test(fu)) { toast('O link do PDF precisa começar com https://', false); return; }
+    if (fu && !fn) fn = 'arquivo.pdf';
+    if (!fu) fn = '';
+    const d = await postJSON(FAQ_EDIT, {token:TOKEN, id, question:q, answer:a, file_url:fu, file_name:fn});
     if (d.ok && d.entry) {
       const f = FAQ.find(x=>x.id===id);
-      if (f) { f.question=q; f.answer=a; }
+      if (f) { f.question=q; f.answer=a; f.file_url=fu||null; f.file_name=fn||null; }
       // (01/09) innerHTML + chip: textContent apagava o 📎 do anexo depois de editar (o anexo continuava no banco, mas sumia da tela)
-      document.getElementById('faq-q-'+id).innerHTML = esc(q) + (_f.file_url ? ' <span title="Envia um PDF junto com a resposta: '+esc(_f.file_name||'arquivo')+'">\uD83D\uDCCE</span>' : '');
+      document.getElementById('faq-q-'+id).innerHTML = esc(q) + (fu ? ' <span title="Envia um PDF junto com a resposta: '+esc(fn||'arquivo')+'">\uD83D\uDCCE</span>' : '');
       document.getElementById('faq-a-'+id).textContent = a;
       closeEdit(id);
       toast('Entrada atualizada');
