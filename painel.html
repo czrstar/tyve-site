@@ -563,6 +563,12 @@
           <div class="kpi-value orange" id="kpiBookings">–</div>
           <div class="kpi-sub">últimos 30 dias</div>
         </div>
+        <div class="kpi-card" id="cardOrderNotify" style="display:none">
+          <div class="kpi-icon">📦</div>
+          <div class="kpi-label">Avisos de pedido enviados</div>
+          <div class="kpi-value" id="kpiOrderNotify">–</div>
+          <div class="kpi-sub">enviado/entregue · últimos 30 dias</div>
+        </div>
       </div>
 
       <!-- Chart -->
@@ -1140,6 +1146,8 @@ function renderDash(d) {
     if (ic3) ic3.textContent='📦'; if (lb3) lb3.textContent='Consultas de pedido';
     if (ic4) ic4.textContent='🔄'; if (lb4) lb4.textContent='Trocas';
     document.getElementById('kpiFollowups').textContent = fmt(d.order_lookups_30d);
+    const _on = document.getElementById('cardOrderNotify');
+    if (_on) { _on.style.display = ''; document.getElementById('kpiOrderNotify').textContent = fmt(d.order_notify_30d || 0); }
     document.getElementById('kpiBookings').textContent  = fmt(d.exchanges_30d);
   } else {
     document.getElementById('kpiFollowups').textContent = fmt((+d.followups_d1||0)+(+d.followups_d3||0));
