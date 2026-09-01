@@ -1050,6 +1050,26 @@
           <p class="q-hint">Se a sua marca usa um emoji caracter&iacute;stico, ele aparece na mensagem de agradecimento ao cliente (ex: &#x1F9E1; &#x26A1; &#x1F9B7;). Deixe em branco para n&atilde;o usar nenhum.</p>
           <input type="text" name="brand_emoji" maxlength="4" placeholder="Ex: &#x1F9E1; (opcional)" />
         </div>
+        <!-- ── MENU DE OPÇÕES (opt-in por cliente) — 01/09/2026, decisão Renato ── -->
+        <div class="question" data-biz-q="ecommerce">
+          <label class="q-label">Menu de opções no início da conversa <span style="color:#64748b;font-weight:400;">(opcional)</span></label>
+          <p class="q-hint">Quando alguém manda a primeira mensagem, o agente pode abrir um menu com atalhos — o cliente <strong>toca</strong> em vez de digitar. Marque os que fazem sentido pra sua loja. Quem preferir escrever a dúvida continua sendo atendido normalmente. <em>Sem custo extra: é resposta dentro da conversa, não mensagem iniciada pela loja.</em></p>
+          <div class="checkbox-group" id="cg-menu">
+            <label class="check-item"><input type="checkbox" name="menu_opt[]" value="pedido" /><div class="check-box"></div><span class="check-label">📦 <strong>Acompanhar meu pedido</strong> — status e código de rastreio</span></label>
+            <label class="check-item" data-plan-q="cresce,escala"><input type="checkbox" name="menu_opt[]" value="troca" /><div class="check-box"></div><span class="check-label">🔁 <strong>Trocas e devoluções</strong> — o agente conduz a troca <em>(Cresce e Escala)</em></span></label>
+            <label class="check-item"><input type="checkbox" name="menu_opt[]" value="frete" /><div class="check-box"></div><span class="check-label">🚚 <strong>Prazo de entrega e frete</strong> — responde pelas suas FAQs</span></label>
+            <label class="check-item"><input type="checkbox" name="menu_opt[]" value="pagamento" /><div class="check-box"></div><span class="check-label">💳 <strong>Formas de pagamento</strong> — responde pelas suas FAQs</span></label>
+            <label class="check-item"><input type="checkbox" name="menu_opt[]" value="medidas" /><div class="check-box"></div><span class="check-label">📏 <strong>Tabela de medidas</strong> — pode enviar o PDF junto, se você cadastrar</span></label>
+            <label class="check-item"><input type="checkbox" name="menu_opt[]" value="humano" /><div class="check-box"></div><span class="check-label">💬 <strong>Falar com o time</strong> — encaminha para uma pessoa</span></label>
+          </div>
+          <p class="q-hint" style="margin-top:12px">Quer um atalho que não está na lista? Escreva abaixo (até 3, no máximo 24 caracteres cada — é o limite do WhatsApp).</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="text" name="menu_extra1" maxlength="24" placeholder="Ex: Comprar na Shopee" style="flex:1;min-width:150px;margin:0" />
+            <input type="text" name="menu_extra2" maxlength="24" placeholder="Outro atalho (opcional)" style="flex:1;min-width:150px;margin:0" />
+            <input type="text" name="menu_extra3" maxlength="24" placeholder="Outro atalho (opcional)" style="flex:1;min-width:150px;margin:0" />
+          </div>
+          <p class="q-hint" style="margin-top:10px">Deixou tudo em branco? O agente não mostra menu nenhum — responde direto, como hoje. Dá pra ligar depois.</p>
+        </div>
         <div class="question">
           <label class="q-label">Nome do assistente virtual</label>
           <p class="q-hint">O nome padrão Tyve é <strong>Luma</strong>. Se quiser um nome personalizado para a sua empresa (ex: Sofia, Max, Bia), escreva abaixo. Deixe em branco para usar Luma.</p>
@@ -1560,6 +1580,23 @@
       const fields = Object.fromEntries(data);
       const objetivos = data.getAll('objetivo[]');
       const orderIdMethod = data.getAll('order_id_method[]');
+      // (01/09/2026) MENU DE OPÇÕES — opt-in por cliente. Só e-commerce (é onde o bot tem o menu).
+      // ids fixos = rotas nativas do bot (pedido/troca/humano); os demais caem no FAQ/LLM pelo título.
+      const MENU_CAT = {
+        pedido:    { id: 'menu::pedido',    title: '\uD83D\uDCE6 Meu pedido / rastreio', description: 'Ver status e código de rastreio' },
+        troca:     { id: 'menu::troca',     title: '\uD83D\uDD01 Trocas e devoluções',   description: 'Passo a passo da troca' },
+        frete:     { id: 'menu::frete',     title: '\uD83D\uDE9A Entrega e frete',        description: 'Prazos e valores de envio' },
+        pagamento: { id: 'menu::pagamento', title: '\uD83D\uDCB3 Formas de pagamento',    description: 'Como você pode pagar' },
+        medidas:   { id: 'menu::medidas',   title: '\uD83D\uDCCF Tabela de medidas',      description: 'Escolher o tamanho certo' },
+        humano:    { id: 'menu::humano',    title: '\uD83D\uDCAC Falar com o time',       description: 'Atendimento humano' }
+      };
+      const menuPicks = (businessType === 'ecommerce') ? data.getAll('menu_opt[]') : [];
+      const menuOptions = [];
+      menuPicks.forEach(k => { if (MENU_CAT[k]) menuOptions.push(MENU_CAT[k]); });
+      ['menu_extra1','menu_extra2','menu_extra3'].forEach((f, i) => {
+        const t = (fields[f] || '').trim().slice(0, 24);
+        if (t && businessType === 'ecommerce') menuOptions.push({ id: 'menu::extra' + (i + 1), title: t });
+      });
       // Endereço de devolução: montado a partir dos campos end_* (fix 21/07/2026 — antes o dado se perdia)
       const _t = v => (v || '').trim();
       const endLinha1 = [_t(fields.end_logradouro), _t(fields.end_numero)].filter(Boolean).join(', ');
@@ -1614,6 +1651,8 @@
         nicho_categorias:      fields.nicho_categorias || '',
         catalogo_url:          fields.catalogo_url || '',
         order_id_method:       orderIdMethod.join(', '),
+        menu_enabled:          menuOptions.length > 0 ? 'sim' : '',
+        menu_options:          menuOptions,
         troca_prazo_dias:      fields.troca_prazo_dias || '',
         reembolso_politica:    fields.reembolso_politica || '',
         troca_frete_quem_paga: fields.troca_frete_quem_paga || '',
