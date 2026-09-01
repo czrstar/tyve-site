@@ -1539,7 +1539,8 @@ async function saveEdit(id) {
     if (d.ok && d.entry) {
       const f = FAQ.find(x=>x.id===id);
       if (f) { f.question=q; f.answer=a; }
-      document.getElementById('faq-q-'+id).textContent = q;
+      // (01/09) innerHTML + chip: textContent apagava o 📎 do anexo depois de editar (o anexo continuava no banco, mas sumia da tela)
+      document.getElementById('faq-q-'+id).innerHTML = esc(q) + (_f.file_url ? ' <span title="Envia um PDF junto com a resposta: '+esc(_f.file_name||'arquivo')+'">\uD83D\uDCCE</span>' : '');
       document.getElementById('faq-a-'+id).textContent = a;
       closeEdit(id);
       toast('Entrada atualizada');
