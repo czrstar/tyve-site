@@ -487,6 +487,12 @@
       <button type="submit" class="wa-btn" style="margin:0">Entrar</button>
     </form>
     <p id="tokenErr" style="display:none;color:#c0392b;font-weight:600;margin:6px 0 0">Código inválido — confere os caracteres e tenta de novo.</p>
+    <p style="margin-top:12px"><a href="#" onclick="return toggleRecovery()" style="color:var(--text-dim,inherit)">Esqueci meu código — receber por e-mail</a></p>
+    <form id="recoveryForm" style="display:none;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px auto 0;max-width:420px" onsubmit="return submitRecovery(event)">
+      <input id="recoveryEmail" type="email" placeholder="E-mail cadastrado na Tyve" autocomplete="email" style="flex:1;min-width:200px;padding:12px 14px;border:1.5px solid var(--border2);border-radius:10px;font:inherit;font-size:15px;background:var(--surface2);color:var(--text)">
+      <button type="submit" class="wa-btn" style="margin:0">Enviar</button>
+    </form>
+    <p id="recoveryMsg" style="display:none;font-weight:600;margin:8px 0 0"></p>
     <p style="margin-top:14px"><a href="https://wa.me/5516994247541?text=Preciso+do+meu+link+do+painel+Tyve" target="_blank" rel="noopener" style="color:var(--text-dim,inherit)">Não tem o código? Falar com a Tyve</a></p>
   </div>
 
@@ -806,6 +812,25 @@ function submitToken(ev) {
   return false;
 }
 function logout() { clearToken(); TOKEN = ''; const ti=document.getElementById('tokenInput'); if (ti) ti.value=''; showState('noToken'); }
+function toggleRecovery() {
+  const f = document.getElementById('recoveryForm');
+  f.style.display = (f.style.display === 'none' || !f.style.display) ? 'flex' : 'none';
+  return false;
+}
+async function submitRecovery(ev) {
+  ev.preventDefault();
+  const email = (document.getElementById('recoveryEmail').value || '').trim();
+  if (!email) return false;
+  const msg = document.getElementById('recoveryMsg');
+  msg.style.display = ''; msg.style.color = 'inherit'; msg.textContent = 'Enviando…';
+  try {
+    const r = await fetch('https://n8n.tyve.com.br/webhook/tyve-painel-recovery', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
+    }).then(x => x.json());
+    msg.textContent = (r && r.message) || 'Se o e-mail estiver cadastrado, o link chega em instantes. 📬';
+  } catch (e) { msg.style.color = '#c0392b'; msg.textContent = 'Não consegui enviar agora — tenta de novo em instantes.'; }
+  return false;
+}
 function fmt(n)  { return Number(n||0).toLocaleString('pt-BR'); }
 function esc(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
