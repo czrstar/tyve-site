@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /painel
+Disallow: /ops
+Disallow: /pause
+Disallow: /teste-luma
+Disallow: /onboarding
+Disallow: /embedded-signup
+Disallow: /instagram-connect
+Disallow: /instagram-callback
+Disallow: /assinar
+
+Sitemap: https://tyve.com.br/sitemap.xml

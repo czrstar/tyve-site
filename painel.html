@@ -442,6 +442,7 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg>
       Atualizar
     </button>
+    <button class="refresh-btn" id="logoutBtn" style="display:none" onclick="logout()" title="Sair deste painel neste navegador">Sair</button>
   </div>
 </nav>
 
@@ -480,8 +481,13 @@
   <div class="state" id="stateNoToken" style="display:none">
     <div style="font-size:52px">⚡</div>
     <h2>Painel Tyve</h2>
-    <p>Use o link personalizado enviado pela Tyve no WhatsApp para acessar seus resultados.</p>
-    <a class="wa-btn" href="https://wa.me/5516994247541?text=Preciso+do+meu+link+do+painel+Tyve" target="_blank" rel="noopener">Falar com a Tyve</a>
+    <p>Cole o código de acesso enviado pela Tyve — ou abra o link personalizado do WhatsApp, que entra sozinho.</p>
+    <form id="tokenForm" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px auto 4px;max-width:420px" onsubmit="return submitToken(event)">
+      <input id="tokenInput" type="password" placeholder="Código de acesso" autocomplete="current-password" style="flex:1;min-width:200px;padding:12px 14px;border:1.5px solid var(--border2);border-radius:10px;font:inherit;font-size:15px;background:var(--surface2);color:var(--text)">
+      <button type="submit" class="wa-btn" style="margin:0">Entrar</button>
+    </form>
+    <p id="tokenErr" style="display:none;color:#c0392b;font-weight:600;margin:6px 0 0">Código inválido — confere os caracteres e tenta de novo.</p>
+    <p style="margin-top:14px"><a href="https://wa.me/5516994247541?text=Preciso+do+meu+link+do+painel+Tyve" target="_blank" rel="noopener" style="color:var(--text-dim,inherit)">Não tem o código? Falar com a Tyve</a></p>
   </div>
 
   <!-- Error -->
@@ -780,7 +786,26 @@ const REFRESH_MS = 5 * 60 * 1000;
 let TOKEN = '', CONFIG = {}, FAQ = [], chart = null;
 
 // ── UTILS ────────────────────────────────────────────
-function token() { return new URLSearchParams(location.search).get('token') || ''; }
+// (31/08/2026) token fora da URL: 1a visita via link guarda no navegador e a URL vira /painel limpa.
+const TOK_KEY = 'tyve_painel_token';
+function storedToken() { try { return localStorage.getItem(TOK_KEY) || ''; } catch(e) { return ''; } }
+function storeToken(t)  { try { localStorage.setItem(TOK_KEY, t); } catch(e) {} }
+function clearToken()   { try { localStorage.removeItem(TOK_KEY); } catch(e) {} }
+function token() {
+  const q = new URLSearchParams(location.search).get('token') || '';
+  if (q) { storeToken(q); try { history.replaceState(null, '', '/painel'); } catch(e) {} return q; }
+  return storedToken();
+}
+function submitToken(ev) {
+  ev.preventDefault();
+  const v = (document.getElementById('tokenInput').value || '').trim();
+  if (!v) return false;
+  storeToken(v);
+  const te = document.getElementById('tokenErr'); if (te) te.style.display = 'none';
+  showState('loading'); reload();
+  return false;
+}
+function logout() { clearToken(); TOKEN = ''; const ti=document.getElementById('tokenInput'); if (ti) ti.value=''; showState('noToken'); }
 function fmt(n)  { return Number(n||0).toLocaleString('pt-BR'); }
 function esc(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -1031,7 +1056,13 @@ async function reload() {
       fetch(DASH_API + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json()).catch(()=>null),
       fetch(CFG_API  + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json()).catch(()=>null),
     ]);
-    if (!dash || dash.error || dash.contacts_this_month === undefined) { showState('error'); return; }
+    if (dash && (dash.error || dash.contacts_this_month === undefined)) {
+      // resposta da API veio, mas o token nao vale: esquece o token guardado e volta pra entrada
+      clearToken(); showState('noToken');
+      const te = document.getElementById('tokenErr'); if (te) te.style.display = '';
+      return;
+    }
+    if (!dash) { showState('error'); return; }
     if (!cfg  || !cfg.ok) { showState('error'); return; }
     CONFIG = cfg.config || {};
     FAQ    = cfg.faq_entries || [];
@@ -1055,6 +1086,8 @@ function showState(s) {
   const tb = document.getElementById('tabsBar');
   if (hs) hs.style.display = show ? '' : 'none';
   if (tb) tb.style.display = show ? '' : 'none';
+  const lb = document.getElementById('logoutBtn');
+  if (lb) lb.style.display = show ? '' : 'none';
 }
 
 // ── DASHBOARD ────────────────────────────────────────
