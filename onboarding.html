@@ -1675,7 +1675,11 @@
         pix_enabled:           fields.pix_enabled || '',
         // meta
         aceite_termos:         true,
-        termos_versao:         '2026-06-20',
+        // ATENCAO: bump obrigatorio a cada mudanca em termos.html. Ficou travado em
+        // '2026-06-20' por 3 revisoes dos Termos (06/07 excedente individual, 21/07 limites
+        // e-commerce, 04/09 excedente R$0,80) — todo aceite desde junho gravou versao errada
+        // em aceites_termos, que e a evidencia legal do aceite.
+        termos_versao:         '2026-09-04',
         prefill_token:         new URLSearchParams(window.location.search).get('t') || '',
         submitted_at:          new Date().toISOString()
       };
