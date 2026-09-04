@@ -507,6 +507,11 @@
           <input type="email" name="client_email" required placeholder="Ex: contato@suaempresa.com.br" />
         </div>
         <div class="question">
+          <label class="q-label">CNPJ (ou CPF) da empresa <span class="req">*</span></label>
+          <p class="q-hint">Usado apenas para emissão de cobrança. Se o seu movimento passar do limite de contatos do plano, os contatos excedentes são cobrados à parte, e sem este dado não conseguimos emitir a fatura.</p>
+          <input type="text" name="cnpj_loja" required placeholder="Ex: 12.345.678/0001-90" />
+        </div>
+        <div class="question">
           <label class="q-label">Descrição da empresa <span class="req">*</span></label>
           <p class="q-hint">2–3 frases sobre o que fazem e para quem. Esta descrição é usada para contextualizar o assistente.<br>Ex: "Clínica odontológica em Franca especializada em estética e implantes. Atendemos adultos e crianças desde 2015."</p>
           <textarea name="descricao_empresa" required rows="3" placeholder="Descreva sua empresa em 2–3 frases..."></textarea>
@@ -942,7 +947,6 @@
             <input type="text" name="end_cidade" placeholder="Cidade" style="flex:2;min-width:140px;margin:0" />
             <input type="text" name="end_uf" placeholder="UF" maxlength="2" style="flex:1;min-width:60px;margin:0;text-transform:uppercase" />
           </div>
-          <input type="text" name="cnpj_loja" placeholder="CNPJ da loja" />
         </div>
         </div><!-- /data-plan-q cresce,escala (troca operacional) -->
         <div class="section-footer">
