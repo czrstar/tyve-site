@@ -569,6 +569,12 @@
           <div class="kpi-value" id="kpiOrderNotify">–</div>
           <div class="kpi-sub">enviado/entregue · últimos 30 dias</div>
         </div>
+        <div class="kpi-card" id="cardMeta" style="display:none" title="Estimativa: mensagens que a Meta aceitou do seu número neste mês × R$ 0,035. A cobrança é feita pela Meta na sua conta do WhatsApp Business, não pela Tyve.">
+          <div class="kpi-icon">🧾</div>
+          <div class="kpi-label">Conta da Meta (prévia do mês)</div>
+          <div class="kpi-value" id="kpiMetaCost">–</div>
+          <div class="kpi-sub" id="kpiMetaSub">mensagens enviadas · cobrado pela Meta na sua conta</div>
+        </div>
       </div>
 
       <!-- Chart -->
@@ -1158,6 +1164,15 @@ function renderDash(d) {
   } else {
     document.getElementById('kpiFollowups').textContent = fmt((+d.followups_d1||0)+(+d.followups_d3||0));
     document.getElementById('kpiBookings').textContent  = fmt(d.bookings_confirmed);
+  }
+  // (04/09/2026) previa da conta da Meta: a partir de 01/10/2026 a Meta cobra ~R$0,035 por mensagem enviada, na conta da loja (nao da Tyve)
+  const _mc = document.getElementById('cardMeta');
+  if (_mc && d.meta_msgs_month !== undefined) {
+    _mc.style.display = '';
+    const cost = Number(d.meta_cost_month || 0);
+    document.getElementById('kpiMetaCost').textContent = 'R$ ' + cost.toFixed(2).replace('.', ',');
+    const free = Number(d.meta_free_month || 0);
+    document.getElementById('kpiMetaSub').textContent = fmt(d.meta_msgs_month || 0) + ' mensagens' + (free ? ' · ' + fmt(free) + ' grátis (anúncio)' : '') + ' · cobrado pela Meta na sua conta' + (new Date() < new Date('2026-10-01T03:00:00Z') ? ' a partir de 01/10' : '');
   }
   // Botão "Conectar transportadora" (Melhor Envio) — só p/ quem tem troca automática ativa
   try {
