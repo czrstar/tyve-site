@@ -1170,9 +1170,13 @@ function renderDash(d) {
   if (_mc && d.meta_msgs_month !== undefined) {
     _mc.style.display = '';
     const cost = Number(d.meta_cost_month || 0);
-    document.getElementById('kpiMetaCost').textContent = 'R$ ' + cost.toFixed(2).replace('.', ',');
     const free = Number(d.meta_free_month || 0);
-    document.getElementById('kpiMetaSub').textContent = fmt(d.meta_msgs_month || 0) + ' mensagens' + (free ? ' · ' + fmt(free) + ' grátis (anúncio)' : '') + ' · cobrado pela Meta na sua conta' + (new Date() < new Date('2026-10-01T03:00:00Z') ? ' a partir de 01/10' : '');
+    const brl = v => 'R$ ' + Number(v).toFixed(2).replace('.', ',');
+    const before0110 = new Date() < new Date('2026-10-01T03:00:00Z');
+    // Ate 30/09 a Meta nao cobra: mostra R$ 0,00 e o que este volume custaria a partir de 01/10
+    document.getElementById('kpiMetaCost').textContent = before0110 ? brl(0) : brl(cost);
+    document.getElementById('kpiMetaSub').textContent = fmt(d.meta_msgs_month || 0) + ' mensagens' + (free ? ' · ' + fmt(free) + ' grátis (anúncio)' : '')
+      + (before0110 ? ' · grátis até 30/09 · com este volume, a partir de 01/10 seriam ' + brl(cost) + ' (cobrado pela Meta na sua conta)' : ' · cobrado pela Meta na sua conta, não pela Tyve');
   }
   // Botão "Conectar transportadora" (Melhor Envio) — só p/ quem tem troca automática ativa
   try {
