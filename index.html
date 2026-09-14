@@ -386,6 +386,23 @@
   .avb-out-agent { background: rgba(248,65,0,.22); color: rgba(255,255,255,.9); align-self: flex-end; border-radius: 8px 0 8px 8px; }
   @media (max-width: 768px) { .avb-grid { grid-template-columns: 1fr; } .avb-card { padding: 28px 22px; } }
 
+  .avb-foot { position: relative; z-index: 1; margin-top: 18px; text-align: center; font-size: 11.5px; color: rgba(255,255,255,.3); }
+
+  /* ─── TRUST (09b) — BEIGE ──────────────────────────────── */
+  .trust-section { padding: 80px 0; background: var(--beige); }
+  .trust-intro { text-align: center; margin-bottom: 40px; }
+  .trust-sub { color: #666; font-size: 16px; max-width: 600px; margin: 16px auto 0; line-height: 1.65; }
+  .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .trust-card { background: #fff; border: 1px solid #ece6dc; border-radius: 18px; padding: 28px 24px; box-shadow: var(--sh-1); transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+  .trust-card:hover { border-color: var(--orange); transform: translateY(-3px); box-shadow: var(--sh-hover); }
+  .trust-num { font-size: 32px; font-weight: 800; color: var(--orange); line-height: 1; margin-bottom: 12px; letter-spacing: -.02em; }
+  .trust-card h3 { font-size: 16px; font-weight: 700; color: var(--txt); margin-bottom: 8px; line-height: 1.3; }
+  .trust-card p { font-size: 13.5px; color: #555; line-height: 1.6; }
+  .trust-quote { margin: 36px auto 0; max-width: 700px; text-align: center; font-size: 13.5px; color: #666; line-height: 1.7; }
+  .trust-quote b { color: var(--txt); }
+  @media (max-width: 900px) { .trust-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .trust-grid { grid-template-columns: 1fr; } }
+
   /* ─── VS COMPARISON (10) — WHITE ──────────────────────── */
   .vs-section { padding: 80px 0; background: var(--light); }
   .vs-header { text-align: center; margin-bottom: 36px; }
@@ -1008,30 +1025,30 @@
 <section class="avb-section">
   <div class="container">
     <div class="avb-intro">
-      <div class="avb-sec-label" data-i18n="avb_label">Por que faz diferença</div>
-      <h2 class="section-title section-title-light" data-i18n-html="avb_h2">Agente de IA não é<br>o mesmo que chatbot</h2>
-      <p class="avb-subtitle" data-i18n="avb_sub">A maioria das automações usa regras simples — se o cliente escrever a palavra certa, funciona. O agente Tyve lê, interpreta e raciocina como um atendente de verdade.</p>
+      <div class="avb-sec-label" data-i18n="avb_label">A pergunta que todo mundo faz</div>
+      <h2 class="section-title section-title-light" data-i18n-html="avb_h2">O WhatsApp já tem IA grátis.<br>Por que a Tyve?</h2>
+      <p class="avb-subtitle" data-i18n="avb_sub">A IA da Meta responde sobre horário, endereço, catálogo, preço e frete com o que você ensina. A Tyve entra onde ela para: no pedido, na troca, na etiqueta e no Pix.</p>
     </div>
     <div class="avb-grid">
 
       <!-- Chatbot simples -->
       <div class="avb-card avb-bot">
         <div class="avb-card-header">
-          <span class="avb-badge avb-badge-bot" data-i18n="avb_badge_bot">Chatbot simples</span>
+          <span class="avb-badge avb-badge-bot" data-i18n="avb_badge_bot">IA da Meta no app</span>
           <span class="avb-icon">🤖</span>
         </div>
         <ul class="avb-list">
-          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f1">Só entende palavras-chave programadas</span></li>
-          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f2">Trava se o cliente digitar diferente</span></li>
-          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f3">Sem memória — cada mensagem é isolada</span></li>
-          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f4">Resposta mecânica e genérica</span></li>
-          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f5">Não decide — segue script fixo</span></li>
-          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f6">Cliente percebe a frieza na hora</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f1">Não consulta pedido nem rastreio: responde com o catálogo, o site e o que você ensinou</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f2">Troca e devolução: repete a política que você escreveu, não executa</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f3">Não envia Pix, etiqueta de devolução nem aviso de pedido enviado</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f4">Aprende das suas conversas dos últimos 6 meses (se você deixar), inclusive do que foi dito errado</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f5">Seu cliente vê a etiqueta "IA" em cada mensagem, e a própria Meta avisa que as respostas "podem conter informações incorretas"</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f6">Ativar desconecta os aparelhos vinculados, e o WhatsApp para Windows não volta</span></li>
         </ul>
         <div class="avb-example avb-example-bot">
-          <div class="avb-ex-label" data-i18n="avb_bot_ex_label">Exemplo real</div>
-          <div class="avb-bubble avb-in" data-i18n="avb_bot_q">meu pedido 1234 tá atrasado, quero cancelar</div>
-          <div class="avb-bubble avb-out-bot" data-i18n-html="avb_bot_a">Desculpe, não entendi. Digite: <strong>STATUS</strong> ou <strong>TROCA</strong></div>
+          <div class="avb-ex-label" data-i18n="avb_bot_ex_label">Exemplo ilustrativo</div>
+          <div class="avb-bubble avb-in" data-i18n="avb_bot_q">oi, meu pedido 1234 ainda não chegou, tem previsão?</div>
+          <div class="avb-bubble avb-out-bot" data-i18n-html="avb_bot_a">Não tenho acesso ao status dos pedidos. Você pode acompanhar pelo site da loja ou aguardar a equipe. <span style="font-size:10px;opacity:.6">IA</span></div>
         </div>
       </div>
 
@@ -1042,21 +1059,41 @@
           <span class="avb-icon avb-icon-tyve"><svg class="avb-bolt" viewBox="66.6 292 147 294.5" xmlns="http://www.w3.org/2000/svg" aria-label="Tyve" role="img"><path d="M164.5,307.6l-86.4,143.1s-11.1,17.2-1.9,23.4c9.2,6.2,47.3-6.2,47.3-1.5s-23.5,91.1-24.6,95.4c0,0,0,.2,0,.3-.3,1.1-2.9,9.8,2.6,11.9,5.3,2,10.2-6.9,11.1-8.6s.2-.4.3-.6l89.4-141.1c0-.1.2-.3.3-.4,1.1-1.5,9.6-13.9,1.6-20.7-6.7-5.7-35.9-.6-39.6-.5-3.7.1-7.8-1.6-4.7-10.1,3-8.2,21.1-83.5,22.5-89.2,0-.2,0-.4.1-.5.3-1.1,1.8-6.3-2.4-9s-1.9-.9-2.9-1c-5-.8-7.5,2-12.6,9.3h0Z" fill="currentColor"/></svg></span>
         </div>
         <ul class="avb-list">
-          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f1">Lê e interpreta qualquer mensagem</span></li>
-          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f2">Entende linguagem informal, erros e abreviações</span></li>
-          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f3">Lembra toda a conversa — responde com continuidade</span></li>
-          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f4">Tom e linguagem do seu negócio</span></li>
-          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f5">Raciocina — decide quando escalar ou resolver o pedido</span></li>
-          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f6">Experiência natural, como falar com um atendente</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f1">Consulta o pedido na sua loja (Nuvemshop, Shopify, Bling, Tiny) e responde status e rastreio</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f2">Faz a troca de numeração e gera a etiqueta de devolução (Correios ou Melhor Envio)</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f3">Manda o Pix e avisa quando o pedido saiu</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f4">Responde da fonte: pedido real, regra de troca que você definiu, FAQ que você escreveu</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f5">Fala com o nome e o tom da sua loja, sem etiqueta de "pode errar"</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f6">Sua equipe continua no app e no WhatsApp Web, no mesmo número</span></li>
         </ul>
         <div class="avb-example avb-example-agent">
-          <div class="avb-ex-label" data-i18n="avb_agent_ex_label">Mesmo exemplo</div>
-          <div class="avb-bubble avb-in" data-i18n="avb_agent_q">meu pedido 1234 tá atrasado, quero cancelar</div>
-          <div class="avb-bubble avb-out-agent" data-i18n="avb_agent_a">Oi! 😊 Deixa eu ver o pedido 1234... saiu pra entrega hoje 🚚 chega amanhã. Se ainda quiser cancelar, eu resolvo por aqui — quer?</div>
+          <div class="avb-ex-label" data-i18n="avb_agent_ex_label">Mesma pergunta</div>
+          <div class="avb-bubble avb-in" data-i18n="avb_agent_q">oi, meu pedido 1234 ainda não chegou, tem previsão?</div>
+          <div class="avb-bubble avb-out-agent" data-i18n="avb_agent_a">Oi, Marina! O pedido 1234 saiu ontem pelos Correios, código BR123456789BR, previsão de entrega quinta. Quer o link de rastreio? 📦</div>
         </div>
       </div>
 
     </div>
+    <p class="avb-foot" data-i18n="avb_foot">Com base na Central de Ajuda do WhatsApp Business (setembro de 2026). Recursos da Meta podem mudar.</p>
+  </div>
+</section>
+
+
+<!-- ══ 09b CONFIANÇA — beige ══ -->
+<section class="trust-section" id="confianca">
+  <div class="container">
+    <div class="trust-intro">
+      <div class="sec-label" data-i18n="trust_label">Confiança</div>
+      <h2 class="section-title section-title-dark" data-i18n="trust_h2">Por que a Tyve não inventa</h2>
+      <p class="trust-sub" data-i18n="trust_sub">O maior medo de quem liga IA no WhatsApp é o robô falar besteira para o cliente. A Tyve foi construída ao contrário: primeiro o controle, depois a conversa.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-num">1</div><h3 data-i18n="trust_1h">Cada resposta tem uma fonte</h3><p data-i18n="trust_1p">Status de pedido vem da sua loja. Troca vem da regra que você definiu. Dúvida vem da FAQ que você escreveu. O painel mostra de onde saiu cada mensagem.</p></div>
+      <div class="trust-card"><div class="trust-num">2</div><h3 data-i18n="trust_2h">Dinheiro nunca é com o robô</h3><p data-i18n="trust_2p">Reembolso, cancelamento, cobrança e reclamação passam sempre para a sua equipe. O agente resolve o que dá para resolver e sabe parar no que não dá.</p></div>
+      <div class="trust-card"><div class="trust-num">300+</div><h3 data-i18n="trust_3h">Verificações por dia</h3><p data-i18n="trust_3p">Todo dia, antes do seu horário de abrir, cada agente recebe uma conversa de teste e é conferido. Se algo sai do esperado, a gente sabe antes de você.</p></div>
+      <div class="trust-card"><div class="trust-num">0</div><h3 data-i18n="trust_4h">Zero "pode conter informações incorretas"</h3><p data-i18n="trust_4p">A própria Meta avisa que a IA dela pode errar. A Tyve não precisa: se não tem a informação, ela pergunta ou passa para a equipe. E o painel mostra quantas conversas ela resolveu sem ninguém.</p></div>
+    </div>
+    <p class="trust-quote" data-i18n-html="trust_quote">A Gartner prevê que <b>4 em cada 10 projetos de agentes de IA serão cancelados até 2027</b> por custo, valor pouco claro ou falta de controle. <b>A Tyve entrega esse controle pronto, no plano, sem consultoria.</b></p>
   </div>
 </section>
 
@@ -1170,6 +1207,7 @@
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q12">O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a12">Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.</p></div></div>
       <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q14">O follow-up automático tem custo? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a14"><b>Pela Tyve, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O que existe é a tarifa da <b>Meta</b>: até 30/09/2026, mensagens dentro da janela de 24 horas depois da última mensagem do seu cliente são gratuitas, e só as enviadas fora dela custam centavos. <b>A partir de 01/10/2026 a Meta passa a cobrar toda mensagem que o seu número envia</b>, inclusive as respostas do agente e o follow-up: cerca de <b>R$ 0,035 por mensagem</b>.<br><br><b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business da sua loja, a mesma que você conecta na ativação. A Tyve não revende mensagem, não põe margem nisso, e mostra no painel a prévia do que a Meta vai cobrar no mês.</p></div></div>
       <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q15">Quanto vou pagar para a Meta por mês? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a15"><b>Depende de quantas mensagens o seu número envia.</b> A partir de 01/10/2026 a Meta cobra cerca de <b>R$ 0,035</b> por mensagem enviada (respostas do agente, follow-up, avisos de pedido), na conta de WhatsApp Business da sua loja. Na nossa medição, o agente envia em média <b>4 a 5 mensagens por contato</b>.<br><br>Exemplos: 250 contatos/mês ≈ <b>R$ 40</b> · 600 contatos ≈ <b>R$ 95</b> · 1.000 contatos ≈ <b>R$ 155</b> · 1.200 contatos ≈ <b>R$ 185</b>.<br><br>Conversa aberta por um anúncio Click-to-WhatsApp é <b>grátis por 72 horas</b> (a Meta não cobra), então tráfego pago via anúncio reduz essa conta. O painel da Tyve mostra a prévia do mês, e a Tyve não cobra nada por mensagem.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q16">O WhatsApp Business já tem IA grátis. Por que eu precisaria da Tyve? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a16">A IA da Meta responde com o catálogo, o site e o que você ensinou. Ela não consulta os pedidos da sua loja, não faz troca, não gera etiqueta de devolução nem envia Pix. A Tyve faz tudo isso conectada à sua loja (Nuvemshop, Shopify, Bling, Tiny), com a sua equipe continuando no app e no WhatsApp Web. E a própria Meta avisa que as respostas da IA dela "podem conter informações incorretas"; a Tyve responde da fonte ou passa para a equipe.</p></div></div>
       <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q13">Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a13">O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.</p></div></div>
     </div>
   </div>
@@ -1346,20 +1384,42 @@ var T = {
     p3_h3:'"Cadê meu pedido?" respondido na hora, com rastreio real',
     p3_desc:'O agente consulta o status e o rastreio do pedido direto na sua loja (Shopify, Nuvemshop, Bling, Woo, Tiny) e responde na conversa — sem inventar, sem "vou verificar e te retorno".',
     p3_sched_hdr:'📦 Status do pedido #1234', p3_sched_btn:'Acompanhar entrega',
-    avb_label:'Por que faz diferença',
-    avb_h2:'Agente de IA não é<br>o mesmo que chatbot',
-    avb_sub:'A maioria das automações usa regras simples — se o cliente escrever a palavra certa, funciona. O agente Tyve lê, interpreta e raciocina como um atendente de verdade.',
-    avb_badge_bot:'Chatbot simples', avb_badge_agent:'Agente Tyve',
-    avb_bot_f1:'Só entende palavras-chave programadas', avb_bot_f2:'Trava se o cliente digitar diferente',
-    avb_bot_f3:'Sem memória — cada mensagem é isolada', avb_bot_f4:'Resposta mecânica e genérica',
-    avb_bot_f5:'Não decide — segue script fixo', avb_bot_f6:'Cliente percebe a frieza na hora',
-    avb_agent_f1:'Lê e interpreta qualquer mensagem', avb_agent_f2:'Entende linguagem informal, erros e abreviações',
-    avb_agent_f3:'Lembra toda a conversa — responde com continuidade', avb_agent_f4:'Tom e linguagem do seu negócio',
-    avb_agent_f5:'Raciocina — decide quando escalar ou resolver o pedido', avb_agent_f6:'Experiência natural, como falar com um atendente',
-    avb_bot_ex_label:'Exemplo real', avb_bot_q:'meu pedido 1234 tá atrasado, quero cancelar',
-    avb_bot_a:'Desculpe, não entendi. Digite: <strong>STATUS</strong> ou <strong>TROCA</strong>',
-    avb_agent_ex_label:'Mesmo exemplo', avb_agent_q:'meu pedido 1234 tá atrasado, quero cancelar',
-    avb_agent_a:'Oi! 😊 Deixa eu ver o pedido 1234... saiu pra entrega hoje 🚚 chega amanhã. Se ainda quiser cancelar, eu resolvo por aqui — quer?',
+    avb_label:'A pergunta que todo mundo faz',
+    avb_h2:'O WhatsApp já tem IA grátis.<br>Por que a Tyve?',
+    avb_sub:'A IA da Meta responde sobre horário, endereço, catálogo, preço e frete com o que você ensina. A Tyve entra onde ela para: no pedido, na troca, na etiqueta e no Pix.',
+    avb_badge_bot:'IA da Meta no app',
+    avb_badge_agent:'Agente Tyve',
+    avb_bot_f1:'Não consulta pedido nem rastreio: responde com o catálogo, o site e o que você ensinou',
+    avb_bot_f2:'Troca e devolução: repete a política que você escreveu, não executa',
+    avb_bot_f3:'Não envia Pix, etiqueta de devolução nem aviso de pedido enviado',
+    avb_bot_f4:'Aprende das suas conversas dos últimos 6 meses (se você deixar), inclusive do que foi dito errado',
+    avb_bot_f5:'Seu cliente vê a etiqueta "IA" em cada mensagem, e a própria Meta avisa que as respostas "podem conter informações incorretas"',
+    avb_bot_f6:'Ativar desconecta os aparelhos vinculados, e o WhatsApp para Windows não volta',
+    avb_agent_f1:'Consulta o pedido na sua loja (Nuvemshop, Shopify, Bling, Tiny) e responde status e rastreio',
+    avb_agent_f2:'Faz a troca de numeração e gera a etiqueta de devolução (Correios ou Melhor Envio)',
+    avb_agent_f3:'Manda o Pix e avisa quando o pedido saiu',
+    avb_agent_f4:'Responde da fonte: pedido real, regra de troca que você definiu, FAQ que você escreveu',
+    avb_agent_f5:'Fala com o nome e o tom da sua loja, sem etiqueta de "pode errar"',
+    avb_agent_f6:'Sua equipe continua no app e no WhatsApp Web, no mesmo número',
+    avb_bot_ex_label:'Exemplo ilustrativo',
+    avb_bot_q:'oi, meu pedido 1234 ainda não chegou, tem previsão?',
+    avb_bot_a:'Não tenho acesso ao status dos pedidos. Você pode acompanhar pelo site da loja ou aguardar a equipe. <span style="font-size:10px;opacity:.6">IA</span>',
+    avb_agent_ex_label:'Mesma pergunta',
+    avb_agent_q:'oi, meu pedido 1234 ainda não chegou, tem previsão?',
+    avb_agent_a:'Oi, Marina! O pedido 1234 saiu ontem pelos Correios, código BR123456789BR, previsão de entrega quinta. Quer o link de rastreio? 📦',
+    avb_foot:'Com base na Central de Ajuda do WhatsApp Business (setembro de 2026). Recursos da Meta podem mudar.',
+    trust_label:'Confiança',
+    trust_h2:'Por que a Tyve não inventa',
+    trust_sub:'O maior medo de quem liga IA no WhatsApp é o robô falar besteira para o cliente. A Tyve foi construída ao contrário: primeiro o controle, depois a conversa.',
+    trust_1h:'Cada resposta tem uma fonte',
+    trust_1p:'Status de pedido vem da sua loja. Troca vem da regra que você definiu. Dúvida vem da FAQ que você escreveu. O painel mostra de onde saiu cada mensagem.',
+    trust_2h:'Dinheiro nunca é com o robô',
+    trust_2p:'Reembolso, cancelamento, cobrança e reclamação passam sempre para a sua equipe. O agente resolve o que dá para resolver e sabe parar no que não dá.',
+    trust_3h:'Verificações por dia',
+    trust_3p:'Todo dia, antes do seu horário de abrir, cada agente recebe uma conversa de teste e é conferido. Se algo sai do esperado, a gente sabe antes de você.',
+    trust_4h:'Zero "pode conter informações incorretas"',
+    trust_4p:'A própria Meta avisa que a IA dela pode errar. A Tyve não precisa: se não tem a informação, ela pergunta ou passa para a equipe. E o painel mostra quantas conversas ela resolveu sem ninguém.',
+    trust_quote:'A Gartner prevê que <b>4 em cada 10 projetos de agentes de IA serão cancelados até 2027</b> por custo, valor pouco claro ou falta de controle. <b>A Tyve entrega esse controle pronto, no plano, sem consultoria.</b>',
     vs_label:'Comparativo', vs_h2:'Tyve vs as outras opções',
     vs_callout:'<strong>Já usa um app de rastreio (Sak, Rastreio.net)?</strong> Ele avisa "saiu para entrega" — e fica mudo quando o cliente responde "mas cadê?". A Tyve responde quem pergunta, resolve a troca e gera o Pix, no mesmo fio da conversa.',
     vs_th2:'App de automação', vs_th3:'Montar do zero',
@@ -1435,6 +1495,7 @@ var T = {
     faq_a14:'<b>Pela Tyve, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O que existe é a tarifa da <b>Meta</b>: até 30/09/2026, mensagens dentro da janela de 24 horas depois da última mensagem do seu cliente são gratuitas, e só as enviadas fora dela custam centavos. <b>A partir de 01/10/2026 a Meta passa a cobrar toda mensagem que o seu número envia</b>, inclusive as respostas do agente e o follow-up: cerca de <b>R$ 0,035 por mensagem</b>.<br><br><b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business da sua loja, a mesma que você conecta na ativação. A Tyve não revende mensagem, não põe margem nisso, e mostra no painel a prévia do que a Meta vai cobrar no mês.',
     faq_q15:'Quanto vou pagar para a Meta por mês? <span class="faq-icon">+</span>',
     faq_a15:'<b>Depende de quantas mensagens o seu número envia.</b> A partir de 01/10/2026 a Meta cobra cerca de <b>R$ 0,035</b> por mensagem enviada (respostas do agente, follow-up, avisos de pedido), na conta de WhatsApp Business da sua loja. Na nossa medição, o agente envia em média <b>4 a 5 mensagens por contato</b>.<br><br>Exemplos: 250 contatos/mês ≈ <b>R$ 40</b> · 600 contatos ≈ <b>R$ 95</b> · 1.000 contatos ≈ <b>R$ 155</b> · 1.200 contatos ≈ <b>R$ 185</b>.<br><br>Conversa aberta por um anúncio Click-to-WhatsApp é <b>grátis por 72 horas</b> (a Meta não cobra), então tráfego pago via anúncio reduz essa conta. O painel da Tyve mostra a prévia do mês, e a Tyve não cobra nada por mensagem.',
+    faq_q16:'O WhatsApp Business já tem IA grátis. Por que eu precisaria da Tyve? <span class="faq-icon">+</span>', faq_a16:'A IA da Meta responde com o catálogo, o site e o que você ensinou. Ela não consulta os pedidos da sua loja, não faz troca, não gera etiqueta de devolução nem envia Pix. A Tyve faz tudo isso conectada à sua loja (Nuvemshop, Shopify, Bling, Tiny), com a sua equipe continuando no app e no WhatsApp Web. E a própria Meta avisa que as respostas da IA dela "podem conter informações incorretas"; a Tyve responde da fonte ou passa para a equipe.',
     faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
     faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
     cta_h2:'Chega de mensagem sem resposta. Nosso agente resolve na hora!',
@@ -1567,20 +1628,42 @@ var T = {
     p3_h3:'"Where is my order?" answered instantly, with real tracking',
     p3_desc:'The agent checks the order status and tracking straight from your store (Shopify, Nuvemshop, Bling, Woo, Tiny) and answers in the chat — no making things up, no "let me check and get back to you".',
     p3_sched_hdr:'📦 Order #1234 status', p3_sched_btn:'Track delivery',
-    avb_label:'Why it matters',
-    avb_h2:'An AI agent is not<br>the same as a chatbot',
-    avb_sub:'Most automations use simple rules — if the customer types the right word, it works. The Tyve agent reads, interprets and reasons like a real attendant.',
-    avb_badge_bot:'Simple chatbot', avb_badge_agent:'Tyve Agent',
-    avb_bot_f1:'Only understands pre-programmed keywords', avb_bot_f2:'Breaks if the customer types differently',
-    avb_bot_f3:'No memory — each message is isolated', avb_bot_f4:'Mechanical and generic responses',
-    avb_bot_f5:'Doesn\'t decide — follows a fixed script', avb_bot_f6:'Customer notices the coldness immediately',
-    avb_agent_f1:'Reads and interprets any message', avb_agent_f2:'Understands informal language, typos and abbreviations',
-    avb_agent_f3:'Remembers the full conversation — replies with continuity', avb_agent_f4:'Your business\'s tone and language',
-    avb_agent_f5:'Reasons — decides when to escalate or resolve the order', avb_agent_f6:'Natural experience, like talking to a real attendant',
-    avb_bot_ex_label:'Real example', avb_bot_q:'my order 1234 is late, I want to cancel',
-    avb_bot_a:'Sorry, I did not understand. Type: <strong>STATUS</strong> or <strong>EXCHANGE</strong>',
-    avb_agent_ex_label:'Same example', avb_agent_q:'my order 1234 is late, I want to cancel',
-    avb_agent_a:'Hi! 😊 Let me check order 1234... it shipped today 🚚 arriving tomorrow. If you still want to cancel, I can handle it right here — shall I?',
+    avb_label:'The question everyone asks',
+    avb_h2:'WhatsApp already has free AI.<br>Why Tyve?',
+    avb_sub:'Meta\'s AI answers about hours, address, catalog, prices and shipping from what you teach it. Tyve starts where it stops: the order, the exchange, the return label and the payment link.',
+    avb_badge_bot:'Meta\'s AI in the app',
+    avb_badge_agent:'Tyve Agent',
+    avb_bot_f1:'Does not look up orders or tracking: answers from the catalog, the website and what you taught it',
+    avb_bot_f2:'Exchanges and returns: repeats the policy you wrote, does not execute it',
+    avb_bot_f3:'No payment link, no return label, no shipping notice',
+    avb_bot_f4:'Learns from your last 6 months of chats (if you allow it), including what was said wrong',
+    avb_bot_f5:'Your customer sees an "AI" tag on every message, and Meta itself warns that replies "may contain inaccurate information"',
+    avb_bot_f6:'Turning it on unlinks your devices, and WhatsApp for Windows doesn\'t come back',
+    avb_agent_f1:'Looks up the order in your store (Nuvemshop, Shopify, Bling, Tiny) and replies with status and tracking',
+    avb_agent_f2:'Handles size exchanges and generates the return label (Correios or Melhor Envio)',
+    avb_agent_f3:'Sends the payment link and the shipping notice',
+    avb_agent_f4:'Answers from the source: the real order, the exchange rule you set, the FAQ you wrote',
+    avb_agent_f5:'Speaks with your store\'s name and tone, no "may be wrong" tag',
+    avb_agent_f6:'Your team keeps using the app and WhatsApp Web, same number',
+    avb_bot_ex_label:'Illustrative example',
+    avb_bot_q:'hi, my order 1234 hasn\'t arrived yet, any ETA?',
+    avb_bot_a:'I don\'t have access to order status. You can check on the store\'s website or wait for the team. <span style="font-size:10px;opacity:.6">AI</span>',
+    avb_agent_ex_label:'Same question',
+    avb_agent_q:'hi, my order 1234 hasn\'t arrived yet, any ETA?',
+    avb_agent_a:'Hi Marina! Order 1234 shipped yesterday via Correios, tracking BR123456789BR, expected Thursday. Want the tracking link? 📦',
+    avb_foot:'Based on the WhatsApp Business Help Center (September 2026). Meta\'s features may change.',
+    trust_label:'Trust',
+    trust_h2:'Why Tyve doesn\'t make things up',
+    trust_sub:'The biggest fear of anyone putting AI on WhatsApp is the bot talking nonsense to a customer. Tyve was built the other way around: control first, conversation second.',
+    trust_1h:'Every answer has a source',
+    trust_1p:'Order status comes from your store. Exchanges come from the rule you set. Questions come from the FAQ you wrote. The dashboard shows where each message came from.',
+    trust_2h:'Money is never up to the bot',
+    trust_2p:'Refunds, cancellations, billing and complaints always go to your team. The agent solves what can be solved and knows when to stop.',
+    trust_3h:'Checks per day',
+    trust_3p:'Every day, before you open, each agent gets a test conversation and is verified. If something is off, we know before you do.',
+    trust_4h:'Zero "may contain inaccurate information"',
+    trust_4p:'Meta itself warns that its AI may be wrong. Tyve doesn\'t need to: without the information, it asks or hands over to the team. And the dashboard shows how many conversations it solved on its own.',
+    trust_quote:'Gartner predicts that <b>4 in 10 AI agent projects will be cancelled by 2027</b> due to cost, unclear value or lack of control. <b>Tyve ships that control built in, on every plan, no consulting.</b>',
     vs_label:'Comparison', vs_h2:'Tyve vs the alternatives',
     vs_callout:'<strong>Already using a tracking app (Sak, Rastreio.net)?</strong> It fires "out for delivery" — and goes silent when the customer replies "but where is it?". Tyve answers the person, resolves the exchange and generates the Pix, in the same conversation thread.',
     vs_th2:'Automation app', vs_th3:'Build from scratch',
@@ -1656,6 +1739,7 @@ var T = {
     faq_a14:'<b>From Tyve, zero.</b> The follow-up is included in your plan and Tyve charges nothing extra for it.<br><br>What exists is <b>Meta\'s</b> fee: until Sep 30, 2026, messages inside the 24-hour window after your customer\'s last message are free, and only those sent outside it cost a few cents. <b>From Oct 1, 2026 Meta bills every message your number sends</b>, including the agent\'s replies and the follow-up: about <b>R$ 0.035 per message</b>.<br><br><b>That charge does not go through Tyve</b> — it goes straight from Meta to you, on the card registered in your store\'s WhatsApp Business account, the same one you connect at activation. Tyve does not resell messages, adds no margin, and shows a monthly preview of Meta\'s charge in the dashboard.',
     faq_q15:'How much will I pay Meta per month? <span class="faq-icon">+</span>',
     faq_a15:'<b>It depends on how many messages your number sends.</b> From Oct 1, 2026 Meta bills about <b>R$ 0.035</b> per message sent (agent replies, follow-up, order notices), on your store\'s WhatsApp Business account. In our measurements the agent sends <b>4 to 5 messages per contact</b> on average.<br><br>Examples: 250 contacts/month ≈ <b>R$ 40</b> · 600 contacts ≈ <b>R$ 95</b> · 1,000 contacts ≈ <b>R$ 155</b> · 1,200 contacts ≈ <b>R$ 185</b>.<br><br>A conversation opened from a Click-to-WhatsApp ad is <b>free for 72 hours</b> (Meta does not charge), so paid traffic through ads lowers this bill. The Tyve dashboard shows the month\'s preview, and Tyve charges nothing per message.',
+    faq_q16:'WhatsApp Business already has free AI. Why would I need Tyve? <span class="faq-icon">+</span>', faq_a16:'Meta\'s AI answers from the catalog, the website and what you taught it. It does not look up your store\'s orders, handle exchanges, generate return labels or send payment links. Tyve does all of that connected to your store (Nuvemshop, Shopify, Bling, Tiny), with your team still on the app and WhatsApp Web. And Meta itself warns that its AI replies "may contain inaccurate information"; Tyve answers from the source or hands over to the team.',
     faq_q13:'Do you have access to my customers data? Is it safe? <span class="faq-icon">+</span>',
     faq_a13:'Access is granted by you through an official, secure connection (OAuth), read-only for what is needed (orders) and compliant with LGPD. You can revoke access whenever you want.',
     cta_h2:'Stop spending your day<br/>answering "where is my order?"',
