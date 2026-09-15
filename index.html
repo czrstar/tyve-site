@@ -1319,6 +1319,10 @@ var T = {
     plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
     cycle_monthly:'Mensal', cycle_annual:'Anual', cycle_badge:'2 meses grátis',
     demo_note:'É uma demonstração real — respostas geradas na hora pela IA da Tyve.',
+    demo_h3:'Converse com o agente, ao vivo', demo_p:'Escolha o tipo de negócio pra experimentar o atendimento:',
+    demo_card_loja:'Loja online', demo_card_loja_sub:'Pedidos, rastreio e trocas', demo_card_serv:'Serviço', demo_card_serv_sub:'Clínica, salão, consultório',
+    demo_online:'online • responde na hora', demo_cta_p:'Gostou? É assim no WhatsApp do seu negócio. 🧡', demo_cta_plans:'Ver planos', demo_cta_wa:'Falar no WhatsApp',
+    demo_placeholder:'Escreva uma mensagem...', demo_disc:'Demonstração da Tyve · dados fictícios',
     ecom_a_tag:'Até 250 contatos atendidos/mês', ecom_c_tag:'Até 600 contatos atendidos/mês', ecom_e_tag:'Até 1.200 contatos/mês',
     ecom_a_fw:'⭐ Consulta de pedido e rastreio ao vivo (Shopify, Nuvemshop, Bling, Woo e Tiny)', ecom_a_f1:'1 número WhatsApp', ecom_a_f2:'Fluxo configurado pra sua loja', ecom_a_f3:'Respostas automáticas 24h/7d',
     ecom_a_f4:'Entende mensagens de texto, voz e imagens 🎙️📷',
@@ -1563,6 +1567,10 @@ var T = {
     cycle_monthly:'Monthly', cycle_annual:'Annual', cycle_badge:'2 months free',
     ecom_a_fw:'⭐ Live order lookup & tracking (Shopify, Nuvemshop, Bling, Woo and Tiny)',
     demo_note:'This is a real demo \u2014 every reply is generated live by Tyve\u2019s AI.',
+    demo_h3:'Chat with the agent, live', demo_p:'Pick a business type to try the service:',
+    demo_card_loja:'Online store', demo_card_loja_sub:'Orders, tracking and exchanges', demo_card_serv:'Service business', demo_card_serv_sub:'Clinic, salon, practice',
+    demo_online:'online • replies instantly', demo_cta_p:'Liked it? This is how it works on your business\u2019s WhatsApp. 🧡', demo_cta_plans:'See plans', demo_cta_wa:'Talk on WhatsApp',
+    demo_placeholder:'Type a message...', demo_disc:'Tyve demo · fictional data',
     ecom_a_tag:'Up to 250 contacts served/month', ecom_c_tag:'Up to 600 contacts served/month', ecom_e_tag:'Up to 1,200 contacts/month',
     ecom_a_f1:'1 WhatsApp number', ecom_a_f2:'Flow configured for your store', ecom_a_f3:'Automatic replies 24/7',
     ecom_a_f4:'Understands text, voice and image messages 🎙️📷',
@@ -1768,6 +1776,12 @@ function setLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
     if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+
+  /* placeholder swap */
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-placeholder');
+    if (T[lang][key] !== undefined) el.setAttribute('placeholder', T[lang][key]);
   });
 
   /* innerHTML swap */
@@ -2020,43 +2034,53 @@ renderCycle();
   <div class="demo-modal">
     <button class="demo-x" id="demo-x" aria-label="Fechar">&times;</button>
     <div class="demo-choose" id="demo-choose">
-      <h3>Converse com o agente, ao vivo</h3>
-      <p>Escolha o tipo de negócio pra experimentar o atendimento:</p>
+      <h3 data-i18n="demo_h3">Converse com o agente, ao vivo</h3>
+      <p data-i18n="demo_p">Escolha o tipo de negócio pra experimentar o atendimento:</p>
       <div class="demo-cards">
-        <button class="demo-card" data-demo="loja"><span class="ico">🛍️</span><strong>Loja online</strong><span>Pedidos, rastreio e trocas</span></button>
-        <button class="demo-card" data-demo="clinica"><span class="ico">🦷</span><strong>Serviço</strong><span>Clínica, salão, consultório</span></button>
+        <button class="demo-card" data-demo="loja"><span class="ico">🛍️</span><strong data-i18n="demo_card_loja">Loja online</strong><span data-i18n="demo_card_loja_sub">Pedidos, rastreio e trocas</span></button>
+        <button class="demo-card" data-demo="clinica"><span class="ico">🦷</span><strong data-i18n="demo_card_serv">Serviço</strong><span data-i18n="demo_card_serv_sub">Clínica, salão, consultório</span></button>
       </div>
       <div class="demo-note" data-i18n="demo_note">É uma demonstração real — respostas geradas na hora pela IA da Tyve.</div>
     </div>
     <div class="demo-chat" id="demo-chat">
       <div class="demo-head">
         <div class="demo-ava" id="demo-ava">R</div>
-        <div><div class="nm" id="demo-nm">Loja Runner</div><div class="sb"><span class="demo-dot-on"></span>online • responde na hora</div></div>
+        <div><div class="nm" id="demo-nm">Loja Runner</div><div class="sb"><span class="demo-dot-on"></span><span data-i18n="demo_online">online • responde na hora</span></div></div>
         <button class="demo-back" id="demo-back" title="Trocar demo">↺</button>
       </div>
       <div class="demo-msgs" id="demo-msgs"></div>
       <div class="demo-cta" id="demo-cta" style="display:none;">
-        <p>Gostou? É assim no WhatsApp do seu negócio. 🧡</p>
-        <a href="#planos" class="p1" id="demo-cta-plans">Ver planos</a>
-        <a href="https://wa.me/5516994247541" target="_blank" class="p2">Falar no WhatsApp</a>
+        <p data-i18n="demo_cta_p">Gostou? É assim no WhatsApp do seu negócio. 🧡</p>
+        <a href="#planos" class="p1" id="demo-cta-plans" data-i18n="demo_cta_plans">Ver planos</a>
+        <a href="https://wa.me/5516994247541" target="_blank" class="p2" data-i18n="demo_cta_wa">Falar no WhatsApp</a>
       </div>
       <div class="demo-in">
-        <input id="demo-text" placeholder="Escreva uma mensagem..." maxlength="300" autocomplete="off"/>
+        <input id="demo-text" placeholder="Escreva uma mensagem..." data-i18n-placeholder="demo_placeholder" maxlength="300" autocomplete="off"/>
         <button id="demo-send" aria-label="Enviar">&#10148;</button>
       </div>
-      <div class="demo-disc">Demonstração da Tyve · dados fictícios</div>
+      <div class="demo-disc" data-i18n="demo_disc">Demonstração da Tyve · dados fictícios</div>
     </div>
   </div>
 </div>
 <script>
 (function(){
   var WEBHOOK="https://n8n.tyve.com.br/webhook/tyve-demo-chat";
-  var CFG={
-    clinica:{nome:"Clínica Sorriso",ava:"S",oi:"Oi! 👋 Sou a Sofia, da Clínica Sorriso. Como posso te ajudar hoje?",
-      chips:["Vocês fazem clareamento?","Qual o horário de vocês?","Quero marcar uma limpeza"]},
-    loja:{nome:"Loja Runner",ava:"R",oi:"Oi! 👋 Sou o Téo, da Loja Runner. Posso te ajudar com pedidos, trocas ou dúvidas. No que você precisa?",
-      chips:["Cadê meu pedido 1234?","Quero trocar um produto","Qual o prazo de entrega?"]}
+  var CFG_ALL={
+    pt:{
+      clinica:{nome:"Clínica Sorriso",ava:"S",oi:"Oi! 👋 Sou a Sofia, da Clínica Sorriso. Como posso te ajudar hoje?",
+        chips:["Vocês fazem clareamento?","Qual o horário de vocês?","Quero marcar uma limpeza"]},
+      loja:{nome:"Loja Runner",ava:"R",oi:"Oi! 👋 Sou o Téo, da Loja Runner. Posso te ajudar com pedidos, trocas ou dúvidas. No que você precisa?",
+        chips:["Cadê meu pedido 1234?","Quero trocar um produto","Qual o prazo de entrega?"]}
+    },
+    en:{
+      clinica:{nome:"Sorriso Clinic",ava:"S",oi:"Hi! 👋 I'm Sofia from Sorriso Clinic. How can I help you today?",
+        chips:["Do you do teeth whitening?","What are your opening hours?","I'd like to book a cleaning"]},
+      loja:{nome:"Runner Store",ava:"R",oi:"Hi! 👋 I'm Téo from Runner Store. I can help with orders, exchanges or questions. What do you need?",
+        chips:["Where is my order 1234?","I want to exchange a product","What's the delivery time?"]}
+    }
   };
+  var CFG=CFG_ALL.pt;
+  function demoLang(){ return (typeof currentLang!=='undefined' && currentLang==='en') ? 'en' : 'pt'; }
   var MAXU=6, demo=null, history=[], userCount=0, busy=false;
   var sid=localStorage.getItem("tyve_demo_sid");
   if(!sid){sid="d"+Date.now()+Math.random().toString(36).slice(2,8);localStorage.setItem("tyve_demo_sid",sid);}
@@ -2083,6 +2107,7 @@ renderCycle();
     msgs.appendChild(wrap);msgs.scrollTop=msgs.scrollHeight;
   }
   function start(which){
+    CFG=CFG_ALL[demoLang()];
     demo=which;history=[];userCount=0;
     document.getElementById("demo-nm").textContent=CFG[demo].nome;
     document.getElementById("demo-ava").textContent=CFG[demo].ava;
@@ -2101,16 +2126,16 @@ renderCycle();
     var typ=document.createElement("div");typ.className="demo-b bot typing";typ.innerHTML='<span class="demo-typing-dot"></span><span class="demo-typing-dot"></span><span class="demo-typing-dot"></span>';msgs.appendChild(typ);msgs.scrollTop=msgs.scrollHeight;
     sendBtn.disabled=true;
     fetch(WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({demo:demo,session_id:sid,messages:history.slice(-8)})})
+      body:JSON.stringify({demo:demo,lang:demoLang(),session_id:sid,messages:history.slice(-8)})})
       .then(function(r){return r.json();})
       .then(function(d){
         typ.remove();
-        var reply=(d&&d.reply)?d.reply:"Opa, tive um probleminha aqui. Pode tentar de novo?";
+        var reply=(d&&d.reply)?d.reply:(demoLang()==='en'?"Oops, something went wrong here. Can you try again?":"Opa, tive um probleminha aqui. Pode tentar de novo?");
         bubble("bot",reply);history.push({role:"assistant",content:reply});
         busy=false;sendBtn.disabled=false;
         if(userCount>=MAXU){endCta();}else{inp.focus();}
       })
-      .catch(function(){typ.remove();bubble("bot","Sem conexão agora 😕 tenta de novo em instantes.");busy=false;sendBtn.disabled=false;});
+      .catch(function(){typ.remove();bubble("bot",demoLang()==='en'?"No connection right now 😕 try again in a moment.":"Sem conexão agora 😕 tenta de novo em instantes.");busy=false;sendBtn.disabled=false;});
   }
   var ob=document.getElementById("open-demo-btn");
   if(ob)ob.addEventListener("click",function(e){e.preventDefault();showChoose();open();});

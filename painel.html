@@ -262,6 +262,9 @@
 
     /* ── CONFIG TAB ──────────────────────────────────────────── */
     .hours-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+    .days-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .day-chip{border:1.5px solid var(--border2, #ddd);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;background:#fff;cursor:pointer;user-select:none;transition:.15s}
+    .day-chip.on{border-color:var(--orange);background:rgba(248,65,0,.08);color:var(--orange)}
     .hours-field{flex:1;min-width:120px}
     .hours-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em}
     .hours-field select{
@@ -689,8 +692,12 @@
             <label>Fechamento</label>
             <select id="hoursEnd"></select>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="saveHours()" style="flex-shrink:0;margin-bottom:1px">Salvar horários</button>
         </div>
+        <div class="hours-field" style="margin-top:14px">
+          <label>Dias em que a equipe atende</label>
+          <div class="days-row" id="hoursDays"></div>
+        </div>
+        <div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="saveHours()">Salvar horários</button></div>
       </div>
 
       <!-- Mensagens que a loja inicia (opt-in) — 25/08/2026 -->
@@ -1599,9 +1606,33 @@ function makeHourOptions(selected) {
   return Array.from({length:24},(_,i)=>`<option value="${i}"${+selected===i?' selected':''}>${String(i).padStart(2,'0')}:00</option>`).join('');
 }
 
+// hours_days: '1-5', '1,3,5', '6-1' (0=dom ... 6=sab); ausente = todos os dias
+const DAY_LBL = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+function parseDays(str) {
+  const set = new Set(); const v = String(str || '').trim();
+  if (!v) { for (let d = 0; d < 7; d++) set.add(d); return set; }
+  v.split(',').forEach(part => {
+    const m = part.trim().match(/^([0-6])(?:-([0-6]))?$/); if (!m) return;
+    const a = +m[1], b = m[2] !== undefined ? +m[2] : a;
+    let d = a; for (let i = 0; i < 7; i++) { set.add(d); if (d === b) break; d = (d + 1) % 7; }
+  });
+  return set;
+}
+function daysToStr(set) {
+  const days = [0,1,2,3,4,5,6].filter(d => set.has(d));
+  if (days.length === 7) return '0-6';
+  if (days.length > 1 && days[days.length-1] - days[0] === days.length - 1) return days[0] + '-' + days[days.length-1];
+  return days.join(',');
+}
+function renderDays() {
+  const box = document.getElementById('hoursDays'); if (!box) return;
+  const on = parseDays(CONFIG.hours_days);
+  box.innerHTML = DAY_LBL.map((l, d) => '<span class="day-chip' + (on.has(d) ? ' on' : '') + '" data-d="' + d + '" onclick="this.classList.toggle(\'on\')">' + l + '</span>').join('');
+}
 function renderConfig() {
   document.getElementById('hoursStart').innerHTML = makeHourOptions(CONFIG.hours_start ?? 8);
   document.getElementById('hoursEnd').innerHTML   = makeHourOptions(CONFIG.hours_end   ?? 18);
+  renderDays();
   renderProactive();
   renderFAQ();
 }
@@ -1641,12 +1672,16 @@ async function saveHours() {
   const s = +document.getElementById('hoursStart').value;
   const e = +document.getElementById('hoursEnd').value;
   if (s >= e) { toast('Abertura deve ser antes do fechamento', false); return; }
+  const daySet = new Set(Array.from(document.querySelectorAll('#hoursDays .day-chip.on')).map(el => +el.getAttribute('data-d')));
+  if (!daySet.size) { toast('Marque pelo menos um dia', false); return; }
+  const dStr = daysToStr(daySet);
   try {
-    const [r1,r2] = await Promise.all([
+    const [r1,r2,r3] = await Promise.all([
       postJSON(CFG_SAVE, {token:TOKEN, key:'hours_start', value:String(s)}),
       postJSON(CFG_SAVE, {token:TOKEN, key:'hours_end',   value:String(e)}),
+      postJSON(CFG_SAVE, {token:TOKEN, key:'hours_days',  value:dStr}),
     ]);
-    if (r1.ok && r2.ok) { CONFIG.hours_start=String(s); CONFIG.hours_end=String(e); toast('Horários salvos'); }
+    if (r1.ok && r2.ok && r3.ok) { CONFIG.hours_start=String(s); CONFIG.hours_end=String(e); CONFIG.hours_days=dStr; toast('Horários salvos'); }
     else toast('Erro ao salvar horários', false);
   } catch(e) { toast('Erro de conexão', false); }
 }
