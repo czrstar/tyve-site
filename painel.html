@@ -441,6 +441,17 @@
     .ens-item input,.ens-item textarea{width:100%;border:1.5px solid var(--border2, #ddd);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;background:#fff;box-sizing:border-box}
     .ens-item textarea{resize:vertical;min-height:70px}
     .ens-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:14px}
+    .plan-opt{border:1.5px solid var(--border2, #ddd);border-radius:12px;padding:16px 16px 14px;background:#fff;display:flex;flex-direction:column;gap:6px}
+    .plan-opt.is-current{border-color:var(--orange);background:rgba(248,65,0,.05)}
+    .plan-opt-name{font-weight:700;font-size:15px}
+    .plan-opt-price{font-size:20px;font-weight:700;letter-spacing:-.01em}
+    .plan-opt-price small{font-size:12px;font-weight:500;color:var(--muted)}
+    .plan-opt-lim{font-size:12.5px;color:var(--muted)}
+    .plan-opt .btn{margin-top:auto;align-self:flex-start}
+    .plan-opt-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--orange)}
+    .plan-confirm{margin-top:14px;border:1px solid #f0d9cc;background:#fff7f4;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.55}
+    .plan-confirm .btn{margin-top:10px;margin-right:8px}
 </style>
 </head>
 <body>
@@ -652,6 +663,16 @@
 
     <!-- ══ TAB: CONFIGURAÇÕES ══════════════════════════════════ -->
     <div id="tab-config" style="display:none">
+
+      <!-- Plano (troca self-service) — 15/09/2026 -->
+      <div class="card" id="planCard">
+        <div class="sec-label" style="margin-bottom:12px">Plano</div>
+        <div class="card-title">Seu plano</div>
+        <div class="card-sub">Mude de plano quando quiser. O novo limite de contatos vale na hora; o valor novo entra na próxima fatura. Sem multa, sem fidelidade.</div>
+        <div class="plan-grid" id="planGrid"><span style="font-size:13px;color:var(--muted)">Carregando planos...</span></div>
+        <div class="plan-confirm" id="planConfirm" style="display:none"></div>
+        <div class="card-sub" id="planNote" style="margin-top:12px;display:none"></div>
+      </div>
 
       <!-- Hours -->
       <div class="card">
@@ -886,6 +907,65 @@ function toast(msg, ok=true) {
 
 function postJSON(url, body) {
   return fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}).then(r=>r.json());
+}
+
+// ── PLANO (troca self-service) — 15/09/2026 ──
+const PLAN_API = N8N + '/tyve-plan-change';
+let PLANS = null, PLAN_PENDING = '';
+function fmtBRL(v) { return 'R$ ' + Number(v).toLocaleString('pt-BR'); }
+async function loadPlan() {
+  const grid = document.getElementById('planGrid'); if (!grid) return;
+  try {
+    const d = await postJSON(PLAN_API, {token: TOKEN, action: 'list'});
+    if (!d || !d.ok) { grid.innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar os planos agora. Fale com a gente pra mudar de plano.</span>'; return; }
+    PLANS = d; renderPlan();
+  } catch(e) { grid.innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar os planos agora.</span>'; }
+}
+function renderPlan() {
+  const grid = document.getElementById('planGrid'); if (!grid || !PLANS) return;
+  grid.innerHTML = PLANS.plans.map(p => {
+    const cur = p.current;
+    return '<div class="plan-opt' + (cur ? ' is-current' : '') + '">' +
+      (cur ? '<span class="plan-opt-tag">Plano atual</span>' : '<span class="plan-opt-tag" style="visibility:hidden">·</span>') +
+      '<div class="plan-opt-name">' + p.name + '</div>' +
+      '<div class="plan-opt-price">' + fmtBRL(p.price) + '<small>/mês</small></div>' +
+      '<div class="plan-opt-lim">até ' + Number(p.limit).toLocaleString('pt-BR') + ' contatos/mês</div>' +
+      (cur ? '' : '<button class="btn btn-ghost btn-sm" onclick="planChoose(\'' + p.id + '\')">Mudar para ' + p.name + '</button>') +
+    '</div>';
+  }).join('');
+  const note = document.getElementById('planNote');
+  if (note) { note.style.display = PLANS.recent_change ? '' : 'none'; note.textContent = PLANS.recent_change ? 'Você acabou de mudar de plano. Espere alguns minutos antes de mudar de novo.' : ''; }
+}
+function planChoose(id) {
+  const p = (PLANS && PLANS.plans || []).find(x => x.id === id); if (!p) return;
+  const cur = (PLANS.plans || []).find(x => x.current) || {};
+  const up = Number(p.price) > Number(cur.price || 0);
+  PLAN_PENDING = id;
+  const box = document.getElementById('planConfirm');
+  box.innerHTML = '<strong>' + (up ? 'Subir' : 'Mudar') + ' para o plano ' + p.name + '?</strong><br>' +
+    'Novo valor: <strong>' + fmtBRL(p.price) + '/mês</strong> (hoje ' + fmtBRL(cur.price || 0) + '). Limite: até <strong>' + Number(p.limit).toLocaleString('pt-BR') + ' contatos/mês</strong>' + (up ? '' : ' (hoje ' + Number(cur.limit || 0).toLocaleString('pt-BR') + ')') + '.<br>' +
+    'O limite vale agora; o valor novo entra na próxima fatura.' +
+    '<div><button class="btn btn-primary btn-sm" id="planConfirmBtn" onclick="planConfirm()">Confirmar mudança</button><button class="btn btn-ghost btn-sm" onclick="planCancel()">Cancelar</button></div>';
+  box.style.display = ''; box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function planCancel() { PLAN_PENDING = ''; const box = document.getElementById('planConfirm'); if (box) box.style.display = 'none'; }
+async function planConfirm() {
+  if (!PLAN_PENDING) return;
+  const btn = document.getElementById('planConfirmBtn'); if (btn) { btn.disabled = true; btn.textContent = 'Mudando...'; }
+  try {
+    const d = await postJSON(PLAN_API, {token: TOKEN, action: 'change', new_plan: PLAN_PENDING});
+    if (d && d.ok) {
+      CONFIG.plan = d.new_plan; CONFIG.contact_limit = String(d.contact_limit);
+      const lbl = planLabel(d.new_plan);
+      ['planName','planBadge','planBadge2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = lbl; });
+      toast(d.message || ('Plano alterado para ' + d.new_name));
+      planCancel(); await loadPlan(); renderProactive && renderProactive();
+    } else {
+      const err = (d && d.error) || '';
+      toast(err === 'too_soon' ? 'Você acabou de mudar de plano. Espere alguns minutos.' : err === 'same_plan' ? 'Você já está nesse plano.' : 'Não foi possível mudar o plano agora. Fale com a gente.', false);
+      if (btn) { btn.disabled = false; btn.textContent = 'Confirmar mudança'; }
+    }
+  } catch(e) { toast('Erro de conexão', false); if (btn) { btn.disabled = false; btn.textContent = 'Confirmar mudança'; } }
 }
 
 // ── ENSINAR (sugestões de FAQ a partir dos handoffs) — 08/09/2026 ──
@@ -1207,6 +1287,7 @@ async function reload() {
     showState('ok');
     initTab();
     refreshEnsinarBadge();
+    loadPlan();
   } catch(e) { showState('error'); }
 }
 
