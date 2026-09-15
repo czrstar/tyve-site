@@ -668,7 +668,8 @@
       <div class="card" id="planCard">
         <div class="sec-label" style="margin-bottom:12px">Plano</div>
         <div class="card-title">Seu plano</div>
-        <div class="card-sub">Mude de plano quando quiser. O novo limite de contatos vale na hora; o valor novo entra na próxima fatura. Sem multa, sem fidelidade.</div>
+        <div class="card-sub">Mude de plano quando quiser, sem multa e sem fidelidade. Subir de plano vale na hora (o valor novo entra na próxima fatura). Descer de plano vale a partir do dia 1 do mês seguinte, para não cortar o seu atendimento no meio do mês.</div>
+        <div class="plan-confirm" id="planSched" style="display:none"></div>
         <div class="plan-grid" id="planGrid"><span style="font-size:13px;color:var(--muted)">Carregando planos...</span></div>
         <div class="plan-confirm" id="planConfirm" style="display:none"></div>
         <div class="card-sub" id="planNote" style="margin-top:12px;display:none"></div>
@@ -935,6 +936,24 @@ function renderPlan() {
   }).join('');
   const note = document.getElementById('planNote');
   if (note) { note.style.display = PLANS.recent_change ? '' : 'none'; note.textContent = PLANS.recent_change ? 'Você acabou de mudar de plano. Espere alguns minutos antes de mudar de novo.' : ''; }
+  const sc = document.getElementById('planSched'), sd = PLANS.scheduled;
+  if (sc) {
+    if (sd) {
+      sc.innerHTML = '<strong>Mudança agendada:</strong> seu plano passa a ser o <strong>' + (sd.new_name || sd.new_plan) + '</strong> em ' + fmtDateBR(sd.effective_at) + '. Até lá nada muda.' +
+        '<div><button class="btn btn-ghost btn-sm" id="planSchedCancel" onclick="planCancelScheduled()">Cancelar mudança</button></div>';
+      sc.style.display = '';
+      grid.querySelectorAll('button').forEach(b => { b.disabled = true; b.title = 'Cancele a mudança agendada para escolher outro plano'; });
+    } else sc.style.display = 'none';
+  }
+}
+function fmtDateBR(iso) { try { const d = new Date(iso); return String(d.getUTCDate()).padStart(2,'0') + '/' + String(d.getUTCMonth()+1).padStart(2,'0'); } catch(e) { return ''; } }
+async function planCancelScheduled() {
+  const b = document.getElementById('planSchedCancel'); if (b) { b.disabled = true; b.textContent = 'Cancelando...'; }
+  try {
+    const d = await postJSON(PLAN_API, {token: TOKEN, action: 'cancel'});
+    if (d && d.ok) { toast('Mudança de plano cancelada. Seu plano continua o mesmo.'); await loadPlan(); }
+    else { toast('Não foi possível cancelar agora. Fale com a gente.', false); if (b) { b.disabled = false; b.textContent = 'Cancelar mudança'; } }
+  } catch(e) { toast('Erro de conexão', false); if (b) { b.disabled = false; b.textContent = 'Cancelar mudança'; } }
 }
 function planChoose(id) {
   const p = (PLANS && PLANS.plans || []).find(x => x.id === id); if (!p) return;
@@ -944,7 +963,7 @@ function planChoose(id) {
   const box = document.getElementById('planConfirm');
   box.innerHTML = '<strong>' + (up ? 'Subir' : 'Mudar') + ' para o plano ' + p.name + '?</strong><br>' +
     'Novo valor: <strong>' + fmtBRL(p.price) + '/mês</strong> (hoje ' + fmtBRL(cur.price || 0) + '). Limite: até <strong>' + Number(p.limit).toLocaleString('pt-BR') + ' contatos/mês</strong>' + (up ? '' : ' (hoje ' + Number(cur.limit || 0).toLocaleString('pt-BR') + ')') + '.<br>' +
-    'O limite vale agora; o valor novo entra na próxima fatura.' +
+    (up ? 'O limite vale agora; o valor novo entra na próxima fatura.' : 'A mudança vale a partir do dia 1 do mês que vem. Até lá o plano atual continua igual, e você pode cancelar a mudança quando quiser.') +
     '<div><button class="btn btn-primary btn-sm" id="planConfirmBtn" onclick="planConfirm()">Confirmar mudança</button><button class="btn btn-ghost btn-sm" onclick="planCancel()">Cancelar</button></div>';
   box.style.display = ''; box.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
@@ -955,14 +974,16 @@ async function planConfirm() {
   try {
     const d = await postJSON(PLAN_API, {token: TOKEN, action: 'change', new_plan: PLAN_PENDING});
     if (d && d.ok) {
-      CONFIG.plan = d.new_plan; CONFIG.contact_limit = String(d.contact_limit);
-      const lbl = planLabel(d.new_plan);
-      ['planName','planBadge','planBadge2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = lbl; });
+      if (!d.scheduled) {
+        CONFIG.plan = d.new_plan; CONFIG.contact_limit = String(d.contact_limit);
+        const lbl = planLabel(d.new_plan);
+        ['planName','planBadge','planBadge2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = lbl; });
+      }
       toast(d.message || ('Plano alterado para ' + d.new_name));
       planCancel(); await loadPlan(); renderProactive && renderProactive();
     } else {
       const err = (d && d.error) || '';
-      toast(err === 'too_soon' ? 'Você acabou de mudar de plano. Espere alguns minutos.' : err === 'same_plan' ? 'Você já está nesse plano.' : 'Não foi possível mudar o plano agora. Fale com a gente.', false);
+      toast(err === 'too_soon' ? 'Você acabou de mudar de plano. Espere alguns minutos.' : err === 'same_plan' ? 'Você já está nesse plano.' : err === 'has_scheduled' ? 'Você já tem uma mudança agendada. Cancele antes de escolher outro plano.' : 'Não foi possível mudar o plano agora. Fale com a gente.', false);
       if (btn) { btn.disabled = false; btn.textContent = 'Confirmar mudança'; }
     }
   } catch(e) { toast('Erro de conexão', false); if (btn) { btn.disabled = false; btn.textContent = 'Confirmar mudança'; } }
