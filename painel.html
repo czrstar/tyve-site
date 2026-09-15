@@ -678,6 +678,16 @@
         <div class="card-sub" id="planNote" style="margin-top:12px;display:none"></div>
       </div>
 
+      <!-- Pacotes de contatos (compra self-service) — 15/09/2026 -->
+      <div class="card" id="packCard">
+        <div class="sec-label" style="margin-bottom:12px">Contatos extras</div>
+        <div class="card-title">Pacotes de contatos</div>
+        <div class="card-sub">Vai passar do limite este mês? Compre um pacote e o seu limite sobe na hora, só neste mês. Sai mais barato que o avulso (R$ 0,80 por contato) e você paga por Pix, boleto ou cartão.</div>
+        <div id="packActive" style="margin-top:12px;display:none"></div>
+        <div class="plan-grid" id="packGrid"><span style="font-size:13px;color:var(--muted)">Carregando pacotes...</span></div>
+        <div class="plan-confirm" id="packConfirm" style="display:none"></div>
+      </div>
+
       <!-- Hours -->
       <div class="card">
         <div class="sec-label" style="margin-bottom:12px">Horários</div>
@@ -994,6 +1004,70 @@ async function planConfirm() {
       if (btn) { btn.disabled = false; btn.textContent = 'Confirmar mudança'; }
     }
   } catch(e) { toast('Erro de conexão', false); if (btn) { btn.disabled = false; btn.textContent = 'Confirmar mudança'; } }
+}
+
+// ── PACOTES DE CONTATOS (compra self-service) — 15/09/2026 ──
+const PACK_API = N8N + '/tyve-contact-pack';
+let PACKS = null, PACK_PENDING = 0;
+async function loadPacks() {
+  const grid = document.getElementById('packGrid'); if (!grid) return;
+  try {
+    const d = await postJSON(PACK_API, {token: TOKEN, action: 'list'});
+    if (!d || !d.ok) { grid.innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar os pacotes agora. Fale com a gente.</span>'; return; }
+    PACKS = d; renderPacks();
+  } catch(e) { grid.innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar os pacotes agora.</span>'; }
+}
+function renderPacks() {
+  const grid = document.getElementById('packGrid'), act = document.getElementById('packActive'); if (!grid || !PACKS) return;
+  grid.innerHTML = PACKS.packs.map(p => '<div class="plan-opt">' +
+    '<div class="plan-opt-name">+' + Number(p.size).toLocaleString('pt-BR') + ' contatos</div>' +
+    '<div class="plan-opt-price">' + fmtBRL(p.price) + '</div>' +
+    '<div class="plan-opt-lim">R$ ' + (p.price / p.size).toFixed(2).replace('.', ',') + ' por contato</div>' +
+    '<button class="btn btn-ghost btn-sm" onclick="packChoose(' + p.size + ')"' + (PACKS.recent ? ' disabled title="Espere alguns minutos entre compras"' : '') + '>Comprar</button></div>').join('');
+  if (act) {
+    const a = PACKS.active || [];
+    if (a.length) {
+      act.innerHTML = '<div class="plan-confirm" style="margin-top:0"><strong>Neste mês:</strong> ' + a.map(x => '+' + x.size + ' contatos (' + fmtBRL(x.price) + ')' +
+        (x.invoice_url ? ' <a href="' + x.invoice_url + '" target="_blank" rel="noopener" style="color:var(--orange);font-weight:600">pagar</a>' : '')).join(' · ') +
+        '. Limite atual: <strong>' + Number(PACKS.contact_limit || 0).toLocaleString('pt-BR') + ' contatos</strong>. Os pacotes valem até o fim do mês.</div>';
+      act.style.display = '';
+    } else act.style.display = 'none';
+  }
+}
+function packChoose(size) {
+  const p = (PACKS && PACKS.packs || []).find(x => x.size === size); if (!p) return;
+  PACK_PENDING = size;
+  const box = document.getElementById('packConfirm');
+  box.innerHTML = '<strong>Comprar +' + size + ' contatos por ' + fmtBRL(p.price) + '?</strong><br>' +
+    'O limite sobe na hora e vale até o fim deste mês. A cobrança chega em seguida (Pix, boleto ou cartão).' +
+    (PACKS.has_cpf ? '' : '<div class="add-field" style="margin-top:10px"><label>CPF ou CNPJ para a nota (só números)</label><input type="text" id="packCpf" placeholder="00.000.000/0001-00" inputmode="numeric" style="max-width:260px" /></div>') +
+    '<div><button class="btn btn-primary btn-sm" id="packConfirmBtn" onclick="packConfirm()">Confirmar compra</button><button class="btn btn-ghost btn-sm" onclick="packCancel()">Cancelar</button></div>';
+  box.style.display = ''; box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function packCancel() { PACK_PENDING = 0; const box = document.getElementById('packConfirm'); if (box) box.style.display = 'none'; }
+async function packConfirm() {
+  if (!PACK_PENDING) return;
+  const body = {token: TOKEN, action: 'buy', size: PACK_PENDING};
+  const cpfEl = document.getElementById('packCpf');
+  if (cpfEl) {
+    const digits = cpfEl.value.replace(/\D/g, '');
+    if (digits.length !== 11 && digits.length !== 14) { toast('Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)', false); return; }
+    body.cpf_cnpj = digits;
+  }
+  const btn = document.getElementById('packConfirmBtn'); if (btn) { btn.disabled = true; btn.textContent = 'Comprando...'; }
+  try {
+    const d = await postJSON(PACK_API, body);
+    if (d && d.ok) {
+      toast(d.message || 'Pacote adicionado');
+      packCancel(); await loadPacks();
+      if (d.invoice_url) { const box = document.getElementById('packConfirm'); box.innerHTML = '<strong>Pacote ativado.</strong> ' + d.message + '<div><a class="btn btn-primary btn-sm" href="' + d.invoice_url + '" target="_blank" rel="noopener">Pagar ' + fmtBRL(d.price) + '</a><button class="btn btn-ghost btn-sm" onclick="packCancel()">Fechar</button></div>'; box.style.display = ''; }
+      CONFIG.contact_limit = String((parseInt(CONFIG.contact_limit) || 0) + d.size);
+    } else {
+      const err = (d && d.error) || '';
+      toast(err === 'too_soon' ? 'Espere alguns minutos entre uma compra e outra.' : err === 'need_cpf' ? 'Precisamos do seu CPF ou CNPJ para emitir a cobrança.' : err === 'limit_month' ? 'Limite de pacotes no mês atingido. Fale com a gente.' : 'Não foi possível comprar agora. Fale com a gente.', false);
+      if (btn) { btn.disabled = false; btn.textContent = 'Confirmar compra'; }
+    }
+  } catch(e) { toast('Erro de conexão', false); if (btn) { btn.disabled = false; btn.textContent = 'Confirmar compra'; } }
 }
 
 // ── ENSINAR (sugestões de FAQ a partir dos handoffs) — 08/09/2026 ──
@@ -1316,6 +1390,7 @@ async function reload() {
     initTab();
     refreshEnsinarBadge();
     loadPlan();
+    loadPacks();
   } catch(e) { showState('error'); }
 }
 
