@@ -714,7 +714,7 @@
       <div class="card" id="proactiveCard">
         <div class="sec-label" style="margin-bottom:12px">Mensagens automáticas</div>
         <div class="card-title">Mensagens que o seu negócio inicia</div>
-        <div class="card-sub">As respostas do agente não têm custo extra. As mensagens abaixo são iniciadas pelo seu negócio e por isso a <strong>Meta cobra cerca de R$ 0,04 cada</strong>, direto na sua conta do WhatsApp (categoria utilidade). A Tyve não cobra nada por elas. Ligue só o que quiser.</div>
+        <div class="card-sub">A partir de <strong>01/10/2026</strong> a Meta cobra <strong>cada mensagem enviada pelo seu número</strong>, inclusive as respostas do agente: cerca de <strong>R$ 0,04 cada</strong>, direto na sua conta do WhatsApp. A Tyve não cobra nada por mensagem. As mensagens abaixo são iniciadas pelo seu negócio: ligue só o que quiser.</div>
         <div id="proactiveList" style="margin-top:14px"></div>
         <div id="proactiveNote" class="card-sub" style="margin-top:10px;display:none"></div>
       </div>
@@ -1715,6 +1715,7 @@ function renderConfig() {
 // ── Mensagens que o negócio inicia (opt-in) ─────────────────
 const PROACTIVE = [
   { key:'order_notif_enabled', label:'📦 Aviso de pedido enviado, com rastreio', desc:'Assim que a loja despacha, o cliente recebe o código de rastreio. Reduz o "cadê meu pedido" antes de ele acontecer.', ecom:true, plans:['cresce','escala'] },
+  { key:'order_notif_delivered_enabled', label:'✅ Aviso de pedido entregue', desc:'Quando a transportadora confirma a entrega, o cliente recebe a confirmação. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
   { key:'followup_d1_enabled', label:'🔁 Follow-up no dia seguinte', desc:'Quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu.', ecom:false, plans:['cresce','escala'] },
   { key:'nps_enabled', label:'⭐ Pesquisa de satisfação (0 a 10)', desc:'Enviada no dia seguinte a cada atendimento da equipe. As notas aparecem na aba Resultados.', ecom:false, plans:['cresce','escala'] },
 ];
@@ -1731,7 +1732,9 @@ function renderProactive() {
   }
   note.style.display = 'none';
   box.innerHTML = allowed.map(p => {
-    const on = String(CONFIG[p.key]||'') === 'true';
+    let on = String(CONFIG[p.key]||'') === 'true';
+    // (16/09/2026) sem a chave propria, o "entregue" segue o legado (order_notif_events ou padrao do Escala)
+    if (p.key === 'order_notif_delivered_enabled' && CONFIG[p.key] == null) { const ev = String(CONFIG.order_notif_events||''); on = String(CONFIG.order_notif_enabled||'') === 'true' && (!ev || ev.split(',').map(x=>x.trim()).includes('delivered')); }
     return '<div class="faq-item" style="padding:10px 0"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div></div></div></div>';
   }).join('');
 }
