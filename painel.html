@@ -757,6 +757,14 @@
         </div>
       </div>
 
+      <!-- Documentos conectados (Notion) — F3 16/09/2026 -->
+      <div class="card" id="kbCard" style="display:none">
+        <div class="sec-label" style="margin-bottom:12px">Base de conhecimento</div>
+        <div class="card-title">Documentos conectados</div>
+        <div class="card-sub">Conecte as páginas do seu Notion e o agente passa a responder com o que está escrito nelas: preços, endereços, regras, horários. Toda mudança que você fizer no Notion chega ao atendimento em poucos minutos. A FAQ acima continua tendo prioridade.</div>
+        <div id="kbBody" style="margin-top:14px"><span style="font-size:13px;color:var(--muted)">Carregando...</span></div>
+      </div>
+
       <!-- Tips -->
       <div class="tips">
         <p>💡 Dicas para um FAQ eficiente</p>
@@ -1710,6 +1718,7 @@ function renderConfig() {
   renderDays();
   renderProactive();
   renderFAQ();
+  loadKB();
 }
 
 // ── Mensagens que o negócio inicia (opt-in) ─────────────────
@@ -1738,6 +1747,68 @@ function renderProactive() {
     return '<div class="faq-item" style="padding:10px 0"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div></div></div></div>';
   }).join('');
 }
+// ── Documentos conectados (Notion) — F3 16/09/2026 ──
+const KB_API = N8N + '/tyve-kb';
+let KB = null, KB_POLL = null;
+function fmtDT(iso) { try { const d = new Date(iso); if (isNaN(d)) return ''; return d.toLocaleString('pt-BR', {timeZone:'America/Sao_Paulo', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}); } catch(e) { return ''; } }
+async function loadKB(silent) {
+  const card = document.getElementById('kbCard'); if (!card) return;
+  const avail = String(CONFIG.kb_available||'') === 'true' || CONFIG.kb_enabled != null;
+  card.style.display = avail ? '' : 'none';
+  if (!avail) return;
+  try { const s = await postJSON(KB_API, {token: TOKEN, action: 'status'}); if (s && s.ok) { KB = s; renderKB(); } else if (!silent) document.getElementById('kbBody').innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar. Tente de novo em instantes.</span>'; }
+  catch(e) { if (!silent) document.getElementById('kbBody').innerHTML = '<span style="font-size:13px;color:var(--muted)">Erro de conexão.</span>'; }
+}
+function kbConnectForm(reconnect) {
+  const oauth = KB && KB.oauth_available ? '<a class="btn btn-primary btn-sm" href="' + N8N + '/notion-oauth-start?token=' + encodeURIComponent(TOKEN) + '" target="_blank" rel="noopener">Conectar com o Notion</a><div style="font-size:12px;color:var(--muted);margin:10px 0">ou, se preferir, use um token de integração interna:</div>' : '';
+  return '<div style="display:flex;flex-direction:column;gap:10px">' + (reconnect ? '<div style="font-size:13px;color:#b45309">A conexão anterior deixou de funcionar (token inválido ou revogado). Cole um token novo para reconectar.</div>' : '') + oauth
+    + '<div class="add-field" style="margin:0"><label>Token da integração interna do Notion</label><input type="password" id="kbToken" placeholder="ntn_..." autocomplete="off" /></div>'
+    + '<div style="display:flex;gap:8px;align-items:center"><button class="btn btn-primary btn-sm" id="kbConnectBtn" onclick="kbConnect()">' + (reconnect ? 'Reconectar' : 'Conectar com token') + '</button><span style="font-size:12px;color:var(--muted)">O token fica guardado com segurança e nunca é mostrado de novo.</span></div>'
+    + '<details style="font-size:13px;color:#555;line-height:1.55"><summary style="cursor:pointer;font-weight:600;color:var(--text)">Como gerar o token (2 minutos)</summary><ol style="margin:8px 0 0 18px;padding:0">'
+    + '<li>No Notion, o dono do espaço abre <strong>notion.so/profile/integrations</strong> e clica em <strong>Nova integração</strong> (tipo interna, associada ao seu espaço).</li>'
+    + '<li>Copie o <strong>Internal Integration Secret</strong> e cole aqui.</li>'
+    + '<li>Em cada página que o agente pode usar, clique em <strong>•••</strong> → <strong>Conexões</strong> → escolha a integração. Páginas dentro dela entram junto.</li></ol>'
+    + '<div style="margin-top:8px">Compartilhe só o que pode ser dito ao cliente. Nada além dessas páginas é lido.</div></details></div>';
+}
+function renderKB() {
+  const box = document.getElementById('kbBody'); if (!box || !KB) return;
+  if (!KB.connected) { box.innerHTML = kbConnectForm(false); return; }
+  const st = KB.status, syncing = KB.syncing || st === 'new';
+  const pill = st === 'reauth' ? ['Precisa reconectar', '#b45309', '#fff7ed'] : st === 'error' ? ['Erro na última sincronização', '#b91c1c', '#fef2f2'] : syncing ? ['Sincronizando...', '#0369a1', '#f0f9ff'] : st === 'partial' ? ['Sincronizado (parcial)', '#a16207', '#fefce8'] : ['Sincronizado', '#15803d', '#f0fdf4'];
+  let h = '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">'
+    + '<div><div style="font-weight:600">Notion · ' + esc(KB.workspace_name || 'espaço conectado') + '</div><div style="font-size:12px;color:var(--muted);margin-top:3px">' + (KB.last_sync_at ? 'Última sincronização: ' + fmtDT(KB.last_sync_at) : 'Primeira sincronização em andamento') + ' · ' + KB.docs + (KB.docs === 1 ? ' documento' : ' documentos') + (KB.token_hint ? ' · token ····' + esc(KB.token_hint) : '') + '</div></div>'
+    + '<span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;color:' + pill[1] + ';background:' + pill[2] + '">' + pill[0] + '</span></div>';
+  if (st === 'error' && KB.last_error) h += '<div style="font-size:12px;color:#b91c1c;margin-top:8px">' + esc(KB.last_error) + '</div>';
+  if (st === 'reauth') h += '<div style="margin-top:12px">' + kbConnectForm(true) + '</div>';
+  const docs = KB.documents || [];
+  if (docs.length) {
+    h += '<div style="margin-top:12px;border:1px solid var(--border);border-radius:10px;max-height:260px;overflow:auto">' + docs.map(d => '<div style="display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px"><div style="min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (d.url ? '<a href="' + esc(d.url) + '" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">' + esc(d.title || 'Sem título') + '</a>' : esc(d.title || 'Sem título')) + '</div>' + (d.parent ? '<div style="font-size:12px;color:var(--muted)">' + esc(d.parent) + '</div>' : '') + '</div><div style="font-size:12px;color:var(--muted);white-space:nowrap">' + (d.edited ? 'editado ' + fmtDT(d.edited) : '') + '</div></div>').join('') + '</div>';
+  } else if (!syncing) {
+    h += '<div style="font-size:13px;color:#b45309;margin-top:10px">Nenhuma página encontrada. No Notion, abra a página, clique em ••• → Conexões e escolha a integração. Depois clique em Sincronizar agora.</div>';
+  }
+  h += '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="kbSync()" ' + (syncing ? 'disabled' : '') + '>Sincronizar agora</button><button class="btn btn-ghost btn-sm" onclick="kbDisconnect()">Desconectar</button></div>';
+  box.innerHTML = h;
+  if (syncing && !KB_POLL) { let n = 0; KB_POLL = setInterval(async () => { n++; await loadKB(true); if (!KB || !(KB.syncing || KB.status === 'new') || n > 24) { clearInterval(KB_POLL); KB_POLL = null; } }, 5000); }
+}
+async function kbConnect() {
+  const inp = document.getElementById('kbToken'), btn = document.getElementById('kbConnectBtn');
+  const t = (inp && inp.value || '').trim(); if (!t) { toast('Cole o token da integração', false); return; }
+  btn.disabled = true; btn.textContent = 'Validando...';
+  try { const r = await postJSON(KB_API, {token: TOKEN, action: 'connect_token', notion_token: t});
+    if (r && r.ok) { toast('Notion conectado'); CONFIG.kb_enabled = 'true'; await loadKB(); }
+    else { toast(r && r.error ? r.error : 'Não foi possível conectar', false); btn.disabled = false; btn.textContent = 'Conectar com token'; }
+  } catch(e) { toast('Erro de conexão', false); btn.disabled = false; btn.textContent = 'Conectar com token'; }
+}
+async function kbSync() {
+  try { const r = await postJSON(KB_API, {token: TOKEN, action: 'sync_now'}); toast(r && r.ok ? r.message : (r && r.error || 'Não foi possível sincronizar'), !!(r && r.ok)); if (r && r.ok) { KB.syncing = true; renderKB(); } }
+  catch(e) { toast('Erro de conexão', false); }
+}
+async function kbDisconnect() {
+  if (!confirm('Desconectar o Notion? O agente deixa de usar esses documentos na hora. Você pode reconectar quando quiser.')) return;
+  try { const r = await postJSON(KB_API, {token: TOKEN, action: 'disconnect'}); if (r && r.ok) { toast('Notion desconectado'); CONFIG.kb_enabled = 'false'; await loadKB(); } else toast('Não foi possível desconectar', false); }
+  catch(e) { toast('Erro de conexão', false); }
+}
+
 async function toggleProactive(key, on, el) {
   try {
     const r = await postJSON(CFG_SAVE, {token:TOKEN, key:key, value: on ? 'true' : 'false'});
