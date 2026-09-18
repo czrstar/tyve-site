@@ -878,7 +878,7 @@ const CONV_API  = N8N + '/tyve-conversations';
 const SUGG_API  = N8N + '/tyve-faq-suggestions';
 const REFRESH_MS = 5 * 60 * 1000;
 
-let TOKEN = '', CONFIG = {}, FAQ = [], chart = null;
+let TOKEN = '', CONFIG = {}, FAQ = [], TEMPLATES = [], chart = null;
 
 // ── UTILS ────────────────────────────────────────────
 // (31/08/2026) token fora da URL: 1a visita via link guarda no navegador e a URL vira /painel limpa.
@@ -1389,6 +1389,7 @@ async function reload() {
     if (!cfg  || !cfg.ok) { showState('error'); return; }
     CONFIG = cfg.config || {};
     FAQ    = cfg.faq_entries || [];
+    TEMPLATES = Array.isArray(cfg.templates) ? cfg.templates : [];
     renderDash(dash);
     renderConfig();
     const exchOn = String(CONFIG.exchange_enabled||'') === 'true';
@@ -1722,6 +1723,17 @@ function renderConfig() {
 }
 
 // ── Mensagens que o negócio inicia (opt-in) ─────────────────
+// (18/09/2026) cada mensagem automática depende de um template aprovado pela Meta na conta do cliente (wa_client_templates via Config GET)
+const PROACTIVE_TPL = { order_notif_enabled:['tyve_pedido_enviado'], order_notif_delivered_enabled:['tyve_pedido_entregue'], followup_d1_enabled:['tyve_followup_d1_v3'], nps_enabled:['tyve_nps_survey'] };
+function tplGate(key) {
+  if (!TEMPLATES.length) return { ok:true };
+  const names = PROACTIVE_TPL[key] || []; const rows = names.map(n => TEMPLATES.find(t => t.name === n)).filter(Boolean);
+  if (rows.length < names.length) return { ok:false, note:'Template ainda não criado na sua conta do WhatsApp. A Tyve cria automaticamente na conexão; fale com a gente.' };
+  const rej = rows.find(t => t.status === 'REJECTED'); if (rej) return { ok:false, note:'A Meta recusou o modelo desta mensagem. A Tyve já foi avisada e vai ajustar.' };
+  const pend = rows.find(t => t.status !== 'APPROVED'); if (pend) return { ok:false, note:'Aguardando aprovação da Meta para o modelo desta mensagem (costuma levar de minutos a algumas horas). O interruptor libera sozinho quando aprovar.' };
+  const mkt = rows.find(t => t.category === 'MARKETING'); if (mkt) return { ok:true, note:'A Meta classificou esta mensagem como marketing na sua conta: custa mais por envio que as demais.' };
+  return { ok:true };
+}
 const PROACTIVE = [
   { key:'order_notif_enabled', label:'📦 Aviso de pedido enviado, com rastreio', desc:'Assim que a loja despacha, o cliente recebe o código de rastreio. Reduz o "cadê meu pedido" antes de ele acontecer.', ecom:true, plans:['cresce','escala'] },
   { key:'order_notif_delivered_enabled', label:'✅ Aviso de pedido entregue', desc:'Quando a transportadora confirma a entrega, o cliente recebe a confirmação. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
@@ -1744,7 +1756,9 @@ function renderProactive() {
     let on = String(CONFIG[p.key]||'') === 'true';
     // (16/09/2026) sem a chave propria, o "entregue" segue o legado (order_notif_events ou padrao do Escala)
     if (p.key === 'order_notif_delivered_enabled' && CONFIG[p.key] == null) { const ev = String(CONFIG.order_notif_events||''); on = String(CONFIG.order_notif_enabled||'') === 'true' && (!ev || ev.split(',').map(x=>x.trim()).includes('delivered')); }
-    return '<div class="faq-item" style="padding:10px 0"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div></div></div></div>';
+    const g = tplGate(p.key);
+    const gateNote = g.note ? '<div style="font-size:12px;color:' + (g.ok ? '#a16207' : '#b45309') + ';margin-top:4px">' + g.note + '</div>' : '';
+    return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + '</div></div></div>';
   }).join('');
 }
 // ── Documentos conectados (Notion) — F3 16/09/2026 ──
