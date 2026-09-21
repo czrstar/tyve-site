@@ -551,7 +551,7 @@
         <div class="ai-bar-wrap">
           <div class="ai-bar-hd">
             <span>Orçamento mensal</span>
-            <span id="ai-budget-txt">– / R$ 200</span>
+            <span id="ai-budget-txt">– / R$ 400</span>
           </div>
           <div class="ai-bar-track">
             <div class="ai-bar-fill safe" id="ai-bar" style="width:0%"></div>
@@ -610,7 +610,7 @@
 
 <script>
 const OPS_API    = 'https://n8n.tyve.com.br/webhook/tyve-ops-dashboard';
-const AI_BUDGET  = 200; // BRL/month
+const AI_BUDGET  = 400; // BRL/month (21/09: era 200, referencia visual apenas)
 let savedToken   = '';
 
 // ── Formatters ────────────────────────────────────────────────
@@ -744,7 +744,7 @@ function render(d) {
     setTimeout(()=>{ bar.style.width = pct.toFixed(1)+'%'; }, 60);
     bar.className = 'ai-bar-fill ' + (pct>=80?'danger':pct>=55?'warn':'safe');
   }
-  setText('ai-budget-txt', brl(mo)+' / R$ 200');
+  setText('ai-budget-txt', brl(mo)+' / R$ '+AI_BUDGET);
 
   // ── Clients table
   setText('cli-count', clients.length);
