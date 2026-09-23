@@ -977,7 +977,12 @@ async function planCancelScheduled() {
   try {
     const d = await postJSON(PLAN_API, {token: TOKEN, action: 'cancel'});
     if (d && d.ok) { toast('Mudança de plano cancelada. Seu plano continua o mesmo.'); await loadPlan(); }
-    else { toast('Não foi possível cancelar agora. Fale com a gente.', false); if (b) { b.disabled = false; b.textContent = 'Cancelar mudança'; } }
+    else {
+      const err = (d && d.error) || '';
+      if (err === 'nothing_scheduled') { toast('Não há mudança de plano agendada.', false); await loadPlan(); return; }
+      toast(err === 'too_soon' ? 'Você acabou de agendar essa mudança. Espere 2 minutos e tente cancelar de novo.' : err === 'too_late' ? 'A mudança de plano já vale a partir de hoje e não pode mais ser cancelada por aqui. Fale com a gente se precisar.' : 'Não foi possível cancelar agora. Fale com a gente.', false);
+      if (b) { b.disabled = false; b.textContent = 'Cancelar mudança'; }
+    }
   } catch(e) { toast('Erro de conexão', false); if (b) { b.disabled = false; b.textContent = 'Cancelar mudança'; } }
 }
 function planChoose(id) {
