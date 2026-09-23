@@ -632,7 +632,27 @@
   } else {
     document.getElementById('sum-amt').textContent = fmtBR(mensal);
     document.getElementById('trust-commit').textContent = 'Sem fidelidade — cancela quando quiser, sem multa';
-    btn.setAttribute('href', plan.asaas);
+    // (23/09/2026 #702) primeiro mês proporcional: quem assina no meio do mês paga só os dias que faltam.
+    // O valor final é calculado no servidor (tyve-checkout); aqui é só a prévia, pelo horário de Brasília.
+    var sp = new Date(Date.now() - 3 * 3600 * 1000);
+    var dia = sp.getUTCDate();
+    var dim = new Date(Date.UTC(sp.getUTCFullYear(), sp.getUTCMonth() + 1, 0)).getUTCDate();
+    var restante = dim - dia + 1;
+    var tipoCk = isServico() ? 'servico' : 'ecom';
+    btn.setAttribute('href', 'https://n8n.tyve.com.br/webhook/tyve-checkout?plano=' + key + '&tipo=' + tipoCk);
+    if (dia > 1) {
+      var MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+      var LIM = isServico() ? { atende: 200, cresce: 500, escala: 1000 } : { atende: 250, cresce: 600, escala: 1200 };
+      var hoje = Math.max(5, Math.round(mensal * restante / dim * 100) / 100);
+      var prox = new Date(Date.UTC(sp.getUTCFullYear(), sp.getUTCMonth() + 1, 1));
+      var proxTxt = '01/' + String(prox.getUTCMonth() + 1).padStart(2, '0');
+      var contatos = Math.max(1, Math.round((LIM[key] || 0) * restante / dim));
+      var pl = document.getElementById('sum-annual-line');
+      pl.style.display = 'block';
+      pl.innerHTML = 'Hoje você paga só <strong>R$' + fmtBR(hoje, 2) + '</strong>, referente aos ' + restante + ' dias que faltam de ' + MESES[sp.getUTCMonth()] + ' (até ' + fmtBR(contatos) + ' contatos neste período).' +
+        ' <span class="save">· A partir de ' + proxTxt + ', R$' + fmtBR(mensal) + '/mês, sempre no dia 1º.</span>';
+      document.getElementById('now-step1').textContent = 'Você paga só o proporcional de hoje até o fim do mês, no ambiente seguro do Asaas (Pix, cartão ou boleto).';
+    }
     document.title = 'Confirme seu plano ' + plan.name + ' · Tyve ⚡';
   }
 
