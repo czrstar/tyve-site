@@ -1738,6 +1738,8 @@ function tplGate(key) {
   // o gate olha esse modelo. Modelo proprio fora da lista padrao e cuidado pela Tyve (so e gravado depois de aprovado) -> nao trava.
   const custom = key === 'order_notif_paid_enabled' ? String(CONFIG.order_notif_tpl_paid || '').trim() : '';
   if (custom && !TEMPLATES.some(t => t.name === custom)) return { ok:true };
+  // (24/09 #737) versao padrao com itens aprovada (o Order Notify usa ela quando aprovada) tambem libera
+  if (!custom && key === 'order_notif_paid_enabled' && TEMPLATES.some(t => t.name === 'tyve_pedido_confirmado_itens' && t.status === 'APPROVED')) return { ok:true };
   const names = custom ? [custom] : (PROACTIVE_TPL[key] || []);
   const rows = names.map(n => TEMPLATES.find(t => t.name === n)).filter(Boolean);
   if (rows.length < names.length) return { ok:false, note:'Template ainda não criado na sua conta do WhatsApp. A Tyve cria automaticamente na conexão; fale com a gente.' };
