@@ -1149,6 +1149,7 @@
           <label class="q-label">Quais dessas você quer ativar? <span style="font-weight:500;color:#888">(opcional)</span></label>
           <div class="checkbox-group" id="cg-optin">
             <label class="check-item" data-biz-q="ecommerce"><input type="checkbox" name="optin_order_notif" value="sim" /><div class="check-box"></div><span class="check-label">📦 <strong>Aviso de pedido enviado, com rastreio</strong>: assim que a loja despacha, o cliente recebe o código. É o que mais reduz o "cadê meu pedido". <em>(incluso no Cresce e no Escala)</em></span></label>
+            <label class="check-item" data-biz-q="ecommerce" data-plan-q="escala"><input type="checkbox" name="optin_order_paid" value="sim" /><div class="check-box"></div><span class="check-label">🎉 <strong>Confirmação de pedido pago</strong>: quando o pagamento é aprovado, o cliente recebe a confirmação do pedido. <em>(só no Escala)</em></span></label>
             <label class="check-item" data-biz-q="ecommerce" data-plan-q="escala"><input type="checkbox" name="optin_order_delivered" value="sim" /><div class="check-box"></div><span class="check-label">✅ <strong>Aviso de pedido entregue</strong>: quando a transportadora confirma a entrega. <em>(só no Escala)</em></span></label>
             <label class="check-item"><input type="checkbox" name="optin_followup" value="sim" /><div class="check-box"></div><span class="check-label">🔁 <strong>Follow-up no dia seguinte</strong>: quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu. <em>(incluso no Cresce e no Escala)</em></span></label>
             <label class="check-item"><input type="checkbox" name="optin_nps" value="sim" /><div class="check-box"></div><span class="check-label">⭐ <strong>Pesquisa de satisfação (nota de 0 a 10)</strong>: enviada no dia seguinte a cada atendimento da equipe. As notas aparecem no seu painel. <em>(incluso no Cresce e no Escala)</em></span></label>
@@ -1639,6 +1640,7 @@
         situacao_chip:         fields.situacao_chip || '',
         optin_order_notif:     fields.optin_order_notif || '',
         optin_order_delivered: fields.optin_order_delivered || '',
+        optin_order_paid:      fields.optin_order_paid || '',
         optin_followup:        fields.optin_followup || '',
         optin_nps:             fields.optin_nps || '',
         optin_reminder:        fields.optin_reminder || '',
