@@ -1159,7 +1159,7 @@ function switchTab(tab) {
   if (en) en.style.display = tab === 'ensinar' ? '' : 'none';
   if (tab === 'ensinar') loadEnsinar();
   if (tab === 'trocas') loadTrocas();
-  if (tab === 'conversas') loadConversas();
+  if (tab === 'conversas') loadConversas(CONV_ACTIVE || undefined);
   history.replaceState(null,'', location.pathname + location.search + '#' + tab);
 }
 
@@ -1202,6 +1202,7 @@ async function loadConversas(chat) {
         return '<div class="conv-item" data-chat="' + esc(c.chat_id) + '" onclick="openConv(\'' + esc(c.chat_id) + '\')"><div class="ci-top"><span>' + name + '</span><span class="ci-when">' + fmtWhen(c.last_at) + '</span></div><div class="ci-last">' + esc(c.last_text) + '</div><div class="ci-meta">' + meta + '</div></div>';
       }).join('') : '<div class="conv-empty">Nenhuma conversa nos últimos 30 dias.</div>';
       CONV_LOADED = true;
+      if (CONV_ACTIVE) document.querySelectorAll('.conv-item').forEach(el => el.classList.toggle('active', el.dataset.chat === CONV_ACTIVE));
     }
     if (chat) renderThread(d);
   } catch(e) { list.innerHTML = '<div class="conv-empty">Não foi possível carregar as conversas.</div>'; }
@@ -1379,6 +1380,7 @@ async function actExchange(id, action, btn) {
 async function reload() {
   TOKEN = token();
   if (!TOKEN) { showState('noToken'); return; }
+  CONV_LOADED = false; // (24/09 #724) Atualizar redesenha a lista de conversas e a conversa aberta
   try {
     const [dash, cfg] = await Promise.all([
       fetch(DASH_API + '?token=' + encodeURIComponent(TOKEN)).then(r=>r.json()).catch(()=>null),
