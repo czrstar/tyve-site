@@ -1731,7 +1731,7 @@ function renderConfig() {
 
 // ── Mensagens que o negócio inicia (opt-in) ─────────────────
 // (18/09/2026) cada mensagem automática depende de um template aprovado pela Meta na conta do cliente (wa_client_templates via Config GET)
-const PROACTIVE_TPL = { order_notif_paid_enabled:['tyve_pedido_confirmado'], order_notif_enabled:['tyve_pedido_enviado'], order_notif_delivered_enabled:['tyve_pedido_entregue'], followup_d1_enabled:['tyve_followup_d1_v3'], nps_enabled:['tyve_nps_survey'] };
+const PROACTIVE_TPL = { order_notif_troca_enabled:['tyve_pedido_enviado'], order_notif_paid_enabled:['tyve_pedido_confirmado'], order_notif_enabled:['tyve_pedido_enviado'], order_notif_delivered_enabled:['tyve_pedido_entregue'], followup_d1_enabled:['tyve_followup_d1_v3'], nps_enabled:['tyve_nps_survey'] };
 function tplGate(key) {
   if (!TEMPLATES.length) return { ok:true };
   // (24/09 #735) loja com modelo proprio de confirmacao (client_config order_notif_tpl_paid, ex.: tyve_pedido_confirmado_itens):
@@ -1750,6 +1750,7 @@ function tplGate(key) {
 }
 const PROACTIVE = [
   { key:'order_notif_enabled', label:'📦 Aviso de pedido enviado, com rastreio', desc:'Assim que a loja despacha, o cliente recebe o código de rastreio. Reduz o "cadê meu pedido" antes de ele acontecer.', ecom:true, plans:['cresce','escala'] },
+  { key:'order_notif_troca_enabled', label:'🔁 Aviso de envio da troca', desc:'Quando a loja coloca no pedido o código de rastreio do par da troca, o cliente recebe o aviso com o código novo. Depende do aviso de envio ligado.', ecom:true, plans:['cresce','escala'] },
   { key:'order_notif_paid_enabled', label:'🎉 Confirmação de pedido pago', desc:'Quando o pagamento é aprovado, o cliente recebe a confirmação do pedido. Só para pedidos novos. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
   { key:'order_notif_delivered_enabled', label:'✅ Aviso de pedido entregue', desc:'Quando a transportadora confirma a entrega, o cliente recebe a confirmação. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
   { key:'followup_d1_enabled', label:'🔁 Follow-up no dia seguinte', desc:'Quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu.', ecom:false, plans:['cresce','escala'] },
@@ -1770,7 +1771,7 @@ function renderProactive() {
   box.innerHTML = allowed.map(p => {
     let on = String(CONFIG[p.key]||'') === 'true';
     // (16/09/2026) sem a chave propria, o "entregue" segue o legado (order_notif_events ou padrao do Escala)
-    if (p.key === 'order_notif_delivered_enabled' && CONFIG[p.key] == null) { const ev = String(CONFIG.order_notif_events||''); on = String(CONFIG.order_notif_enabled||'') === 'true' && (!ev || ev.split(',').map(x=>x.trim()).includes('delivered')); }
+    if (p.key === 'order_notif_delivered_enabled' && CONFIG[p.key] == null) { const ev = String(CONFIG.order_notif_events||''); on = String(CONFIG.order_notif_enabled||'') === 'true' && !!ev && ev.split(',').map(x=>x.trim()).includes('delivered'); } // (24/09 #738) sem chave = desligado (opt-in)
     const g = tplGate(p.key);
     const gateNote = g.note ? '<div style="font-size:12px;color:' + (g.ok ? '#a16207' : '#b45309') + ';margin-top:4px">' + g.note + '</div>' : '';
     return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + '</div></div></div>';
