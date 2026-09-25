@@ -1462,12 +1462,15 @@ function renderDash(d) {
     _mc.style.display = '';
     const cost = Number(d.meta_cost_month || 0);
     const free = Number(d.meta_free_month || 0);
-    const brl = v => 'R$ ' + Number(v).toFixed(2).replace('.', ',');
+    const brl = v => 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const before0110 = new Date() < new Date('2026-10-01T03:00:00Z');
     // Ate 30/09 a Meta nao cobra: mostra R$ 0,00 e o que este volume custaria a partir de 01/10
     document.getElementById('kpiMetaCost').textContent = before0110 ? brl(0) : brl(cost);
-    document.getElementById('kpiMetaSub').textContent = fmt(d.meta_msgs_month || 0) + ' mensagens' + (free ? ' · ' + fmt(free) + ' grátis (anúncio)' : '')
-      + (before0110 ? ' · grátis até 30/09 · com este volume, a partir de 01/10 seriam ' + brl(cost) + ' (cobrado pela Meta na sua conta)' : ' · cobrado pela Meta na sua conta, não pela Tyve');
+    // (25/09 #744) projecao pelo ritmo dos ultimos 7 dias (o mes corrente pode estar no comeco ou ter dias sem registro)
+    const proj = Number(d.meta_proj30_cost || 0), projN = Number(d.meta_msgs_proj30 || 0);
+    const projTxt = projN ? (' · no ritmo dos últimos 7 dias, um mês de uso daria cerca de ' + fmt(projN) + ' mensagens, ' + brl(proj)) : '';
+    document.getElementById('kpiMetaSub').textContent = fmt(d.meta_msgs_month || 0) + ' mensagens neste mês' + (free ? ' · ' + fmt(free) + ' grátis (anúncio)' : '')
+      + (before0110 ? ' · grátis até 30/09' + (projTxt ? projTxt + ' a partir de 01/10 (cobrado pela Meta na sua conta)' : '') : projTxt + ' · cobrado pela Meta na sua conta, não pela Tyve');
   }
   // Botão "Conectar transportadora" (Melhor Envio) — só p/ quem tem troca automática ativa
   try {
