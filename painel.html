@@ -1500,8 +1500,14 @@ function renderDash(d) {
   } catch(e) {}
 
   const trend = Array.isArray(d.daily_trend) ? d.daily_trend : [];
-  const trendTotal = trend.reduce((s,r) => s + Number(r.contacts), 0);
-  document.getElementById('statAvg').textContent = trend.length ? (trendTotal/trend.length).toFixed(1) : '0';
+  // (28/09) media so dos dias com o bot ligado: comeca no 1o dia com contato e ignora o dia de hoje (ainda incompleto)
+  // 1o dia de uso de verdade: tem contato e os 2 dias seguintes tambem (ignora teste isolado antes de ligar o bot)
+  const _first = trend.findIndex((r, i) => Number(r.contacts) > 0 && trend.slice(i, i + 3).every(x => Number(x.contacts) > 0));
+  let _act = _first >= 0 ? trend.slice(_first) : [];
+  const _hoje = (function(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); })();
+  if (_act.length > 1 && String(_act[_act.length-1].day) === _hoje) _act = _act.slice(0, -1);
+  const trendTotal = _act.reduce((s,r) => s + Number(r.contacts), 0);
+  document.getElementById('statAvg').textContent = _act.length ? Math.round(trendTotal/_act.length).toString() : '0';
   // % resolvido sem humano (30d): contatos únicos - contatos que foram encaminhados
   try {
     const rEl = document.getElementById('statResolved'), rDesc = document.getElementById('statResolvedDesc');
