@@ -1036,7 +1036,10 @@ function renderPacks() {
     '<div class="plan-opt-name">+' + Number(p.size).toLocaleString('pt-BR') + ' contatos</div>' +
     '<div class="plan-opt-price">' + fmtBRL(p.price) + '</div>' +
     '<div class="plan-opt-lim">R$ ' + (p.price / p.size).toFixed(2).replace('.', ',') + ' por contato</div>' +
-    '<button class="btn btn-ghost btn-sm" onclick="packChoose(' + p.size + ')"' + (PACKS.recent ? ' disabled title="Espere alguns minutos entre compras"' : '') + '>Comprar</button></div>').join('');
+    (p.allowed === false
+      ? '<button class="btn btn-ghost btn-sm" disabled title="Acima do limite de pacotes do seu plano neste mês">Indisponível no seu plano</button></div>'
+      : '<button class="btn btn-ghost btn-sm" onclick="packChoose(' + p.size + ')"' + (PACKS.recent ? ' disabled title="Espere alguns minutos entre compras"' : '') + '>Comprar</button></div>')).join('')
+    + (PACKS.cap_month ? '<div style="grid-column:1/-1;font-size:13px;color:var(--muted);margin-top:4px">No seu plano, dá pra comprar até ' + Number(PACKS.cap_month).toLocaleString('pt-BR') + ' contatos em pacotes por mês' + (PACKS.cap_left < PACKS.cap_month ? ' (restam ' + Number(PACKS.cap_left).toLocaleString('pt-BR') + ')' : '') + '.' + (PACKS.next_plan ? ' Se precisa de mais todo mês, vale olhar o plano ' + PACKS.next_plan + '.' : '') + '</div>' : '');
   if (act) {
     const a = PACKS.active || [];
     if (a.length) {
@@ -1077,7 +1080,7 @@ async function packConfirm() {
       CONFIG.contact_limit = String((parseInt(CONFIG.contact_limit) || 0) + d.size);
     } else {
       const err = (d && d.error) || '';
-      toast(err === 'too_soon' ? 'Espere alguns minutos entre uma compra e outra.' : err === 'need_cpf' ? 'Precisamos do seu CPF ou CNPJ para emitir a cobrança.' : err === 'limit_month' ? 'Limite de pacotes no mês atingido. Fale com a gente.' : 'Não foi possível comprar agora. Fale com a gente.', false);
+      toast(err === 'too_soon' ? 'Espere alguns minutos entre uma compra e outra.' : err === 'need_cpf' ? 'Precisamos do seu CPF ou CNPJ para emitir a cobrança.' : err === 'limit_plan' ? 'Esse pacote passa do limite do seu plano neste mês. Para mais contatos, veja a mudança de plano.' : err === 'limit_month' ? 'Limite de pacotes no mês atingido. Fale com a gente.' : 'Não foi possível comprar agora. Fale com a gente.', false);
       if (btn) { btn.disabled = false; btn.textContent = 'Confirmar compra'; }
     }
   } catch(e) { toast('Erro de conexão', false); if (btn) { btn.disabled = false; btn.textContent = 'Confirmar compra'; } }
