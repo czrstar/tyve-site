@@ -682,7 +682,7 @@
       <div class="card" id="packCard">
         <div class="sec-label" style="margin-bottom:12px">Contatos extras</div>
         <div class="card-title">Pacotes de contatos</div>
-        <div class="card-sub">Vai passar do limite este mês? Compre um pacote e o seu limite sobe na hora, só neste mês. Sai mais barato que o avulso (R$ 0,80 por contato) e você paga por Pix, boleto ou cartão.</div>
+        <div class="card-sub">Vai passar do limite este mês? Compre um pacote e o seu limite sobe na hora. Com o pacote pago, os contatos que você não usar passam para o mês seguinte. Sai mais barato que o avulso (R$ 0,80 por contato) e você paga por Pix, boleto ou cartão.</div>
         <div id="packActive" style="margin-top:12px;display:none"></div>
         <div class="plan-grid" id="packGrid"><span style="font-size:13px;color:var(--muted)">Carregando pacotes...</span></div>
         <div class="plan-confirm" id="packConfirm" style="display:none"></div>
@@ -1040,9 +1040,9 @@ function renderPacks() {
   if (act) {
     const a = PACKS.active || [];
     if (a.length) {
-      act.innerHTML = '<div class="plan-confirm" style="margin-top:0"><strong>Neste mês:</strong> ' + a.map(x => '+' + x.size + ' contatos (' + fmtBRL(x.price) + ')' +
+      act.innerHTML = '<div class="plan-confirm" style="margin-top:0"><strong>Neste mês:</strong> ' + a.map(x => '+' + x.size + ' contatos (' + (x.status === 'carryover' ? 'saldo do mês anterior' : fmtBRL(x.price)) + ')' +
         (x.invoice_url ? ' <a href="' + x.invoice_url + '" target="_blank" rel="noopener" style="color:var(--orange);font-weight:600">pagar</a>' : '')).join(' · ') +
-        '. Limite atual: <strong>' + Number(PACKS.contact_limit || 0).toLocaleString('pt-BR') + ' contatos</strong>. Os pacotes valem até o fim do mês.</div>';
+        '. Limite atual: <strong>' + Number(PACKS.contact_limit || 0).toLocaleString('pt-BR') + ' contatos</strong>. O que sobrar dos pacotes pagos passa para o mês seguinte.</div>';
       act.style.display = '';
     } else act.style.display = 'none';
   }
@@ -1052,7 +1052,7 @@ function packChoose(size) {
   PACK_PENDING = size;
   const box = document.getElementById('packConfirm');
   box.innerHTML = '<strong>Comprar +' + size + ' contatos por ' + fmtBRL(p.price) + '?</strong><br>' +
-    'O limite sobe na hora e vale até o fim deste mês. A cobrança chega em seguida (Pix, boleto ou cartão).' +
+    'O limite sobe na hora e, com o pacote pago, o que você não usar passa para o mês seguinte. A cobrança chega em seguida (Pix, boleto ou cartão).' +
     (PACKS.has_cpf ? '' : '<div class="add-field" style="margin-top:10px"><label>CPF ou CNPJ para a nota (só números)</label><input type="text" id="packCpf" placeholder="00.000.000/0001-00" inputmode="numeric" style="max-width:260px" /></div>') +
     '<div><button class="btn btn-primary btn-sm" id="packConfirmBtn" onclick="packConfirm()">Confirmar compra</button><button class="btn btn-ghost btn-sm" onclick="packCancel()">Cancelar</button></div>';
   box.style.display = ''; box.scrollIntoView({behavior:'smooth', block:'nearest'});
