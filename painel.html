@@ -1086,6 +1086,113 @@ async function packConfirm() {
   } catch(e) { toast('Erro de conexão', false); if (btn) { btn.disabled = false; btn.textContent = 'Confirmar compra'; } }
 }
 
+// ── Add-on Recuperação de Carrinho: compra automática (29/09 #755) ──
+const ADDON_API = N8N + '/tyve-addon';
+let ADDON = null, ADDON_POLL = null, ADDON_BUSY = false;
+async function loadAddon() {
+  try {
+    const d = await postJSON(ADDON_API, {token: TOKEN, action: 'status'});
+    if (d && d.ok) { ADDON = d; renderAddonCard(); if (d.state === 'pending' || d.state === 'suspended') startAddonPoll(); }
+  } catch(e) {}
+}
+function addonDateBR(iso) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || '')); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; }
+function renderAddonCard() {
+  const box = document.getElementById('addonCartBox'); if (!box || !ADDON) return;
+  const a = ADDON, st = a.state;
+  if (!a.eligible || (!a.offer && st === 'none')) { box.innerHTML = ''; return; }
+  const head = '<div class="faq-q">🛒 Recuperação de carrinho <span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 47/mês</span></div>';
+  const meta = 'Cada lembrete enviado é uma mensagem de marketing que a Meta cobra direto na sua conta do WhatsApp (cerca de R$ 0,34 por envio). A Tyve não recebe nada por essas mensagens; o R$ 47 é só pela plataforma e pela estrutura que permitem enviá-las.';
+  let txt = '', btns = '';
+  const busy = ADDON_BUSY ? ' disabled' : '';
+  if (st === 'canceled') {
+    txt = '<strong>Cancelado.</strong> Segue ativo até ' + addonDateBR(a.until) + ' e não haverá nova cobrança. Depois dessa data você pode contratar de novo.';
+  } else if (st === 'none') {
+    txt = 'Quem abandona o carrinho recebe um lembrete no WhatsApp com o link para finalizar a compra, uma única vez por carrinho e só se aceitou receber comunicações no checkout. ' + meta;
+    if (a.can_buy) {
+      btns = (a.has_cpf ? '' : '<div class="add-field" style="margin-top:10px"><label>CPF ou CNPJ para a cobrança (só números)</label><input type="text" id="addonCpf" placeholder="00.000.000/0001-00" inputmode="numeric" style="max-width:260px" /></div>') +
+        '<div><button class="btn btn-primary btn-sm" onclick="addonBuy()"' + busy + '>Contratar por R$ 47/mês</button></div>';
+    }
+  } else if (st === 'pending') {
+    txt = '<strong>Aguardando o pagamento da primeira fatura.</strong> Assim que ele for confirmado, o add-on liga sozinho e o interruptor aparece acima. ' + meta;
+    btns = '<div><button class="btn btn-primary btn-sm" onclick="addonBuy()"' + busy + '>Abrir fatura</button><button class="btn btn-ghost btn-sm" onclick="addonCancel()"' + busy + '>Cancelar compra</button></div>';
+  } else if (st === 'suspended') {
+    txt = '<strong>Suspenso por falta de pagamento.</strong> Pague a fatura em aberto e o add-on volta sozinho, com o envio como estava antes.';
+    btns = '<div><button class="btn btn-primary btn-sm" onclick="addonBuy()"' + busy + '>Abrir fatura</button><button class="btn btn-ghost btn-sm" onclick="addonCancel()"' + busy + '>Cancelar add-on</button></div>';
+  } else if (st === 'active') {
+    const tplOk = String(a.template || '') === 'APPROVED';
+    txt = '<strong>Contratado.</strong> ' + (a.enabled ? 'O envio está ligado.' : 'Ligue o envio no interruptor acima' + (tplOk ? '.' : ' quando o modelo de mensagem for aprovado pela Meta (costuma levar de minutos a 1 dia).')) + ' ' + meta;
+    btns = '<div><button class="btn btn-ghost btn-sm" onclick="addonCancel()"' + busy + '>Cancelar add-on</button></div>';
+  }
+  box.innerHTML = '<div class="faq-item" style="padding:12px 0"><div class="faq-content">' + head + '<div class="faq-a" style="font-size:13px;color:#666">' + txt + '</div>' + btns + '</div></div>';
+}
+function addonErr(err) {
+  return err === 'need_cpf' ? 'Precisamos do seu CPF ou CNPJ para emitir a cobrança.' : err === 'too_soon' ? 'Espere alguns segundos e tente de novo.' :
+    err === 'not_eligible' || err === 'not_offered' ? 'Este add-on ainda não está disponível para a sua loja. Fale com a gente.' : err === 'already_active' ? 'O add-on já está ativo.' : err === 'in_progress' ? 'Sua compra já está sendo processada. Aguarde alguns segundos.' : 'Não foi possível agora. Fale com a gente.';
+}
+async function addonBuy() {
+  if (ADDON_BUSY) return;
+  const body = {token: TOKEN, action: 'buy'};
+  const cpfEl = document.getElementById('addonCpf');
+  if (cpfEl) {
+    const digits = cpfEl.value.replace(/\D/g, '');
+    if (digits.length !== 11 && digits.length !== 14) { toast('Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)', false); return; }
+    body.cpf_cnpj = digits;
+  }
+  ADDON_BUSY = true; renderAddonCard();
+  try {
+    const d = await postJSON(ADDON_API, body);
+    if (d && d.ok && d.invoice_url && /^https:\/\/(www\.|sandbox\.)?asaas\.com\//.test(d.invoice_url)) {
+      toast('Fatura gerada. Pague para ativar o add-on.');
+      window.open(d.invoice_url, '_blank', 'noopener');
+      const box = document.getElementById('addonCartBox');
+      if (box) box.insertAdjacentHTML('beforeend', '<div class="plan-confirm" style="margin-top:8px">Se a fatura não abriu, <a href="' + encodeURI(d.invoice_url).replace(/"/g, '%22') + '" target="_blank" rel="noopener" style="color:var(--orange);font-weight:600">clique aqui para pagar</a> (Pix, cartão ou boleto).</div>');
+      ADDON = Object.assign({}, ADDON, {state: 'pending'}); startAddonPoll();
+    } else if (d && d.ok) { toast('Pagamento já confirmado. Add-on ativo!'); ADDON_BUSY = false; await refreshAddonAndConfig(); return; }
+    else { toast(addonErr(d && d.error), false); }
+  } catch(e) { toast('Erro de conexão', false); }
+  ADDON_BUSY = false;
+  const keep = document.querySelector('#addonCartBox .plan-confirm');
+  const extra = keep ? keep.outerHTML : '';
+  renderAddonCard(); if (extra) document.getElementById('addonCartBox').insertAdjacentHTML('beforeend', extra);
+}
+async function addonCancel() {
+  if (ADDON_BUSY) return;
+  const st = ADDON && ADDON.state;
+  const msg = st === 'active' ? 'Cancelar o add-on? Ele segue ativo até o fim do período já pago e não haverá nova cobrança.' : 'Cancelar? Nenhuma cobrança será feita.';
+  if (!window.confirm(msg)) return;
+  ADDON_BUSY = true; renderAddonCard();
+  try {
+    const d = await postJSON(ADDON_API, {token: TOKEN, action: 'cancel'});
+    if (d && d.ok) toast('Cancelado.'); else toast(addonErr(d && d.error), false);
+  } catch(e) { toast('Erro de conexão', false); }
+  ADDON_BUSY = false;
+  await refreshAddonAndConfig();
+}
+async function refreshAddonAndConfig() {
+  try {
+    const [d, cfg] = await Promise.all([postJSON(ADDON_API, {token: TOKEN, action: 'status'}), fetch(CFG_API + '?token=' + encodeURIComponent(TOKEN)).then(r => r.json()).catch(() => null)]);
+    if (cfg && cfg.ok) { CONFIG = cfg.config || CONFIG; TEMPLATES = Array.isArray(cfg.templates) ? cfg.templates : TEMPLATES; }
+    if (d && d.ok) ADDON = d;
+    renderProactive();
+  } catch(e) {}
+}
+function startAddonPoll() {
+  if (ADDON_POLL) return;
+  let n = 0;
+  ADDON_POLL = setInterval(async () => {
+    n++;
+    if (n > 45 || document.hidden) { if (n > 45) { clearInterval(ADDON_POLL); ADDON_POLL = null; } return; }
+    try {
+      const d = await postJSON(ADDON_API, {token: TOKEN, action: 'status'});
+      if (d && d.ok && d.state !== 'pending' && d.state !== 'suspended') {
+        clearInterval(ADDON_POLL); ADDON_POLL = null;
+        if (d.state === 'active') toast('Pagamento confirmado. Add-on ativo!');
+        await refreshAddonAndConfig();
+      }
+    } catch(e) {}
+  }, 8000);
+}
+
 // ── ENSINAR (sugestões de FAQ a partir dos handoffs) — 08/09/2026 ──
 let ENS = [];
 async function refreshEnsinarBadge() {
@@ -1413,6 +1520,7 @@ async function reload() {
     refreshEnsinarBadge();
     loadPlan();
     loadPacks();
+    loadAddon();
   } catch(e) { showState('error'); }
 }
 
@@ -1780,9 +1888,9 @@ function renderProactive() {
   const items = PROACTIVE.filter(p => (!p.ecom || ecom) && (!p.addon || String(CONFIG[p.addon]||'') === 'true'));
   const allowed = items.filter(p => p.plans.includes(plan));
   // (29/09 #753) add-on ainda nao contratado: mostra a oferta so para lojas com cart_recovery_offer='true' (Renato libera; Shopify/Nuvemshop), com o custo da Meta explicito
-  const addonPromo = (ecom && String(CONFIG.cart_recovery_offer||'') === 'true' && String(CONFIG.cart_recovery_addon||'') !== 'true') ? '<div class="faq-item" style="padding:12px 0"><div class="faq-content"><div class="faq-q">🛒 Recuperação de carrinho <span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 47/mês</span></div><div class="faq-a" style="font-size:13px;color:#666">Quem abandona o carrinho recebe um lembrete no WhatsApp com o link para finalizar a compra. Cada lembrete é uma mensagem de marketing cobrada pela Meta na sua conta (cerca de R$ 0,34 por envio), uma única vez por carrinho e só para quem aceitou receber comunicações no checkout. <a href="https://wa.me/5516994247541?text=Quero+contratar+o+add-on+de+recupera%C3%A7%C3%A3o+de+carrinho" target="_blank" rel="noopener">Quero contratar</a>.</div></div></div>' : '';
+  const addonPromo = '<div id="addonCartBox"></div>'; // (29/09 #755) cartao de compra automatica: renderAddonCard()
   if (!allowed.length) {
-    box.innerHTML = addonPromo;
+    box.innerHTML = addonPromo; renderAddonCard();
     note.style.display = ''; note.innerHTML = 'No plano <strong>Atende</strong> o agente só responde; as mensagens automáticas (aviso de pedido, follow-up, pesquisa) fazem parte do <strong>Cresce</strong> e do <strong>Escala</strong>. Quer ativar? <a href="https://wa.me/5516994247541?text=Quero+ativar+as+mensagens+autom%C3%A1ticas+na+minha+loja" target="_blank" rel="noopener">Fala com a gente</a>.';
     return;
   }
@@ -1795,6 +1903,7 @@ function renderProactive() {
     const gateNote = g.note ? '<div style="font-size:12px;color:' + (g.ok ? '#a16207' : '#b45309') + ';margin-top:4px">' + g.note + '</div>' : '';
     return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + '</div></div></div>';
   }).join('') + addonPromo;
+  renderAddonCard();
 }
 // ── Documentos conectados (Notion) — F3 16/09/2026 ──
 const KB_API = N8N + '/tyve-kb';
