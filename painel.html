@@ -1863,7 +1863,11 @@ function tplGate(key) {
   if (custom && !TEMPLATES.some(t => t.name === custom)) return { ok:true };
   // (24/09 #737) versao padrao com itens aprovada (o Order Notify usa ela quando aprovada) tambem libera
   if (!custom && key === 'order_notif_paid_enabled' && TEMPLATES.some(t => t.name === 'tyve_pedido_confirmado_itens' && t.status === 'APPROVED')) return { ok:true };
-  const names = custom ? [custom] : (PROACTIVE_TPL[key] || []);
+  // (29/09) Shopify nao informa a entrega: o aviso de pedido entregue nao existe nessa plataforma
+  if (key === 'order_notif_delivered_enabled' && (String(CONFIG.order_api_type||'').toLowerCase() === 'shopify' || String(CONFIG.exchange_platform||'').toLowerCase() === 'shopify')) return { ok:false, note:'Indisponível para lojas Shopify: a Shopify não avisa quando a transportadora entrega o pedido, então não há como enviar essa mensagem.' };
+  // (29/09) recuperacao de carrinho pode usar modelo proprio da loja (client_config cart_recovery_tpl)
+  const cartTpl = key === 'cart_recovery_enabled' ? String(CONFIG.cart_recovery_tpl || '').trim() : '';
+  const names = custom ? [custom] : (cartTpl ? [cartTpl] : (PROACTIVE_TPL[key] || []));
   const rows = names.map(n => TEMPLATES.find(t => t.name === n)).filter(Boolean);
   if (rows.length < names.length) return { ok:false, note:'Template ainda não criado na sua conta do WhatsApp. A Tyve cria automaticamente na conexão; fale com a gente.' };
   const rej = rows.find(t => t.status === 'REJECTED'); if (rej) return { ok:false, note:'A Meta recusou o modelo desta mensagem. A Tyve já foi avisada e vai ajustar.' };
