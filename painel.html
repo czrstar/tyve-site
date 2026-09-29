@@ -1100,8 +1100,9 @@ function renderAddonCard() {
   const box = document.getElementById('addonCartBox'); if (!box || !ADDON) return;
   const a = ADDON, st = a.state;
   if (!a.eligible || (!a.offer && st === 'none')) { box.innerHTML = ''; return; }
-  const head = '<div class="faq-q">🛒 Recuperação de carrinho <span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 47/mês</span></div>';
-  const meta = 'Cada lembrete enviado é uma mensagem de marketing que a Meta cobra direto na sua conta do WhatsApp (cerca de R$ 0,34 por envio). A Tyve não recebe nada por essas mensagens; o R$ 47 é só pela plataforma e pela estrutura que permitem enviá-las.';
+  const free = a.free === true;
+  const head = '<div class="faq-q">🛒 Recuperação de carrinho ' + (free ? '<span style="font-size:12px;font-weight:600;color:#15803d">add-on cortesia</span>' : '<span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 47/mês</span>') + '</div>';
+  const meta = 'Cada lembrete enviado é uma mensagem de marketing que a Meta cobra direto na sua conta do WhatsApp (cerca de R$ 0,34 por envio). A Tyve não recebe nada por essas mensagens' + (free ? '; este add-on está liberado para você sem cobrança da Tyve.' : '; o R$ 47 é só pela plataforma e pela estrutura que permitem enviá-las.');
   let txt = '', btns = '';
   const busy = ADDON_BUSY ? ' disabled' : '';
   if (st === 'canceled') {
@@ -1120,8 +1121,8 @@ function renderAddonCard() {
     btns = '<div><button class="btn btn-primary btn-sm" onclick="addonBuy()"' + busy + '>Abrir fatura</button><button class="btn btn-ghost btn-sm" onclick="addonCancel()"' + busy + '>Cancelar add-on</button></div>';
   } else if (st === 'active') {
     const tplOk = String(a.template || '') === 'APPROVED';
-    txt = '<strong>Contratado.</strong> ' + (a.enabled ? 'O envio está ligado.' : 'Ligue o envio no interruptor acima' + (tplOk ? '.' : ' quando o modelo de mensagem for aprovado pela Meta (costuma levar de minutos a 1 dia).')) + ' ' + meta;
-    btns = '<div><button class="btn btn-ghost btn-sm" onclick="addonCancel()"' + busy + '>Cancelar add-on</button></div>';
+    txt = '<strong>' + (free ? 'Ativo sem cobrança.' : 'Contratado.') + '</strong> ' + (a.enabled ? 'O envio está ligado.' : 'Ligue o envio no interruptor acima' + (tplOk ? '.' : ' quando o modelo de mensagem for aprovado pela Meta (costuma levar de minutos a 1 dia).')) + ' ' + meta;
+    btns = free ? '' : '<div><button class="btn btn-ghost btn-sm" onclick="addonCancel()"' + busy + '>Cancelar add-on</button></div>';
   }
   box.innerHTML = '<div class="faq-item" style="padding:12px 0"><div class="faq-content">' + head + '<div class="faq-a" style="font-size:13px;color:#666">' + txt + '</div>' + btns + '</div></div>';
 }
@@ -1883,7 +1884,7 @@ const PROACTIVE = [
   { key:'order_notif_delivered_enabled', label:'✅ Aviso de pedido entregue', desc:'Quando a transportadora confirma a entrega, o cliente recebe a confirmação. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
   { key:'followup_d1_enabled', label:'🔁 Follow-up no dia seguinte', desc:'Quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu.', ecom:false, plans:['cresce','escala'] },
   { key:'nps_enabled', label:'⭐ Pesquisa de satisfação (0 a 10)', desc:'Enviada no dia seguinte a cada atendimento da equipe. As notas aparecem na aba Resultados.', ecom:false, plans:['cresce','escala'] },
-  { key:'cart_recovery_enabled', label:'🛒 Recuperação de carrinho', desc:'Quem deixou produtos no carrinho recebe um lembrete no WhatsApp, com o link para finalizar, cerca de 1 hora depois. Add-on contratado.', ecom:true, plans:['atende','cresce','escala'], addon:'cart_recovery_addon' },
+  { key:'cart_recovery_enabled', label:'🛒 Recuperação de carrinho', desc:'Quem deixou produtos no carrinho recebe um lembrete no WhatsApp, com o link para finalizar, cerca de 1 hora depois. Add-on ativo.', ecom:true, plans:['atende','cresce','escala'], addon:'cart_recovery_addon' },
 ];
 function renderProactive() {
   const box = document.getElementById('proactiveList'), note = document.getElementById('proactiveNote'); if (!box) return;
