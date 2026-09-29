@@ -1746,7 +1746,7 @@ function renderConfig() {
 
 // ── Mensagens que o negócio inicia (opt-in) ─────────────────
 // (18/09/2026) cada mensagem automática depende de um template aprovado pela Meta na conta do cliente (wa_client_templates via Config GET)
-const PROACTIVE_TPL = { order_notif_troca_enabled:['tyve_pedido_enviado'], order_notif_paid_enabled:['tyve_pedido_confirmado'], order_notif_enabled:['tyve_pedido_enviado'], order_notif_delivered_enabled:['tyve_pedido_entregue'], followup_d1_enabled:['tyve_followup_d1_v3'], nps_enabled:['tyve_nps_survey'] };
+const PROACTIVE_TPL = { order_notif_troca_enabled:['tyve_pedido_enviado'], order_notif_paid_enabled:['tyve_pedido_confirmado'], order_notif_enabled:['tyve_pedido_enviado'], order_notif_delivered_enabled:['tyve_pedido_entregue'], followup_d1_enabled:['tyve_followup_d1_v3'], nps_enabled:['tyve_nps_survey'], cart_recovery_enabled:['tyve_carrinho_lembrete'] };
 function tplGate(key) {
   if (!TEMPLATES.length) return { ok:true };
   // (24/09 #735) loja com modelo proprio de confirmacao (client_config order_notif_tpl_paid, ex.: tyve_pedido_confirmado_itens):
@@ -1760,6 +1760,7 @@ function tplGate(key) {
   if (rows.length < names.length) return { ok:false, note:'Template ainda não criado na sua conta do WhatsApp. A Tyve cria automaticamente na conexão; fale com a gente.' };
   const rej = rows.find(t => t.status === 'REJECTED'); if (rej) return { ok:false, note:'A Meta recusou o modelo desta mensagem. A Tyve já foi avisada e vai ajustar.' };
   const pend = rows.find(t => t.status !== 'APPROVED'); if (pend) return { ok:false, note:'Aguardando aprovação da Meta para o modelo desta mensagem (costuma levar de minutos a algumas horas). O interruptor libera sozinho quando aprovar.' };
+  if (key === 'cart_recovery_enabled') return { ok:true, note:'Cada lembrete enviado custa cerca de R$ 0,34, cobrado pela Meta na sua conta do WhatsApp (mensagem de marketing), não pela Tyve. Enviamos uma única vez por carrinho e só para quem aceitou receber comunicações no checkout.' };
   const mkt = rows.find(t => t.category === 'MARKETING'); if (mkt) return { ok:true, note:'A Meta classificou esta mensagem como marketing na sua conta: custa mais por envio que as demais.' };
   return { ok:true };
 }
@@ -1770,15 +1771,18 @@ const PROACTIVE = [
   { key:'order_notif_delivered_enabled', label:'✅ Aviso de pedido entregue', desc:'Quando a transportadora confirma a entrega, o cliente recebe a confirmação. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
   { key:'followup_d1_enabled', label:'🔁 Follow-up no dia seguinte', desc:'Quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu.', ecom:false, plans:['cresce','escala'] },
   { key:'nps_enabled', label:'⭐ Pesquisa de satisfação (0 a 10)', desc:'Enviada no dia seguinte a cada atendimento da equipe. As notas aparecem na aba Resultados.', ecom:false, plans:['cresce','escala'] },
+  { key:'cart_recovery_enabled', label:'🛒 Recuperação de carrinho', desc:'Quem deixou produtos no carrinho recebe um lembrete no WhatsApp, com o link para finalizar, cerca de 1 hora depois. Add-on contratado.', ecom:true, plans:['atende','cresce','escala'], addon:'cart_recovery_addon' },
 ];
 function renderProactive() {
   const box = document.getElementById('proactiveList'), note = document.getElementById('proactiveNote'); if (!box) return;
   const plan = String(CONFIG.plan || '').toLowerCase();
   const ecom = String(CONFIG.order_lookup_enabled||'') === 'true' || String(CONFIG.exchange_enabled||'') === 'true';
-  const items = PROACTIVE.filter(p => (!p.ecom || ecom));
+  const items = PROACTIVE.filter(p => (!p.ecom || ecom) && (!p.addon || String(CONFIG[p.addon]||'') === 'true'));
   const allowed = items.filter(p => p.plans.includes(plan));
+  // (29/09 #753) add-on ainda nao contratado: mostra a oferta, com o custo da Meta explicito
+  const addonPromo = (ecom && String(CONFIG.cart_recovery_addon||'') !== 'true') ? '<div class="faq-item" style="padding:12px 0"><div class="faq-content"><div class="faq-q">🛒 Recuperação de carrinho <span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 47/mês</span></div><div class="faq-a" style="font-size:13px;color:#666">Quem abandona o carrinho recebe um lembrete no WhatsApp com o link para finalizar a compra. Cada lembrete é uma mensagem de marketing cobrada pela Meta na sua conta (cerca de R$ 0,34 por envio), uma única vez por carrinho e só para quem aceitou receber comunicações no checkout. <a href="https://wa.me/5516994247541?text=Quero+contratar+o+add-on+de+recupera%C3%A7%C3%A3o+de+carrinho" target="_blank" rel="noopener">Quero contratar</a>.</div></div></div>' : '';
   if (!allowed.length) {
-    box.innerHTML = '';
+    box.innerHTML = addonPromo;
     note.style.display = ''; note.innerHTML = 'No plano <strong>Atende</strong> o agente só responde; as mensagens automáticas (aviso de pedido, follow-up, pesquisa) fazem parte do <strong>Cresce</strong> e do <strong>Escala</strong>. Quer ativar? <a href="https://wa.me/5516994247541?text=Quero+ativar+as+mensagens+autom%C3%A1ticas+na+minha+loja" target="_blank" rel="noopener">Fala com a gente</a>.';
     return;
   }
@@ -1790,7 +1794,7 @@ function renderProactive() {
     const g = tplGate(p.key);
     const gateNote = g.note ? '<div style="font-size:12px;color:' + (g.ok ? '#a16207' : '#b45309') + ';margin-top:4px">' + g.note + '</div>' : '';
     return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + '</div></div></div>';
-  }).join('');
+  }).join('') + addonPromo;
 }
 // ── Documentos conectados (Notion) — F3 16/09/2026 ──
 const KB_API = N8N + '/tyve-kb';
@@ -1857,6 +1861,8 @@ async function kbDisconnect() {
 async function toggleProactive(key, on, el) {
   try {
     const r = await postJSON(CFG_SAVE, {token:TOKEN, key:key, value: on ? 'true' : 'false'});
+    // (29/09 #753) o servidor responde ok mesmo quando recusa (ex.: add-on nao contratado); para o carrinho confere se gravou de fato
+    if (r && r.ok && key === 'cart_recovery_enabled' && on && !(r.updated && r.updated.key)) { el.checked = false; toast('Não foi possível ativar. Confira se o add-on está contratado e o modelo de mensagem aprovado.', false); return; }
     if (r && r.ok) { CONFIG[key] = on ? 'true' : 'false'; toast(on ? 'Ativado. A cobrança da Meta vale a partir de agora.' : 'Desativado.'); }
     else { el.checked = !on; toast('Não foi possível salvar', false); }
   } catch(e) { el.checked = !on; toast('Erro de conexão', false); }
