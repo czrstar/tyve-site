@@ -1101,8 +1101,8 @@ function renderAddonCard() {
   const a = ADDON, st = a.state;
   if (!a.eligible || (!a.offer && st === 'none')) { box.innerHTML = ''; return; }
   const free = a.free === true;
-  const head = '<div class="faq-q">🛒 Recuperação de carrinho ' + (free ? '<span style="font-size:12px;font-weight:600;color:#15803d">add-on cortesia</span>' : '<span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 47/mês</span>') + '</div>';
-  const meta = 'Cada lembrete enviado é uma mensagem de marketing que a Meta cobra direto na sua conta do WhatsApp (cerca de R$ 0,34 por envio). A Tyve não recebe nada por essas mensagens' + (free ? '; este add-on está liberado para você sem cobrança da Tyve.' : '; o R$ 47 é só pela plataforma e pela estrutura que permitem enviá-las.');
+  const head = '<div class="faq-q">🛒 Recuperação de carrinho ' + (free ? '<span style="font-size:12px;font-weight:600;color:#15803d">add-on cortesia</span>' : '<span style="font-size:12px;font-weight:600;color:#f84100">add-on R$ 57/mês</span>') + '</div>';
+  const meta = 'Cada lembrete enviado é uma mensagem de marketing que a Meta cobra direto na sua conta do WhatsApp (cerca de R$ 0,34 por envio). A Tyve não recebe nada por essas mensagens' + (free ? '; este add-on está liberado para você sem cobrança da Tyve.' : '; o R$ 57 é só pela plataforma e pela estrutura que permitem enviá-las.');
   let txt = '', btns = '';
   const busy = ADDON_BUSY ? ' disabled' : '';
   if (st === 'canceled') {
@@ -1111,7 +1111,7 @@ function renderAddonCard() {
     txt = 'Quem abandona o carrinho recebe um lembrete no WhatsApp com o link para finalizar a compra, uma única vez por carrinho e só se aceitou receber comunicações no checkout. ' + meta;
     if (a.can_buy) {
       btns = (a.has_cpf ? '' : '<div class="add-field" style="margin-top:10px"><label>CPF ou CNPJ para a cobrança (só números)</label><input type="text" id="addonCpf" placeholder="00.000.000/0001-00" inputmode="numeric" style="max-width:260px" /></div>') +
-        '<div><button class="btn btn-primary btn-sm" onclick="addonBuy()"' + busy + '>Contratar por R$ 47/mês</button></div>';
+        '<div><button class="btn btn-primary btn-sm" onclick="addonBuy()"' + busy + '>Contratar por R$ 57/mês</button></div>';
     }
   } else if (st === 'pending') {
     txt = '<strong>Aguardando o pagamento da primeira fatura.</strong> Assim que ele for confirmado, o add-on liga sozinho e o interruptor aparece acima. ' + meta;
