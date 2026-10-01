@@ -766,6 +766,14 @@
         </div>
       </div>
 
+      <!-- Pix na conversa (plano Escala) — 01/10/2026. Visivel so com client_config.pix_panel_enabled='true' -->
+      <div class="card" id="pixCard" style="display:none">
+        <div class="sec-label" style="margin-bottom:12px">Pagamentos</div>
+        <div class="card-title">Pix na conversa</div>
+        <div class="card-sub">Quando o cliente pede o Pix de um pedido seu que está em aberto, o agente gera a cobrança na <strong>sua conta do Asaas</strong> e envia o código. O dinheiro vai direto para a sua conta: a Tyve não recebe nem repassa valores, e não cobra percentual. Para isso, cole abaixo a chave de API da sua conta Asaas.</div>
+        <div id="pixBody" style="margin-top:14px"><span style="font-size:13px;color:var(--muted)">Carregando...</span></div>
+      </div>
+
       <!-- Documentos conectados (Notion) — F3 16/09/2026 -->
       <div class="card" id="kbCard" style="display:none">
         <div class="sec-label" style="margin-bottom:12px">Base de conhecimento</div>
@@ -1889,6 +1897,7 @@ function renderConfig() {
   renderProactive();
   renderFAQ();
   loadKB();
+  loadPix();
 }
 
 // ── Mensagens que o negócio inicia (opt-in) ─────────────────
@@ -1947,6 +1956,51 @@ function renderProactive() {
     return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + '</div></div></div>';
   }).join('') + addonPromo;
   renderAddonCard();
+}
+// ── Pix na conversa (chave Asaas) — 01/10/2026 ──
+const PIX_API = N8N + '/tyve-pix-key';
+let PIX = null;
+async function loadPix() {
+  const card = document.getElementById('pixCard'); if (!card) return;
+  const avail = String(CONFIG.pix_panel_enabled||'') === 'true' && String(CONFIG.plan||'').toLowerCase() === 'escala';
+  card.style.display = avail ? '' : 'none';
+  if (!avail) return;
+  try { const r = await postJSON(PIX_API, {token: TOKEN, action: 'status'}); if (r && r.ok) { PIX = r; renderPix(); } else document.getElementById('pixBody').innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar agora. Tente novamente em instantes.</span>'; }
+  catch(e) { document.getElementById('pixBody').innerHTML = '<span style="font-size:13px;color:var(--muted)">Não foi possível carregar agora. Tente novamente em instantes.</span>'; }
+}
+function renderPix() {
+  const box = document.getElementById('pixBody'); if (!box || !PIX) return;
+  const guide = '<div style="font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5">Como gerar a chave (o caminho no Asaas pode variar um pouco): entre no Asaas com o usuário administrador, abra <strong>Integrações</strong>, depois <strong>Chave de API</strong>, e gere a chave. Ela aparece <strong>uma única vez</strong>, então copie na hora. Se gerar outra depois, a anterior para de funcionar e é preciso colar a nova aqui. Para mais segurança, no Asaas você pode liberar o uso da chave apenas para o IP da Tyve; peça o IP ao nosso time.</div>';
+  const consent = '<label style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;margin-top:10px;line-height:1.45"><input type="checkbox" id="pixConsent" style="margin-top:2px"> <span>Sou o titular da conta Asaas (ou tenho autorização dele). Sei que a chave de API do Asaas dá acesso amplo à conta, e que a Tyve a usa somente para criar e consultar cobranças Pix de pedidos da minha loja, a pedido do cliente na conversa de WhatsApp. Posso remover a chave aqui a qualquer momento ou gerar outra no Asaas.</span></label>';
+  const form = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input id="pixKey" type="password" autocomplete="new-password" spellcheck="false" aria-label="Chave de API do Asaas" placeholder="Cole aqui a chave de API do Asaas" style="flex:1;min-width:220px;padding:9px 11px;border:1px solid var(--border);border-radius:8px;font-size:14px"><button class="btn btn-primary btn-sm" id="pixSaveBtn" onclick="savePix()">Validar e salvar</button></div>' + consent;
+  if (PIX.configured) {
+    const env = PIX.env === 'sandbox' ? ' <span style="font-size:12px;color:#b45309">(ambiente de teste)</span>' : '';
+    box.innerHTML = '<div style="font-size:14px">✅ Chave configurada, terminada em <strong>' + String(PIX.last4||'').replace(/[^A-Za-z0-9_=\-]/g,'') + '</strong>' + env + '. O Pix está ' + (PIX.pix_enabled ? '<strong>ativo</strong>' : 'desligado') + '.</div><div style="margin-top:10px"><button class="btn btn-sm" onclick="removePix()">Remover chave</button></div><div style="font-size:12.5px;color:var(--muted);margin-top:14px">Para trocar a chave, cole a nova abaixo.</div>' + form + guide;
+  } else {
+    box.innerHTML = '<div style="font-size:14px">Nenhuma chave configurada. O Pix na conversa está desligado.</div>' + form + guide;
+  }
+}
+async function savePix() {
+  const inp = document.getElementById('pixKey'), btn = document.getElementById('pixSaveBtn'), c = document.getElementById('pixConsent');
+  const key = (inp && inp.value || '').trim();
+  if (!key) { toast('Cole a chave de API do Asaas', false); return; }
+  if (!c || !c.checked) { toast('Marque a autorização para continuar', false); return; }
+  btn.disabled = true; btn.textContent = 'Validando...';
+  try {
+    const r = await postJSON(PIX_API, {token: TOKEN, action: 'set', api_key: key});
+    if (inp) inp.value = '';
+    if (r && r.ok) { toast(r.sandbox ? 'Chave de teste salva. O Pix continua desligado, porque o ambiente é de teste.' : 'Chave validada e salva. Pix ativado.'); CONFIG.pix_enabled = r.pix_enabled ? 'true' : 'false'; await loadPix(); }
+    else {
+      const m = { formato_invalido: 'Essa chave não parece ser do Asaas. Confira se copiou inteira.', chave_recusada: 'O Asaas recusou essa chave. Gere uma nova e cole de novo.', asaas_indisponivel: 'O Asaas não respondeu agora. Tente de novo em instantes.' };
+      toast((r && m[r.error]) || 'Não foi possível salvar a chave.', false);
+      btn.disabled = false; btn.textContent = 'Validar e salvar';
+    }
+  } catch(e) { toast('Não foi possível salvar agora.', false); btn.disabled = false; btn.textContent = 'Validar e salvar'; }
+}
+async function removePix() {
+  if (!confirm('Remover a chave do Asaas? O Pix na conversa será desligado.')) return;
+  try { const r = await postJSON(PIX_API, {token: TOKEN, action: 'remove'}); if (r && r.ok) { toast('Chave removida. Pix desligado.'); CONFIG.pix_enabled = 'false'; await loadPix(); } else toast('Não foi possível remover agora.', false); }
+  catch(e) { toast('Não foi possível remover agora.', false); }
 }
 // ── Documentos conectados (Notion) — F3 16/09/2026 ──
 const KB_API = N8N + '/tyve-kb';
