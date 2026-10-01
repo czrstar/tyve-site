@@ -1688,8 +1688,9 @@ function renderDash(d) {
       let _h = '<div class="cstats"><div class="cstat"><div class="cstat-num">' + fmt(_usedPlan) + '<span class="cstat-of"> de ' + fmt(_pl) + '</span></div>'
         + '<div class="cbar"><div class="cbar-fill" style="width:' + _pct + '%;background:' + _bar + '"></div></div>'
         + '<div class="cstat-lbl">Plano do mês</div></div>';
-      const _bpct = _left <= 0 ? 0 : _left >= _bal ? 100 : Math.max(1, Math.min(99, Math.floor(_left / _bal * 100))); // barra do saldo mostra quanto resta (esvazia com o uso)
-      if (_bal > 0) _h += '<div class="cstat' + (_act ? '' : ' cstat-idle') + '"><div class="cstat-num">' + fmt(_left) + '</div>'
+      const _ptot = _num(LIMITS.pack_total), _tot = Math.max(_bal, _ptot || 0); // (01/10) total dos pacotes que formam o saldo atual: "797 de 1.000"
+      const _bpct = _left <= 0 ? 0 : _left >= _tot ? 100 : Math.max(1, Math.min(99, Math.floor(_left / _tot * 100))); // barra do saldo mostra quanto resta (esvazia com o uso)
+      if (_bal > 0) _h += '<div class="cstat' + (_act ? '' : ' cstat-idle') + '"><div class="cstat-num">' + fmt(_left) + (_ptot > 0 ? '<span class="cstat-of"> de ' + fmt(_tot) + '</span>' : '') + '</div>'
         + '<div class="cbar" style="width:120px"><div class="cbar-fill" style="width:' + _bpct + '%;background:' + (_act ? '#5b6fd6' : 'rgba(17,30,29,0.18)') + '"></div></div>'
         + '<div class="cstat-lbl">Saldo de pacotes'
         + (_act ? (_left > 0 ? ' · <span style="color:var(--orange)">em uso</span>' : ' · <span style="color:#d93025">esgotado</span>') : '') + '</div></div>';
