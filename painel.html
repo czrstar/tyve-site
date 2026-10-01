@@ -238,6 +238,14 @@
     }
     .plan-label-sm{font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
     #planName{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+    .cstats{display:flex;gap:14px 32px;flex-wrap:wrap;align-items:flex-start}
+    .cstat-num{font-size:22px;font-weight:800;letter-spacing:-.3px;line-height:1.1;color:var(--text)}
+    .cstat-of{font-size:13px;font-weight:500;color:var(--muted)}
+    .cstat-lbl{font-size:11px;color:var(--muted2);margin-top:4px}
+    .cstat-idle .cstat-num{color:var(--muted2)}
+    .cbar{width:170px;max-width:100%;height:6px;background:rgba(17,30,29,0.08);border-radius:99px;margin-top:7px;overflow:hidden}
+    .cbar-fill{height:100%;border-radius:99px}
+    .cinfo{display:inline-block;width:14px;height:14px;line-height:14px;text-align:center;border-radius:50%;border:1px solid var(--muted2);font-size:9px;font-weight:700;cursor:help;margin-left:4px;font-style:normal}
     .plan-badge{
       font-size:13px;font-weight:700;padding:8px 22px;border-radius:999px;
       background:linear-gradient(90deg,var(--orange),#00e8df);color:#000;
@@ -558,10 +566,10 @@
           <div class="plan-label-sm">Plano atual</div>
           <div id="planName">–</div>
         </div>
-        <div style="text-align:right">
+        <div id="contactBox" style="text-align:right">
           <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px" id="contactPeriodLbl">Contatos este mês</div>
           <div style="font-size:13px;color:var(--muted)" id="contactLimit"></div>
-          <div style="font-size:11px;color:var(--muted2);margin-top:3px" id="contactNote">o contador zera todo dia 1º</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:6px" id="contactNote">O contador zera todo dia 1º.</div>
         </div>
         <span class="plan-badge" id="planBadge2">–</span>
       </div>
@@ -1667,16 +1675,26 @@ function renderDash(d) {
     limitEl.textContent = fmt(d.contacts_this_month) + ' / ' + fmt(CONFIG.contact_limit) + ' contatos';
   }
   // (01/10 #778) plano e saldo de pacotes separados: o saldo so e usado depois que os contatos do plano acabam
+  // (01/10 visual) dois numeros lado a lado, barra de progresso do plano, nota curta com explicacao no (i)
   try {
-    const _pl = Number(LIMITS && LIMITS.plan_limit), _bal = Math.max(0, Number(LIMITS && LIMITS.pack_balance) || 0), _u = Number(LIMITS && LIMITS.used != null ? LIMITS.used : d.contacts_this_month) || 0; // mesmo calculo do saldo (mes de Sao Paulo)
-    if (limitEl && LIMITS && _pl > 0) {
-      const _usedPack = Math.max(0, _u - _pl), _left = Math.max(0, _bal - _usedPack), _exc = Math.max(0, _u - _pl - _bal);
-      limitEl.innerHTML = fmt(Math.min(_u, _pl)) + ' / ' + fmt(_pl) + ' do plano'
-        + (_bal > 0 ? '<br>Saldo de pacotes: <strong>' + fmt(_left) + '</strong> contatos' : '')
-        + (_exc > 0 ? '<br>Acima do ' + (_bal > 0 ? 'plano e do saldo' : 'plano') + ': <strong>' + fmt(_exc) + '</strong> contatos' : '');
-      const _nt = document.getElementById('contactNote');
-      if (_nt) _nt.textContent = _bal > 0 ? 'o plano zera todo dia 1º · o saldo só é usado depois que o plano acaba; o de pacote pago não vence' : 'o contador zera todo dia 1º';
-    } else { const _nt = document.getElementById('contactNote'); if (_nt) _nt.textContent = 'o contador zera todo dia 1º'; if (limitEl && !CONFIG.contact_limit) limitEl.textContent = ''; }
+    const _pl = Number(LIMITS && LIMITS.plan_limit), _bal = Math.max(0, Number(LIMITS && LIMITS.pack_balance) || 0), _u = Math.max(0, Number(LIMITS && LIMITS.used != null ? LIMITS.used : d.contacts_this_month) || 0); // mesmo calculo do saldo (mes de Sao Paulo)
+    const _nt = document.getElementById('contactNote'), _box = document.getElementById('contactBox');
+    if (limitEl && LIMITS && isFinite(_pl) && _pl > 0) {
+      const _num = v => (v != null && isFinite(Number(v))) ? Math.max(0, Number(v)) : null; // usa o numero do servidor quando existir
+      const _usedPlan = Math.min(_u, _pl), _usedPack = Math.max(0, _u - _pl), _left = _num(LIMITS.pack_left) ?? Math.max(0, _bal - _usedPack), _exc = _num(LIMITS.excess) ?? Math.max(0, _u - _pl - _bal);
+      const _pct = _usedPlan >= _pl ? 100 : Math.max(_usedPlan > 0 ? 1 : 0, Math.min(99, Math.floor(_usedPlan / _pl * 100)));
+      const _bar = (_pct >= 100 && _left === 0) ? '#d93025' : _pct >= 80 ? 'var(--orange)' : 'var(--teal)'; // vermelho so quando nao sobra saldo
+      const _act = _usedPack > 0;
+      let _h = '<div class="cstats"><div class="cstat"><div class="cstat-num">' + fmt(_usedPlan) + '<span class="cstat-of"> de ' + fmt(_pl) + '</span></div>'
+        + '<div class="cbar"><div class="cbar-fill" style="width:' + _pct + '%;background:' + _bar + '"></div></div>'
+        + '<div class="cstat-lbl">Plano do mês</div></div>';
+      if (_bal > 0) _h += '<div class="cstat' + (_act ? '' : ' cstat-idle') + '"><div class="cstat-num">' + fmt(_left) + '</div><div class="cstat-lbl">Saldo de pacotes'
+        + (_act ? (_left > 0 ? ' · <span style="color:var(--orange)">em uso</span>' : ' · <span style="color:#d93025">esgotado</span>') : '') + '</div></div>';
+      if (_exc > 0) _h += '<div class="cstat"><div class="cstat-num" style="color:#d93025">' + fmt(_exc) + '</div><div class="cstat-lbl">Acima do ' + (_bal > 0 ? 'plano e do saldo' : 'plano') + '</div></div>';
+      limitEl.innerHTML = _h + '</div>';
+      if (_box) _box.style.textAlign = 'left';
+      if (_nt) _nt.innerHTML = _bal > 0 ? 'Plano renova dia 1º. Saldo usado só depois do plano.<i class="cinfo" role="button" tabindex="0" aria-label="Mais detalhes" title="Toque para ver detalhes" onclick="var e=this.nextElementSibling;e.style.display=e.style.display===\'block\'?\'none\':\'block\'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click()}">i</i><span style="display:none;margin-top:4px">O plano renova todo dia 1º. O saldo de pacotes só é usado depois que os contatos do plano acabam. Saldo de pacote pago não vence.</span>' : 'O contador zera todo dia 1º.';
+    } else { if (_box) _box.style.textAlign = 'right'; if (_nt) _nt.textContent = 'O contador zera todo dia 1º.'; if (limitEl && !CONFIG.contact_limit) limitEl.textContent = ''; }
   } catch (e) {}
 
   buildChart(trend);
