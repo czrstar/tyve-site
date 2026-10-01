@@ -561,7 +561,7 @@
         <div style="text-align:right">
           <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px" id="contactPeriodLbl">Contatos este mês</div>
           <div style="font-size:13px;color:var(--muted)" id="contactLimit"></div>
-          <div style="font-size:11px;color:var(--muted2);margin-top:3px">o contador zera todo dia 1º</div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:3px" id="contactNote">o contador zera todo dia 1º</div>
         </div>
         <span class="plan-badge" id="planBadge2">–</span>
       </div>
@@ -880,6 +880,7 @@ const SUGG_API  = N8N + '/tyve-faq-suggestions';
 const REFRESH_MS = 5 * 60 * 1000;
 
 let TOKEN = '', CONFIG = {}, FAQ = [], TEMPLATES = [], chart = null;
+let LIMITS = null; // (01/10 #778) plano e saldo de pacotes separados (tyve_contact_limits)
 
 // ── UTILS ────────────────────────────────────────────
 // (31/08/2026) token fora da URL: 1a visita via link guarda no navegador e a URL vira /painel limpa.
@@ -1173,7 +1174,7 @@ async function addonCancel() {
 async function refreshAddonAndConfig() {
   try {
     const [d, cfg] = await Promise.all([postJSON(ADDON_API, {token: TOKEN, action: 'status'}), fetch(CFG_API + '?token=' + encodeURIComponent(TOKEN)).then(r => r.json()).catch(() => null)]);
-    if (cfg && cfg.ok) { CONFIG = cfg.config || CONFIG; TEMPLATES = Array.isArray(cfg.templates) ? cfg.templates : TEMPLATES; }
+    if (cfg && cfg.ok) { CONFIG = cfg.config || CONFIG; TEMPLATES = Array.isArray(cfg.templates) ? cfg.templates : TEMPLATES; if (cfg.limits) LIMITS = cfg.limits; }
     if (d && d.ok) ADDON = d;
     renderProactive();
   } catch(e) {}
@@ -1510,6 +1511,7 @@ async function reload() {
     if (!dash) { showState('error'); return; }
     if (!cfg  || !cfg.ok) { showState('error'); return; }
     CONFIG = cfg.config || {};
+    LIMITS = cfg.limits || null;
     FAQ    = cfg.faq_entries || [];
     TEMPLATES = Array.isArray(cfg.templates) ? cfg.templates : [];
     renderDash(dash);
@@ -1664,6 +1666,18 @@ function renderDash(d) {
   if (limitEl && CONFIG.contact_limit) {
     limitEl.textContent = fmt(d.contacts_this_month) + ' / ' + fmt(CONFIG.contact_limit) + ' contatos';
   }
+  // (01/10 #778) plano e saldo de pacotes separados: o saldo so e usado depois que os contatos do plano acabam
+  try {
+    const _pl = Number(LIMITS && LIMITS.plan_limit), _bal = Math.max(0, Number(LIMITS && LIMITS.pack_balance) || 0), _u = Number(LIMITS && LIMITS.used != null ? LIMITS.used : d.contacts_this_month) || 0; // mesmo calculo do saldo (mes de Sao Paulo)
+    if (limitEl && LIMITS && _pl > 0) {
+      const _usedPack = Math.max(0, _u - _pl), _left = Math.max(0, _bal - _usedPack), _exc = Math.max(0, _u - _pl - _bal);
+      limitEl.innerHTML = fmt(Math.min(_u, _pl)) + ' / ' + fmt(_pl) + ' do plano'
+        + (_bal > 0 ? '<br>Saldo de pacotes: <strong>' + fmt(_left) + '</strong> contatos' : '')
+        + (_exc > 0 ? '<br>Acima do ' + (_bal > 0 ? 'plano e do saldo' : 'plano') + ': <strong>' + fmt(_exc) + '</strong> contatos' : '');
+      const _nt = document.getElementById('contactNote');
+      if (_nt) _nt.textContent = _bal > 0 ? 'o plano zera todo dia 1º · o saldo só é usado depois que o plano acaba; o de pacote pago não vence' : 'o contador zera todo dia 1º';
+    } else { const _nt = document.getElementById('contactNote'); if (_nt) _nt.textContent = 'o contador zera todo dia 1º'; if (limitEl && !CONFIG.contact_limit) limitEl.textContent = ''; }
+  } catch (e) {}
 
   buildChart(trend);
   renderNPS(d);
