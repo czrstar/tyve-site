@@ -559,8 +559,9 @@
           <div id="planName">–</div>
         </div>
         <div style="text-align:right">
-          <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Últimos 30 dias</div>
+          <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px" id="contactPeriodLbl">Contatos este mês</div>
           <div style="font-size:13px;color:var(--muted)" id="contactLimit"></div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:3px">o contador zera todo dia 1º</div>
         </div>
         <span class="plan-badge" id="planBadge2">–</span>
       </div>
@@ -1659,6 +1660,7 @@ function renderDash(d) {
 
   // FIX: use contacts_this_month (unique contacts this billing month) not trendTotal (daily sum)
   const limitEl = document.getElementById('contactLimit');
+  try { const _pl = document.getElementById('contactPeriodLbl'); if (_pl) _pl.textContent = 'Contatos em ' + new Date().toLocaleString('pt-BR', { month: 'long', timeZone: 'America/Sao_Paulo' }); } catch (e) {} // (01/10) contagem e do mes do calendario, nao 30 dias
   if (limitEl && CONFIG.contact_limit) {
     limitEl.textContent = fmt(d.contacts_this_month) + ' / ' + fmt(CONFIG.contact_limit) + ' contatos';
   }
