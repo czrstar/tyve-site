@@ -56,7 +56,7 @@
 
 <div class="container">
   <h1>Política de Privacidade</h1>
-  <p class="date">Última atualização: 08 de julho de 2026</p>
+  <p class="date">Última atualização: 04 de outubro de 2026</p>
   <div class="highlight">
     A Tyve é uma plataforma de automação de atendimento via WhatsApp e Instagram para pequenas empresas. Esta política explica como coletamos, usamos e protegemos os dados dos nossos clientes e de seus usuários finais.
   </div>
@@ -64,14 +64,16 @@
   <h2>1. Quem somos</h2>
   <p>Tyve é uma plataforma de tecnologia (SaaS) que fornece atendimento automatizado via WhatsApp Business para lojas de e-commerce e negócios no Brasil. Operamos como Tech Provider autorizado da Meta Platforms, utilizando a API oficial do WhatsApp Business (Cloud API).</p>
   <p><strong>A Tyve não é afiliada, endossada ou operada pela Meta Platforms, Inc., Facebook, Inc. ou WhatsApp LLC.</strong></p>
+  <p>Nos dados pessoais dos clientes finais (as pessoas que conversam com o negócio pelo WhatsApp ou Instagram), o negócio contratante é o <strong>controlador</strong> e a Tyve atua como <strong>operadora</strong>, tratando os dados apenas conforme as instruções do contratante, nos termos da LGPD (Lei nº 13.709/2018). As condições desse tratamento estão no nosso <a href="/dpa">Acordo de Tratamento de Dados</a>. Nos dados do próprio negócio contratante (cadastro, plano, cobrança e uso da conta), a Tyve é a controladora.</p>
   <p>Contato: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a> | Site: <a href="https://tyve.com.br">tyve.com.br</a></p>
 
   <h2>2. Dados que coletamos</h2>
   <p>Coletamos e processamos os seguintes tipos de dados:</p>
   <ul>
     <li><strong>Dados do cliente (negócio contratante):</strong> nome da empresa, número de WhatsApp Business, token de acesso à API do WhatsApp, e informações de plano e faturamento.</li>
-    <li><strong>Dados de usuários finais (clientes do negócio):</strong> número de telefone WhatsApp, mensagens enviadas ao número do cliente, e dados fornecidos voluntariamente durante a conversa (nome, tipo de solicitação).</li>
+    <li><strong>Dados de usuários finais (clientes do negócio):</strong> número de telefone WhatsApp, mensagens enviadas ao número do cliente, e dados fornecidos voluntariamente durante a conversa (nome, tipo de solicitação e, nas trocas e devoluções, CPF e endereço).</li>
     <li><strong>Dados do Instagram (quando o cliente conecta uma conta Instagram profissional):</strong> identificador e nome de usuário (@) da conta profissional conectada, token de acesso, e as mensagens diretas (DMs) recebidas na conta do cliente, para que o agente automatizado possa respondê-las em nome do negócio. Acessamos apenas as conversas iniciadas por usuários com a conta do próprio cliente; não acessamos publicações, seguidores nem DMs de terceiros.</li>
+    <li><strong>Dados da loja Shopify (quando o lojista instala o app Tyve pela Shopify App Store):</strong> com autorização do lojista e somente para leitura, a Tyve consulta na loja os pedidos (número, status, itens, valores, rastreio), e, desses pedidos, o nome, o e-mail, o telefone e o endereço de entrega do comprador. A consulta é feita no momento da conversa, para responder ao próprio comprador sobre o pedido dele. A Tyve não copia a base de pedidos ou de clientes da loja: guarda apenas o registro de cada consulta e a própria conversa, que pode conter os dados do pedido informados ao comprador, pelos prazos da seção 7. Também guardamos o endereço e o identificador da loja, o token de acesso concedido pela Shopify, o plano assinado, as informações preenchidas no formulário de configuração e o registro do aceite dos Termos (data, IP e navegador).</li>
     <li><strong>Dados de uso da plataforma:</strong> logs de execução, métricas de atendimento (volume de mensagens, NPS, transferências para atendimento humano), e dados de desempenho do sistema.</li>
   </ul>
 
@@ -80,6 +82,7 @@
   <ul>
     <li>Prestar o serviço de atendimento automatizado contratado pelo cliente;</li>
     <li>Processar mensagens recebidas via webhook da Meta e enviar respostas automatizadas via Graph API;</li>
+    <li>Consultar, somente para leitura, pedidos da loja conectada (Shopify, Nuvemshop e outras plataformas integradas) para informar ao comprador o status e o rastreio do pedido dele, conferindo, pelo telefone cadastrado no pedido, que quem pergunta é o dono do pedido;</li>
     <li>Gerar relatórios de desempenho para o cliente contratante;</li>
     <li>Monitorar a qualidade e a continuidade do serviço;</li>
     <li>Cumprir obrigações legais e contratuais.</li>
@@ -90,19 +93,29 @@
   <p>Nossos clientes autorizam o acesso às suas contas WhatsApp Business por meio do fluxo oficial de Embedded Signup (Cadastro Integrado) da Meta. Cada cliente concede permissão explícita para que a Tyve acesse e gerencie seu número WhatsApp Business em seu nome. Esse acesso pode ser revogado a qualquer momento pelo cliente diretamente no painel da Meta.</p>
   <p>Para o Instagram, o cliente conecta sua conta profissional por meio do login oficial do Instagram (Instagram API with Instagram Login). A conexão concede à Tyve permissão para ler as mensagens diretas recebidas e responder em nome do negócio. O cliente pode revogar esse acesso a qualquer momento removendo o aplicativo em Configurações → Apps e sites, na sua conta Instagram, ou solicitando a desconexão diretamente à Tyve.</p>
 
+  <p><strong>Lojas Shopify.</strong> O lojista instala o app Tyve pela Shopify App Store e autoriza, na tela oficial da Shopify, apenas acessos de leitura a pedidos, clientes e envios (<em>read_orders</em>, <em>read_customers</em>, <em>read_assigned_fulfillment_orders</em>). A Tyve não altera pedidos, produtos ou dados da loja. O acesso termina quando o lojista desinstala o app. A assinatura do plano é feita e cobrada pela própria Shopify; a Tyve não recebe dados de cartão ou de pagamento do lojista. A Tyve não é afiliada, endossada ou operada pela Shopify Inc.</p>
+
   <h2>5. Compartilhamento de dados</h2>
   <p>Não vendemos, alugamos ou compartilhamos dados pessoais com terceiros, exceto:</p>
   <ul>
     <li><strong>Meta Platforms:</strong> as mensagens transitam pela infraestrutura da Meta (WhatsApp Cloud API) conforme os termos de uso da plataforma;</li>
-    <li><strong>Provedores de infraestrutura:</strong> utilizamos DigitalOcean (servidores) e OpenRouter (processamento de linguagem natural) com acordos de confidencialidade;</li>
+    <li><strong>Provedores que tratam dados em nosso nome (suboperadores):</strong> DigitalOcean (servidores e banco de dados, EUA); OpenRouter (acesso aos modelos de inteligência artificial, EUA); Resend (envio de e-mails transacionais, como boas-vindas e avisos, EUA); Asaas (cobrança dos planos contratados pelo site, Brasil); Telegram (alertas internos de operação enviados à equipe da Tyve, com a identificação da loja ou do cliente). O OpenRouter encaminha o texto da conversa aos provedores dos modelos de inteligência artificial que interpretam e redigem as respostas. Eles recebem apenas o necessário para prestar o serviço. Alguns desses provedores ficam fora do Brasil, principalmente nos Estados Unidos; nesses casos, a transferência internacional segue o art. 33 da LGPD;</li>
+    <li><strong>Shopify:</strong> para lojistas que contratam pela Shopify App Store, a Shopify fornece os dados da loja descritos acima e processa a assinatura e a cobrança do plano;</li>
     <li><strong>Obrigação legal:</strong> quando exigido por lei ou autoridade competente.</li>
   </ul>
 
   <h2>6. Armazenamento e segurança</h2>
-  <p>Os dados são armazenados em servidores privados na DigitalOcean (região NYC1), em banco de dados PostgreSQL com acesso restrito. Tokens de acesso são armazenados de forma segura e nunca expostos publicamente. Realizamos backups diários com retenção de 30 dias.</p>
+  <p>Os dados são armazenados em servidores privados na DigitalOcean (região NYC1), em banco de dados PostgreSQL com acesso restrito. Tokens de acesso são armazenados de forma segura e nunca expostos publicamente. As comunicações da Tyve com a Meta, a Shopify, os demais serviços integrados e os navegadores usam conexão criptografada (HTTPS/TLS). O banco de dados não tem porta aberta para a internet, e o acesso aos dados de produção é restrito à equipe da Tyve. Fazemos backup automático semanal do servidor e mantemos as 4 cópias mais recentes; dados apagados da base podem continuar por até 5 semanas nessas cópias, sem uso, até serem substituídos automaticamente.</p>
 
   <h2>7. Retenção de dados</h2>
-  <p>Mantemos os dados pelo período necessário à prestação do serviço contratado. Após o encerramento do contrato, os dados são eliminados em até 90 dias, salvo obrigação legal de retenção.</p>
+  <p>Mantemos os dados pelo período necessário à prestação do serviço contratado:</p>
+  <ul>
+    <li><strong>Conversas e dados de atendimento</strong> (mensagens, encaminhamentos, consultas de pedido, pesquisas de satisfação): até <strong>12 meses</strong>. Depois disso, são apagados automaticamente por uma rotina diária.</li>
+    <li><strong>Registros de cobrança</strong> (contagem de contatos e de mensagens por mês): mantidos enquanto forem necessários para comprovar a cobrança e cumprir obrigações legais. Após 12 meses, o telefone e o nome do contato são removidos desses registros.</li>
+    <li><strong>Pedidos para não receber mensagens:</strong> mantemos o registro do contato que fez o pedido, para continuar respeitando a escolha dele.</li>
+    <li><strong>Após o encerramento do contrato:</strong> os dados da conta do cliente e das conversas são eliminados em até 90 dias, salvo obrigação legal de retenção.</li>
+    <li><strong>Lojas Shopify:</strong> ao desinstalar o app, o acesso à loja é encerrado imediatamente; quando a Shopify nos envia o pedido de eliminação da loja (cerca de 48 horas após a desinstalação), apagamos os dados de pedidos e as conversas dos compradores daquela loja.</li>
+  </ul>
 
   <h2>8. Direitos do titular (LGPD)</h2>
   <p>Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito a:</p>
@@ -113,6 +126,7 @@
     <li>Solicitar a eliminação dos seus dados;</li>
     <li>Revogar o consentimento a qualquer momento.</li>
   </ul>
+  <p>Se você conversou com um negócio que usa a Tyve, esse negócio é o controlador dos seus dados: você pode exercer seus direitos com ele ou conosco, e repassamos o pedido. Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
   <p>Para exercer seus direitos, entre em contato: <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a></p>
 
   <h2 id="exclusao-de-dados">9. Exclusão de dados (Data Deletion)</h2>
@@ -120,6 +134,7 @@
   <ul>
     <li><strong>Por e-mail:</strong> envie uma mensagem para <a href="mailto:contato@tyve.com.br">contato@tyve.com.br</a> com o assunto "Exclusão de dados", informando o número de WhatsApp ou o @ da conta Instagram associados à sua conversa.</li>
     <li><strong>Cliente (negócio contratante):</strong> ao encerrar o contrato, ou a qualquer momento sob solicitação, removemos os dados da sua conta, incluindo tokens de acesso do WhatsApp e do Instagram e o histórico de mensagens armazenado.</li>
+    <li><strong>Comprador de uma loja Shopify:</strong> os pedidos de acesso e de exclusão de dados que você fizer à loja chegam à Tyve pelos canais oficiais da Shopify e são atendidos em até 30 dias, para os dados que tratamos em nome daquela loja.</li>
     <li><strong>Usuário do Instagram:</strong> você também pode revogar o acesso do aplicativo em Configurações → Apps e sites, na sua conta Instagram; ao fazê-lo, deixamos de receber suas mensagens e excluímos os dados vinculados à conexão.</li>
   </ul>
   <p>Após recebermos o pedido, confirmamos e concluímos a exclusão dos dados pessoais em até <strong>30 dias</strong>, salvo dados que a lei nos obrigue a reter. Tokens de acesso são revogados imediatamente.</p>
@@ -143,6 +158,7 @@
   <div class="ft-links">
     <a href="/termos.html">Termos de Serviço</a>
     <a href="/privacidade">Privacidade</a>
+    <a href="/dpa">Tratamento de Dados</a>
     <a href="https://wa.me/5516994247541" target="_blank">WhatsApp</a>
   </div>
   <p class="ft-copy">© 2026 Tyve. Todos os direitos reservados. Tyve não é afiliada a Meta, Facebook ou WhatsApp.</p>
