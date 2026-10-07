@@ -1259,6 +1259,26 @@
     return Array.from(document.querySelectorAll('.section-card')).filter(c => c.style.display !== 'none');
   }
 
+  // ── (07/10/2026) Cadastro vindo da instalacao pela Nuvemshop (?ns_install=<nonce>): a loja ja esta conectada ──
+  setTimeout(function prefillFromNuvemshopInstall() {
+    const ns = (new URLSearchParams(window.location.search).get('ns_install') || '').toLowerCase().replace(/[^0-9a-f]/g, '');
+    if (ns.length !== 32) return;
+    window.__tyveNsInstall = ns;
+    try { selectBusinessType('ecommerce'); } catch (e) {}
+    const r = document.querySelector('input[name="plataforma"][value="nuvemshop"]');
+    if (r) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); const it = r.closest('.radio-item'); if (it) it.classList.add('selected'); }
+    const lu = document.getElementById('loja-url-wrap'); if (lu) lu.style.display = 'none';
+    const form = document.getElementById('onboardingForm');
+    if (form && !document.getElementById('nsInstallBanner')) {
+      const b = document.createElement('div');
+      b.id = 'nsInstallBanner';
+      b.setAttribute('role', 'status');
+      b.style.cssText = 'background:#ecfdf5;border:1px solid #10b981;color:#065f46;border-radius:10px;padding:12px 16px;margin:0 0 16px;font-size:14px;line-height:1.5';
+      b.textContent = 'Sua loja Nuvemshop já está conectada à Tyve. Complete o cadastro abaixo para ativarmos o atendimento no seu WhatsApp.';
+      form.parentNode.insertBefore(b, form);
+    }
+  }, 0); // depois dos listeners de change (revisao 07/10)
+
   // ── Prefill from payment token (service checkouts) ──
   (async function prefillFromToken() {
     const params = new URLSearchParams(window.location.search);
@@ -1692,6 +1712,7 @@
         // em aceites_termos, que e a evidencia legal do aceite.
         termos_versao:         '2026-09-29-r2',
         prefill_token:         new URLSearchParams(window.location.search).get('t') || '',
+        ns_install:            window.__tyveNsInstall || '',
         submitted_at:          new Date().toISOString()
       };
       const res = await fetch('https://n8n.tyve.com.br/webhook/tyve-onboarding-form', {
