@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
     @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
@@ -125,6 +126,11 @@
     .bar-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
     .note{font-size:12px;color:var(--muted2);margin-top:14px;line-height:1.5}
 
+    .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:20px}
+    .chart-card{margin-bottom:0}
+    .chart-wrap{height:240px;position:relative}
+    .chart-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted2);font-size:13px;text-align:center;padding:0 20px}
+    @media(max-width:560px){.chart-grid{grid-template-columns:1fr}}
     footer{text-align:center;font-size:12px;color:var(--muted2);padding:0 20px 36px}
     @media(max-width:700px){nav{padding:0 16px}.hero,.tabs-bar{padding-left:16px;padding-right:16px}main{padding:24px 16px 60px}.nav-btn span{display:none}}
   </style>
@@ -175,6 +181,7 @@
     <button class="tab-btn active" data-tab="geral" type="button" onclick="switchTab('geral')">📊 Visão geral</button>
     <button class="tab-btn" data-tab="clientes" type="button" onclick="switchTab('clientes')">🏪 Clientes</button>
     <button class="tab-btn" data-tab="custos" type="button" onclick="switchTab('custos')">💸 Custo de IA</button>
+    <button class="tab-btn" data-tab="historico" type="button" onclick="switchTab('historico')">📈 Histórico</button>
   </div></div>
 
   <main>
@@ -187,7 +194,7 @@
         <div class="kpi-card"><div class="kpi-icon">🏪</div><div class="kpi-label">Clientes ativos</div><div class="kpi-value orange" id="kClients">–</div><div class="kpi-sub" id="kPlans">–</div></div>
         <div class="kpi-card"><div class="kpi-icon">💰</div><div class="kpi-label">Receita mensal (estimada)</div><div class="kpi-value teal" id="kMrr">–</div><div class="kpi-sub">Soma dos planos dos clientes ativos</div></div>
         <div class="kpi-card"><div class="kpi-icon">🔁</div><div class="kpi-label">Encaminhamentos na semana<span id="kHandTrend"></span></div><div class="kpi-value" id="kHand">–</div><div class="kpi-sub" id="kHandMonth">–</div></div>
-        <div class="kpi-card"><div class="kpi-icon">🙋</div><div class="kpi-label">Conversas com a equipe</div><div class="kpi-value amber" id="kHuman">–</div><div class="kpi-sub">Agente pausado agora</div></div>
+        <div class="kpi-card"><div class="kpi-icon">🙋</div><div class="kpi-label">Conversas com a equipe</div><div class="kpi-value amber" id="kHuman">–</div><div class="kpi-sub">Agente pausado agora (todas as lojas, inclui testes)</div></div>
         <div class="kpi-card"><div class="kpi-icon">📨</div><div class="kpi-label">Follow-ups na semana</div><div class="kpi-value" id="kFollow">–</div><div class="kpi-sub">Mensagem do dia seguinte</div></div>
         <div class="kpi-card"><div class="kpi-icon">⚡</div><div class="kpi-label">Leads da Luma</div><div class="kpi-value" id="kLuma">–</div><div class="kpi-sub" id="kLumaTotal">–</div></div>
       </div>
@@ -221,6 +228,25 @@
         <div class="note">Mostra só o OpenRouter (bots dos clientes e imagens). A Luma usa a Anthropic direto e o áudio usa a Groq, que não entram nesta soma. O teto é só uma referência visual.</div>
       </div>
     </div>
+
+    <!-- HISTÓRICO -->
+    <div id="tab-historico" style="display:none">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Mês a mês</div>
+        <div class="card-sub">Só clientes reais (lojas de teste ficam de fora). O mês atual aparece em tom mais claro porque ainda está em andamento.</div>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart-card"><div class="card-title">Custo de IA por mês</div><div class="card-sub">Em reais (OpenRouter)</div><div class="chart-wrap"><canvas id="chAi"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Custo de IA por dia</div><div class="card-sub">Últimos 30 dias, em reais</div><div class="chart-wrap"><canvas id="chAiDaily"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Contatos atendidos por mês</div><div class="card-sub">Pessoas diferentes que falaram com o agente</div><div class="chart-wrap"><canvas id="chContacts"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Custo de IA por contato</div><div class="card-sub">Reais gastos por contato atendido</div><div class="chart-wrap"><canvas id="chPerContact"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Encaminhamentos para a equipe</div><div class="card-sub">Por mês</div><div class="chart-wrap"><canvas id="chHand"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Pedidos consultados e trocas</div><div class="card-sub">Consultas de pedido (WISMO) e trocas abertas por mês</div><div class="chart-wrap"><canvas id="chEcom"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Mensagens por mês</div><div class="card-sub">Mensagens recebidas dos clientes finais</div><div class="chart-wrap"><canvas id="chMsgs"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Novos cadastros</div><div class="card-sub">Formulários de onboarding enviados por mês</div><div class="chart-wrap"><canvas id="chOnb"></canvas></div></div>
+      </div>
+      <p class="note" id="histNote"></p>
+    </div>
   </main>
   <footer id="footTs">–</footer>
 </div>
@@ -230,6 +256,7 @@ const OPS_API   = 'https://n8n.tyve.com.br/webhook/tyve-ops-dashboard';
 const AI_BUDGET = 400;                       // R$/mês — referência visual
 const PRICES    = { atende: 497, cresce: 797, escala: 1097 };  // e-commerce, mensal (R$)
 const TEST_INSTANCES = ['INSTANCE_PLACEHOLDER','zappro-test','ecom-test','ecom-shopify','shp-tyve-app-review','agaya-de-joias'];
+const isTestInst = i => !i || TEST_INSTANCES.includes(i) || /test|teste/i.test(i);
 const SKEY = 'tyve-ops-pw';
 let savedToken = '';
 let refreshTimer = null;
@@ -250,7 +277,7 @@ function show(which){
 }
 function switchTab(t){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===t));
-  ['geral','clientes','custos'].forEach(k=>{ $('tab-'+k).style.display = k===t ? '' : 'none'; });
+  ['geral','clientes','custos','historico'].forEach(k=>{ $('tab-'+k).style.display = k===t ? '' : 'none'; });
 }
 
 async function doLogin(e){
@@ -280,6 +307,7 @@ async function loadData(silent){
     const d = await res.json();
     if(!d || d.error) return false;
     render(d);
+    loadHistory();
     return true;
   }catch(err){ return false; }
 }
@@ -375,6 +403,79 @@ function render(d){
     setText('footTs', df+' · '+tf);
   }
   show('dash');
+}
+
+
+// ───────── HISTÓRICO (gráficos mês a mês) ─────────
+const HIST_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-history';
+const CHARTS = {};
+const MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const mLabel = m => MESES[parseInt(m.slice(5,7),10)-1]+'/'+m.slice(2,4);
+function nowYM(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function monthRange(from){ const out=[]; let [y,m]=from.split('-').map(Number); const end=nowYM();
+  while(true){ const s=y+'-'+String(m).padStart(2,'0'); out.push(s); if(s>=end) break; m++; if(m>12){m=1;y++;} } return out; }
+function sumBy(rows, months, f){ const mp={}; (rows||[]).forEach(r=>{ if(isTestInst(r.i)) return; mp[r.m]=(mp[r.m]||0)+Number(f(r)||0); }); return months.map(m=>mp[m]||0); }
+function drawChart(id, cfg){
+  const cv=$(id); if(!cv) return;
+  if(CHARTS[id]) CHARTS[id].destroy();
+  const wrap=cv.parentElement; const old=wrap.querySelector('.chart-empty'); if(old) old.remove();
+  const data=cfg.data.datasets.flatMap(d=>d.data);
+  if(!data.some(v=>v>0)){ cv.style.display='none'; const e=document.createElement('div'); e.className='chart-empty'; e.textContent='Ainda não há dados suficientes para este gráfico.'; wrap.appendChild(e); return; }
+  cv.style.display='';
+  CHARTS[id]=new Chart(cv,cfg);
+}
+function shade(color, months){ const cur=nowYM(); return months.map(m=>m===cur? color+'66' : color); }
+function baseOpts(extra){
+  return Object.assign({responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{beginAtZero:true,grid:{color:'rgba(17,30,29,0.07)'},ticks:{color:'#888',font:{size:11}}}}},extra||{});
+}
+async function loadHistory(){
+  if(!savedToken) return;
+  let H; try{ const r=await fetch(HIST_API+'?token='+encodeURIComponent(savedToken)); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
+  if(!H || H.error) return;
+  const first=(H.contacts||[]).filter(r=>!isTestInst(r.i)).map(r=>r.m).sort()[0] || (H.ai||[]).filter(r=>r.brl>1).map(r=>r.m).sort()[0] || nowYM();
+  const months=monthRange(first<'2026-07'?first:'2026-07'), labels=months.map(mLabel);
+  const O='#f84100', T='#00b5ae', D='#111e1d';
+  // custo IA mensal
+  const aiMap={}; (H.ai||[]).forEach(r=>aiMap[r.m]=Number(r.brl)||0);
+  const aiBrl=months.map(m=>aiMap[m]||0);
+  drawChart('chAi',{type:'bar',data:{labels,datasets:[{data:aiBrl,backgroundColor:shade(O,months),borderRadius:6}]},
+    options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+brl(c.parsed.y)}}}})});
+  // custo IA diário
+  const dl=(H.ai_daily||[]);
+  drawChart('chAiDaily',{type:'line',data:{labels:dl.map(r=>r.d.slice(8,10)+'/'+r.d.slice(5,7)),datasets:[{data:dl.map(r=>Number(r.brl)||0),borderColor:O,backgroundColor:'rgba(248,65,0,.10)',fill:true,tension:.3,pointRadius:2}]},
+    options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+brl(c.parsed.y)}}}})});
+  // contatos
+  const contacts=sumBy(H.contacts,months,r=>r.n);
+  drawChart('chContacts',{type:'bar',data:{labels,datasets:[{data:contacts,backgroundColor:shade(T,months),borderRadius:6}]},options:baseOpts()});
+  // custo por contato
+  const per=months.map((m,i)=>contacts[i]>0? aiBrl[i]/contacts[i] : 0);
+  drawChart('chPerContact',{type:'bar',data:{labels,datasets:[{data:per,backgroundColor:shade(D,months),borderRadius:6}]},
+    options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+brl(c.parsed.y)+' por contato'}}}})});
+  // encaminhamentos (handoffs não têm instância: total do mês)
+  const hMap={}; (H.handoffs||[]).forEach(r=>{ hMap[r.m]=(hMap[r.m]||0)+Number(r.n||0); });
+  drawChart('chHand',{type:'bar',data:{labels,datasets:[{data:months.map(m=>hMap[m]||0),backgroundColor:shade(O,months),borderRadius:6}]},options:baseOpts()});
+  // ecom
+  drawChart('chEcom',{type:'bar',data:{labels,datasets:[
+    {label:'Consultas de pedido',data:sumBy(H.wismo,months,r=>r.n),backgroundColor:O,borderRadius:6},
+    {label:'Trocas',data:sumBy(H.trocas,months,r=>r.n),backgroundColor:T,borderRadius:6}]},
+    options:baseOpts({plugins:{legend:{display:true,labels:{boxWidth:12,font:{size:12}}}}})});
+  // mensagens
+  drawChart('chMsgs',{type:'bar',data:{labels,datasets:[{data:sumBy(H.msgs,months,r=>r.n),backgroundColor:shade(T,months),borderRadius:6}]},options:baseOpts()});
+  // onboardings
+  const oMap={}; (H.onboardings||[]).forEach(r=>oMap[r.m]=Number(r.n)||0);
+  drawChart('chOnb',{type:'bar',data:{labels,datasets:[{data:months.map(m=>oMap[m]||0),backgroundColor:shade(D,months),borderRadius:6}]},options:baseOpts({scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{precision:0}}}})});
+  setText('histNote','O histórico de receita e de plano por mês ainda não é guardado pelo sistema, por isso não aparece aqui. Os gráficos começam em '+labels[0]+'.');
+
+  // alerta de uso: contatos do mês contra o limite de cada cliente real
+  const cur=nowYM(), lim={}; (H.limits||[]).forEach(l=>lim[l.i]=Number(l.contact_limit)||0);
+  const uso=(H.contacts||[]).filter(r=>r.m===cur && !isTestInst(r.i) && lim[r.i] && lim[r.i]<99999);
+  const el=$('chips');
+  if(el){ el.querySelectorAll('.chip.usage').forEach(x=>x.remove());
+    uso.forEach(r=>{ const pct=Math.round(r.n/lim[r.i]*100); const t=pct>=100?'warn':pct>=80?'warn':'info';
+      el.insertAdjacentHTML('beforeend',`<div class="chip ${t} usage"><div class="chip-dot"></div><div>${esc(r.i)}: ${num(r.n)} contatos no mês, ${pct}% do limite configurado (${num(lim[r.i])}).</div></div>`); });
+  }
 }
 
 // restaura sessão da aba
