@@ -905,7 +905,8 @@ function storedToken() { try { return localStorage.getItem(TOK_KEY) || ''; } cat
 function storeToken(t)  { try { localStorage.setItem(TOK_KEY, t); } catch(e) {} }
 function clearToken()   { try { localStorage.removeItem(TOK_KEY); } catch(e) {} }
 function token() {
-  const q = new URLSearchParams(location.search).get('token') || '';
+  let q = new URLSearchParams(location.search).get('token') || '';
+  if (!q) { const m = location.pathname.match(/^\/painel\/([a-z0-9]+_[A-Za-z0-9]+)\/?$/); if (m) q = m[1]; }  // link limpo /painel/<token>
   if (q) { storeToken(q); try { history.replaceState(null, '', '/painel'); } catch(e) {} return q; }
   return storedToken();
 }
