@@ -471,6 +471,10 @@ async function loadHealth(){
   else ch.push({t:'warn',m:'Sem registro do teste diário.'});
   const bd=H.backup_last, today=new Date().toISOString().slice(0,10), yest=new Date(Date.now()-864e5).toISOString().slice(0,10);
   ch.push(bd>=yest ? {t:'ok',m:'Backup do banco em dia (último: '+bd.slice(8,10)+'/'+bd.slice(5,7)+').'} : {t:'warn',m:'Backup do banco atrasado (último: '+(bd||'nenhum')+').'});
+  if(H.openrouter){ const b=H.openrouter.balance; ch.push(b<3 ? {t:'warn',m:'Saldo de IA na OpenRouter baixo: US$ '+b.toFixed(2)+'. A recarga automática deve cobrir, mas vale conferir.'} : {t:'ok',m:'Saldo de IA na OpenRouter: US$ '+b.toFixed(2)+' (gastos do mês não incluem recargas automáticas).'}); }
+  else ch.push({t:'warn',m:'Não foi possível ler o saldo da OpenRouter agora.'});
+  if(H.meta){ const q=H.meta.quality; ch.push(q==='GREEN' ? {t:'ok',m:'Número na Meta: qualidade verde, limite de '+String(H.meta.tier||'').replace('TIER_','')+' conversas novas por dia.'} : {t:'warn',m:'Número na Meta com qualidade '+q+'. Limite: '+H.meta.tier+'.'}); }
+  else ch.push({t:'warn',m:'Não foi possível ler a qualidade do número na Meta agora.'});
   if(H.anomalies24>0) ch.push({t:'warn',m:H.anomalies24+' anomalia(s) de erro detectadas nas últimas 24h.'});
   if(H.handoff_pending>0) ch.push({t:'info',m:H.handoff_pending+' encaminhamento(s) com mais de 12h ainda em atendimento humano.'});
   const te=(H.tokens||{}).tenants_expiring||[];
@@ -482,7 +486,7 @@ async function loadHealth(){
   $('healthChips').innerHTML = ch.map(c=>`<div class="chip ${c.t}"><div class="chip-dot"></div><div>${esc(c.m)}</div></div>`).join('');
   const te2=ex.top_errors||[];
   $('healthErrs').innerHTML = te2.length ? te2.map(e=>esc(e.name)+': '+e.n+' erro(s), último há '+hrs(e.last)+'h').join('<br>') : 'Nenhum.';
-  setText('healthNote','Atualizado em '+new Date(H.generated_at).toLocaleString('pt-BR')+'. Saldo de crédito de IA e qualidade do número na Meta ainda não aparecem aqui (não há dado local para ler).');
+  setText('healthNote','Atualizado em '+new Date(H.generated_at).toLocaleString('pt-BR')+'.');
 }
 async function loadHistory(){
   if(!savedToken) return;
