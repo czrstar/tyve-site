@@ -216,12 +216,12 @@
     <div id="tab-custos" style="display:none">
       <div class="card">
         <div class="card-title">Custo de IA <span class="pill">OpenRouter</span></div>
-        <div class="card-sub">Consumo em reais, convertido pelo dólar do dia.</div>
+        <div class="card-sub">Cada dia é convertido pelo dólar daquele dia e fica guardado, então o histórico não muda quando a cotação muda.</div>
         <div class="ai-grid">
           <div class="ai-box"><div class="ai-lbl">Hoje</div><div class="ai-brl" id="aiTodayBrl">–</div><div class="ai-usd" id="aiTodayUsd">–</div></div>
           <div class="ai-box"><div class="ai-lbl">Últimos 7 dias</div><div class="ai-brl" id="aiWeekBrl">–</div><div class="ai-usd" id="aiWeekUsd">–</div></div>
           <div class="ai-box"><div class="ai-lbl">Mês</div><div class="ai-brl" id="aiMonthBrl">–</div><div class="ai-usd" id="aiMonthUsd">–</div></div>
-          <div class="ai-box"><div class="ai-lbl">Dólar</div><div class="ai-brl" id="brlRate">–</div><div class="ai-usd">cotação usada</div></div>
+          <div class="ai-box"><div class="ai-lbl">Dólar de hoje</div><div class="ai-brl" id="brlRate">–</div><div class="ai-usd">cada dia usa a cotação do próprio dia</div></div>
         </div>
         <div class="bar-row"><span>Teto de referência do mês</span><span id="aiBudgetTxt">–</span></div>
         <div class="bar"><div class="bar-fill safe" id="aiBar"></div></div>
@@ -243,6 +243,8 @@
         <div class="card chart-card"><div class="card-title">Encaminhamentos para a equipe</div><div class="card-sub">Por mês</div><div class="chart-wrap"><canvas id="chHand"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Pedidos consultados e trocas</div><div class="card-sub">Consultas de pedido (WISMO) e trocas abertas por mês</div><div class="chart-wrap"><canvas id="chEcom"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Mensagens por mês</div><div class="card-sub">Mensagens recebidas dos clientes finais</div><div class="chart-wrap"><canvas id="chMsgs"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Receita mensal estimada</div><div class="card-sub">Soma dos planos dos clientes ativos no fim do mês</div><div class="chart-wrap"><canvas id="chMrr"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Clientes ativos por plano</div><div class="card-sub">No fim de cada mês</div><div class="chart-wrap"><canvas id="chPlans"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Novos cadastros</div><div class="card-sub">Formulários de onboarding enviados por mês</div><div class="chart-wrap"><canvas id="chOnb"></canvas></div></div>
       </div>
       <p class="note" id="histNote"></p>
@@ -260,6 +262,8 @@ const isTestInst = i => !i || TEST_INSTANCES.includes(i) || /test|teste/i.test(i
 const SKEY = 'tyve-ops-pw';
 let savedToken = '';
 let refreshTimer = null;
+let HIST = null;
+const LAST = {};
 
 const brl = v => 'R$ ' + (Number(v)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const brl0 = v => 'R$ ' + (Number(v)||0).toLocaleString('pt-BR',{maximumFractionDigits:0});
@@ -359,13 +363,10 @@ function render(d){
   chips.push(hum===0
     ? {t:'ok',m:'Nenhuma conversa em atendimento humano. O agente responde tudo.'}
     : {t:'warn',m:`${num(hum)} conversa${hum>1?'s':''} com a equipe agora. Confira se há resposta pendente.`});
-  if(mo>0 && real.length>0){
-    const proj=(mo/Math.max(dayOfMonth(),1))*daysInMonth();
-    chips.push({t:'info',m:`Projeção do custo de IA no mês: ${brl(proj)} (OpenRouter, inclui testes).`});
-  }
-  if(mrr>0 && mo>0) chips.push({t:'info',m:`O custo de IA do mês equivale a ${(mo/mrr*100).toFixed(1).replace('.',',')}% da receita mensal estimada.`});
+  LAST.mrr = mrr; LAST.real = real.length;
   if(hw>0) chips.push({t:'info',m:`${num(hw)} encaminhamento${hw>1?'s':''} na semana, de ${real.length} cliente${real.length>1?'s':''}.`});
   $('chips').innerHTML = chips.map(c=>`<div class="chip ${c.t}"><div class="chip-dot"></div><div>${esc(c.m)}</div></div>`).join('');
+  if(HIST) updateAiCosts(HIST);
 
   // clientes
   setText('cliCount', real.length);
@@ -385,14 +386,12 @@ function render(d){
     : '<tr><td colspan="6" class="empty-td">Nenhum cliente cadastrado ainda</td></tr>';
 
   // custos
-  setText('aiTodayBrl', brl(d.ai_today_brl)); setText('aiTodayUsd', usd(d.ai_today_usd));
-  setText('aiWeekBrl', brl(d.ai_week_brl));   setText('aiWeekUsd', usd(d.ai_week_usd));
-  setText('aiMonthBrl', brl(d.ai_month_brl)); setText('aiMonthUsd', usd(d.ai_month_usd));
+  setText('aiTodayUsd', usd(d.ai_today_usd));
+  setText('aiWeekUsd', usd(d.ai_week_usd));
+  setText('aiMonthUsd', usd(d.ai_month_usd));
   setText('brlRate', d.brl_rate ? 'R$ '+parseFloat(d.brl_rate).toFixed(2).replace('.',',') : '–');
-  const pct=Math.min(mo/AI_BUDGET*100,100), bar=$('aiBar');
-  bar.className='bar-fill '+(pct>=80?'danger':pct>=55?'warn':'safe');
-  setTimeout(()=>{ bar.style.width=pct.toFixed(1)+'%'; },60);
-  setText('aiBudgetTxt', brl(mo)+' de R$ '+AI_BUDGET);
+  LAST.usd = {today:d.ai_today_usd, week:d.ai_week_usd, month:d.ai_month_usd};
+  if(!HIST){ ['aiTodayBrl','aiWeekBrl','aiMonthBrl'].forEach(id=>setText(id,'…')); setText('aiBudgetTxt','…'); }
 
   // timestamp
   const ts=new Date(d.generated_at);
@@ -430,10 +429,32 @@ function baseOpts(extra){
     plugins:{legend:{display:false}},
     scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{beginAtZero:true,grid:{color:'rgba(17,30,29,0.07)'},ticks:{color:'#888',font:{size:11}}}}},extra||{});
 }
+function updateAiCosts(H){
+  const cur=nowYM();
+  const m=(H.ai||[]).find(r=>r.m===cur); const month=m?Number(m.brl)||0:0;
+  const daily=(H.ai_daily||[]);
+  const week=daily.slice(-7).reduce((s,r)=>s+(Number(r.brl)||0),0);
+  const sp=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));
+  const todayKey=sp.getFullYear()+'-'+String(sp.getMonth()+1).padStart(2,'0')+'-'+String(sp.getDate()).padStart(2,'0');
+  const t=daily.find(r=>r.d===todayKey); const today=t?Number(t.brl)||0:0;
+  setText('aiTodayBrl',brl(today)); setText('aiWeekBrl',brl(week)); setText('aiMonthBrl',brl(month));
+  const pct=Math.min(month/AI_BUDGET*100,100), bar=$('aiBar');
+  bar.className='bar-fill '+(pct>=80?'danger':pct>=55?'warn':'safe');
+  setTimeout(()=>{ bar.style.width=pct.toFixed(1)+'%'; },60);
+  setText('aiBudgetTxt', brl(month)+' de R$ '+AI_BUDGET);
+  const el=$('chips'); if(!el) return;
+  el.querySelectorAll('.chip.aicost').forEach(x=>x.remove());
+  if(month>0){
+    const proj=(month/Math.max(dayOfMonth(),1))*daysInMonth();
+    el.insertAdjacentHTML('beforeend',`<div class="chip info aicost"><div class="chip-dot"></div><div>Projeção do custo de IA no mês: ${esc(brl(proj))} (OpenRouter, inclui testes).</div></div>`);
+    if(LAST.mrr>0) el.insertAdjacentHTML('beforeend',`<div class="chip info aicost"><div class="chip-dot"></div><div>O custo de IA do mês equivale a ${(month/LAST.mrr*100).toFixed(1).replace('.',',')}% da receita mensal estimada.</div></div>`);
+  }
+}
 async function loadHistory(){
   if(!savedToken) return;
   let H; try{ const r=await fetch(HIST_API+'?token='+encodeURIComponent(savedToken)); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
   if(!H || H.error) return;
+  HIST=H; updateAiCosts(H);
   const first=(H.contacts||[]).filter(r=>!isTestInst(r.i)).map(r=>r.m).sort()[0] || (H.ai||[]).filter(r=>r.brl>1).map(r=>r.m).sort()[0] || nowYM();
   const months=monthRange(first<'2026-07'?first:'2026-07'), labels=months.map(mLabel);
   const O='#f84100', T='#00b5ae', D='#111e1d';
@@ -463,18 +484,38 @@ async function loadHistory(){
     options:baseOpts({plugins:{legend:{display:true,labels:{boxWidth:12,font:{size:12}}}}})});
   // mensagens
   drawChart('chMsgs',{type:'bar',data:{labels,datasets:[{data:sumBy(H.msgs,months,r=>r.n),backgroundColor:shade(T,months),borderRadius:6}]},options:baseOpts()});
+  // receita e planos (guardados diariamente a partir de 11/10/2026)
+  const mrrMap={}, planMap={atende:{},cresce:{},escala:{}};
+  (H.mrr||[]).forEach(r=>{ mrrMap[r.m]=(mrrMap[r.m]||0)+Number(r.mrr||0); if(planMap[r.plan]) planMap[r.plan][r.m]=Number(r.n)||0; });
+  drawChart('chMrr',{type:'bar',data:{labels,datasets:[{data:months.map(m=>mrrMap[m]||0),backgroundColor:shade(T,months),borderRadius:6}]},
+    options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+brl0(c.parsed.y)}}}})});
+  const PC={atende:'#bbb',cresce:T,escala:O};
+  drawChart('chPlans',{type:'bar',data:{labels,datasets:['atende','cresce','escala'].map(pl=>({label:pl.charAt(0).toUpperCase()+pl.slice(1),data:months.map(m=>planMap[pl][m]||0),backgroundColor:PC[pl],borderRadius:4}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{boxWidth:12,font:{size:12}}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{stacked:true,beginAtZero:true,ticks:{precision:0,color:'#888',font:{size:11}},grid:{color:'rgba(17,30,29,0.07)'}}}}});
   // onboardings
   const oMap={}; (H.onboardings||[]).forEach(r=>oMap[r.m]=Number(r.n)||0);
   drawChart('chOnb',{type:'bar',data:{labels,datasets:[{data:months.map(m=>oMap[m]||0),backgroundColor:shade(D,months),borderRadius:6}]},options:baseOpts({scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{precision:0}}}})});
-  setText('histNote','O histórico de receita e de plano por mês ainda não é guardado pelo sistema, por isso não aparece aqui. Os gráficos começam em '+labels[0]+'.');
+  setText('histNote','Receita e plano por mês começaram a ser guardados em 11/10/2026 (um registro por dia), então esses dois gráficos só têm dados a partir de outubro. Os demais começam em '+labels[0]+'. O custo de IA usa o dólar de cada dia.');
 
-  // alerta de uso: contatos do mês contra o limite de cada cliente real
-  const cur=nowYM(), lim={}; (H.limits||[]).forEach(l=>lim[l.i]=Number(l.contact_limit)||0);
-  const uso=(H.contacts||[]).filter(r=>r.m===cur && !isTestInst(r.i) && lim[r.i] && lim[r.i]<99999);
+  // cobertura de contatos do mês: plano + pacotes (a Tyve não bloqueia; excedente é cobrado)
+  const cur=nowYM(), pk={}; (H.packs||[]).forEach(p=>{ if(p.lim) pk[p.i]=p.lim; });
+  const lim={}; (H.limits||[]).forEach(l=>lim[l.i]=Number(l.contact_limit)||0);
+  const uso=(H.contacts||[]).filter(r=>r.m===cur && !isTestInst(r.i));
   const el=$('chips');
   if(el){ el.querySelectorAll('.chip.usage').forEach(x=>x.remove());
-    uso.forEach(r=>{ const pct=Math.round(r.n/lim[r.i]*100); const t=pct>=100?'warn':pct>=80?'warn':'info';
-      el.insertAdjacentHTML('beforeend',`<div class="chip ${t} usage"><div class="chip-dot"></div><div>${esc(r.i)}: ${num(r.n)} contatos no mês, ${pct}% do limite configurado (${num(lim[r.i])}).</div></div>`); });
+    uso.forEach(r=>{
+      const L=pk[r.i]; let msg, t='info';
+      if(L && L.effective_limit){
+        const ex=Number(L.excess)||0;
+        msg=`${r.i}: ${num(L.used)} contatos no mês. Plano de ${num(L.plan_limit)} + pacote de ${num(L.pack_balance)} (saldo que veio do mês passado) = cobertura de ${num(L.effective_limit)}, sobram ${num(Math.max(L.effective_limit-L.used,0))}`+(ex>0?`. Excedente de ${num(ex)} contatos a cobrar.`:'. Sem excedente. O atendimento não é bloqueado.');
+        if(ex>0) t='warn';
+      } else if(lim[r.i] && lim[r.i]<99999){
+        const pct=Math.round(r.n/lim[r.i]*100);
+        msg=`${r.i}: ${num(r.n)} contatos no mês (${pct}% de ${num(lim[r.i])}). O atendimento não é bloqueado; o excedente é cobrado.`;
+        if(pct>=100) t='warn';
+      } else return;
+      el.insertAdjacentHTML('beforeend',`<div class="chip ${t} usage"><div class="chip-dot"></div><div>${esc(msg)}</div></div>`);
+    });
   }
 }
 
