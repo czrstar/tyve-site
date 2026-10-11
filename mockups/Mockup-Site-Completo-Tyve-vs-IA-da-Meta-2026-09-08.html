@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[MOCKUP] Tyve — O pós-venda da sua loja resolvido no WhatsApp</title>
+  <meta name="description" content="A Tyve responde 'cadê meu pedido?' sozinha, com rastreio real da sua loja (Shopify, Nuvemshop, Bling), resolve troca de numeração e gera Pix na conversa. 24h, feito no Brasil." />
+  <meta property="og:title" content="Tyve — O pós-venda que resolve para a sua loja" />
+  <meta property="og:description" content="'Cadê meu pedido?' respondido sozinho, com rastreio real. Troca resolvida no WhatsApp. 24h por dia." />
+  <meta property="og:image" content="https://tyve.com.br/og-image-v4.png" />
+  <meta property="og:url" content="https://tyve.com.br" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+
+<style>
+  /* ─── GRIFT FONT ─────────────────────────────────────────── */
+  @font-face { font-family:'Grift'; src:url('https://tyve.com.br/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('https://tyve.com.br/assets/fonts/Grift-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('https://tyve.com.br/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('https://tyve.com.br/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('https://tyve.com.br/assets/fonts/Grift-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Grift'; src:url('https://tyve.com.br/assets/fonts/Grift-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+
+  /* ─── TOKENS ─────────────────────────────────────────── */
+  :root {
+    --sh-1: 0 1px 2px rgba(20,10,0,.04), 0 6px 16px rgba(20,10,0,.06), 0 16px 30px rgba(20,10,0,.05);
+    --sh-2: 0 2px 4px rgba(20,10,0,.04), 0 10px 26px rgba(20,10,0,.07);
+    --sh-hover: 0 2px 4px rgba(20,10,0,.05), 0 14px 30px rgba(248,65,0,.14);
+    --orange:  #f84100;
+    --dark:    #111e1d;
+    --beige:   #f0ebe3;
+    --teal:    #00e8df;
+    --light:   #ffffff;
+    --light2:  #f6f6f6;
+    --txt:     #111e1d;
+    --txt-mid: #555;
+    --txt-dim: #888;
+    --font:    'Grift', 'DM Sans', sans-serif;
+    --nav-h:   64px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
+  body { font-family: var(--font); background: var(--light); color: var(--txt); overflow-x: hidden; max-width: 100%; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+  @media (max-width: 768px) { .container { padding: 0 24px; } }
+
+  /* ─── SEC LABEL (solid orange pill) ─────────────────── */
+  .sec-label {
+    display: inline-block;
+    border: 1.5px solid var(--orange);
+    color: var(--orange);
+    border-radius: 100px;
+    padding: 5px 18px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 200;
+    height: var(--nav-h);
+    /* mesmo degrade da tarja, invertido: claro na direita, escuro na esquerda */
+    background: linear-gradient(300deg, #ff6a34 0%, #f84100 55%, #d63500 100%);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 48px;
+  }
+  .nav-logo { display: flex; align-items: center; text-decoration: none; }
+  .nav-logo img { height: 32px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a { color: white; text-decoration: none; font-size: 14px; font-weight: 500; opacity: .92; transition: opacity .2s; white-space: nowrap; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-links .btn-planos { background: var(--dark); color: white; padding: 9px 22px; border-radius: 100px; font-weight: 600; opacity: 1; }
+  .nav-links .btn-demo { border: 1.5px solid rgba(255,255,255,.7); padding: 8px 18px; border-radius: 100px; font-size: 13px; opacity: 1; }
+  .nav-flags { display: flex; gap: 6px; font-size: 22px; }
+  .nav-flags span { cursor: pointer; transition: opacity .2s; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: white; border-radius: 2px; }
+
+  /* ─── HERO (02) — dark ────────────────────────────────── */
+  .hero {
+    position: relative; padding-top: var(--nav-h);
+    display: flex; flex-direction: column; align-items: center;
+    overflow: hidden; background: var(--dark);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url('https://tyve.com.br/assets/raios-tyve.svg');
+    background-size: auto 60%; background-repeat: repeat-x;
+    background-position: center 70%; opacity: .10; pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; text-align: center; max-width: 880px; padding: 64px 24px 60px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1.5px solid rgba(255,255,255,.25); border-radius: 100px;
+    padding: 7px 18px 7px 10px; font-size: 13px; color: rgba(255,255,255,.85); margin-bottom: 36px;
+  }
+  .badge-wa { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .badge-wa svg { width: 24px; height: 24px; }
+  .hero h1 { font-size: clamp(32px, 4.6vw, 48px); font-weight: 800; line-height: 1.13; color: white; margin-bottom: 20px; }
+  .hero h1 .accent { color: var(--orange); }
+  .hero-sub { font-size: clamp(16px, 1.5vw, 19px); color: rgba(255,255,255,.65); margin-bottom: 14px; }
+  .hero-br { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 40px; }
+  .btn-cta {
+    display: inline-block; background: var(--orange); color: white;
+    font-family: var(--font); font-size: 15px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: 18px 52px; border-radius: 100px; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(248,65,0,.4); transition: transform .2s, box-shadow .2s;
+  }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(248,65,0,.5); }
+
+  /* ─── SHOWCASE (03) — dark top / beige bottom ────────── */
+  .showcase { position: relative; background: var(--dark); overflow: visible; }
+  .showcase-bg { position: absolute; left: 0; right: 0; bottom: 0; height: 510px; background: var(--beige); border-radius: 0; overflow: hidden; }
+  .showcase-inner { position: relative; z-index: 2; width: min(1000px, 92vw); margin: 0 auto; display: flex; align-items: flex-end; justify-content: center; padding: 0; }
+  .showcase-photo { flex: 0 0 auto; width: clamp(320px, 38vw, 480px); min-width: 0; display: flex; align-items: flex-end; overflow: visible; position: relative; }
+  .showcase-photo img { width: 100%; display: block; max-height: 720px; object-fit: contain; object-position: bottom center; }
+  .showcase-phone { flex: 0 0 auto; display: flex; justify-content: center; align-items: flex-end; padding: 0 20px; overflow: visible; }
+  .phone-mockup {
+    width: clamp(260px, 28vw, 320px); background: white; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,.28); font-size: 13px;
+    border: 2px solid rgba(248,65,0,.35);
+    margin-bottom: -23px;
+  }
+  .chat-header { background: #f7f7f7; padding: 12px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #ebebeb; }
+  .chat-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 16px; }
+  .chat-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .chat-info strong { display: block; font-weight: 600; font-size: 13px; color: #111; }
+  .chat-info .online { font-size: 11px; color: #25d366; font-weight: 500; }
+  .chat-messages { background: #ece5dd; padding: 12px 10px; min-height: 440px; display: flex; flex-direction: column; gap: 6px; }
+  .msg { max-width: 86%; padding: 8px 10px 4px; border-radius: 8px; line-height: 1.45; color: #111; }
+  .msg-user { background: white; align-self: flex-start; border-radius: 0 8px 8px 8px; }
+  .msg-bot { background: #d9fdd3; align-self: flex-end; border-radius: 8px 0 8px 8px; }
+  .msg-time { font-size: 10px; color: #aaa; text-align: right; margin-top: 2px; }
+  .typing { background: white; align-self: flex-start; border-radius: 0 8px 8px 8px; padding: 10px 14px; display: flex; gap: 4px; align-items: center; }
+  .typing span { width: 7px; height: 7px; background: #aaa; border-radius: 50%; animation: bounce 1.3s infinite; }
+  .typing span:nth-child(2) { animation-delay: .18s; }
+  .typing span:nth-child(3) { animation-delay: .36s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-5px);opacity:1} }
+
+  /* ─── PROBLEM (04) — dark ─────────────────────────────── */
+  .problem { padding: 88px 0; background: var(--dark); }
+  .problem-header { text-align: center; margin-bottom: 48px; }
+  .section-title { font-size: clamp(26px, 3.2vw, 40px); font-weight: 800; line-height: 1.2; margin-bottom: 0; }
+  .section-title-light { color: white; }
+  .section-title-dark { color: var(--txt); }
+  .problem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .problem-card { background: #1b2a28; border: 1px solid rgba(255,255,255,.07); border-top: 2px solid transparent; background-image: linear-gradient(#1b2a28,#1b2a28), linear-gradient(90deg,#ff7a4d,#f84100); background-origin: border-box; background-clip: padding-box, border-box; box-shadow: 0 10px 26px rgba(0,0,0,.35); border-radius: 14px; padding: 32px 26px; transition: transform .25s ease, box-shadow .25s ease; cursor: default; text-align: center; }
+  .problem-card:hover { transform: translateY(-6px); box-shadow: 0 22px 46px rgba(0,0,0,.5); }
+  .problem-icon { width: 44px; height: 44px; margin: 0 auto 16px; border-radius: 12px; background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center; color: #ff7a4d; }
+  .problem-icon svg { width: 24px; height: 24px; }
+  .problem-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: white; }
+  .problem-card p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.55; }
+  @media (max-width: 900px) { .problem-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px) { .problem-grid { grid-template-columns: 1fr; } }
+
+  /* ─── HOW (05) — WHITE ─────────────────────────────────── */
+  .how { padding: 88px 0; background: var(--light); }
+  .how-header { text-align: center; margin-bottom: 56px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .step-badge { display: inline-block; background: var(--orange); color: white; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 4px 14px; border-radius: 100px; margin-bottom: 14px; }
+  .step h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--txt); }
+  .mini-chat { background: #f4f4f4; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .mini-msg { padding: 8px 12px; border-radius: 10px; font-size: 13px; line-height: 1.45; max-width: 90%; }
+  .mini-msg.in { background: #e0e0e0; color: #333; align-self: flex-start; }
+  .mini-msg.out { background: #d9fdd3; color: #1a3a1a; align-self: flex-end; border-radius: 10px 0 10px 10px; }
+  .mini-msg.notif { background: #fff3ee; color: #333; align-self: stretch; border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; font-size: 12px; }
+  @media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ─── REVEAL NO SCROLL ─────────────────────────────────── */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+  .reveal.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none; } }
+
+  /* ─── TARJA / QUOTE (06) — ORANGE ─────────────────────── */
+  .tarja { background: linear-gradient(120deg, #ff6a34 0%, #f84100 55%, #d63500 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.15); padding: 44px 0; text-align: center; }
+  .tarja-text { font-size: clamp(20px, 2.5vw, 30px); font-weight: 700; color: white; line-height: 1.45; max-width: 780px; margin: 0 auto; }
+
+  /* ─── FOR WHO (07) — WHITE ─────────────────────────────── */
+  .for-who { padding: 52px 0 28px; background: var(--light); }
+  .for-who-header { text-align: center; margin-bottom: 40px; }
+  .for-who-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: nowrap; }
+  .segment-card { flex: 1; min-width: 0; display: flex; flex-direction: column; background: #fff; border: 1px solid #f0f0f0; border-radius: 14px; padding: 22px 16px; text-decoration: none; color: var(--txt); box-shadow: var(--sh-1); transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; text-align: center; }
+  .segment-card:hover { border-color: var(--orange); transform: translateY(-4px); box-shadow: var(--sh-hover); }
+  .segment-icon { width: 46px; height: 46px; margin: 0 auto 10px; border-radius: 50%; background: rgba(248,65,0,.09); display: flex; align-items: center; justify-content: center; color: var(--orange); }
+  .segment-icon svg { width: 24px; height: 24px; }
+  .segment-card h3 { font-size: 14px; font-weight: 700; color: var(--txt); line-height: 1.3; }
+  .segment-link { display: inline-block; margin-top: auto; padding-top: 10px; font-size: 12px; color: var(--orange); font-weight: 600; }
+  @media (max-width: 900px) { .for-who-grid { flex-wrap: wrap; } .segment-card { flex: 0 0 calc(33.33% - 12px); } }
+  @media (max-width: 540px) { .segment-card { flex: 0 0 calc(50% - 8px); } }
+
+  /* ─── PRICING (08) — WHITE ─────────────────────────────── */
+  .pricing { padding: 24px 0 88px; background: var(--light); }
+  .pricing-header { text-align: center; margin-bottom: 48px; }
+  .plans-sub { color: #666; font-size: 16px; line-height: 1.6; max-width: 560px; margin: 14px auto 0; }
+  .plans-trust { color: var(--laranja, #f84100); font-size: 13.5px; font-weight: 600; margin: 12px auto 0; letter-spacing: .2px; }
+  .vs-callout { margin-top: 22px; background: #fff7f3; border-left: 3px solid #f84100; border-radius: 10px; padding: 16px 20px; font-size: 14.5px; line-height: 1.65; color: #444; }
+  .hero-secondary { display: inline-block; margin-left: 18px; color: rgba(255,255,255,.85); font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
+  .hero-secondary:hover { color: #fff; }
+  .final-cta-content p.cta-garantia { margin: 16px 0 0; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.92); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; align-items: stretch; }
+  .biz-toggle { display: flex; justify-content: center; margin-bottom: 28px; flex-wrap: wrap; }
+  .biz-toggle-track { display: inline-flex; background: #f0f0f0; border: 1px solid #e2e2e2; border-radius: 100px; padding: 4px; gap: 2px; flex-wrap: wrap; }
+  .biz-toggle-btn { background: transparent; border: none; color: var(--txt-dim); padding: 10px 22px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .biz-toggle-btn.active { background: var(--dark); color: #fff; }
+  .cycle-toggle { display: flex; justify-content: center; align-items: center; margin: -8px 0 26px; flex-wrap: wrap; }
+  .cycle-toggle-track { display: inline-flex; align-items: center; background: #f0f0f0; border: 1px solid #e2e2e2; border-radius: 100px; padding: 4px; gap: 2px; }
+  .cycle-btn { background: transparent; border: none; color: var(--txt-dim); padding: 9px 20px; border-radius: 100px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+  .cycle-btn.active { background: var(--dark); color: #fff; }
+  .cycle-badge { background: rgba(0,232,223,.15); color: #079b94; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 100px; }
+  .cycle-btn.active .cycle-badge { background: #fff; color: var(--orange); }
+  .plan-annual-note { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--orange); line-height: 1.4; }
+  .plan-annual-note .save { display: block; color: rgba(0,0,0,.45); font-weight: 500; font-size: 12px; margin-top: 2px; }
+  .ecom-explainer { background: rgba(248,65,0,.05); border: 1px solid rgba(248,65,0,.18); border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; line-height: 1.6; color: var(--txt); }
+  .ecom-enterprise-note { text-align: center; margin-top: 18px; font-size: 13px; color: #666; }
+  .plan-name .plan-seg { font-size: 11px; color: var(--orange); font-weight: 700; }
+  .plan {
+    background: #fff; border: 1px solid #e8e8e8;
+    border-radius: 16px; padding: 30px 26px; position: relative;
+    box-shadow: var(--sh-2);
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; display: flex; flex-direction: column;
+  }
+  .plan:hover { border-color: #e0e0e0; box-shadow: 0 4px 8px rgba(20,10,0,.05), 0 16px 36px rgba(20,10,0,.09); transform: translateY(-4px); }
+  .plan.featured { border-color: var(--orange); background: #fff8f5; box-shadow: 0 4px 10px rgba(248,65,0,.10), 0 18px 40px rgba(248,65,0,.18); transform: scale(1.035); z-index: 1; }
+  .plan.featured:hover { box-shadow: 0 6px 14px rgba(248,65,0,.14), 0 22px 48px rgba(248,65,0,.24); transform: scale(1.035) translateY(-4px); }
+  @media (max-width: 900px) { .plan.featured, .plan.featured:hover { transform: none; } }
+  .price-was { font-size: 13px; color: #aaa; text-decoration: line-through; margin-bottom: 2px; display: none; }
+  .price-was.show { display: block; }
+  .plan-badge-top {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--orange); color: white; font-size: 11px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; padding: 5px 18px; border-radius: 100px; white-space: nowrap;
+  }
+  .plan-name { font-size: 12px; font-weight: 700; color: var(--txt-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .plan-price { display: flex; align-items: baseline; gap: 3px; margin-bottom: 4px; }
+  .plan-currency { font-size: 18px; font-weight: 700; color: var(--txt-mid); }
+  .plan-amount { font-size: 48px; font-weight: 900; color: var(--txt); letter-spacing: -2px; line-height: 1; }
+  .plan-period { font-size: 14px; color: var(--txt-dim); }
+  .plan-tagline { font-size: 13px; color: var(--txt-dim); margin-bottom: 20px; }
+  .plan-divider { border: none; border-top: 1px solid #e8e8e8; margin: 16px 0; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; flex: 1; }
+  .plan-features li { font-size: 13px; color: var(--txt-mid); line-height: 1.5; padding-left: 20px; position: relative; }
+  .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+  .plan-features li.feature-all {
+    padding-left: 0; color: var(--orange); font-weight: 700; font-size: 13px;
+    background: rgba(248,65,0,.08); border: 1.5px solid var(--orange);
+    border-radius: 8px; padding: 6px 12px; text-align: center;
+  }
+  .plan-features li.feature-all::before { content: none; }
+  .btn-plan {
+    display: block; width: 100%; padding: 13px;
+    background: #25D366; color: #fff;
+    font-family: var(--font); font-size: 14px; font-weight: 700;
+    border-radius: 100px; text-align: center; text-decoration: none; border: none; cursor: pointer;
+    transition: opacity .2s; margin-top: auto;
+  }
+  .btn-plan:hover { opacity: .88; }
+  .btn-plan-outline {
+    display: block; width: 100%; padding: 12px;
+    background: transparent; color: var(--txt);
+    font-family: var(--font); font-size: 14px; font-weight: 600;
+    border-radius: 100px; text-align: center; text-decoration: none;
+    border: 1.5px solid #ccc; cursor: pointer; transition: border-color .2s; margin-top: auto;
+  }
+  .btn-plan-outline:hover { border-color: var(--orange); color: var(--orange); }
+  .addon-box {
+    background: #f0fffe; border: 1px solid rgba(0,232,223,.3);
+    border-radius: 16px; padding: 28px 32px; display: flex; gap: 28px; align-items: center; margin-bottom: 40px;
+    box-shadow: var(--sh-2);
+  }
+  .addon-icon { width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; background: rgba(0,232,223,.14); display: flex; align-items: center; justify-content: center; color: #00b5ad; }
+  .addon-icon svg { width: 26px; height: 26px; }
+  .addon-content { flex: 1; }
+  .addon-title { font-size: 16px; font-weight: 800; color: var(--txt); margin-bottom: 6px; }
+  .addon-desc { font-size: 13px; color: var(--txt-mid); line-height: 1.6; }
+  .addon-price { text-align: center; flex-shrink: 0; }
+  .addon-amount { font-size: 28px; font-weight: 900; color: var(--dark); }
+  .addon-period { font-size: 14px; color: var(--txt-dim); }
+  .addon-note { font-size: 11px; color: var(--txt-dim); margin-top: 4px; }
+  @media (max-width: 640px) { .addon-box { flex-direction: column; text-align: center; } }
+  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+  /* ─── NA PRÁTICA / SLIDER (09) — light grey ───────────── */
+  .features-demo { padding: 88px 0; background: var(--light2); }
+  .features-demo-header { text-align: center; margin-bottom: 40px; }
+  .slider-tabs {
+    display: flex; border: 1.5px solid #e0e0e0; border-radius: 12px;
+    overflow: hidden; margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;
+  }
+  .slider-tab {
+    flex: 1; padding: 13px 10px; background: white; color: #999;
+    border: none; cursor: pointer; font-family: var(--font); font-size: 13px; font-weight: 600;
+    transition: background .2s, color .2s; border-right: 1px solid #e0e0e0; text-align: center; line-height: 1.3;
+  }
+  .slider-tab:last-child { border-right: none; }
+  .slider-tab.active { background: var(--orange); color: white; }
+  .slider-tab:hover:not(.active) { background: #f5f5f5; color: #555; }
+  .slider-panel { display: none; }
+  .slider-panel.active { display: flex; align-items: center; gap: 56px; }
+  .sp-text { flex: 1; min-width: 0; }
+  .sp-visual { flex: 1; min-width: 0; }
+  .sp-badge { display: inline-block; background: rgba(248,65,0,.1); color: var(--orange); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: .05em; }
+  .sp-title { font-size: clamp(18px, 1.8vw, 24px); font-weight: 800; line-height: 1.3; margin-bottom: 14px; color: var(--txt); }
+  .sp-desc { font-size: 14px; color: var(--txt-mid); line-height: 1.7; }
+  .sp-note { margin-top: 12px; font-size: 12px; color: #999; line-height: 1.6; border-left: 2px solid rgba(248,65,0,.25); padding-left: 10px; }
+  @media (max-width: 768px) {
+    .slider-tabs { flex-direction: column; }
+    .slider-tab { border-right: none; border-bottom: 1px solid #e0e0e0; }
+    .slider-tab:last-child { border-bottom: none; }
+    .slider-panel.active { flex-direction: column; gap: 28px; }
+  }
+  /* Slider visuals */
+  .notif-mockup { background: #1f2c34; border-radius: 14px; padding: 18px; max-width: 400px; margin: 0 auto; }
+  .notif-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .notif-av { width: 34px; height: 34px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+  .notif-nm { color: #e9edef; font-size: 13px; font-weight: 600; }
+  .notif-sb { color: #8696a0; font-size: 11px; }
+  .notif-bubble { background: #2a3942; border-radius: 4px 12px 12px 12px; padding: 12px 14px 8px; }
+  .notif-txt { font-size: 12.5px; line-height: 1.6; color: #e9edef; }
+  .nb-urg { color: #ef4444; font-weight: 700; }
+  .nb-dim { color: #8696a0; }
+  .nb-cyan { color: #22d3ee; font-weight: 600; }
+  .notif-time { font-size: 10px; color: #8696a0; text-align: right; margin-top: 6px; }
+  .dash-mockup { background: white; border: 1px solid #e8e8e8; border-radius: 14px; padding: 22px; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  .dm-hdr { font-size: 13px; font-weight: 700; color: #666; margin-bottom: 16px; }
+  .dm-metrics { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-bottom: 16px; }
+  .dm-metric { background: #f8f8f8; border-radius: 10px; padding: 12px; }
+  .dm-num { display: block; font-size: 26px; font-weight: 900; color: var(--txt); line-height: 1; margin-bottom: 2px; }
+  .dm-metric.green .dm-num { color: var(--teal); }
+  .dm-lbl { font-size: 11px; color: #999; }
+  .dm-bars { display: flex; align-items: flex-end; gap: 8px; height: 56px; }
+  .dm-bar { background: linear-gradient(180deg, var(--orange), rgba(248,65,0,.4)); border-radius: 4px 4px 0 0; flex: 1; }
+  .fc-chat { background: white; border: 1px solid #e8e8e8; border-radius: 14px; padding: 18px; max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  .fc-bot { padding: 10px 13px; border-radius: 0 12px 12px 12px; font-size: 13px; line-height: 1.5; max-width: 85%; background: #f0f0f0; color: #333; align-self: flex-start; }
+  .fc-client { padding: 10px 13px; border-radius: 12px 0 12px 12px; font-size: 13px; line-height: 1.5; max-width: 85%; background: #d9fdd3; color: #1a3a1a; align-self: flex-end; }
+  .fc-time { font-size: 10px; color: #aaa; margin-top: 2px; }
+  .sched-mockup { background: white; border: 1px solid #e8e8e8; border-radius: 14px; padding: 20px; max-width: 360px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  .sched-hdr { font-size: 14px; font-weight: 700; color: var(--txt); margin-bottom: 14px; text-align: center; }
+  .sched-opts { display: flex; flex-direction: column; gap: 9px; }
+  .sched-opt { padding: 11px 14px; border-radius: 9px; font-size: 13px; font-weight: 500; border: 1.5px solid #ddd; color: #666; text-align: center; }
+  .sched-opt.sel { border-color: var(--teal); color: var(--dark); background: rgba(0,232,223,.07); }
+  .sched-btn { display: block; width: 100%; margin-top: 14px; padding: 12px; background: var(--teal); color: var(--dark); font-weight: 700; font-size: 13px; border: none; border-radius: 9px; cursor: pointer; font-family: var(--font); }
+
+  /* ─── AGENTE vs BOT (09b) — DARK ─────────────────────── */
+  .avb-section { padding: 88px 0; background: var(--dark); position: relative; overflow: hidden; }
+  .avb-section::before { content: ''; position: absolute; inset: 0; background-image: url('https://tyve.com.br/assets/raios-tyve.svg'); background-size: auto 65%; background-repeat: repeat-x; background-position: center 72%; opacity: .10; pointer-events: none; z-index: 0; }
+  .avb-intro { text-align: center; margin-bottom: 56px; position: relative; z-index: 1; }
+  .avb-sec-label { display: inline-block; border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.55); border-radius: 100px; padding: 5px 18px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 20px; }
+  .avb-subtitle { color: rgba(255,255,255,.5); font-size: 16px; max-width: 560px; margin: 16px auto 0; line-height: 1.65; }
+  .avb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; z-index: 1; }
+  .avb-card { border-radius: 20px; padding: 36px 32px; }
+  .avb-bot { background: #16161a; border: 1.5px solid rgba(255,255,255,.09); }
+  .avb-agent { background: #1d0a04; border: 1.5px solid rgba(248,65,0,.4); position: relative; overflow: hidden; }
+  .avb-agent::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(248,65,0,.18), transparent 70%); pointer-events: none; }
+  .avb-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .avb-badge { font-size: 11px; font-weight: 700; letter-spacing: .05em; padding: 5px 16px; border-radius: 100px; }
+  .avb-badge-bot { background: rgba(255,255,255,.08); color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .1em; }
+  .avb-badge-agent { background: rgba(248,65,0,.18); color: var(--orange); border: 1px solid rgba(248,65,0,.4); }
+  .avb-icon { font-size: 26px; }
+  .avb-icon-tyve { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; color: var(--orange); }
+  .avb-bolt { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(248,65,0,.45)); }
+  .avb-list { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 32px; }
+  .avb-list li { font-size: 14.5px; display: flex; align-items: flex-start; gap: 10px; line-height: 1.45; }
+  .avb-bot .avb-list li { color: rgba(255,255,255,.4); }
+  .avb-agent .avb-list li { color: rgba(255,255,255,.85); }
+  .avb-x { color: #ef4444; font-weight: 700; flex-shrink: 0; margin-top: 1px; font-size: 13px; }
+  .avb-chk { color: var(--orange); font-weight: 700; flex-shrink: 0; margin-top: 1px; font-size: 13px; }
+  .avb-example { border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .avb-example-bot { background: rgba(255,255,255,.03); }
+  .avb-example-agent { background: rgba(248,65,0,.06); }
+  .avb-ex-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.25); margin-bottom: 6px; }
+  .avb-bubble { font-size: 13px; padding: 9px 13px; border-radius: 8px; max-width: 88%; line-height: 1.5; }
+  .avb-in { background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); align-self: flex-start; border-radius: 0 8px 8px 8px; }
+  .avb-out-bot { background: rgba(255,255,255,.05); color: rgba(255,255,255,.35); align-self: flex-end; border-radius: 8px 0 8px 8px; }
+  .avb-out-agent { background: rgba(248,65,0,.22); color: rgba(255,255,255,.9); align-self: flex-end; border-radius: 8px 0 8px 8px; }
+  @media (max-width: 768px) { .avb-grid { grid-template-columns: 1fr; } .avb-card { padding: 28px 22px; } }
+
+  .avb-foot { position: relative; z-index: 1; margin-top: 18px; text-align: center; font-size: 11.5px; color: rgba(255,255,255,.3); }
+
+  /* ─── TRUST (09b) — BEIGE ──────────────────────────────── */
+  .trust-section { padding: 80px 0; background: var(--beige); }
+  .trust-intro { text-align: center; margin-bottom: 40px; }
+  .trust-sub { color: #666; font-size: 16px; max-width: 600px; margin: 16px auto 0; line-height: 1.65; }
+  .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .trust-card { background: #fff; border: 1px solid #ece6dc; border-radius: 18px; padding: 28px 24px; box-shadow: var(--sh-1); transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+  .trust-card:hover { border-color: var(--orange); transform: translateY(-3px); box-shadow: var(--sh-hover); }
+  .trust-num { font-size: 32px; font-weight: 800; color: var(--orange); line-height: 1; margin-bottom: 12px; letter-spacing: -.02em; }
+  .trust-card h3 { font-size: 16px; font-weight: 700; color: var(--txt); margin-bottom: 8px; line-height: 1.3; }
+  .trust-card p { font-size: 13.5px; color: #555; line-height: 1.6; }
+  .trust-quote { margin: 36px auto 0; max-width: 700px; text-align: center; font-size: 13.5px; color: #666; line-height: 1.7; }
+  .trust-quote b { color: var(--txt); }
+  @media (max-width: 900px) { .trust-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .trust-grid { grid-template-columns: 1fr; } }
+
+  /* ─── VS COMPARISON (10) — WHITE ──────────────────────── */
+  .vs-section { padding: 80px 0; background: var(--light); }
+  .vs-header { text-align: center; margin-bottom: 36px; }
+  .vs-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .vs-table th, .vs-table td { padding: 11px 16px; border-bottom: 1px solid #efefef; text-align: left; }
+  .vs-table th { background: #f6f6f6; font-weight: 700; color: #555; }
+  .vs-table td { color: #666; }
+  .vs-table td:first-child { font-weight: 600; color: var(--txt); }
+  .col-tyve { color: var(--teal) !important; font-weight: 700 !important; }
+  .check { color: var(--teal); font-weight: 700; }
+  .cross { color: #e55; font-weight: 700; }
+  .partial { color: #b88; }
+
+  /* ─── TESTIMONIAL (11) — WHITE ─────────────────────────── */
+  .testimonial { padding: 80px 0; background: var(--light); }
+  .testimonial-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+  .testimonial-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 18px; padding: 36px 32px; box-shadow: var(--sh-2); position: relative; overflow: hidden; }
+  .testimonial-card .quotemark { position: absolute; top: -22px; left: 18px; font-size: 140px; line-height: 1; color: rgba(248,65,0,.10); font-family: Georgia, serif; pointer-events: none; user-select: none; }
+  .testimonial-card > *:not(.quotemark) { position: relative; z-index: 1; }
+  .stars { font-size: 20px; margin-bottom: 18px; }
+  .testimonial-text { font-size: clamp(15px, 1.6vw, 18px); color: #444; line-height: 1.65; font-style: italic; margin-bottom: 24px; }
+  .testimonial-author { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .author-avatar { width: 44px; height: 44px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(248,65,0,.18); }
+  .author-name { font-weight: 700; font-size: 14px; color: var(--txt); }
+  .author-role { font-size: 12px; color: #999; margin-top: 1px; }
+
+  /* ─── ROI CALCULATOR (12) — light grey ─────────────────── */
+  .roi-section { padding: 80px 0; background: var(--light2); }
+  .roi-inner { max-width: 780px; margin: 0 auto; }
+  .roi-header { text-align: center; margin-bottom: 36px; }
+  .roi-label { display: inline-block; background: rgba(0,232,223,.12); color: #00b5ad; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 100px; margin-bottom: 12px; }
+  .roi-sub { font-size: 13px; color: #999; margin-top: 6px; }
+  .roi-calc { background: white; border: 1px solid #e8e8e8; border-radius: 18px; padding: 32px; }
+  .roi-input-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--txt); }
+  .roi-slider-row { display: flex; align-items: center; gap: 14px; }
+  .roi-slider { flex: 1; accent-color: var(--orange); }
+  .roi-slider-value { font-size: 24px; font-weight: 900; color: var(--orange); min-width: 44px; text-align: right; }
+  .roi-slider-hints { display: flex; justify-content: space-between; font-size: 11px; color: #bbb; margin-top: 4px; margin-bottom: 28px; }
+  .roi-results { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
+  .roi-card { background: #f6f6f6; border-radius: 10px; padding: 18px; text-align: center; }
+  .roi-card-highlight { border: 1.5px solid rgba(0,232,223,.4); background: #f0fffe; }
+  .roi-card-label { display: block; font-size: 11px; color: #999; margin-bottom: 6px; }
+  .roi-card-value { display: block; font-size: 26px; font-weight: 900; color: var(--txt); margin-bottom: 3px; }
+  .roi-card-highlight .roi-card-value { color: #00b5ad; }
+  .roi-card-detail { display: block; font-size: 11px; color: #bbb; line-height: 1.4; }
+  .roi-bonus { font-size: 14px; color: #555; line-height: 1.6; text-align: center; margin-bottom: 10px; }
+  .roi-footnote { font-size: 11px; color: #bbb; text-align: center; }
+  @media (max-width: 640px) { .roi-results { grid-template-columns: 1fr; } }
+
+  /* ─── FAQ (13) — WHITE ─────────────────────────────────── */
+  .faq { padding: 80px 0; background: var(--light); }
+  .faq-header { text-align: center; margin-bottom: 40px; }
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .plans-calc { text-align:center; margin-top:10px; font-size:14px; } .plans-calc a { color: var(--orange); font-weight:700; text-decoration:none; border-bottom:1.5px solid rgba(248,65,0,.35); } .plans-calc a:hover { border-bottom-color: var(--orange); }
+  .meta-ast { color: var(--orange, #f84100); font-weight: 800; text-decoration: none; margin-left: 2px; }
+  .ecom-meta-note { font-size: 12.5px; color: #6b6b6b; line-height: 1.55; max-width: 760px; margin: 18px auto 6px; text-align: center; }
+  .faq-item { border-bottom: 1px solid #efefef; }
+  .faq-question {
+    width: 100%; background: none; border: none; text-align: left;
+    padding: 18px 0; font-family: var(--font); font-size: 15px; font-weight: 600;
+    color: var(--txt); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  }
+  .faq-icon { font-size: 20px; color: var(--orange); flex-shrink: 0; transition: transform .2s; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-answer { display: none; padding: 0 0 18px; }
+  .faq-item.open .faq-answer { display: block; }
+  .faq-answer p { font-size: 14px; color: #666; line-height: 1.7; }
+
+  /* ─── FINAL CTA (14) — degrade João ───────────────────── */
+  .final-cta { padding: 96px 0; background: url('https://tyve.com.br/assets/fundo-degrade.png') center/cover no-repeat; }
+  .final-cta-content { text-align: center; max-width: 640px; margin: 0 auto; }
+  .final-cta-content h2 { font-size: clamp(34px, 4.6vw, 58px); font-weight: 900; line-height: 1.15; color: white; margin-bottom: 18px; }
+  .final-cta-content p { font-size: clamp(20px, 2.2vw, 26px); color: rgba(255,255,255,.85); margin-bottom: 40px; line-height: 1.6; font-weight: 500; }
+  @media (min-width: 1024px) { .final-cta-content p[data-i18n-html="cta_p"] { margin-left: -70px; margin-right: -70px; } }
+  .btn-cta-teal {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25D366; color: #fff;
+    font-family: var(--font); font-size: 15px; font-weight: 700;
+    padding: 17px 44px; border-radius: 100px; text-decoration: none;
+    box-shadow: 0 4px 24px rgba(37,211,102,.3); transition: opacity .2s;
+  }
+  .btn-cta-teal:hover { opacity: .9; }
+
+  /* ─── FOOTER (15) ───────────────────────────────────────── */
+  footer { background: #0d1f1a; padding: 44px 0; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+  .footer-logo-row { display: flex; align-items: center; gap: 10px; }
+  .footer-wordmark { font-weight: 800; font-size: 20px; background: linear-gradient(135deg,#f84100,#00e8df); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: rgba(255,255,255,.55); font-size: 13px; text-decoration: none; transition: color .2s; }
+  .footer-links a:hover { color: white; }
+  .footer-copy { color: rgba(255,255,255,.45); font-size: 12px; }
+  .footer-disclaimer { color: rgba(255,255,255,.3); font-size: 11px; }
+  .footer-social { display: flex; gap: 14px; margin-top: 2px; }
+  .footer-social a { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.14); color: rgba(255,255,255,.6); transition: color .2s, border-color .2s, background .2s; }
+  .footer-social a:hover { color: #fff; border-color: var(--orange); background: rgba(248,65,0,.12); }
+  .footer-social svg { width: 17px; height: 17px; }
+
+  /* ─── WA FLOAT ─────────────────────────────────────────── */
+  .whatsapp-float {
+    position: fixed; bottom: 28px; right: 28px; z-index: 300;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25d366; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; transform: scale(.8);
+    transition: opacity .3s, transform .3s; pointer-events: none; text-decoration: none;
+  }
+  .whatsapp-float.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+  .whatsapp-float svg { width: 28px; height: 28px; fill: white; }
+
+  /* ─── MOBILE ────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .showcase-inner { flex-direction: column; align-items: center; padding: 0 24px; width: 100%; }
+    .showcase-photo { flex: none; width: 100%; max-width: 320px; }
+    .showcase-photo picture { display: block; width: 100%; }
+    .showcase-photo img { width: 100%; max-height: 360px; object-fit: cover; object-position: top center; }
+    .showcase-phone { flex: none; width: 100%; padding: 0 0 48px; justify-content: center; }
+    .phone-mockup { width: clamp(240px, 80vw, 290px); margin-bottom: 0; }
+    .showcase-bg { height: 60%; }
+  }
+  @media (max-width: 480px) {
+    .phone-mockup { width: 260px; }
+    .container { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:99999;background:#fffae6;border-bottom:1px solid #f0d97a;padding:10px 20px;font:600 12px 'DM Sans',Arial,sans-serif;color:#7a5a00;letter-spacing:.05em;text-transform:uppercase;text-align:center">Mockup para aprovação · 08/09/2026 · página inteira com as mudanças · nada publicado · as seções novas estão logo após "Veja como funciona no seu dia a dia"</div>
+
+
+<!-- ══ 01 NAV ══ -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="https://tyve.com.br/assets/logo-tyve.svg" alt="Tyve" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#como-funciona" data-i18n="nav_how">Como funciona</a></li>
+    <li><a href="#segmentos" data-i18n="nav_segments">Segmentos</a></li>
+    <li><a href="/calculadora" data-i18n="nav_calc">Calculadora</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#planos" class="btn-planos" data-i18n="nav_plans">Planos e Preços</a></li>
+    <li><a href="#" class="btn-demo" id="open-demo-btn" data-i18n="nav_demo">⚡ Ver demo ao vivo</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div class="nav-flags">
+      <span title="Português" onclick="setLang('pt')">🇧🇷</span>
+      <span title="English" onclick="setLang('en')" style="opacity:.5;">🇺🇸</span>
+    </div>
+    <div class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+
+<!-- ══ 02 HERO ══ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-wa">
+        <svg viewBox="0 0 1635.4 1554" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#32d951" fill-rule="evenodd" d="M817.7,1390.7c325.3,0,590.6-265.3,590.6-590.6S1143,209.5,817.7,209.5,227.1,474.8,227.1,800.1s265.3,590.6,590.6,590.6Z"/>
+          <path fill="#fff" fill-rule="evenodd" d="M975,876.4c-8.6-4.7-50.8-27.5-58.7-30.7-7.9-3.2-13.7-4.9-19.9,3.7-6.2,8.5-23.7,27.6-29,33.3-10.1,10.7-29.7-3.4-40.7-9.5-12.6-7-29.2-17.9-47.1-35.1-25.1-24.2-41.6-53.5-46.4-62.4-7.3-13.7,18.3-29.6,26.1-44.2.4-.8.9-1.7,1.4-2.6,3.1-5.7,1.9-10.9-.2-15.4-2-4.4-17.9-48.2-24.5-66-8.4-22.6-45.7-20.8-59.6-6.6-8.3,8.5-31.8,28.8-33.4,71.8-1.6,43,28.2,85.8,32.3,91.8,4.2,6,56.9,99.3,144.5,137.7,51.8,22.7,93.2,43.7,143.1,9.8,9.8-6.7,18.3-14.9,21.7-23.3,8.1-20.2,8.7-37.7,6.7-41.4-2.1-3.7-7.8-6.2-16.4-10.8Z"/>
+          <path fill="#fff" fill-rule="evenodd" d="M1058,558.4c-63.8-63.8-148.5-99-238.9-99-186.1,0-337.6,151.4-337.7,337.6,0,59.5,15.5,117.6,45.1,168.8l-47.9,174.9,179-46.9c49.3,26.9,104.9,41.1,161.4,41.1h.1s0,0,0,0c186.1,0,337.6-151.5,337.7-337.6,0-90.2-35.1-175-98.8-238.8h0ZM819.1,1077.9h-.1c-50.4,0-99.8-13.5-142.9-39.1l-10.3-6.1-106.2,27.9,28.4-103.5-6.7-10.6c-28.1-44.7-42.9-96.3-42.9-149.3,0-154.7,126-280.6,280.8-280.6,75,0,145.5,29.3,198.4,82.3,53,53,82.2,123.5,82.1,198.5,0,154.7-126,280.6-280.7,280.6Z"/>
+        </svg>
+      </span>
+      <span data-i18n="hero_badge">WhatsApp Cloud API oficial</span>
+    </div>
+    <h1 data-i18n-html="hero_h1">Atendimento que resolve,<br/><span class="accent">24 horas por dia</span> no seu WhatsApp.</h1>
+    <p class="hero-sub" data-i18n-html="hero_sub">Chega de mensagem sem resposta. Nosso agente resolve na hora, dúvida, pedido, agendamento, reclamação, seja o que for. E só te chama quando precisa!</p>
+    <p class="hero-br" data-i18n="hero_br">🇧🇷 Feito no Brasil, suporte em português</p>
+    <a href="#planos" class="btn-cta js-open-demo" data-i18n="hero_cta">⚡ Ver demo ao vivo</a><a href="#planos" class="hero-secondary" data-i18n="hero_cta2">Ver planos →</a>
+  </div>
+</section>
+
+
+<!-- ══ 03 SHOWCASE ══ -->
+<section class="showcase">
+  <div class="showcase-bg"></div>
+  <div class="showcase-inner">
+    <div class="showcase-photo">
+      <picture>
+        <source srcset="/assets/luma-celular.webp" type="image/webp" />
+        <img src="https://tyve.com.br/assets/luma-celular.png" alt="Luma — Assistente inteligente Tyve" />
+      </picture>
+    </div>
+    <div class="showcase-phone">
+      <div class="phone-mockup">
+        <div class="chat-header">
+          <div class="chat-avatar">
+            <picture>
+              <source srcset="/assets/luma-avatar.webp" type="image/webp" />
+              <img src="https://tyve.com.br/assets/luma-avatar.png" alt="Luma" onerror="this.style.display='none'" />
+            </picture>
+          </div>
+          <div class="chat-info"><strong data-i18n="showcase_name">Luma — Loja Street Style</strong><span class="online" data-i18n="showcase_online">online</span></div>
+        </div>
+        <div class="chat-messages">
+          <div class="msg msg-user"><span data-i18n="chat_m1_user">Oi! Cadê meu pedido? Comprei semana passada e ainda não chegou</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m1_bot">Oi! Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m1_bot2">Pode mandar aqui mesmo que eu já verifico.</span><div class="msg-time">21:42</div></div>
+          <div class="msg msg-user"><span data-i18n="chat_m2_user">Pedido 1234</span><div class="msg-time">21:43</div></div>
+          <div class="msg msg-bot"><span data-i18n="chat_m2_bot">Achei aqui! Seu pedido #1234 saiu pra entrega hoje. Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?</span><div class="msg-time">21:43</div></div>
+          <div class="msg msg-user"><span data-i18n="chat_m3_user">Quero! E se não servir, dá pra trocar a numeração?</span><div class="msg-time">21:44</div></div>
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 04 PROBLEMA — dark ══ -->
+<section class="problem">
+  <div class="container">
+    <div class="problem-header">
+      <div class="sec-label" data-i18n="prob_label">O problema</div>
+      <h2 class="section-title section-title-light" data-i18n-html="prob_h2">Quantas vendas sua loja perde por dia<br/>por falta de atendimento?</h2>
+      <p class="avb-subtitle" data-i18n="prob_sub">Sua equipe passa o dia respondendo pedido, troca e dúvida na mão e quem espera acaba comprando na concorrência.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card"><div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div><h3 data-i18n="prob_c1h">Pedido às 22h sem ninguém</h3><p data-i18n="prob_c1p">O cliente pergunta do pedido à noite. De manhã já abriu reclamação ou pediu reembolso.</p></div>
+      <div class="problem-card"><div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div><h3 data-i18n="prob_c2h">"Cadê meu pedido?" o dia todo</h3><p data-i18n="prob_c2p">Metade do WhatsApp da loja é rastreio. Sua equipe copia e cola link o dia inteiro.</p></div>
+      <div class="problem-card"><div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></div><h3 data-i18n="prob_c3h">Troca virou novela manual</h3><p data-i18n="prob_c3p">Confere pedido, vê estoque da numeração, gera devolução. Cada troca trava a venda de novo.</p></div>
+      <div class="problem-card"><div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div><h3 data-i18n="prob_c4h">Frete e numeração sem resposta</h3><p data-i18n="prob_c4p">O cliente pergunta o frete ou a numeração e não tem retorno na hora. Vai comprar na loja do lado.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 05 COMO FUNCIONA — white ══ -->
+<section class="how" id="como-funciona">
+  <div class="container">
+    <div class="how-header">
+      <div class="sec-label" data-i18n="how_label">Como funciona</div>
+      <h2 class="section-title section-title-dark" data-i18n-html="how_h2">Você não precisa fazer nada.<br/>A gente cuida de tudo.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-badge" data-i18n="how_s1badge">Passo 1</span>
+        <h3 data-i18n="how_s1h">Você conta da sua loja e conecta</h3>
+        <div class="mini-chat">
+          <div class="mini-msg in" data-i18n="how_s1m1">Minha loja é de calçados, uso Shopify</div>
+          <div class="mini-msg out" data-i18n="how_s1m2">Perfeito! Conecto em 2 cliques e já leio seus pedidos, frete e política de troca ✅</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-badge" data-i18n="how_s2badge">Passo 2</span>
+        <h3 data-i18n="how_s2h">O agente responde rastreio, resolve troca e tira dúvidas — 24h</h3>
+        <div class="mini-chat">
+          <div class="mini-msg in" data-i18n="how_s2m1">Boa noite, meu pedido tá atrasado?</div>
+          <div class="mini-msg out" data-i18n="how_s2m2">Boa noite! Deixa eu ver… saiu pra entrega hoje 🚚 rastreio BR123, chega amanhã 😊</div>
+          <div class="mini-msg in" data-i18n="how_s2m3">E o Pix da segunda peça?</div>
+          <div class="mini-msg out" data-i18n="how_s2m4">Gerei aqui 💸 é só pagar que eu confirmo na hora</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-badge" data-i18n="how_s3badge">Passo 3</span>
+        <h3 data-i18n="how_s3h">Você recebe só o que precisa de você</h3>
+        <div class="mini-chat">
+          <div class="mini-msg notif" data-i18n="how_s3m1">🔁 TROCA — Loja Street Style</div>
+          <div class="mini-msg out" data-i18n="how_s3m2">Cliente: Ana. Pedido #1234, tênis 38 → 39. Fora do estoque padrão. Resumo pronto.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 06 TARJA FRASE — orange ══ -->
+<section class="tarja">
+  <div class="container">
+    <p class="tarja-text" data-i18n-html="tarja_text">Existem ferramentas para quem quer aprender a fazer.<br/>Tyve foi criada para resolver!</p>
+  </div>
+</section>
+
+
+<!-- ══ 07 PARA QUEM É — white ══ -->
+<section class="for-who" id="segmentos">
+  <div class="container">
+    <div class="for-who-header">
+      <div class="sec-label" data-i18n="fw_label">Para quem é</div>
+      <h2 class="section-title section-title-dark" data-i18n-html="fw_h2">Pra negócio que vende de verdade<br/>e trata o pós-venda como parte da venda.</h2>
+    </div>
+    <div class="for-who-grid">
+      <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div><h3 data-i18n="fw_c1">Moda e calçados</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg></div><h3 data-i18n="fw_c2">Cosméticos e beleza</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></div><h3 data-i18n="fw_c3">Suplementos e saúde</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg></div><h3 data-i18n="fw_c4">Eletrônicos e acessórios</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg></div><h3 data-i18n="fw_c5">Pet shop online</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos" class="segment-card"><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h3 data-i18n="fw_c6">Casa e decoração</h3><span class="segment-link">Ver planos →</span></a>
+      <a href="#planos-ecommerce" class="segment-card" data-ecom-trigger><div class="segment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg></div><h3 data-i18n="fw_c7">Moda íntima e fitness</h3><span class="segment-link">Ver planos →</span></a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ NPS SOCIAL PROOF — hidden until 15+ responses ══ -->
+<section id="nps-social" style="display:none;background:#fff;padding:40px 0 0">
+  <div class="container" style="text-align:center">
+    <p style="font-size:13px;color:#94a3b8;margin:0 0 8px;letter-spacing:.5px;text-transform:uppercase;font-weight:600">Avaliado por clientes reais</p>
+    <div style="display:inline-flex;align-items:center;gap:12px;background:#fff7f4;border:1.5px solid #f84100;border-radius:16px;padding:14px 28px">
+      <span style="font-size:32px;font-weight:800;color:#f84100" id="nps-score">–</span>
+      <div style="text-align:left">
+        <div style="font-size:13px;font-weight:700;color:#111e1d">de satisfação</div>
+        <div style="font-size:12px;color:#64748b" id="nps-label">– avaliações</div>
+      </div>
+      <div style="font-size:24px;margin-left:4px">⭐</div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  fetch('https://n8n.tyve.com.br/webhook/tyve-nps-public')
+    .then(r=>r.json()).then(d=>{
+      const data = Array.isArray(d) ? d[0] : d;
+      if(data && data.threshold_met){
+        document.getElementById('nps-score').textContent = data.display;
+        document.getElementById('nps-label').textContent = data.label;
+        document.getElementById('nps-social').style.display = '';
+      }
+    }).catch(()=>{});
+})();
+</script>
+
+<!-- ══ 08 PLANOS — white ══ -->
+<section class="pricing" id="planos">
+  <div class="container">
+    <div class="pricing-header">
+      <div class="sec-label" data-i18n="plans_label">Planos</div>
+      <h2 class="section-title section-title-dark" data-i18n="plans_h2">Investimento direto. Resultado real.</h2>
+      <p class="plans-sub" data-i18n="plans_sub">Menos de um terço do custo de um atendente, respondendo 24h, todo dia, sem férias.</p>
+      <p class="plans-trust" data-i18n="plans_trust">⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias</p>
+      <p class="plans-calc"><a href="/calculadora" data-i18n="plans_calc">🧮 Quanto custa o "cadê meu pedido" na sua loja hoje? Calcule em 30 segundos</a></p>
+    </div>
+
+    <div class="biz-toggle" id="planos-ecommerce">
+      <div class="biz-toggle-track">
+        <button class="biz-toggle-btn active" data-biz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+        <button class="biz-toggle-btn" data-biz="servicos" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+      </div>
+    </div>
+
+    <div id="grid-servicos" style="display:none">
+    <div class="cycle-toggle" id="cycle-toggle-servicos">
+      <div class="cycle-toggle-track">
+        <button class="cycle-btn active" data-ciclo="mensal" type="button" data-i18n="cycle_monthly">Mensal</button>
+        <button class="cycle-btn" data-ciclo="anual" type="button"><span data-i18n="cycle_annual">Anual</span> <span class="cycle-badge" data-i18n="cycle_badge">2 meses grátis</span></button>
+      </div>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan">
+        <p class="plan-name" data-i18n="plan_atende">Atende</p>
+        <p class="price-was" data-was></p>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
+        <p class="plan-tagline" data-i18n="atende_tagline">Até 200 contatos atendidos/mês</p>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li data-i18n="atende_f1">1 número WhatsApp</li>
+          <li data-i18n="atende_f2">Fluxo configurado pro seu negócio</li>
+          <li data-i18n="atende_f3">Respostas automáticas 24h/7d</li>
+          <li data-i18n="atende_f4">Entende mensagens de texto, voz e imagens 🎙️📷</li>
+          <li data-i18n="atende_f5">Triagem e qualificação de leads</li>
+          <li data-i18n="atende_f8b">Painel de resultados com link</li>
+          <li data-i18n="atende_f6">Alerta com resumo completo da conversa</li>
+          <li data-i18n="atende_f7">Detecta clientes frustrados e alerta com prioridade ⚠️</li>
+          <li data-i18n="atende_f8">Lembrete automático se o cliente esperar +12h sem retorno</li>
+          <li data-i18n="atende_f9">1 ajuste por mês</li>
+          <li data-i18n="atende_f10">Suporte via WhatsApp (retorno em até 8h)</li>
+        </ul>
+        <a href="/assinar/plano-atende?tipo=servico" class="btn-plan" data-i18n="atende_cta">Assinar Atende</a>
+      </div>
+
+      <div class="plan featured">
+        <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
+        <p class="plan-name" data-i18n="plan_cresce">Cresce</p>
+        <p class="price-was" data-was></p>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="697">697</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
+        <p class="plan-tagline" data-i18n="cresce_tagline">Até 500 contatos atendidos/mês</p>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li class="feature-all" data-i18n="cresce_all">Tudo do Atende</li>
+          <li data-i18n-html="cresce_f1">Follow-up automático no dia seguinte <a href="#nota-meta-serv" class="meta-ast">*</a></li>
+          <li data-i18n-html="cresce_f2">Pesquisa de satisfação automática (NPS) <a href="#nota-meta-serv" class="meta-ast">*</a></li>
+          <li data-i18n="cresce_f3">1 ajuste por semana</li>
+          <li data-i18n="cresce_f4">Resumo semanal por email</li>
+          <li data-i18n="cresce_f5">O agente envia link da sua agenda</li>
+          <li data-i18n="cresce_f6">Suporte prioritário (retorno em até 4h)</li>
+        </ul>
+        <a href="/assinar/plano-cresce?tipo=servico" class="btn-plan" data-i18n="cresce_cta">Assinar Cresce</a>
+      </div>
+
+      <div class="plan">
+        <p class="plan-name" data-i18n="plan_escala">Escala</p>
+        <p class="price-was" data-was></p>
+        <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="997">997</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+        <p class="plan-annual-note" style="display:none"></p>
+        <p class="plan-tagline" data-i18n="escala_tagline">Até 1.000 contatos/mês</p>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li class="feature-all" data-i18n="escala_all">Tudo do Cresce</li>
+          <li data-i18n="escala_f3">Agendamento nativo no WhatsApp</li>
+          <li data-i18n="escala_f4">Múltiplos fluxos e segmentações</li>
+          <li data-i18n="escala_f5">Relatório mensal PDF com análise completa</li>
+          <li data-i18n="escala_f6">Reunião mensal de resultados</li>
+          <li data-i18n="escala_f7">Gerente de conta dedicado (retorno em até 2h)</li>
+        </ul>
+        <a href="/assinar/plano-escala?tipo=servico" class="btn-plan" data-i18n="escala_cta">Assinar Escala</a>
+      </div>
+    </div>
+
+    <div class="addon-box">
+      <div class="addon-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div>
+      <div class="addon-content">
+        <p class="addon-title" data-i18n="addon_title">Adicional: Agendamento automático via WhatsApp</p>
+        <p class="addon-desc" data-i18n-html="addon_desc">O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Atende%20com%20adicional%20de%20agendamento%20(site)!" class="btn-plan-outline" style="font-size:12px;padding:8px 16px;display:inline-block;width:auto;" target="_blank" rel="noopener" data-i18n="addon_cta_atende">Atende + Agenda</a>
+          <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20o%20Cresce%20com%20adicional%20de%20agendamento%20(site)!" class="btn-plan-outline" style="font-size:12px;padding:8px 16px;display:inline-block;width:auto;" target="_blank" rel="noopener" data-i18n="addon_cta_cresce">Cresce + Agenda</a>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--teal);padding:8px 16px;background:rgba(0,232,223,.08);border-radius:100px;" data-i18n="addon_note2">✓ Incluso no Escala</span>
+        </div>
+      </div>
+      <div class="addon-price" style="text-align:center;">
+        <span class="addon-amount" data-addon-brl="79">+R$79</span><span class="addon-period" data-i18n="per_month">/mês</span>
+        <p class="addon-note" data-i18n="addon_note1">Para Atende e Cresce</p>
+      </div>
+    </div>
+    <p class="ecom-meta-note" id="nota-meta-serv" data-i18n-html="serv_meta_note">* <b>Mensagens que o seu negócio inicia</b> (follow-up, pesquisa de satisfação, lembrete de agendamento) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp do negócio: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade, normalmente menos de R$ 30 por mês. A Tyve não cobra nada por elas. A partir de <b>01/10/2026</b> a Meta passa a cobrar também as respostas do agente dentro da conversa: cerca de <b>R$ 0,035 por mensagem</b>, na mesma conta (1.000 contatos/mês ≈ R$ 155). A Tyve não cobra nada por mensagem e o painel mostra a prévia desse custo todo mês.</p>
+    </div><!-- /grid-servicos -->
+
+    <div id="grid-ecommerce">
+      <div class="cycle-toggle" id="cycle-toggle-ecom">
+        <div class="cycle-toggle-track">
+          <button class="cycle-btn active" data-ciclo="mensal" type="button" data-i18n="cycle_monthly">Mensal</button>
+          <button class="cycle-btn" data-ciclo="anual" type="button"><span data-i18n="cycle_annual">Anual</span> <span class="cycle-badge" data-i18n="cycle_badge">2 meses grátis</span></button>
+        </div>
+      </div>
+      <div class="pricing-grid">
+        <div class="plan">
+          <p class="plan-name"><span data-i18n="plan_atende">Atende</span> <span class="plan-seg">E-commerce</span></p>
+          <p class="price-was" data-was></p>
+          <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="497">497</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+          <p class="plan-annual-note" style="display:none"></p>
+          <p class="plan-tagline" data-i18n="ecom_a_tag">Até 250 contatos atendidos/mês</p>
+          <hr class="plan-divider"/>
+          <ul class="plan-features">
+            <li data-i18n="ecom_a_fw">⭐ Consulta de pedido e rastreio ao vivo (Shopify, Nuvemshop, Bling, Woo e Tiny)</li>
+            <li data-i18n="ecom_a_f1">1 número WhatsApp</li>
+            <li data-i18n="ecom_a_f2">Fluxo configurado pra sua loja</li>
+            <li data-i18n="ecom_a_f3">Respostas automáticas 24h/7d</li>
+            <li data-i18n="ecom_a_f4">Entende mensagens de texto, voz e imagens 🎙️📷</li>
+            <li data-i18n="ecom_a_f5">FAQ de e-commerce: frete, prazo, troca, numeração, pagamento</li>
+            <li data-i18n="ecom_a_f6">Tabela de numeração e catálogo no WhatsApp (PDF) 👟</li>
+            <li data-i18n="ecom_a_f7">Triagem e encaminhamento com resumo</li>
+            <li data-i18n="ecom_a_fp">Painel de resultados com link</li>
+            <li data-i18n="ecom_a_f8">Detecta clientes frustrados e prioriza ⚠️</li>
+            <li data-i18n="ecom_a_f9">1 ajuste por mês · Suporte (retorno em até 8h)</li>
+          </ul>
+          <a href="/assinar/plano-atende" class="btn-plan" data-i18n="ecom_cta_a">Quero o Atende</a>
+        </div>
+
+        <div class="plan featured">
+          <div class="plan-badge-top" data-i18n="plans_popular">MAIS POPULAR</div>
+          <p class="plan-name"><span data-i18n="plan_cresce">Cresce</span> <span class="plan-seg">E-commerce</span></p>
+          <p class="price-was" data-was></p>
+          <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="797">797</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+          <p class="plan-annual-note" style="display:none"></p>
+          <p class="plan-tagline" data-i18n="ecom_c_tag">Até 600 contatos atendidos/mês</p>
+          <hr class="plan-divider"/>
+          <ul class="plan-features">
+            <li class="feature-all" data-i18n="cresce_all">Tudo do Atende</li>
+            <li data-i18n="ecom_c_ftroca">⭐ Troca de numeração automática — o cliente resolve no WhatsApp 👟🔁</li>
+            <li data-i18n-html="ecom_c_fship">📦 Aviso automático de pedido enviado, com rastreio <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
+            <li data-i18n-html="ecom_c_f1">Follow-up automático no dia seguinte — reengaja quem conversou e sumiu <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
+            <li data-i18n-html="ecom_c_f2">Pesquisa de satisfação automática (NPS) <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
+            <li data-i18n="ecom_c_f3">O agente envia link de pagamento e orienta 2ª via</li>
+            <li data-i18n="ecom_c_f4">Resumo semanal por email</li>
+            <li data-i18n="ecom_c_f5">1 ajuste por semana</li>
+            <li data-i18n="ecom_c_f6">Suporte prioritário (retorno em até 4h)</li>
+          </ul>
+          <a href="/assinar/plano-cresce" class="btn-plan" data-i18n="ecom_cta_c">Quero o Cresce</a>
+        </div>
+
+        <div class="plan">
+          <p class="plan-name"><span data-i18n="plan_escala">Escala</span> <span class="plan-seg">E-commerce</span></p>
+          <p class="price-was" data-was></p>
+          <div class="plan-price"><span class="plan-currency" data-currency>R$</span><span class="plan-amount" data-brl="1097">1.097</span><span class="plan-period" data-i18n="per_month">/mês</span></div>
+          <p class="plan-annual-note" style="display:none"></p>
+          <p class="plan-tagline" data-i18n="ecom_e_tag">Até 1.200 contatos/mês</p>
+          <hr class="plan-divider"/>
+          <ul class="plan-features">
+            <li class="feature-all" data-i18n="escala_all">Tudo do Cresce</li>
+            <li data-i18n="ecom_e_f2">⭐ Pix gerado dentro da conversa</li>
+            <li data-i18n-html="ecom_e_fship">📦 Avisos de pedido confirmado, enviado e entregue, no tom da sua loja <a href="#nota-meta" class="meta-ast" title="Mensagem cobrada pela Meta na conta da loja">*</a></li>
+            <li data-i18n="ecom_e_f3">Painel de resultados + relatório mensal PDF</li>
+            <li data-i18n="ecom_e_f4">Múltiplos fluxos e segmentações</li>
+            <li data-i18n="ecom_e_f5">Reunião mensal · Gerente dedicado (retorno em até 2h)</li>
+          </ul>
+          <a href="/assinar/plano-escala" class="btn-plan" data-i18n="ecom_cta_e">Quero o Escala</a>
+        </div>
+      </div>
+      <p class="ecom-meta-note" id="nota-meta" data-i18n-html="ecom_meta_note">* <b>Mensagens que a loja inicia</b> (aviso de pedido, follow-up, pesquisa de satisfação) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp da loja: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade (300 avisos de envio no mês ≈ R$ 12). A Tyve não cobra nada por elas e você liga e desliga cada uma quando quiser. A partir de <b>01/10/2026</b> a Meta passa a cobrar também as respostas do agente dentro da conversa: cerca de <b>R$ 0,035 por mensagem</b>, na mesma conta (1.000 contatos/mês ≈ R$ 155). A Tyve não cobra nada por mensagem e o painel mostra a prévia desse custo todo mês.</p>
+      <p class="ecom-enterprise-note" data-i18n-html="ecom_enterprise">Passou do limite do plano? O atendimento não para — <b>R$ 0,80 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 72</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ 09 NA PRÁTICA — slider / light grey ══ -->
+<section class="features-demo" id="na-pratica">
+  <div class="container">
+    <div class="features-demo-header">
+      <div class="sec-label" data-i18n="nd_label">Na prática</div>
+      <h2 class="section-title section-title-dark" data-i18n="nd_h2">Veja como funciona no seu dia a dia</h2>
+    </div>
+
+    <div class="slider-tabs">
+      <button class="slider-tab active" onclick="showSlide(0)" data-i18n="tabs_t0">Alerta de transição</button>
+      <button class="slider-tab" onclick="showSlide(1)" data-i18n="tabs_t1">Painel de resultados</button>
+      <button class="slider-tab" onclick="showSlide(2)" data-i18n="tabs_t2">Follow-up automático</button>
+      <button class="slider-tab" onclick="showSlide(3)" data-i18n="tabs_t3">Consulta de pedido</button>
+    </div>
+
+    <!-- Panel 0 -->
+    <div class="slider-panel active" id="panel-0">
+      <div class="sp-text">
+        <span class="sp-badge" data-i18n="p0_badge">Incluído em todos os planos</span>
+        <h3 class="sp-title" data-i18n="p0_h3">Você recebe um alerta quando o agente precisar de você</h3>
+        <p class="sp-desc" data-i18n="p0_desc">Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.</p>
+      </div>
+      <div class="sp-visual">
+        <div class="notif-mockup">
+          <div class="notif-hdr">
+            <div class="notif-av">T</div>
+            <div><div class="notif-nm">Tyve</div><div class="notif-sb" data-i18n="notif_sb">Notificações</div></div>
+          </div>
+          <div class="notif-bubble">
+            <div class="notif-txt">
+              <span class="nb-urg" data-i18n="notif_urg">🚨 URGENTE — Tyve</span><br/><br/>
+              <span class="nb-dim" data-i18n="notif_wa">📱 WhatsApp: </span><span class="nb-cyan">(16) 99999-9999</span><br/>
+              <span class="nb-dim" data-i18n="notif_name">👤 Nome: </span>Maria Silva<br/><br/>
+              <strong><span data-i18n="notif_what">💬 O que o cliente disse:</span></strong><br/>
+              <span data-i18n="notif_msg">Preciso falar com alguém urgente</span><br/><br/>
+              <em style="color:#8696a0;font-size:11px;" data-i18n="notif_reply">Responda diretamente no WhatsApp do cliente.</em>
+            </div>
+            <div class="notif-time">14:32 ✓✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 1 -->
+    <div class="slider-panel" id="panel-1">
+      <div class="sp-text">
+        <span class="sp-badge" data-i18n="p1_badge">Incluído em todos os planos</span>
+        <h3 class="sp-title" data-i18n="p1_h3">Painel de resultados que você acessa de qualquer lugar</h3>
+        <p class="sp-desc" data-i18n="p1_desc">Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.</p>
+      </div>
+      <div class="sp-visual">
+        <div class="dash-mockup">
+          <div class="dm-hdr" data-i18n="dm_hdr">📊 Painel Tyve — Março 2026</div>
+          <div class="dm-metrics">
+            <div class="dm-metric"><span class="dm-num">847</span><span class="dm-lbl" data-i18n="dm_atend">Atendimentos</span></div>
+            <div class="dm-metric"><span class="dm-num">23</span><span class="dm-lbl" data-i18n="dm_enc">Encaminhados</span></div>
+            <div class="dm-metric"><span class="dm-num">156</span><span class="dm-lbl" data-i18n="dm_followup">Follow-ups</span></div>
+            <div class="dm-metric green"><span class="dm-num">97%</span><span class="dm-lbl" data-i18n="dm_res">Resolvidos pelo agente</span></div>
+          </div>
+          <div style="font-size:11px;color:#bbb;margin-bottom:8px;" data-i18n="dm_week">Atendimentos por semana</div>
+          <div class="dm-bars">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="dm-bar" style="height:33px;width:100%;"></div><span style="font-size:10px;color:#bbb;">S1</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="dm-bar" style="height:42px;width:100%;"></div><span style="font-size:10px;color:#bbb;">S2</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="dm-bar" style="height:50px;width:100%;"></div><span style="font-size:10px;color:#bbb;">S3</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="dm-bar" style="height:56px;width:100%;"></div><span style="font-size:10px;color:#bbb;">S4</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="slider-panel" id="panel-2">
+      <div class="sp-text">
+        <span class="sp-badge" data-i18n="p2_badge">Cresce e Escala</span>
+        <h3 class="sp-title" data-i18n="p2_h3">Follow-up automático para quem não voltou</h3>
+        <p class="sp-desc" data-i18n="p2_desc">Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.</p>
+      </div>
+      <div class="sp-visual">
+        <div class="fc-chat">
+          <div class="fc-bot"><span data-i18n="p2_bot1">Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊</span><div class="fc-time">D+1 — 09:00</div></div>
+          <div class="fc-client"><span data-i18n="p2_client">Sim! Já agendei, obrigado!</span><div class="fc-time">09:14</div></div>
+          <div class="fc-bot"><span data-i18n="p2_bot2">Ótimo! Qualquer coisa estamos aqui. Até logo! 👋</span><div class="fc-time">09:14</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="slider-panel" id="panel-3">
+      <div class="sp-text">
+        <span class="sp-badge" data-i18n="p3_badge">Incluído em todos os planos</span>
+        <h3 class="sp-title" data-i18n="p3_h3">"Cadê meu pedido?" respondido na hora, com rastreio real</h3>
+        <p class="sp-desc" data-i18n="p3_desc">O agente consulta o status e o rastreio do pedido direto na sua loja (Shopify, Nuvemshop, Bling, Woo, Tiny) e responde na conversa — sem inventar, sem "vou verificar e te retorno".</p>
+      </div>
+      <div class="sp-visual">
+        <div class="sched-mockup">
+          <div class="sched-hdr" data-i18n="p3_sched_hdr">📦 Status do pedido #1234</div>
+          <div class="sched-opts">
+            <div class="sched-opt sel">🚚 Saiu para entrega — hoje</div>
+            <div class="sched-opt">Rastreio: BR123456789BR</div>
+            <div class="sched-opt">Previsão: chega amanhã</div>
+          </div>
+          <button class="sched-btn" data-i18n="p3_sched_btn">Acompanhar entrega</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 09b AGENTE vs BOT — dark ══ -->
+<section class="avb-section">
+  <div class="container">
+    <div class="avb-intro">
+      <div class="avb-sec-label" data-i18n="avb_label">A pergunta que todo mundo faz</div>
+      <h2 class="section-title section-title-light" data-i18n-html="avb_h2">O WhatsApp já tem IA grátis.<br>Por que a Tyve?</h2>
+      <p class="avb-subtitle" data-i18n="avb_sub">A IA da Meta é boa para horário, endereço e catálogo. A Tyve entra onde ela para: no pedido, na troca, na etiqueta e no Pix.</p>
+    </div>
+    <div class="avb-grid">
+
+      <!-- Chatbot simples -->
+      <div class="avb-card avb-bot">
+        <div class="avb-card-header">
+          <span class="avb-badge avb-badge-bot" data-i18n="avb_badge_bot">IA da Meta no app</span>
+          <span class="avb-icon">🤖</span>
+        </div>
+        <ul class="avb-list">
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f1">Não enxerga pedido nenhum: responde com o catálogo, o site e o que você ensinou</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f2">Troca, devolução e etiqueta: "fale com a loja"</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f3">Não manda Pix nem avisa quando o pedido saiu</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f4">Aprende sozinha das suas conversas dos últimos 6 meses, inclusive do que foi dito errado</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f5">Seu cliente vê a etiqueta "IA" e o aviso de que a resposta "pode conter informações incorretas"</span></li>
+          <li><span class="avb-x">✗</span><span data-i18n="avb_bot_f6">Ativar desconecta os aparelhos vinculados, e o WhatsApp para Windows não volta</span></li>
+        </ul>
+        <div class="avb-example avb-example-bot">
+          <div class="avb-ex-label" data-i18n="avb_bot_ex_label">Exemplo ilustrativo</div>
+          <div class="avb-bubble avb-in" data-i18n="avb_bot_q">oi, meu pedido 1234 ainda não chegou, tem previsão?</div>
+          <div class="avb-bubble avb-out-bot" data-i18n-html="avb_bot_a">Não tenho acesso ao status dos pedidos. Você pode acompanhar pelo site da loja ou aguardar a equipe. <span style="font-size:10px;opacity:.6">IA</span></div>
+        </div>
+      </div>
+
+      <!-- Agente Tyve -->
+      <div class="avb-card avb-agent">
+        <div class="avb-card-header">
+          <span class="avb-badge avb-badge-agent" data-i18n="avb_badge_agent">Agente Tyve</span>
+          <span class="avb-icon avb-icon-tyve"><svg class="avb-bolt" viewBox="66.6 292 147 294.5" xmlns="http://www.w3.org/2000/svg" aria-label="Tyve" role="img"><path d="M164.5,307.6l-86.4,143.1s-11.1,17.2-1.9,23.4c9.2,6.2,47.3-6.2,47.3-1.5s-23.5,91.1-24.6,95.4c0,0,0,.2,0,.3-.3,1.1-2.9,9.8,2.6,11.9,5.3,2,10.2-6.9,11.1-8.6s.2-.4.3-.6l89.4-141.1c0-.1.2-.3.3-.4,1.1-1.5,9.6-13.9,1.6-20.7-6.7-5.7-35.9-.6-39.6-.5-3.7.1-7.8-1.6-4.7-10.1,3-8.2,21.1-83.5,22.5-89.2,0-.2,0-.4.1-.5.3-1.1,1.8-6.3-2.4-9s-1.9-.9-2.9-1c-5-.8-7.5,2-12.6,9.3h0Z" fill="currentColor"/></svg></span>
+        </div>
+        <ul class="avb-list">
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f1">Consulta o pedido na sua loja (Nuvemshop, Shopify, Bling, Tiny) e responde status e rastreio</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f2">Faz a troca de numeração e gera a etiqueta de devolução (Correios ou Melhor Envio)</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f3">Manda o Pix e avisa quando o pedido saiu</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f4">Responde da fonte: pedido real, regra de troca que você definiu, FAQ que você escreveu</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f5">Fala com o nome e o tom da sua loja, sem etiqueta de "pode errar"</span></li>
+          <li><span class="avb-chk">✓</span><span data-i18n="avb_agent_f6">Sua equipe continua no app e no WhatsApp Web, no mesmo número</span></li>
+        </ul>
+        <div class="avb-example avb-example-agent">
+          <div class="avb-ex-label" data-i18n="avb_agent_ex_label">Mesma pergunta</div>
+          <div class="avb-bubble avb-in" data-i18n="avb_agent_q">oi, meu pedido 1234 ainda não chegou, tem previsão?</div>
+          <div class="avb-bubble avb-out-agent" data-i18n="avb_agent_a">Oi, Marina! O pedido 1234 saiu ontem pelos Correios, código BR123456789BR, previsão de entrega quinta. Quer o link de rastreio? 📦</div>
+        </div>
+      </div>
+
+    </div>
+    <p class="avb-foot" data-i18n="avb_foot">Com base na Central de Ajuda do WhatsApp Business (setembro de 2026). Recursos da Meta podem mudar.</p>
+  </div>
+</section>
+
+
+<!-- ══ 09b CONFIANÇA — beige ══ -->
+<section class="trust-section" id="confianca">
+  <div class="container">
+    <div class="trust-intro">
+      <div class="sec-label" data-i18n="trust_label">Confiança</div>
+      <h2 class="section-title section-title-dark" data-i18n="trust_h2">Por que a Tyve não inventa</h2>
+      <p class="trust-sub" data-i18n="trust_sub">O maior medo de quem liga IA no WhatsApp é o robô falar besteira para o cliente. A Tyve foi construída ao contrário: primeiro o controle, depois a conversa.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-num">1</div><h3 data-i18n="trust_1h">Cada resposta tem uma fonte</h3><p data-i18n="trust_1p">Status de pedido vem da sua loja. Troca vem da regra que você definiu. Dúvida vem da FAQ que você escreveu. O painel mostra de onde saiu cada mensagem.</p></div>
+      <div class="trust-card"><div class="trust-num">2</div><h3 data-i18n="trust_2h">Dinheiro nunca é com o robô</h3><p data-i18n="trust_2p">Reembolso, cancelamento, cobrança e reclamação passam sempre para a sua equipe. O agente resolve o que dá para resolver e sabe parar no que não dá.</p></div>
+      <div class="trust-card"><div class="trust-num">300+</div><h3 data-i18n="trust_3h">Verificações por dia</h3><p data-i18n="trust_3p">Todo dia, antes do seu horário de abrir, cada agente recebe uma conversa de teste e é conferido. Se algo sai do esperado, a gente sabe antes de você.</p></div>
+      <div class="trust-card"><div class="trust-num">0</div><h3 data-i18n="trust_4h">Zero "pode conter informações incorretas"</h3><p data-i18n="trust_4p">A IA da Meta avisa o seu cliente que pode errar. A Tyve não precisa: se não tem a informação, ela pergunta ou passa para a equipe. E o painel mostra quantas conversas ela resolveu sem ninguém.</p></div>
+    </div>
+    <p class="trust-quote" data-i18n-html="trust_quote">A Gartner prevê que <b>4 em cada 10 projetos de agentes de IA serão cancelados até 2027</b> por custo, valor pouco claro ou falta de controle. <b>A Tyve entrega esse controle pronto, no plano, sem consultoria.</b></p>
+  </div>
+</section>
+
+
+<!-- ══ 10 COMPARATIVO — white ══ -->
+<section class="vs-section">
+  <div class="container">
+    <div class="vs-header">
+      <div class="sec-label" data-i18n="vs_label">Comparativo</div>
+      <h2 class="section-title section-title-dark" data-i18n="vs_h2">Tyve vs as outras opções</h2>
+    </div>
+    <div class="vs-table-wrap"><table class="vs-table">
+      <thead><tr><th></th><th class="col-tyve">Tyve</th><th data-i18n="vs_th2">App de automação</th><th data-i18n="vs_th3">Montar do zero</th></tr></thead>
+      <tbody>
+        <tr><td data-i18n="vs_r1l">Responde certo na primeira</td><td data-i18n-html="vs_r1c1"><span class="check">✓</span> Entende o que o cliente escreveu</td><td data-i18n-html="vs_r1c2"><span class="cross">✗</span> Repete o menu</td><td data-i18n-html="vs_r1c3"><span class="partial">Depende do que você previu</span></td></tr>
+        <tr><td data-i18n="vs_r0l">Quem responde às 22h de domingo</td><td data-i18n-html="vs_r0c1"><span class="check">✓</span> O agente, e ele resolve</td><td data-i18n-html="vs_r0c2"><span class="partial">Um menu</span></td><td data-i18n-html="vs_r0c3"><span class="cross">✗</span> Você</td></tr>
+        <tr><td data-i18n="vs_r2l">Configurado pro seu negócio</td><td data-i18n-html="vs_r2c1"><span class="check">✓</span></td><td data-i18n-html="vs_r2c2"><span class="cross">✗</span> você configura</td><td data-i18n-html="vs_r2c3"><span class="cross">✗</span> você faz tudo</td></tr>
+        <tr><td data-i18n="vs_r3l">Sem virar técnico de TI</td><td data-i18n-html="vs_r3c1"><span class="check">✓</span></td><td data-i18n-html="vs_r3c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r3c3"><span class="cross">✗</span></td></tr>
+        <tr><td data-i18n="vs_r4l">A gente mantém. Você só usa.</td><td data-i18n-html="vs_r4c1"><span class="check">✓</span></td><td data-i18n-html="vs_r4c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r4c3"><span class="cross">✗</span></td></tr>
+        <tr><td data-i18n="vs_r5l">Funcionando na primeira semana</td><td data-i18n-html="vs_r5c1"><span class="check">✓</span></td><td data-i18n-html="vs_r5c2"><span class="partial">Semanas de setup</span></td><td data-i18n-html="vs_r5c3"><span class="partial">Meses de setup</span></td></tr>
+        <tr><td data-i18n="vs_r6l">Suporte de quem conhece o seu agente</td><td data-i18n-html="vs_r6c1"><span class="check">✓</span></td><td data-i18n-html="vs_r6c2"><span class="partial">Ticket / FAQ</span></td><td data-i18n-html="vs_r6c3"><span class="cross">✗</span></td></tr>
+        <tr><td data-i18n="vs_r7l">IA treinada no seu negócio</td><td data-i18n-html="vs_r7c1"><span class="check">✓</span></td><td data-i18n-html="vs_r7c2"><span class="cross">✗</span></td><td data-i18n-html="vs_r7c3"><span class="partial">Depende de você</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="vs-callout" data-i18n-html="vs_callout"><strong>Já usa um app de rastreio (Sak, Rastreio.net)?</strong> Ele avisa "saiu para entrega" — e fica mudo quando o cliente responde "mas cadê?". A Tyve responde quem pergunta, resolve a troca e gera o Pix, no mesmo fio da conversa.</div>
+  </div>
+</section>
+
+
+<!-- ══ 11 QUEM JÁ USA — white ══ -->
+<section class="testimonial">
+  <div class="container">
+    <div class="testimonial-inner">
+      <div class="sec-label" data-i18n="tst_label">Quem já usa</div>
+      <div class="testimonial-card">
+        <span class="quotemark" aria-hidden="true">&ldquo;</span>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text" data-i18n="tst_text">"Metade do meu WhatsApp era 'cadê meu pedido?'. Agora o agente puxa o rastreio na hora, resolve a troca de numeração sozinho e só me chama quando precisa. Sobrou tempo pra vender de verdade."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">🛍️</div>
+          <div><p class="author-name" data-i18n="tst_name">Loja de calçados</p><p class="author-role" data-i18n="tst_role">Piloto e-commerce Tyve</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 12 CALCULADORA — light grey ══ -->
+<section class="roi-section" id="roi">
+  <div class="container">
+    <div class="roi-inner">
+      <div class="roi-header">
+        <div class="sec-label" data-i18n="roi_label">Calculadora de venda recuperada</div>
+        <h2 class="section-title section-title-dark" style="font-size:clamp(32px,4vw,52px);" data-i18n-html="roi_h2">Quanto sua loja recupera<br>com a Tyve?</h2>
+        <p class="roi-sub" data-i18n="roi_sub">Uma estimativa de quanto o pós-venda automático mantém em vendas na sua loja.</p>
+      </div>
+      <div class="roi-calc">
+        <label class="roi-input-label" data-i18n="roi_input_label">Pedidos por mês</label>
+        <div class="roi-slider-row">
+          <input type="range" id="roiSlider" min="50" max="2000" value="300" step="50" class="roi-slider" />
+          <span class="roi-slider-value" id="roiValue">300</span>
+        </div>
+        <div class="roi-slider-hints"><span data-i18n="roi_hint1">50</span><span data-i18n="roi_hint2">Loja média: ~300</span><span data-i18n="roi_hint3">2.000</span></div>
+        <label class="roi-input-label" data-i18n="roi_ticket_label" style="margin-top:16px;display:block">Ticket médio (R$)</label>
+        <div class="roi-slider-row">
+          <input type="range" id="roiTicket" min="50" max="500" value="150" step="10" class="roi-slider" />
+          <span class="roi-slider-value" id="roiTicketValue">150</span>
+        </div>
+        <div class="roi-results">
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c1_label">"Cadê meu pedido?" por mês</span><span class="roi-card-value" id="roiManual">240</span><span class="roi-card-detail" data-i18n="roi_c1_detail">o agente responde na hora, com rastreio real</span></div>
+          <div class="roi-card"><span class="roi-card-label" data-i18n="roi_c2_label">Horas da equipe por mês</span><span class="roi-card-value" id="roiSaved">28h</span><span class="roi-card-detail" data-i18n="roi_c2_detail">~3% dos pedidos que virariam reembolso ou cliente perdido</span></div>
+          <div class="roi-card roi-card-highlight"><span class="roi-card-label" data-i18n="roi_c3_label">Custo + vendas salvas por mês</span><span class="roi-card-value" id="roiDays">R$3.260</span><span class="roi-card-detail" data-i18n="roi_c3_detail">vendas salvas × seu ticket médio</span></div>
+        </div>
+        <p class="roi-bonus" id="roiBonus">São <strong id="roiSavedText">R$3.260</strong> por mês entre horas da equipe e vendas salvas, e o plano indicado é o <strong>Atende</strong>.</p>
+        <p class="roi-footnote" data-i18n="roi_footnote">Estimativa ilustrativa. Cada loja varia conforme volume, nicho e ticket.</p>
+        <p class="roi-footnote" style="margin-top:6px"><a href="/calculadora" data-i18n="roi_full" style="color:var(--orange);font-weight:700;text-decoration:none;border-bottom:1.5px solid rgba(248,65,0,.35)">Ver a conta completa: horas da equipe, custo por mês e o plano certo pra sua loja →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 13 FAQ — white ══ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <div class="sec-label" data-i18n="faq_label">Dúvidas</div>
+      <h2 class="section-title section-title-dark" data-i18n="faq_h2">Perguntas frequentes</h2>
+    </div>
+    <div class="biz-toggle" id="faq-biz-toggle" style="margin-bottom:22px">
+      <div class="biz-toggle-track">
+        <button class="biz-toggle-btn active" data-faqbiz="servico" type="button" data-i18n="biz_servicos">Serviços e Negócios locais</button>
+        <button class="biz-toggle-btn" data-faqbiz="ecommerce" type="button" data-i18n="biz_ecommerce">🛒 E-commerce / Loja online</button>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q1">Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a1">Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q2">Quanto tempo até estar funcionando? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a2">De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q2b">Preciso entender de automação ou configurar algo técnico? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a2b">Não. Diferente de ferramentas de automação tradicionais, você não monta fluxo, não configura integração e não mexe em nada técnico. Você preenche um formulário simples contando sobre o seu negócio, horários e serviços, e a nossa equipe cuida de toda a configuração, dos testes e da ativação. Você só usa.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q3">Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a3">Não. A Tyve funciona no número que você já usa, pela conexão oficial da Meta — poucos cliques, e o seu WhatsApp continua funcionando normal no celular.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q4">E se o agente falar alguma coisa errada? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a4">O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q5">O que é o follow-up automático? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a5">Quando um cliente conversa com o agente mas não finaliza a compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ficou alguma dúvida ou se conseguiu o que precisava. Tudo sem você precisar lembrar de ninguém. Como é uma mensagem que o seu negócio inicia, a Meta cobra cerca de R$ 0,04 por envio na conta do WhatsApp do negócio (a Tyve não cobra nada por ela). Você escolhe se quer ligar, no formulário de ativação ou depois, no painel.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q6">O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a6">Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada. Como é uma mensagem que o seu negócio inicia, a Meta cobra cerca de R$ 0,04 por envio na conta do WhatsApp do negócio (a Tyve não cobra nada por ela). Você escolhe se quer ligar, no formulário de ativação ou depois, no painel.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q7">Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a7">Sem fidelidade. É mês a mês — cancela quando quiser, sem aviso prévio e sem multa. E você ainda tem 7 dias de garantia: se não gostar, devolvemos 100%.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q8">Precisa de WhatsApp Business? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a8">Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q8b">O que a Meta pede na hora de conectar o número? Preciso verificar minha empresa? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a8b">A conexão é feita numa janela oficial da Meta e leva uns 2 minutos, mas ela pede três coisas que vale deixar prontas: <b>(1)</b> um <b>Gerenciador de Negócios da Meta</b> (business.facebook.com) em nome da sua empresa, com você como administrador; <b>(2)</b> login numa <b>conta pessoal do Facebook</b> já existente, que seja admin desse Gerenciador; <b>(3)</b> uma página comercial no Facebook e um site com nome, CNPJ e endereço da empresa. A <b>verificação da empresa</b> (com CNPJ) não é obrigatória para ativar, mas sem ela a Meta limita o número a 250 conversas iniciadas por dia e não libera o selo. A gente te orienta em cada passo antes de você conectar.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q9">A Tyve funciona com a minha loja (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a9">Sim. A Tyve integra com Shopify, Nuvemshop, Bling, WooCommerce e Tiny. A conexão é em poucos cliques, com a sua autorização — você não troca de sistema nem instala nada complicado.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q10">A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a10">Sim, em todos os planos. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q12">O WhatsApp Business já tem IA grátis. Por que eu precisaria da Tyve? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a12">A IA da Meta responde com o catálogo, o site e o que você ensinou. Ela não enxerga os pedidos da sua loja, não faz troca, não gera etiqueta de devolução nem manda Pix. A Tyve faz tudo isso conectada à sua loja (Nuvemshop, Shopify, Bling, Tiny), com a sua equipe continuando no app e no WhatsApp Web. E cada mensagem da IA da Meta vai com o aviso de que "pode conter informações incorretas"; a Tyve responde da fonte ou passa para a equipe.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q11">A Tyve faz a troca sozinha? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a11">Nos planos Cresce e Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q12">O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a12">Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q14">O follow-up automático tem custo? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a14"><b>Pela Tyve, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O que existe é a tarifa da <b>Meta</b>: até 30/09/2026, mensagens dentro da janela de 24 horas depois da última mensagem do seu cliente são gratuitas, e só as enviadas fora dela custam centavos. <b>A partir de 01/10/2026 a Meta passa a cobrar toda mensagem que o seu número envia</b>, inclusive as respostas do agente e o follow-up: cerca de <b>R$ 0,035 por mensagem</b>.<br><br><b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business da sua loja, a mesma que você conecta na ativação. A Tyve não revende mensagem, não põe margem nisso, e mostra no painel a prévia do que a Meta vai cobrar no mês.</p></div></div>
+      <div class="faq-item" data-biz="both"><button class="faq-question" data-i18n-html="faq_q15">Quanto vou pagar para a Meta por mês? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n-html="faq_a15"><b>Depende de quantas mensagens o seu número envia.</b> A partir de 01/10/2026 a Meta cobra cerca de <b>R$ 0,035</b> por mensagem enviada (respostas do agente, follow-up, avisos de pedido), na conta de WhatsApp Business da sua loja. Na nossa medição, o agente envia em média <b>4 a 5 mensagens por contato</b>.<br><br>Exemplos: 250 contatos/mês ≈ <b>R$ 40</b> · 600 contatos ≈ <b>R$ 95</b> · 1.000 contatos ≈ <b>R$ 155</b> · 1.200 contatos ≈ <b>R$ 185</b>.<br><br>Conversa aberta por um anúncio Click-to-WhatsApp é <b>grátis por 72 horas</b> (a Meta não cobra), então tráfego pago via anúncio reduz essa conta. O painel da Tyve mostra a prévia do mês, e a Tyve não cobra nada por mensagem.</p></div></div>
+      <div class="faq-item" data-biz="ecommerce"><button class="faq-question" data-i18n-html="faq_q13">Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span></button><div class="faq-answer"><p data-i18n="faq_a13">O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.</p></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 14 BANNER FINAL — dark gradient ══ -->
+<section class="final-cta">
+  <div class="container">
+    <div class="final-cta-content">
+      <h2 data-i18n-html="cta_h2">Chega de mensagem sem resposta. Nosso agente resolve na hora!</h2>
+      <p data-i18n-html="cta_p">Em 20 minutinhos a gente mostra ao vivo como fica na sua loja,<br/>sem compromisso nenhum.</p>
+      <a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20uma%20demo%20da%20Tyve%20(site)!" class="btn-cta-teal" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="cta_btn">Agendar demo grátis</span>
+      </a>
+      <p class="cta-garantia" data-i18n="cta_garantia">Garantia de 7 dias — não gostou, devolvemos 100%.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 15 RODAPÉ — dark ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo-row">
+      <img src="https://tyve.com.br/assets/logo-tyve.svg" alt="Tyve" style="height:28px; filter:brightness(0) invert(1);" />
+    </div>
+    <div class="footer-links">
+      <a href="/termos.html" data-i18n="footer_terms">Termos de Serviço</a>
+      <a href="/privacidade" data-i18n="footer_privacy">Privacidade</a>
+      <a href="/calculadora" data-i18n="nav_calc">Calculadora</a>
+      <a href="https://wa.me/5516994247541?text=Oi%20(site)!" target="_blank">WhatsApp</a>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/tyve.ai/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="https://www.youtube.com/@tyve.oficial" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a href="https://www.tiktok.com/@tyve.ai" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3a5.6 5.6 0 0 0 4.5 4.9v2.7a8.3 8.3 0 0 1-4.5-1.3v6.1a5.9 5.9 0 1 1-5.9-5.9c.3 0 .6 0 .9.1v2.8a3.1 3.1 0 1 0 2.2 3V3h2.8z"/></svg></a>
+    </div>
+    <p class="footer-copy" data-i18n="footer_copy">© 2026 Tyve. Todos os direitos reservados.</p>
+    <p class="footer-disclaimer" data-i18n="footer_disclaimer">Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.</p>
+  </div>
+</footer>
+
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/5516994247541?text=Oi%2C%20quero%20saber%20mais%20sobre%20a%20Tyve%20(site)!" class="whatsapp-float" target="_blank" title="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+
+<script>
+/* ─── I18N ─────────────────────────────────────────────── */
+var currentLang = 'pt';
+
+var USD_PRICES = { 497: 199, 697: 299, 797: 349, 997: 499, 1097: 549, 79: 69 };
+
+function formatBRL(n) {
+  return n >= 1000 ? Math.floor(n/1000) + '.' + (n % 1000).toString().padStart(3,'0') : n.toString();
+}
+
+var T = {
+  pt: {
+    nav_how:'Como funciona', nav_segments:'Segmentos', nav_faq:'FAQ',
+    nav_plans:'Planos e Preços', nav_demo:'⚡ Ver demo ao vivo',
+    hero_badge:'WhatsApp Cloud API oficial',
+    hero_h1:'Atendimento que resolve,<br/><span class="accent">24 horas por dia</span> no seu WhatsApp.',
+    hero_sub:'Chega de mensagem sem resposta. Nosso agente resolve na hora, dúvida, pedido, agendamento, reclamação, seja o que for. E só te chama quando precisa!',
+    hero_br:'🇧🇷 Feito no Brasil, suporte em português',
+    hero_cta:'⚡ Ver demo ao vivo',
+    hero_cta2:'Ver planos →',
+    showcase_name:'Luma — Loja Street Style', showcase_online:'online',
+    chat_m1_user:'Oi! Cadê meu pedido? Comprei semana passada e ainda não chegou',
+    chat_m1_bot:'Oi! Me passa o número do pedido ou o seu CPF que eu confiro o status agora mesmo pra você.',
+    chat_m1_bot2:'Pode mandar aqui mesmo que eu já verifico.',
+    chat_m2_user:'Pedido 1234',
+    chat_m2_bot:'Achei aqui! Seu pedido #1234 saiu pra entrega hoje. Rastreio: BR123456789BR — chega até amanhã. Quer o link pra acompanhar?',
+    chat_m3_user:'Quero! E se não servir, dá pra trocar a numeração?',
+    prob_label:'O problema',
+    prob_h2:'Quantas vendas sua loja perde por dia<br/>por falta de atendimento?',
+    prob_sub:'Sua equipe passa o dia respondendo pedido, troca e dúvida na mão e quem espera acaba comprando na concorrência.',
+    prob_c1h:'Pedido às 22h sem ninguém', prob_c1p:'O cliente pergunta do pedido à noite. De manhã já abriu reclamação ou pediu reembolso.',
+    prob_c2h:'"Cadê meu pedido?" o dia todo', prob_c2p:'Metade do WhatsApp da loja é rastreio. Sua equipe copia e cola link o dia inteiro.',
+    prob_c3h:'Troca virou novela manual', prob_c3p:'Confere pedido, vê estoque da numeração, gera devolução. Cada troca trava a venda de novo.',
+    prob_c4h:'Frete e numeração sem resposta', prob_c4p:'O cliente pergunta o frete ou a numeração e não tem retorno na hora. Vai comprar na loja do lado.',
+    how_label:'Como funciona',
+    how_h2:'Você não precisa fazer nada.<br/>A gente cuida de tudo.',
+    how_s1badge:'Passo 1', how_s1h:'Você conta da sua loja e conecta',
+    how_s1m1:'Minha loja é de calçados, uso Shopify',
+    how_s1m2:'Perfeito! Conecto em 2 cliques e já leio seus pedidos, frete e política de troca ✅',
+    how_s2badge:'Passo 2', how_s2h:'O agente responde rastreio, resolve troca e tira dúvidas — 24h',
+    how_s2m1:'Boa noite, meu pedido tá atrasado?',
+    how_s2m2:'Boa noite! Deixa eu ver… saiu pra entrega hoje 🚚 rastreio BR123, chega amanhã 😊',
+    how_s2m3:'E o Pix da segunda peça?', how_s2m4:'Gerei aqui 💸 é só pagar que eu confirmo na hora',
+    how_s3badge:'Passo 3', how_s3h:'Você recebe só o que precisa de você',
+    how_s3m1:'🔁 TROCA — Loja Street Style',
+    how_s3m2:'Cliente: Ana. Pedido #1234, tênis 38 → 39. Fora do estoque padrão. Resumo pronto.',
+    tarja_text:'Existem ferramentas para quem quer aprender a fazer.<br/>Tyve foi criada para resolver!',
+    fw_label:'Para quem é',
+    fw_h2:'Pra negócio que vende de verdade<br/>e trata o pós-venda como parte da venda.',
+    fw_c1:'Moda e calçados', fw_c2:'Cosméticos e beleza', fw_c3:'Suplementos e saúde',
+    fw_c4:'Eletrônicos e acessórios', fw_c5:'Pet shop online', fw_c6:'Casa e decoração',
+    fw_c7:'Moda íntima e fitness', fw_more:'Saiba mais →',
+    biz_servicos:'Serviços e Negócios locais', biz_ecommerce:'🛒 E-commerce / Loja online',
+    plans_label:'Planos', plans_h2:'Investimento direto. Resultado real.',
+    plans_sub:'Menos de um terço do custo de um atendente, respondendo 24h, todo dia, sem férias.',
+    plans_trust:'⚡ No ar em 3–7 dias · 🔓 Sem fidelidade · ✓ Garantia de 7 dias',
+    plans_popular:'MAIS POPULAR', plans_volume:'MAIS VOLUME', per_month:'/mês',
+    plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
+    cycle_monthly:'Mensal', cycle_annual:'Anual', cycle_badge:'2 meses grátis',
+    demo_note:'É uma demonstração real — respostas geradas na hora pela IA da Tyve.',
+    ecom_a_tag:'Até 250 contatos atendidos/mês', ecom_c_tag:'Até 600 contatos atendidos/mês', ecom_e_tag:'Até 1.200 contatos/mês',
+    ecom_a_fw:'⭐ Consulta de pedido e rastreio ao vivo (Shopify, Nuvemshop, Bling, Woo e Tiny)', ecom_a_f1:'1 número WhatsApp', ecom_a_f2:'Fluxo configurado pra sua loja', ecom_a_f3:'Respostas automáticas 24h/7d',
+    ecom_a_f4:'Entende mensagens de texto, voz e imagens 🎙️📷',
+    ecom_a_f5:'FAQ de e-commerce: frete, prazo, troca, numeração, pagamento',
+    ecom_a_f6:'Tabela de numeração e catálogo no WhatsApp (PDF) 👟',
+    ecom_a_f7:'Triagem e encaminhamento com resumo', ecom_a_fp:'Painel de resultados com link', ecom_a_f8:'Detecta clientes frustrados e prioriza ⚠️',
+    ecom_a_f9:'1 ajuste por mês · Suporte (retorno em até 8h)',
+    ecom_c_ftroca:'⭐ Troca de numeração automática — o cliente resolve no WhatsApp 👟🔁',
+    ecom_c_f1:'Follow-up automático no dia seguinte — reengaja quem conversou e sumiu <a href="#nota-meta" class="meta-ast">*</a>',
+    serv_meta_note:'* <b>Mensagens que o seu negócio inicia</b> (follow-up, pesquisa de satisfação, lembrete de agendamento) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp do negócio: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade, normalmente menos de R$ 30 por mês. A Tyve não cobra nada por elas. A partir de <b>01/10/2026</b> a Meta passa a cobrar também as respostas do agente dentro da conversa: cerca de <b>R$ 0,035 por mensagem</b>, na mesma conta (1.000 contatos/mês ≈ R$ 155). A Tyve não cobra nada por mensagem e o painel mostra a prévia desse custo todo mês.',
+    nav_calc:'Calculadora',
+    roi_full:'Ver a conta completa: horas da equipe, custo por mês e o plano certo pra sua loja →',
+    plans_calc:'🧮 Quanto custa o "cadê meu pedido" na sua loja hoje? Calcule em 30 segundos',
+    faq_q8b:'O que a Meta pede na hora de conectar o número? Preciso verificar minha empresa? <span class="faq-icon">+</span>',
+    faq_a8b:'A conexão é feita numa janela oficial da Meta e leva uns 2 minutos, mas ela pede três coisas que vale deixar prontas: <b>(1)</b> um <b>Gerenciador de Negócios da Meta</b> (business.facebook.com) em nome da sua empresa, com você como administrador; <b>(2)</b> login numa <b>conta pessoal do Facebook</b> já existente, que seja admin desse Gerenciador; <b>(3)</b> uma página comercial no Facebook e um site com nome, CNPJ e endereço da empresa. A <b>verificação da empresa</b> (com CNPJ) não é obrigatória para ativar, mas sem ela a Meta limita o número a 250 conversas iniciadas por dia e não libera o selo. A gente te orienta em cada passo antes de você conectar.',
+    ecom_c_fship:'📦 Aviso automático de pedido enviado, com rastreio <a href="#nota-meta" class="meta-ast">*</a>', ecom_e_fship:'📦 Avisos de pedido confirmado, enviado e entregue, no tom da sua loja <a href="#nota-meta" class="meta-ast">*</a>',
+    ecom_meta_note:'* <b>Mensagens que a loja inicia</b> (aviso de pedido, follow-up, pesquisa de satisfação) são cobradas pela <b>Meta</b>, direto na conta do WhatsApp da loja: cerca de <b>R$ 0,04 por mensagem</b> na categoria utilidade (300 avisos de envio no mês ≈ R$ 12). A Tyve não cobra nada por elas e você liga e desliga cada uma quando quiser. A partir de <b>01/10/2026</b> a Meta passa a cobrar também as respostas do agente dentro da conversa: cerca de <b>R$ 0,035 por mensagem</b>, na mesma conta (1.000 contatos/mês ≈ R$ 155). A Tyve não cobra nada por mensagem e o painel mostra a prévia desse custo todo mês.',
+    ecom_c_f2:'Pesquisa de satisfação automática (NPS) <a href="#nota-meta" class="meta-ast">*</a>', ecom_c_f3:'O agente envia link de pagamento e orienta 2ª via',
+    ecom_c_f4:'Resumo semanal por email', ecom_c_f5:'1 ajuste por semana', ecom_c_f6:'Suporte prioritário (retorno em até 4h)',
+    ecom_e_f1:'⭐ Troca de numeração automática — o cliente resolve a troca no WhatsApp 👟🔁',
+    ecom_e_f2:'⭐ Pix gerado dentro da conversa', ecom_e_f3:'Painel de resultados + relatório mensal PDF',
+    ecom_e_f4:'Múltiplos fluxos e segmentações', ecom_e_f5:'Reunião mensal · Gerente dedicado (retorno em até 2h)',
+    ecom_cta_a:'Quero o Atende', ecom_cta_c:'Quero o Cresce', ecom_cta_e:'Quero o Escala',
+    ecom_enterprise:'Passou do limite do plano? O atendimento não para — <b>R$ 0,80 por contato adicional</b>, proporcional. Prefere adiantar? <b>Pacote de 100 contatos por R$ 72</b>. Volume muito alto e recorrente? Fala com a gente: tem o <b>Escala Enterprise</b>, sob medida.',
+    atende_tagline:'Até 200 contatos atendidos/mês',
+    atende_f1:'1 número WhatsApp', atende_f2:'Fluxo configurado pro seu negócio',
+    atende_f3:'Respostas automáticas 24h/7d', atende_f4:'Entende mensagens de texto, voz e imagens 🎙️📷',
+    atende_f5:'Triagem e qualificação de leads', atende_f6:'Alerta com resumo completo da conversa',
+    atende_f7:'Detecta clientes frustrados e alerta com prioridade ⚠️',
+    atende_f8:'Lembrete automático se o cliente esperar +12h sem retorno',
+    atende_f9:'1 ajuste por mês', atende_f10:'Suporte via WhatsApp (retorno em até 8h)',
+    atende_cta:'Assinar Atende',
+    cresce_tagline:'Até 500 contatos atendidos/mês', cresce_all:'Tudo do Atende',
+    cresce_f1:'Follow-up automático no dia seguinte <a href="#nota-meta-serv" class="meta-ast">*</a>', cresce_f2:'Pesquisa de satisfação automática (NPS) <a href="#nota-meta-serv" class="meta-ast">*</a>',
+    cresce_f3:'1 ajuste por semana', cresce_f4:'Resumo semanal por email',
+    cresce_f5:'O agente envia link da sua agenda', cresce_f6:'Suporte prioritário (retorno em até 4h)',
+    cresce_cta:'Assinar Cresce',
+    escala_tagline:'Até 1.000 contatos/mês', escala_all:'Tudo do Cresce',
+    escala_f1:'', escala_f2:'',
+    escala_f3:'Agendamento nativo no WhatsApp', escala_f4:'Múltiplos fluxos e segmentações',
+    escala_f5:'Relatório mensal PDF com análise completa', escala_f6:'Reunião mensal de resultados',
+    escala_f7:'Gerente de conta dedicado (retorno em até 2h)', escala_cta:'Assinar Escala',
+    addon_title:'Adicional: Agendamento automático via WhatsApp',
+    addon_desc:'O cliente escolhe o horário <strong>direto no WhatsApp</strong>. O agente consulta sua agenda, cria o evento e manda lembrete D-1. Integração com Google Calendar.',
+    addon_note1:'Para Atende e Cresce', addon_note2:'✓ Incluso no Escala', addon_cta:'Adicionar',
+    addon_cta_atende:'Atende + Agenda', addon_cta_cresce:'Cresce + Agenda',
+
+    nd_label:'Na prática', nd_h2:'Veja como funciona no seu dia a dia',
+    tabs_t0:'Alerta de transição', tabs_t1:'Painel de resultados', tabs_t2:'Follow-up automático', tabs_t3:'Consulta de pedido',
+    p0_badge:'Incluído em todos os planos',
+    p0_h3:'Você recebe um alerta quando o agente precisar de você',
+    p0_desc:'Quando um cliente tem uma urgência ou dúvida que só um humano resolve, a Tyve te manda uma notificação no WhatsApp na hora — com o nome do cliente e o resumo da conversa. Você entra direto, sem vasculhar o histórico.',
+    p1_badge:'Incluído em todos os planos', atende_f8b:'Painel de resultados com link',
+    p1_h3:'Painel de resultados que você acessa de qualquer lugar',
+    p1_desc:'Veja quantos atendimentos o agente fez, quantas vezes precisou chamar você, quantos follow-ups foram enviados. Acessível por link, sem instalar nada.',
+    p2_badge:'Cresce e Escala',
+    p2_h3:'Follow-up automático para quem não voltou',
+    p2_desc:'Depois que o agente encaminha um cliente, ele manda uma mensagem automática no dia seguinte para ver se o cliente conseguiu o que precisava. Você não precisa fazer nada.',
+    p2_bot1:'Oi, Renato! Passando pra saber se conseguiu resolver o que precisava 😊',
+    p2_client:'Sim! Já agendei, obrigado!',
+    p2_bot2:'Ótimo! Qualquer coisa estamos aqui. Até logo! 👋',
+    p3_badge:'Incluído em todos os planos',
+    p3_h3:'"Cadê meu pedido?" respondido na hora, com rastreio real',
+    p3_desc:'O agente consulta o status e o rastreio do pedido direto na sua loja (Shopify, Nuvemshop, Bling, Woo, Tiny) e responde na conversa — sem inventar, sem "vou verificar e te retorno".',
+    p3_sched_hdr:'📦 Status do pedido #1234', p3_sched_btn:'Acompanhar entrega',
+    avb_label:'A pergunta que todo mundo faz',
+    avb_h2:'O WhatsApp já tem IA grátis.<br>Por que a Tyve?',
+    avb_sub:'A IA da Meta é boa para horário, endereço e catálogo. A Tyve entra onde ela para: no pedido, na troca, na etiqueta e no Pix.',
+    avb_badge_bot:'IA da Meta no app',
+    avb_badge_agent:'Agente Tyve',
+    avb_bot_f1:'Não enxerga pedido nenhum: responde com o catálogo, o site e o que você ensinou',
+    avb_bot_f2:'Troca, devolução e etiqueta: "fale com a loja"',
+    avb_bot_f3:'Não manda Pix nem avisa quando o pedido saiu',
+    avb_bot_f4:'Aprende sozinha das suas conversas dos últimos 6 meses, inclusive do que foi dito errado',
+    avb_bot_f5:'Seu cliente vê a etiqueta "IA" e o aviso de que a resposta "pode conter informações incorretas"',
+    avb_bot_f6:'Ativar desconecta os aparelhos vinculados, e o WhatsApp para Windows não volta',
+    avb_agent_f1:'Consulta o pedido na sua loja (Nuvemshop, Shopify, Bling, Tiny) e responde status e rastreio',
+    avb_agent_f2:'Faz a troca de numeração e gera a etiqueta de devolução (Correios ou Melhor Envio)',
+    avb_agent_f3:'Manda o Pix e avisa quando o pedido saiu',
+    avb_agent_f4:'Responde da fonte: pedido real, regra de troca que você definiu, FAQ que você escreveu',
+    avb_agent_f5:'Fala com o nome e o tom da sua loja, sem etiqueta de "pode errar"',
+    avb_agent_f6:'Sua equipe continua no app e no WhatsApp Web, no mesmo número',
+    avb_bot_ex_label:'Exemplo ilustrativo',
+    avb_bot_q:'oi, meu pedido 1234 ainda não chegou, tem previsão?',
+    avb_bot_a:'Não tenho acesso ao status dos pedidos. Você pode acompanhar pelo site da loja ou aguardar a equipe. <span style="font-size:10px;opacity:.6">IA</span>',
+    avb_agent_ex_label:'Mesma pergunta',
+    avb_agent_q:'oi, meu pedido 1234 ainda não chegou, tem previsão?',
+    avb_agent_a:'Oi, Marina! O pedido 1234 saiu ontem pelos Correios, código BR123456789BR, previsão de entrega quinta. Quer o link de rastreio? 📦',
+    avb_foot:'Com base na Central de Ajuda do WhatsApp Business (setembro de 2026). Recursos da Meta podem mudar.',
+    trust_label:'Confiança',
+    trust_h2:'Por que a Tyve não inventa',
+    trust_sub:'O maior medo de quem liga IA no WhatsApp é o robô falar besteira para o cliente. A Tyve foi construída ao contrário: primeiro o controle, depois a conversa.',
+    trust_1h:'Cada resposta tem uma fonte',
+    trust_1p:'Status de pedido vem da sua loja. Troca vem da regra que você definiu. Dúvida vem da FAQ que você escreveu. O painel mostra de onde saiu cada mensagem.',
+    trust_2h:'Dinheiro nunca é com o robô',
+    trust_2p:'Reembolso, cancelamento, cobrança e reclamação passam sempre para a sua equipe. O agente resolve o que dá para resolver e sabe parar no que não dá.',
+    trust_3h:'Verificações por dia',
+    trust_3p:'Todo dia, antes do seu horário de abrir, cada agente recebe uma conversa de teste e é conferido. Se algo sai do esperado, a gente sabe antes de você.',
+    trust_4h:'Zero "pode conter informações incorretas"',
+    trust_4p:'A IA da Meta avisa o seu cliente que pode errar. A Tyve não precisa: se não tem a informação, ela pergunta ou passa para a equipe. E o painel mostra quantas conversas ela resolveu sem ninguém.',
+    trust_quote:'A Gartner prevê que <b>4 em cada 10 projetos de agentes de IA serão cancelados até 2027</b> por custo, valor pouco claro ou falta de controle. <b>A Tyve entrega esse controle pronto, no plano, sem consultoria.</b>',
+    vs_label:'Comparativo', vs_h2:'Tyve vs as outras opções',
+    vs_callout:'<strong>Já usa um app de rastreio (Sak, Rastreio.net)?</strong> Ele avisa "saiu para entrega" — e fica mudo quando o cliente responde "mas cadê?". A Tyve responde quem pergunta, resolve a troca e gera o Pix, no mesmo fio da conversa.',
+    vs_th2:'App de automação', vs_th3:'Montar do zero',
+    vs_r1l:'Responde certo na primeira',
+    vs_r0l:'Quem responde às 22h de domingo',
+    vs_r0c1:'<span class="check">✓</span> O agente, e ele resolve',
+    vs_r0c2:'<span class="partial">Um menu</span>',
+    vs_r0c3:'<span class="cross">✗</span> Você',
+    vs_r1c1:'<span class="check">✓</span> Entende o que o cliente escreveu',
+    vs_r1c2:'<span class="cross">✗</span> Repete o menu',
+    vs_r1c3:'<span class="partial">Depende do que você previu</span>',
+    vs_r2l:'Configurado pro seu negócio',
+    vs_r2c1:'<span class="check">✓</span>',
+    vs_r2c2:'<span class="cross">✗</span> você configura',
+    vs_r2c3:'<span class="cross">✗</span> você faz tudo',
+    vs_r3l:'Sem virar técnico de TI',
+    vs_r3c1:'<span class="check">✓</span>', vs_r3c2:'<span class="cross">✗</span>', vs_r3c3:'<span class="cross">✗</span>',
+    vs_r4l:'A gente mantém. Você só usa.',
+    vs_r4c1:'<span class="check">✓</span>', vs_r4c2:'<span class="cross">✗</span>', vs_r4c3:'<span class="cross">✗</span>',
+    vs_r5l:'Funcionando na primeira semana',
+    vs_r5c1:'<span class="check">✓</span>',
+    vs_r5c2:'<span class="partial">Semanas de setup</span>',
+    vs_r5c3:'<span class="partial">Meses de setup</span>',
+    vs_r6l:'Suporte de quem conhece o seu agente',
+    vs_r6c1:'<span class="check">✓</span>',
+    vs_r6c2:'<span class="partial">Ticket / FAQ</span>',
+    vs_r6c3:'<span class="cross">✗</span>',
+    vs_r7l:'IA treinada no seu negócio',
+    vs_r7c1:'<span class="check">✓</span>', vs_r7c2:'<span class="cross">✗</span>',
+    vs_r7c3:'<span class="partial">Depende de você</span>',
+    tst_label:'Quem já usa',
+    tst_text:'"Metade do meu WhatsApp era \'cadê meu pedido?\'. Agora o agente puxa o rastreio na hora, resolve a troca de numeração sozinho e só me chama quando precisa. Sobrou tempo pra vender de verdade."',
+    tst_name:'Loja de calçados', tst_role:'Piloto e-commerce Tyve',
+    roi_label:'Calculadora de venda recuperada',
+    roi_h2:'Quanto sua loja recupera<br>com a Tyve?',
+    roi_sub:'Uma estimativa de quanto o pós-venda automático mantém em vendas na sua loja.',
+    roi_input_label:'Pedidos por mês', roi_ticket_label:'Ticket médio (R$)',
+    roi_hint1:'50', roi_hint2:'Loja média: ~300', roi_hint3:'2.000',
+    roi_c1_label:'"Cadê meu pedido?" por mês', roi_c1_detail:'~40% dos pedidos geram contato; o agente responde na hora, com rastreio real',
+    roi_c2_label:'Horas da equipe por mês', roi_c2_detail:'~7 min por contato; a R$ 20/h vira o custo abaixo',
+    roi_c3_label:'Custo + vendas salvas por mês', roi_c3_detail:'horas × R$ 20 + ~3% dos pedidos × ticket (estimativa)',
+    roi_footnote:'Estimativa ilustrativa. Cada loja varia conforme volume, nicho e ticket.',
+    roi_unit_days:' dias',
+    roi_bonus_pre:'São ', roi_bonus_mid:' e o plano indicado é o ', roi_bonus_post:' por mês entre horas da equipe e vendas salvas',
+    faq_label:'Dúvidas', faq_h2:'Perguntas frequentes',
+    faq_q1:'Meus clientes vão perceber que é um agente de IA? <span class="faq-icon">+</span>',
+    faq_a1:'Na maioria das vezes, não. O agente é configurado com o tom e linguagem do seu negócio — ele lê a mensagem, entende o contexto e responde de forma natural. Quando precisa de atenção personalizada, ele passa a conversa pra sua equipe com um resumo completo de tudo que rolou.',
+    faq_q2:'Quanto tempo até estar funcionando? <span class="faq-icon">+</span>',
+    faq_a2:'De 3 a 7 dias úteis. A gente faz uma reunião de descoberta, configura tudo, testa junto com você e só lança quando você aprovar. Sem surpresa.',
+    faq_q2b:'Preciso entender de automação ou configurar algo técnico? <span class="faq-icon">+</span>',
+    faq_a2b:'Não. Diferente de ferramentas de automação tradicionais, você não monta fluxo, não configura integração e não mexe em nada técnico. Você preenche um formulário simples contando sobre o seu negócio, horários e serviços, e a nossa equipe cuida de toda a configuração, dos testes e da ativação. Você só usa.',
+    faq_q3:'Preciso trocar meu número do WhatsApp? <span class="faq-icon">+</span>',
+    faq_a3:'Não. A Tyve funciona no número que você já usa, pela conexão oficial da Meta — poucos cliques, e o seu WhatsApp continua funcionando normal no celular.',
+    faq_q4:'E se o agente falar alguma coisa errada? <span class="faq-icon">+</span>',
+    faq_a4:'O agente só responde dentro do que a gente configurou — ele não inventa nada. Se aparecer algo fora do esperado, você manda mensagem e a gente ajusta em até 24h. Na primeira semana a gente monitora tudo de perto.',
+    faq_q5:'O que é o follow-up automático? <span class="faq-icon">+</span>',
+    faq_a5:'Quando um cliente conversa com o agente mas não finaliza a compra ou some sem resposta, o agente manda uma mensagem automática no dia seguinte perguntando se ficou alguma dúvida ou se conseguiu o que precisava. Tudo sem você precisar lembrar de ninguém. Como é uma mensagem que o seu negócio inicia, a Meta cobra cerca de R$ 0,04 por envio na conta do WhatsApp do negócio (a Tyve não cobra nada por ela). Você escolhe se quer ligar, no formulário de ativação ou depois, no painel.',
+    faq_q6:'O que é a pesquisa de satisfação automática? <span class="faq-icon">+</span>',
+    faq_a6:'Depois de cada atendimento, o agente manda uma mensagem perguntando se o cliente ficou satisfeito — numa escala simples de 0 a 10. Você vê essas notas no seu painel e sabe exatamente quais atendimentos foram bem e quais precisam de atenção. Tudo automático, sem você precisar perguntar nada. Como é uma mensagem que o seu negócio inicia, a Meta cobra cerca de R$ 0,04 por envio na conta do WhatsApp do negócio (a Tyve não cobra nada por ela). Você escolhe se quer ligar, no formulário de ativação ou depois, no painel.',
+    faq_q7:'Tem contrato longo? Posso cancelar? <span class="faq-icon">+</span>',
+    faq_a7:'Sem fidelidade. É mês a mês — cancela quando quiser, sem aviso prévio e sem multa. E você ainda tem 7 dias de garantia: se não gostar, devolvemos 100%.',
+    faq_q8:'Precisa de WhatsApp Business? <span class="faq-icon">+</span>',
+    faq_a8:'Sim — a Tyve funciona exclusivamente com WhatsApp Business, garantindo conformidade com os termos do WhatsApp.',
+    faq_q9:'A Tyve funciona com a minha loja (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span>',
+    faq_a9:'Sim. A Tyve integra com Shopify, Nuvemshop, Bling, WooCommerce e Tiny. A conexão é em poucos cliques, com a sua autorização — você não troca de sistema nem instala nada complicado.',
+    faq_q10:'A Tyve consulta o status do meu pedido de verdade? <span class="faq-icon">+</span>',
+    faq_a10:'Sim, em todos os planos. Ela puxa o status e o código de rastreio direto da sua loja e responde na hora — não inventa nem chuta. Quando o pedido já tem rastreio, manda o link junto.',
+    faq_q12:'WhatsApp Business already has free AI. Why would I need Tyve? <span class="faq-icon">+</span>', faq_a12:'Meta\'s AI answers from the catalog, the website and what you taught it. It cannot see your store\'s orders, handle exchanges, generate return labels or send payment links. Tyve does all of that connected to your store (Nuvemshop, Shopify, Bling, Tiny), with your team still on the app and WhatsApp Web. And every message from Meta\'s AI carries a notice that it "may contain inaccurate information"; Tyve answers from the source or hands over to the team.',
+    faq_q12:'O WhatsApp Business já tem IA grátis. Por que eu precisaria da Tyve? <span class="faq-icon">+</span>', faq_a12:'A IA da Meta responde com o catálogo, o site e o que você ensinou. Ela não enxerga os pedidos da sua loja, não faz troca, não gera etiqueta de devolução nem manda Pix. A Tyve faz tudo isso conectada à sua loja (Nuvemshop, Shopify, Bling, Tiny), com a sua equipe continuando no app e no WhatsApp Web. E cada mensagem da IA da Meta vai com o aviso de que "pode conter informações incorretas"; a Tyve responde da fonte ou passa para a equipe.',
+    faq_q11:'A Tyve faz a troca sozinha? <span class="faq-icon">+</span>',
+    faq_a11:'Nos planos Cresce e Escala, sim: a Tyve resolve a troca de numeração no WhatsApp — confere o pedido, a disponibilidade da nova numeração e gera o código de devolução. Casos fora do padrão (defeito, fora do prazo, sem estoque) vão para a sua equipe com todo o contexto pronto.',
+    faq_q12:'O dinheiro do Pix cai na minha conta? <span class="faq-icon">+</span>',
+    faq_a12:'Sim. No plano Escala, a Tyve gera o Pix do pedido dentro da conversa e o valor vai direto para a conta da sua loja. A Tyve não fica no meio do pagamento.',
+    faq_q14:'O follow-up automático tem custo? <span class="faq-icon">+</span>',
+    faq_a14:'<b>Pela Tyve, zero.</b> O follow-up está incluído no seu plano e a Tyve não cobra nada a mais por ele.<br><br>O que existe é a tarifa da <b>Meta</b>: até 30/09/2026, mensagens dentro da janela de 24 horas depois da última mensagem do seu cliente são gratuitas, e só as enviadas fora dela custam centavos. <b>A partir de 01/10/2026 a Meta passa a cobrar toda mensagem que o seu número envia</b>, inclusive as respostas do agente e o follow-up: cerca de <b>R$ 0,035 por mensagem</b>.<br><br><b>Essa cobrança não passa pela Tyve</b> — vai direto da Meta pra você, no cartão cadastrado na conta de WhatsApp Business da sua loja, a mesma que você conecta na ativação. A Tyve não revende mensagem, não põe margem nisso, e mostra no painel a prévia do que a Meta vai cobrar no mês.',
+    faq_q15:'Quanto vou pagar para a Meta por mês? <span class="faq-icon">+</span>',
+    faq_a15:'<b>Depende de quantas mensagens o seu número envia.</b> A partir de 01/10/2026 a Meta cobra cerca de <b>R$ 0,035</b> por mensagem enviada (respostas do agente, follow-up, avisos de pedido), na conta de WhatsApp Business da sua loja. Na nossa medição, o agente envia em média <b>4 a 5 mensagens por contato</b>.<br><br>Exemplos: 250 contatos/mês ≈ <b>R$ 40</b> · 600 contatos ≈ <b>R$ 95</b> · 1.000 contatos ≈ <b>R$ 155</b> · 1.200 contatos ≈ <b>R$ 185</b>.<br><br>Conversa aberta por um anúncio Click-to-WhatsApp é <b>grátis por 72 horas</b> (a Meta não cobra), então tráfego pago via anúncio reduz essa conta. O painel da Tyve mostra a prévia do mês, e a Tyve não cobra nada por mensagem.',
+    faq_q13:'Vocês têm acesso aos dados dos meus clientes? É seguro? <span class="faq-icon">+</span>',
+    faq_a13:'O acesso é concedido por você, por uma conexão oficial e segura (OAuth), apenas para leitura do que é necessário (os pedidos) e seguindo a LGPD. Você pode revogar o acesso quando quiser.',
+    cta_h2:'Chega de mensagem sem resposta. Nosso agente resolve na hora!',
+    cta_p:'Em 20 minutinhos a gente mostra ao vivo como fica na sua loja,<br/>sem compromisso nenhum.',
+    cta_btn:'Agendar demo grátis',
+    cta_garantia:'Garantia de 7 dias — não gostou, devolvemos 100%.',
+    footer_terms:'Termos de Serviço', footer_privacy:'Privacidade',
+    footer_copy:'© 2026 Tyve. Todos os direitos reservados.',
+    footer_disclaimer:'Tyve não é afiliado a Meta, Facebook ou WhatsApp. Integrado com WhatsApp Cloud API oficial.',
+    notif_sb:'Notificações', notif_urg:'🚨 URGENTE — Tyve',
+    notif_wa:'📱 WhatsApp: ', notif_name:'👤 Nome: ',
+    notif_what:'💬 O que o cliente disse:', notif_msg:'Preciso falar com alguém urgente',
+    notif_reply:'Responda diretamente no WhatsApp do cliente.',
+    dm_hdr:'📊 Painel Tyve — Março 2026', dm_atend:'Atendimentos',
+    dm_enc:'Encaminhados', dm_followup:'Follow-ups', dm_res:'Resolvidos pelo agente',
+    dm_week:'Atendimentos por semana'
+  },
+  en: {
+    nav_how:'How it works', nav_segments:'Segments', nav_faq:'FAQ',
+    nav_plans:'Plans & Pricing', nav_demo:'⚡ See live demo',
+    hero_badge:'Official WhatsApp Cloud API',
+    hero_h1:'Support that resolves,<br/><span class="accent">24 hours a day</span> on your WhatsApp.',
+    hero_sub:'No more "where is my order?" left unanswered. Our agent resolves it on the spot!<br/>Orders, exchanges, questions — and only calls you when needed.',
+    hero_br:'🇧🇷 Made in Brazil, support in Portuguese',
+    hero_cta:'⚡ See live demo',
+    hero_cta2:'See plans →',
+    showcase_name:'Luma — Street Style Store', showcase_online:'online',
+    chat_m1_user:'Hi! Where is my order? I bought last week and it has not arrived',
+    chat_m1_bot:'Hi! Send me your order number or your ID and I will check the status right now.',
+    chat_m1_bot2:'You can send it right here and I will check it.',
+    chat_m2_user:'Order 1234',
+    chat_m2_bot:'Found it! Your order #1234 shipped today. Tracking: BR123456789BR — arriving tomorrow. Want the tracking link?',
+    chat_m3_user:'Yes! And if it does not fit, can I exchange the size?',
+    prob_label:'The problem',
+    prob_h2:'How much revenue does your store lose every day<br/>to "where is my order?"',
+    prob_sub:'Your team spends the day answering orders, exchanges and questions by hand, and customers left waiting buy from the competitor.',
+    prob_c1h:'Order question at 10pm, nobody around', prob_c1p:'A customer asks about their order at night. By morning they have filed a complaint or asked for a refund.',
+    prob_c2h:'"Where is my order?" all day long', prob_c2p:'Half of the store WhatsApp is tracking. Your team copies and pastes links all day.',
+    prob_c3h:'Exchanges became a manual soap opera', prob_c3p:'Check the order, check size stock, generate the return label. Each exchange stalls the sale again.',
+    prob_c4h:'Shipping and sizing left unanswered', prob_c4p:'The customer asks about shipping or sizing and gets no quick reply. They buy from the store next door.',
+    how_label:'How it works',
+    how_h2:'You don\'t have to do anything.<br/>We take care of everything.',
+    how_s1badge:'Step 1', how_s1h:'You tell us about your store and connect',
+    how_s1m1:'My store sells sneakers, I use Shopify',
+    how_s1m2:'Perfect! Connect in 2 clicks and I already read your orders, shipping and exchange policy ✅',
+    how_s2badge:'Step 2', how_s2h:'The agent answers tracking, resolves exchanges and clears doubts — 24/7',
+    how_s2m1:'Good evening, is my order delayed?',
+    how_s2m2:'Good evening! Let me see... it shipped today 🚚 tracking BR123, arriving tomorrow 😊',
+    how_s2m3:'And the Pix for the second item?', how_s2m4:'Generated it here 💸 just pay and I confirm on the spot',
+    how_s3badge:'Step 3', how_s3h:'You only get what needs you',
+    how_s3m1:'🔁 EXCHANGE — Street Style Store',
+    how_s3m2:'Customer: Ana. Order #1234, sneakers 38 → 39. Out of standard stock. Summary ready.',
+    tarja_text:'There are tools for those who want to learn how to build.<br/>Tyve was built to resolve!',
+    fw_label:'Who it\'s for',
+    fw_h2:'For businesses that really sell<br/>and treat after-sales as part of the sale.',
+    fw_c1:'Fashion & footwear', fw_c2:'Cosmetics & beauty', fw_c3:'Supplements & health',
+    fw_c4:'Electronics & accessories', fw_c5:'Online pet shop', fw_c6:'Home & decor',
+    fw_c7:'Lingerie & fitness', fw_more:'Learn more →',
+    biz_servicos:'Services & Local business', biz_ecommerce:'🛒 E-commerce / Online store',
+    plans_label:'Plans', plans_h2:'Straightforward pricing. Real results.',
+    plans_sub:'Less than a third of the cost of a support rep, replying 24/7, every day, no vacations.',
+    plans_trust:'⚡ Live in 3–7 days · 🔓 No lock-in · ✓ 7-day guarantee',
+    plans_popular:'MOST POPULAR', plans_volume:'MORE VOLUME', per_month:'/mo',
+    plan_atende:'Atende', plan_cresce:'Cresce', plan_escala:'Escala',
+    cycle_monthly:'Monthly', cycle_annual:'Annual', cycle_badge:'2 months free',
+    ecom_a_fw:'⭐ Live order lookup & tracking (Shopify, Nuvemshop, Bling, Woo and Tiny)',
+    demo_note:'This is a real demo \u2014 every reply is generated live by Tyve\u2019s AI.',
+    ecom_a_tag:'Up to 250 contacts served/month', ecom_c_tag:'Up to 600 contacts served/month', ecom_e_tag:'Up to 1,200 contacts/month',
+    ecom_a_f1:'1 WhatsApp number', ecom_a_f2:'Flow configured for your store', ecom_a_f3:'Automatic replies 24/7',
+    ecom_a_f4:'Understands text, voice and image messages 🎙️📷',
+    ecom_a_f5:'E-commerce FAQ: shipping, delivery time, exchanges, sizing, payment',
+    ecom_a_f6:'Size chart and catalog on WhatsApp (PDF) 👟',
+    ecom_a_f7:'Screening and handoff with a summary', ecom_a_fp:'Results dashboard via link', ecom_a_f8:'Detects frustrated customers and prioritizes them ⚠️',
+    ecom_a_f9:'1 adjustment per month · Support (reply within 8h)',
+    ecom_c_ftroca:'⭐ Automatic size exchange — the customer resolves it on WhatsApp 👟🔁',
+    ecom_c_f1:'Automatic next-day follow-up — re-engages shoppers who chatted and went quiet <a href="#nota-meta" class="meta-ast">*</a>',
+    serv_meta_note:'* <b>Messages your business initiates</b> (follow-up, satisfaction survey, appointment reminder) are billed by <b>Meta</b> directly to the business\'s WhatsApp account: about <b>R$ 0.04 per message</b> in the utility category, usually under R$ 30 a month. Tyve charges nothing for them. From <b>Oct 1, 2026</b> Meta also bills the agent\'s replies inside the conversation: about <b>R$ 0.035 per message</b>, on the same account (1,000 contacts/month ≈ R$ 155). Tyve charges nothing per message and the dashboard shows a monthly preview of this cost.',
+    nav_calc:'Calculator',
+    roi_full:'See the full math: team hours, monthly cost and the right plan for your store →',
+    plans_calc:'🧮 How much does "where is my order" cost your store today? Calculate in 30 seconds',
+    faq_q8b:'What does Meta ask for when connecting the number? Do I need to verify my business? <span class="faq-icon">+</span>',
+    faq_a8b:'The connection happens in an official Meta window and takes about 2 minutes, but it asks for three things worth having ready: <b>(1)</b> a <b>Meta Business Manager</b> (business.facebook.com) in your company\'s name, with you as admin; <b>(2)</b> login with an existing <b>personal Facebook account</b> that is an admin of that Business Manager; <b>(3)</b> a Facebook business page and a website showing the company name, tax ID and address. <b>Business verification</b> is not required to activate, but without it Meta caps the number at 250 business-initiated conversations per day and won\'t grant the badge. We guide you through each step before you connect.',
+    ecom_c_fship:'📦 Automatic "order shipped" notice with tracking <a href="#nota-meta" class="meta-ast">*</a>', ecom_e_fship:'📦 Order confirmed, shipped and delivered notices, in your store\'s tone <a href="#nota-meta" class="meta-ast">*</a>',
+    ecom_meta_note:'* <b>Store-initiated messages</b> (order notices, follow-up, satisfaction survey) are billed by <b>Meta</b> directly to the store\'s WhatsApp account: about <b>R$ 0.04 per message</b> in the utility category (300 shipping notices a month ≈ R$ 12). Tyve charges nothing for them and you can switch each one on or off. From <b>Oct 1, 2026</b> Meta also bills the agent\'s replies inside the conversation: about <b>R$ 0.035 per message</b>, on the same account (1,000 contacts/month ≈ R$ 155). Tyve charges nothing per message and the dashboard shows a monthly preview of this cost.',
+    ecom_c_f2:'Automatic satisfaction survey (NPS) <a href="#nota-meta" class="meta-ast">*</a>', ecom_c_f3:'The agent sends the payment link and guides re-issues',
+    ecom_c_f4:'Weekly summary by email', ecom_c_f5:'1 adjustment per week', ecom_c_f6:'Priority support (reply within 4h)',
+    ecom_e_f1:'⭐ Automatic size exchange \u2014 the customer resolves it on WhatsApp 👟🔁',
+    ecom_e_f2:'⭐ Pix generated inside the conversation', ecom_e_f3:'Results dashboard + monthly PDF report',
+    ecom_e_f4:'Multiple flows and segmentation', ecom_e_f5:'Monthly meeting · Dedicated manager (reply within 2h)',
+    ecom_cta_a:'I want Atende', ecom_cta_c:'I want Cresce', ecom_cta_e:'I want Escala',
+    ecom_enterprise:'Over your plan limit? Service never stops \u2014 <b>R$ 0.80 per extra contact</b>, prorated. Prefer to prepay? <b>100-contact pack for R$ 72</b>. Very high, recurring volume? Talk to us: there is a tailor-made <b>Escala Enterprise</b>.',
+    atende_tagline:'Up to 200 contacts/month',
+    atende_f1:'1 WhatsApp number', atende_f2:'Flow configured for your business',
+    atende_f3:'Automatic responses 24/7', atende_f4:'Understands text, voice and image messages 🎙️📷',
+    atende_f5:'Lead triage and qualification', atende_f6:'Alert with full conversation summary',
+    atende_f7:'Detects frustrated customers and alerts with priority ⚠️',
+    atende_f8:'Automatic reminder if customer waits 12h+ without a reply',
+    atende_f9:'1 adjustment per month', atende_f10:'WhatsApp support (SLA 8h)',
+    atende_cta:'Subscribe Atende',
+    cresce_tagline:'Up to 500 contacts/month', cresce_all:'Everything in Atende',
+    cresce_f1:'Automatic next-day follow-up <a href="#nota-meta-serv" class="meta-ast">*</a>', cresce_f2:'Automatic satisfaction survey (NPS) <a href="#nota-meta-serv" class="meta-ast">*</a>',
+    cresce_f3:'1 adjustment per week', cresce_f4:'Weekly email summary',
+    cresce_f5:'Agent sends your booking link', cresce_f6:'Priority support (SLA 4h)',
+    cresce_cta:'Subscribe Cresce',
+    escala_tagline:'Up to 1,000 contacts/month', escala_all:'Everything in Cresce',
+    escala_f1:'', escala_f2:'',
+    escala_f3:'Native WhatsApp scheduling', escala_f4:'Multiple flows and segments',
+    escala_f5:'Monthly PDF report with full analysis', escala_f6:'Monthly results meeting',
+    escala_f7:'Dedicated account manager (SLA 2h)', escala_cta:'Subscribe Escala',
+    addon_title:'Add-on: Automatic Scheduling via WhatsApp',
+    addon_desc:'The customer picks a time slot <strong>directly in WhatsApp</strong>. The agent checks your calendar, creates the event and sends a D-1 reminder. Google Calendar integration.',
+    addon_note1:'For Atende and Cresce', addon_note2:'✓ Included in Escala', addon_cta:'Add on',
+    addon_cta_atende:'Atende + Scheduling', addon_cta_cresce:'Cresce + Scheduling',
+
+    nd_label:'In practice', nd_h2:'See how it works in your day-to-day',
+    tabs_t0:'Transfer alert', tabs_t1:'Results dashboard', tabs_t2:'Automatic follow-up', tabs_t3:'Order lookup',
+    p0_badge:'Included in all plans',
+    p0_h3:'You get an alert when the agent needs you',
+    p0_desc:'When a customer has an urgent need or a question only a human can solve, Tyve sends you a WhatsApp notification instantly — with the customer\'s name and a conversation summary. You jump in directly, no scrolling needed.',
+    p1_badge:'Included in every plan', atende_f8b:'Results dashboard with link',
+    p1_h3:'A results dashboard you can access from anywhere',
+    p1_desc:'See how many sessions the agent handled, how many times it needed you, how many follow-ups were sent. Accessible by link, no install needed.',
+    p2_badge:'Cresce and Escala',
+    p2_h3:'Automatic follow-up for customers who didn\'t return',
+    p2_desc:'After the agent hands off a customer, it sends an automatic message the next day to check if they got what they needed. You don\'t have to do anything.',
+    p2_bot1:'Hi, Renato! Just checking in to see if you got what you needed 😊',
+    p2_client:'Yes! Already booked, thanks!',
+    p2_bot2:'Great! We\'re here whenever you need us. Bye! 👋',
+    p3_badge:'Included in every plan',
+    p3_h3:'"Where is my order?" answered instantly, with real tracking',
+    p3_desc:'The agent checks the order status and tracking straight from your store (Shopify, Nuvemshop, Bling, Woo, Tiny) and answers in the chat — no making things up, no "let me check and get back to you".',
+    p3_sched_hdr:'📦 Order #1234 status', p3_sched_btn:'Track delivery',
+    avb_label:'The question everyone asks',
+    avb_h2:'WhatsApp already has free AI.<br>Why Tyve?',
+    avb_sub:'Meta\'s AI is fine for hours, address and catalog. Tyve starts where it stops: the order, the exchange, the return label and the payment link.',
+    avb_badge_bot:'Meta\'s AI in the app',
+    avb_badge_agent:'Tyve Agent',
+    avb_bot_f1:'Sees no orders at all: answers from the catalog, the website and what you taught it',
+    avb_bot_f2:'Exchange, return and label: "contact the store"',
+    avb_bot_f3:'No payment link, no shipping notice',
+    avb_bot_f4:'Learns on its own from your last 6 months of chats, including what was said wrong',
+    avb_bot_f5:'Your customer sees an "AI" tag and a notice that the reply "may contain inaccurate information"',
+    avb_bot_f6:'Turning it on unlinks your devices, and WhatsApp for Windows doesn\'t come back',
+    avb_agent_f1:'Looks up the order in your store (Nuvemshop, Shopify, Bling, Tiny) and replies with status and tracking',
+    avb_agent_f2:'Handles size exchanges and generates the return label (Correios or Melhor Envio)',
+    avb_agent_f3:'Sends the payment link and the shipping notice',
+    avb_agent_f4:'Answers from the source: the real order, the exchange rule you set, the FAQ you wrote',
+    avb_agent_f5:'Speaks with your store\'s name and tone, no "may be wrong" tag',
+    avb_agent_f6:'Your team keeps using the app and WhatsApp Web, same number',
+    avb_bot_ex_label:'Illustrative example',
+    avb_bot_q:'hi, my order 1234 hasn\'t arrived yet, any ETA?',
+    avb_bot_a:'I don\'t have access to order status. You can check on the store\'s website or wait for the team. <span style="font-size:10px;opacity:.6">AI</span>',
+    avb_agent_ex_label:'Same question',
+    avb_agent_q:'hi, my order 1234 hasn\'t arrived yet, any ETA?',
+    avb_agent_a:'Hi Marina! Order 1234 shipped yesterday via Correios, tracking BR123456789BR, expected Thursday. Want the tracking link? 📦',
+    avb_foot:'Based on the WhatsApp Business Help Center (September 2026). Meta\'s features may change.',
+    trust_label:'Trust',
+    trust_h2:'Why Tyve doesn\'t make things up',
+    trust_sub:'The biggest fear of anyone putting AI on WhatsApp is the bot talking nonsense to a customer. Tyve was built the other way around: control first, conversation second.',
+    trust_1h:'Every answer has a source',
+    trust_1p:'Order status comes from your store. Exchanges come from the rule you set. Questions come from the FAQ you wrote. The dashboard shows where each message came from.',
+    trust_2h:'Money is never up to the bot',
+    trust_2p:'Refunds, cancellations, billing and complaints always go to your team. The agent solves what can be solved and knows when to stop.',
+    trust_3h:'Checks per day',
+    trust_3p:'Every day, before you open, each agent gets a test conversation and is verified. If something is off, we know before you do.',
+    trust_4h:'Zero "may contain inaccurate information"',
+    trust_4p:'Meta\'s AI warns your customer it may be wrong. Tyve doesn\'t need to: without the information, it asks or hands over to the team. And the dashboard shows how many conversations it solved on its own.',
+    trust_quote:'Gartner predicts that <b>4 in 10 AI agent projects will be cancelled by 2027</b> due to cost, unclear value or lack of control. <b>Tyve ships that control built in, on every plan, no consulting.</b>',
+    vs_label:'Comparison', vs_h2:'Tyve vs the alternatives',
+    vs_callout:'<strong>Already using a tracking app (Sak, Rastreio.net)?</strong> It fires "out for delivery" — and goes silent when the customer replies "but where is it?". Tyve answers the person, resolves the exchange and generates the Pix, in the same conversation thread.',
+    vs_th2:'Automation app', vs_th3:'Build from scratch',
+    vs_r1l:'Gets it right the first time',
+    vs_r0l:'Who answers at 10pm on a Sunday',
+    vs_r0c1:'<span class="check">✓</span> The agent, and it resolves it',
+    vs_r0c2:'<span class="partial">A menu</span>',
+    vs_r0c3:'<span class="cross">✗</span> You',
+    vs_r1c1:'<span class="check">✓</span> Understands what the customer wrote',
+    vs_r1c2:'<span class="cross">✗</span> Repeats the menu',
+    vs_r1c3:'<span class="partial">Depends on what you anticipated</span>',
+    vs_r2l:'Configured for your business',
+    vs_r2c1:'<span class="check">✓</span>',
+    vs_r2c2:'<span class="cross">✗</span> you configure it',
+    vs_r2c3:'<span class="cross">✗</span> you do everything',
+    vs_r3l:'No IT skills needed',
+    vs_r3c1:'<span class="check">✓</span>', vs_r3c2:'<span class="cross">✗</span>', vs_r3c3:'<span class="cross">✗</span>',
+    vs_r4l:'We maintain it. You just use it.',
+    vs_r4c1:'<span class="check">✓</span>', vs_r4c2:'<span class="cross">✗</span>', vs_r4c3:'<span class="cross">✗</span>',
+    vs_r5l:'Up and running in the first week',
+    vs_r5c1:'<span class="check">✓</span>',
+    vs_r5c2:'<span class="partial">Weeks of setup</span>',
+    vs_r5c3:'<span class="partial">Months of setup</span>',
+    vs_r6l:'Support from someone who knows your agent',
+    vs_r6c1:'<span class="check">✓</span>',
+    vs_r6c2:'<span class="partial">Ticket / FAQ</span>',
+    vs_r6c3:'<span class="cross">✗</span>',
+    vs_r7l:'AI trained on your business',
+    vs_r7c1:'<span class="check">✓</span>', vs_r7c2:'<span class="cross">✗</span>',
+    vs_r7c3:'<span class="partial">Depends on you</span>',
+    tst_label:'Who\'s using it',
+    tst_text:'"Half my WhatsApp was where is my order. Now the agent pulls tracking instantly, resolves size exchanges on its own and only calls me when needed. I got time back to actually sell."',
+    tst_name:'Footwear store', tst_role:'Tyve e-commerce pilot',
+    roi_label:'Recovered-sales calculator',
+    roi_h2:'How much your store recovers<br>with Tyve?',
+    roi_sub:'An estimate of how much automatic post-sale keeps in sales at your store.',
+    roi_input_label:'Orders per month', roi_ticket_label:'Average ticket (R$)',
+    roi_hint1:'50', roi_hint2:'Average store: ~300', roi_hint3:'2,000',
+    roi_c1_label:'"Where is my order?" per month', roi_c1_detail:'~40% of orders generate a contact; the agent answers instantly, with real tracking',
+    roi_c2_label:'Team hours per month', roi_c2_detail:'~7 min per contact; at R$ 20/h it becomes the cost below',
+    roi_c3_label:'Cost + saved sales per month', roi_c3_detail:'hours × R$ 20 + ~3% of orders × ticket (estimate)',
+    roi_footnote:'Illustrative estimate. Each store varies by volume, niche and ticket.',
+    roi_unit_days:' days',
+    roi_bonus_pre:'That is ', roi_bonus_mid:' and the suggested plan is ', roi_bonus_post:' per month between team hours and saved sales',
+    faq_label:'Questions', faq_h2:'Frequently asked questions',
+    faq_q1:'Will my customers notice it\'s an AI agent? <span class="faq-icon">+</span>',
+    faq_a1:'Most of the time, no. The agent is configured with your business\'s tone and language — it reads the message, understands the context and responds naturally. When personalized attention is needed, it hands the conversation to your team with a complete summary of everything that happened.',
+    faq_q2:'How long until it\'s up and running? <span class="faq-icon">+</span>',
+    faq_a2:'3 to 7 business days. We have a discovery call, set everything up, test it with you and only launch when you approve. No surprises.',
+    faq_q2b:'Do I need to understand automation or configure anything technical? <span class="faq-icon">+</span>',
+    faq_a2b:'No. Unlike traditional automation tools, you don\'t build flows, configure integrations, or touch anything technical. You fill out a simple form about your business, hours and services, and our team handles all the setup, testing and activation. You just use it.',
+    faq_q3:'Do I need to change my WhatsApp number? <span class="faq-icon">+</span>',
+    faq_a3:'No. Tyve works with the number you already use, through the official Meta connection — a few clicks, and your WhatsApp keeps working normally on your phone.',
+    faq_q4:'What if the agent says something wrong? <span class="faq-icon">+</span>',
+    faq_a4:'The agent only responds within what we\'ve configured — it doesn\'t make things up. If something unexpected appears, you message us and we adjust within 24h. In the first week we monitor everything closely.',
+    faq_q5:'What is automatic follow-up? <span class="faq-icon">+</span>',
+    faq_a5:'When a customer talks to the agent but does not complete the purchase or goes quiet, the agent sends an automatic message the next day asking if they have any questions. All without you having to remember anyone. Because your business initiates this message, Meta charges about R$ 0.04 per send to the business WhatsApp account (Tyve charges nothing for it). You choose whether to turn it on, in the activation form or later in the dashboard.',
+    faq_q6:'What is the automatic satisfaction survey? <span class="faq-icon">+</span>',
+    faq_a6:'After each session, the agent sends a message asking if the customer was satisfied — on a simple scale from 0 to 10. You see these scores in your dashboard and know exactly which sessions went well and which need attention. All automatic, without you having to ask anything. Because your business initiates this message, Meta charges about R$ 0.04 per send to the business WhatsApp account (Tyve charges nothing for it). You choose whether to turn it on, in the activation form or later in the dashboard.',
+    faq_q7:'Is there a long contract? Can I cancel? <span class="faq-icon">+</span>',
+    faq_a7:'No lock-in. It is month-to-month — cancel anytime, no notice period, no penalty. Plus a 7-day guarantee: if you are not happy, we refund 100%.',
+    faq_q8:'Do I need WhatsApp Business? <span class="faq-icon">+</span>',
+    faq_a8:'Yes — Tyve works exclusively with WhatsApp Business, ensuring compliance with WhatsApp\'s terms.',
+    faq_q9:'Does Tyve work with my store (Shopify, Nuvemshop, Bling)? <span class="faq-icon">+</span>',
+    faq_a9:'Yes. Tyve integrates with Shopify, Nuvemshop, Bling, WooCommerce and Tiny. Connecting takes a few clicks with your authorization — no system change, nothing complicated to install.',
+    faq_q10:'Does Tyve really check my order status? <span class="faq-icon">+</span>',
+    faq_a10:'Yes, on every plan. It pulls the status and tracking code straight from your store and answers instantly — it does not make things up. When the order has tracking, it sends the link too.',
+    faq_q11:'Does Tyve handle exchanges on its own? <span class="faq-icon">+</span>',
+    faq_a11:'On the Cresce and Escala plans, yes: Tyve handles size exchanges in WhatsApp — it checks the order, the new size availability and generates the return code. Edge cases (defects, out of window, out of stock) go to your team with full context ready.',
+    faq_q12:'Does the Pix money go to my account? <span class="faq-icon">+</span>',
+    faq_a12:'Yes. On the Escala plan, Tyve generates the order Pix inside the conversation and the money goes straight to your store account. Tyve is not in the middle of the payment.',
+    faq_q14:'Does the automatic follow-up cost anything? <span class="faq-icon">+</span>',
+    faq_a14:'<b>From Tyve, zero.</b> The follow-up is included in your plan and Tyve charges nothing extra for it.<br><br>What exists is <b>Meta\'s</b> fee: until Sep 30, 2026, messages inside the 24-hour window after your customer\'s last message are free, and only those sent outside it cost a few cents. <b>From Oct 1, 2026 Meta bills every message your number sends</b>, including the agent\'s replies and the follow-up: about <b>R$ 0.035 per message</b>.<br><br><b>That charge does not go through Tyve</b> — it goes straight from Meta to you, on the card registered in your store\'s WhatsApp Business account, the same one you connect at activation. Tyve does not resell messages, adds no margin, and shows a monthly preview of Meta\'s charge in the dashboard.',
+    faq_q15:'How much will I pay Meta per month? <span class="faq-icon">+</span>',
+    faq_a15:'<b>It depends on how many messages your number sends.</b> From Oct 1, 2026 Meta bills about <b>R$ 0.035</b> per message sent (agent replies, follow-up, order notices), on your store\'s WhatsApp Business account. In our measurements the agent sends <b>4 to 5 messages per contact</b> on average.<br><br>Examples: 250 contacts/month ≈ <b>R$ 40</b> · 600 contacts ≈ <b>R$ 95</b> · 1,000 contacts ≈ <b>R$ 155</b> · 1,200 contacts ≈ <b>R$ 185</b>.<br><br>A conversation opened from a Click-to-WhatsApp ad is <b>free for 72 hours</b> (Meta does not charge), so paid traffic through ads lowers this bill. The Tyve dashboard shows the month\'s preview, and Tyve charges nothing per message.',
+    faq_q13:'Do you have access to my customers data? Is it safe? <span class="faq-icon">+</span>',
+    faq_a13:'Access is granted by you through an official, secure connection (OAuth), read-only for what is needed (orders) and compliant with LGPD. You can revoke access whenever you want.',
+    cta_h2:'Stop spending your day<br/>answering "where is my order?"',
+    cta_p:'In 20 minutes we\'ll show you live how it looks in your store,<br/>with no commitment whatsoever.',
+    cta_btn:'Book a demo',
+    cta_garantia:'7-day guarantee — not happy, 100% refunded.',
+    footer_terms:'Terms of Service', footer_privacy:'Privacy',
+    footer_copy:'© 2026 Tyve. All rights reserved.',
+    footer_disclaimer:'Tyve is not affiliated with Meta, Facebook or WhatsApp. Integrated with the official WhatsApp Cloud API.',
+    notif_sb:'Notifications', notif_urg:'🚨 URGENT — Tyve',
+    notif_wa:'📱 WhatsApp: ', notif_name:'👤 Name: ',
+    notif_what:'💬 What the customer said:', notif_msg:'I need to speak with someone urgently',
+    notif_reply:'Reply directly on the customer\'s WhatsApp.',
+    dm_hdr:'📊 Tyve Dashboard — March 2026', dm_atend:'Sessions',
+    dm_enc:'Handed off', dm_followup:'Follow-ups', dm_res:'Resolved by agent',
+    dm_week:'Sessions per week'
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  try { localStorage.setItem('tyve-lang', lang); } catch(e) {}
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+
+  /* textContent swap */
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+
+  /* innerHTML swap */
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-html');
+    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+
+  /* currency swap */
+  var isEN = lang === 'en';
+  document.querySelectorAll('[data-currency]').forEach(function(el) {
+    el.textContent = isEN ? '$' : 'R$';
+  });
+  document.querySelectorAll('[data-brl]').forEach(function(el) {
+    var brl = parseInt(el.getAttribute('data-brl'));
+    el.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
+  });
+  document.querySelectorAll('[data-addon-brl]').forEach(function(el) {
+    var brl = parseInt(el.getAttribute('data-addon-brl'));
+    el.textContent = isEN ? '+$' + USD_PRICES[brl] : '+R$' + formatBRL(brl);
+  });
+
+  /* flag opacity */
+  var flags = document.querySelectorAll('.nav-flags span');
+  if (flags[0]) flags[0].style.opacity = lang === 'pt' ? '1' : '0.45';
+  if (flags[1]) flags[1].style.opacity = lang === 'en' ? '1' : '0.45';
+
+  /* meta */
+  if (lang === 'en') {
+    document.title = 'Tyve — Your store\'s post-sale solved on WhatsApp';
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', 'Tyve answers "where is my order?" on its own, with real tracking from your store (Shopify, Nuvemshop, Bling), handles size exchanges and generates Pix in the chat. 24/7, made in Brazil.');
+    var ol = document.querySelector('meta[property="og:locale"]');
+    if (ol) ol.setAttribute('content', 'en_US');
+  } else {
+    document.title = 'Tyve — O pós-venda da sua loja resolvido no WhatsApp';
+    var md2 = document.querySelector('meta[name="description"]');
+    if (md2) md2.setAttribute('content', 'A Tyve responde \'cadê meu pedido?\' sozinha, com rastreio real da sua loja (Shopify, Nuvemshop, Bling), resolve troca de numeração e gera Pix na conversa. 24h, feito no Brasil.');
+    var ol2 = document.querySelector('meta[property="og:locale"]');
+    if (ol2) ol2.setAttribute('content', 'pt_BR');
+  }
+
+  /* re-run ROI with updated units */
+  if (rs) calcROI();
+
+  /* re-aplica ciclo Mensal/Anual após troca de idioma/moeda */
+  if (typeof renderCycle === 'function') renderCycle();
+}
+
+/* ─── SLIDER ─────────────────────────────────────────────── */
+function showSlide(i) {
+  document.querySelectorAll('.slider-panel').forEach(function(p,j){ p.classList.toggle('active',j===i); });
+  document.querySelectorAll('.slider-tab').forEach(function(t,j){ t.classList.toggle('active',j===i); });
+}
+
+/* ─── ROI ────────────────────────────────────────────────── */
+var rs = document.getElementById('roiSlider');
+var rt = document.getElementById('roiTicket');
+function calcROI() {
+  // Mesma conta de /calculadora: 40% dos pedidos geram contato, 7 min por contato, R$20/h, vendas salvas = 3% x ticket
+  var ped = parseInt(rs.value);
+  var tk = rt ? parseInt(rt.value) : 150;
+  document.getElementById('roiValue').textContent = ped;
+  if (rt) document.getElementById('roiTicketValue').textContent = tk;
+  var contatos = Math.round(ped*0.4);
+  var horas = contatos*7/60;
+  var custo = horas*20;
+  var salvas = Math.round(ped*0.03)*tk;
+  var total = Math.round(custo + salvas);
+  var plano = contatos <= 250 ? 'Atende' : contatos <= 600 ? 'Cresce' : contatos <= 1200 ? 'Escala' : 'Escala Enterprise';
+  var L = T[currentLang];
+  var fmt = 'R$' + total.toLocaleString('pt-BR');
+  document.getElementById('roiManual').textContent = contatos.toLocaleString('pt-BR');
+  document.getElementById('roiSaved').textContent = (Math.round(horas*10)/10).toLocaleString('pt-BR') + 'h';
+  document.getElementById('roiDays').textContent = fmt;
+  var bonus = document.getElementById('roiBonus');
+  if (bonus) bonus.innerHTML = L.roi_bonus_pre + '<strong>' + fmt + '</strong>' + L.roi_bonus_post + L.roi_bonus_mid + '<strong>' + plano + '</strong>.';
+}
+if (rs) { rs.addEventListener('input', calcROI); if (rt) rt.addEventListener('input', calcROI); calcROI(); }
+
+/* ─── FAQ ────────────────────────────────────────────────── */
+document.querySelectorAll('.faq-question').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(el){ el.classList.remove('open'); });
+    if (!open) item.classList.add('open');
+  });
+});
+
+/* ─── WA FLOAT ───────────────────────────────────────────── */
+var waf = document.querySelector('.whatsapp-float');
+window.addEventListener('scroll', function(){ if(waf) waf.classList.toggle('visible', window.scrollY>300); });
+
+/* ─── INIT LANG ──────────────────────────────────────────── */
+(function() {
+  var saved;
+  try { saved = localStorage.getItem('tyve-lang'); } catch(e) {}
+  if (saved && saved !== 'pt') setLang(saved);
+})();
+
+// Toggle tipo de negócio (Serviços <-> E-commerce) — restaurado 10/08/2026, e-commerce como padrão
+(function(){
+  function setBiz(b){
+    var s=document.getElementById('grid-servicos'), e=document.getElementById('grid-ecommerce');
+    if(!s||!e) return;
+    var ecom = (b==='ecommerce');
+    s.style.display = ecom ? 'none' : '';
+    e.style.display = ecom ? '' : 'none';
+    document.querySelectorAll('.biz-toggle-btn[data-biz]').forEach(function(btn){ btn.classList.toggle('active', btn.getAttribute('data-biz')===b); });
+  }
+  window.setBiz = setBiz;
+  document.querySelectorAll('.biz-toggle-btn[data-biz]').forEach(function(btn){
+    btn.addEventListener('click', function(){ setBiz(btn.getAttribute('data-biz')); });
+  });
+  document.querySelectorAll('[data-ecom-trigger]').forEach(function(el){
+    el.addEventListener('click', function(){ setBiz('ecommerce'); });
+  });
+  document.querySelectorAll('[data-servico-trigger]').forEach(function(el){
+    el.addEventListener('click', function(){ setBiz('servicos'); });
+  });
+  if (location.hash === '#planos-servicos') { setBiz('servicos'); }
+})();
+
+// Toggle FAQ Servicos <-> E-commerce
+(function(){
+  function setFaqBiz(b){
+    document.querySelectorAll('#faq .faq-item').forEach(function(it){
+      var db = it.getAttribute('data-biz');
+      it.style.display = (db==='both'||db===b) ? '' : 'none';
+    });
+    document.querySelectorAll('#faq-biz-toggle .biz-toggle-btn').forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-faqbiz')===b);
+    });
+  }
+  document.querySelectorAll('#faq-biz-toggle .biz-toggle-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setFaqBiz(btn.getAttribute('data-faqbiz')); });
+  });
+  setFaqBiz('ecommerce');
+})();
+
+// Toggle Mensal <-> Anual (2 meses grátis · BR only)
+var CICLO = 'mensal';
+function renderCycle(){
+  var isEN = (currentLang === 'en');
+  document.querySelectorAll('.cycle-toggle').forEach(function(ct){ ct.style.display = isEN ? 'none' : ''; });
+  if (isEN) CICLO = 'mensal'; // plano anual 12x é oferta BR
+  document.querySelectorAll('.cycle-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-ciclo') === CICLO);
+  });
+
+  function applyCards(sel, kind){
+    document.querySelectorAll(sel).forEach(function(card){
+      var amtEl = card.querySelector('.plan-amount[data-brl]');
+      if (!amtEl) return;
+      var perEl = card.querySelector('.plan-period');
+      var noteEl = card.querySelector('.plan-annual-note');
+      var wasEl = card.querySelector('.price-was');
+      var btn = card.querySelector('.btn-plan');
+      var brl = parseInt(amtEl.getAttribute('data-brl'), 10);
+      var nome = '';
+      if (card.querySelector('.plan-name')) nome = card.querySelector('.plan-name').firstChild.textContent.trim();
+
+      if (CICLO === 'anual' && !isEN) {
+        var total = brl * 10, parcela = brl * 10 / 12, econ = brl * 2;
+        amtEl.textContent = parcela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+        if (perEl) perEl.textContent = '/mês';
+        if (noteEl) {
+          noteEl.style.display = 'block';
+          noteEl.innerHTML = 'R$' + formatBRL(total) + '/ano em 12x sem juros<span class="save">2 meses grátis · economize R$' + formatBRL(econ) + '/ano</span>';
+        }
+        if (wasEl) { wasEl.textContent = 'R$' + formatBRL(brl) + '/mês'; wasEl.classList.add('show'); }
+        if (btn) {
+          if (kind === 'servicos') { var mm = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm) btn.setAttribute('href', '/assinar/plano-' + mm[1] + '?tipo=servico&ciclo=anual'); }
+          else { btn.setAttribute('href', '/assinar/plano-' + nome.toLowerCase() + '?ciclo=anual'); }
+        }
+      } else {
+        amtEl.textContent = isEN ? USD_PRICES[brl].toString() : formatBRL(brl);
+        if (perEl) perEl.textContent = (T[currentLang] && T[currentLang].per_month) || '/mês';
+        if (noteEl) noteEl.style.display = 'none';
+        if (wasEl) wasEl.classList.remove('show');
+        if (btn) {
+          if (kind === 'servicos') { var mm2 = (btn.getAttribute('href') || '').match(/plano-([a-z]+)/); if (mm2) btn.setAttribute('href', '/assinar/plano-' + mm2[1] + '?tipo=servico'); }
+          else { btn.setAttribute('href', '/assinar/plano-' + nome.toLowerCase()); }
+        }
+      }
+    });
+  }
+  applyCards('#grid-servicos .pricing-grid .plan', 'servicos');
+  applyCards('#grid-ecommerce .pricing-grid .plan', 'ecom');
+}
+document.querySelectorAll('.cycle-btn').forEach(function(b){
+  b.addEventListener('click', function(){ CICLO = b.getAttribute('data-ciclo'); renderCycle(); });
+});
+renderCycle();
+</script>
+<!-- ===== DEMO AO VIVO (widget) ===== -->
+<style>
+  #demo-overlay{position:fixed;inset:0;z-index:1000;background:rgba(17,30,29,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:16px;}
+  #demo-overlay.open{display:flex;}
+  .demo-modal{background:#fff;width:100%;max-width:420px;border-radius:22px;overflow:hidden;position:relative;font-family:var(--font);box-shadow:0 2px 4px rgba(60,20,0,.10),0 10px 20px rgba(60,20,0,.12),0 28px 56px rgba(40,14,0,.22);}
+  .demo-x{position:absolute;top:10px;right:14px;background:none;border:none;font-size:26px;line-height:1;color:#fff;cursor:pointer;z-index:3;opacity:.9;}
+  .demo-choose{padding:34px 26px 30px;text-align:center;}
+  .demo-choose h3{font-size:21px;font-weight:800;color:var(--dark);margin-bottom:6px;}
+  .demo-choose p{font-size:14px;color:#666;margin-bottom:22px;}
+  .demo-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .demo-card{border:1.5px solid #eee;border-radius:14px;padding:18px 12px;background:#fff;cursor:pointer;text-align:center;transition:.15s;display:flex;flex-direction:column;gap:4px;align-items:center;}
+  .demo-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 8px 20px rgba(248,65,0,.12);}
+  .demo-card .ico{font-size:30px;}
+  .demo-card strong{font-size:15px;color:var(--dark);}
+  .demo-card span{font-size:11.5px;color:#888;line-height:1.3;}
+  .demo-note{margin-top:18px;font-size:11px;color:#aaa;}
+  .demo-chat{display:none;flex-direction:column;height:560px;max-height:82vh;}
+  .demo-chat.on{display:flex;}
+  .demo-head{background:linear-gradient(135deg,#ff6a34,#f84100);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:11px;}
+  .demo-ava{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;box-shadow:0 0 0 3px rgba(255,255,255,.25);}
+  .demo-head .nm{font-size:15px;font-weight:700;line-height:1.1;}
+  .demo-head .sb{font-size:11px;opacity:.9;}
+  .demo-back{margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;}
+  .demo-msgs{flex:1;overflow-y:auto;background:#efe9e1;padding:16px 13px;display:flex;flex-direction:column;gap:3px;}
+  .demo-b{max-width:78%;padding:10px 14px;font-size:13.5px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word;min-width:0;margin-top:5px;box-shadow:0 1px 1px rgba(0,0,0,.07);animation:demoIn .22s ease-out both;}
+  .demo-b.bot{background:#fff;align-self:flex-start;border-radius:4px 18px 18px 18px;color:#111;}
+  .demo-b.me{background:#d9fdd3;align-self:flex-end;border-radius:18px 4px 18px 18px;color:#0b3d16;}
+  .demo-b.typing{display:flex;gap:4px;align-items:center;padding:12px 14px;}
+  .demo-typing-dot{width:7px;height:7px;border-radius:50%;background:#b3b3b3;animation:demoBlink 1.3s infinite ease-in-out;}
+  .demo-typing-dot:nth-child(2){animation-delay:.2s;}
+  .demo-typing-dot:nth-child(3){animation-delay:.4s;}
+  .demo-chips{display:flex;flex-wrap:wrap;gap:6px;padding:2px 2px 0;}
+  .demo-chip{background:#fff;border:1px solid #ffd2c2;color:var(--orange);font-size:12px;padding:6px 11px;border-radius:100px;cursor:pointer;font-weight:600;}
+  .demo-chip:hover{background:#fff3ee;}
+  .demo-in{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;background:#fff;}
+  .demo-in input{flex:1;border:1.5px solid #e6e6e6;border-radius:100px;padding:10px 15px;font-size:14px;outline:none;font-family:var(--font);}
+  .demo-in input:focus{border-color:var(--orange);}
+  .demo-in button{background:linear-gradient(135deg,#ff6a34,#f84100);color:#fff;border:none;width:42px;height:42px;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;box-shadow:0 2px 6px rgba(248,65,0,.35);transition:transform .1s;}
+  .demo-in button:hover:not(:disabled){transform:scale(1.06);}
+  .demo-in button:disabled{opacity:.4;cursor:default;}
+  .demo-cta{padding:14px 16px;background:#fff3ee;border-top:1px solid #ffd9cb;text-align:center;}
+  .demo-cta p{font-size:13px;color:#333;margin-bottom:10px;font-weight:600;}
+  .demo-cta a{display:inline-block;margin:0 5px;padding:9px 18px;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;}
+  .demo-cta .p1{background:var(--orange);color:#fff;}
+  .demo-cta .p2{background:#25D366;color:#fff;}
+  .demo-disc{font-size:10.5px;color:#b7b0a8;text-align:center;padding:5px;background:#ece5dd;}
+  @keyframes demoIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  @keyframes demoBlink{0%,80%,100%{transform:translateY(0);opacity:.4;}40%{transform:translateY(-5px);opacity:1;}}
+  .demo-dot-on{display:inline-block;width:7px;height:7px;border-radius:50%;background:#00e8df;margin-right:5px;box-shadow:0 0 0 0 rgba(0,232,223,.6);animation:demoPulse 1.8s infinite;}
+  @keyframes demoPulse{0%{box-shadow:0 0 0 0 rgba(0,232,223,.5);}70%{box-shadow:0 0 0 5px rgba(0,232,223,0);}100%{box-shadow:0 0 0 0 rgba(0,232,223,0);}}
+  @media (prefers-reduced-motion:reduce){.demo-b{animation:none;}.demo-typing-dot,.demo-dot-on{animation:none;}}
+</style>
+<div id="demo-overlay" aria-hidden="true">
+  <div class="demo-modal">
+    <button class="demo-x" id="demo-x" aria-label="Fechar">&times;</button>
+    <div class="demo-choose" id="demo-choose">
+      <h3>Converse com o agente, ao vivo</h3>
+      <p>Pergunte sobre um pedido, rastreio ou troca — como um cliente da sua loja faria:</p>
+      <div class="demo-cards">
+        <button class="demo-card" data-demo="loja"><span class="ico">🛍️</span><strong>Loja online</strong><span>Pedidos, rastreio e trocas</span></button>
+      </div>
+      <div class="demo-note" data-i18n="demo_note">É uma demonstração real — respostas geradas na hora pela IA da Tyve.</div>
+    </div>
+    <div class="demo-chat" id="demo-chat">
+      <div class="demo-head">
+        <div class="demo-ava" id="demo-ava">R</div>
+        <div><div class="nm" id="demo-nm">Loja Runner</div><div class="sb"><span class="demo-dot-on"></span>online • responde na hora</div></div>
+        <button class="demo-back" id="demo-back" title="Trocar demo">↺</button>
+      </div>
+      <div class="demo-msgs" id="demo-msgs"></div>
+      <div class="demo-cta" id="demo-cta" style="display:none;">
+        <p>Gostou? É assim no WhatsApp do seu negócio. 🧡</p>
+        <a href="#planos" class="p1" id="demo-cta-plans">Ver planos</a>
+        <a href="https://wa.me/5516994247541" target="_blank" class="p2">Falar no WhatsApp</a>
+      </div>
+      <div class="demo-in">
+        <input id="demo-text" placeholder="Escreva uma mensagem..." maxlength="300" autocomplete="off"/>
+        <button id="demo-send" aria-label="Enviar">&#10148;</button>
+      </div>
+      <div class="demo-disc">Demonstração da Tyve · dados fictícios</div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var WEBHOOK="https://n8n.tyve.com.br/webhook/tyve-demo-chat";
+  var CFG={
+    clinica:{nome:"Clínica Sorriso",ava:"S",oi:"Oi! 👋 Sou a Sofia, da Clínica Sorriso. Como posso te ajudar hoje?",
+      chips:["Vocês fazem clareamento?","Qual o horário de vocês?","Quero marcar uma limpeza"]},
+    loja:{nome:"Loja Runner",ava:"R",oi:"Oi! 👋 Sou o Téo, da Loja Runner. Posso te ajudar com pedidos, trocas ou dúvidas. No que você precisa?",
+      chips:["Cadê meu pedido 1234?","Quero trocar um produto","Qual o prazo de entrega?"]}
+  };
+  var MAXU=6, demo=null, history=[], userCount=0, busy=false;
+  var sid=localStorage.getItem("tyve_demo_sid");
+  if(!sid){sid="d"+Date.now()+Math.random().toString(36).slice(2,8);localStorage.setItem("tyve_demo_sid",sid);}
+  var ov=document.getElementById("demo-overlay"),
+      choose=document.getElementById("demo-choose"),
+      chat=document.getElementById("demo-chat"),
+      msgs=document.getElementById("demo-msgs"),
+      inp=document.getElementById("demo-text"),
+      sendBtn=document.getElementById("demo-send"),
+      cta=document.getElementById("demo-cta");
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function md(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");}
+  function open(){ov.classList.add("open");ov.setAttribute("aria-hidden","false");}
+  function close(){ov.classList.remove("open");ov.setAttribute("aria-hidden","true");}
+  function showChoose(){choose.style.display="block";chat.classList.remove("on");}
+  function bubble(role,text,cls){var d=document.createElement("div");d.className="demo-b "+(role==="me"?"me":"bot")+(cls?(" "+cls):"");d.innerHTML=md(text);msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;}
+  function chips(){
+    var wrap=document.createElement("div");wrap.className="demo-chips";
+    CFG[demo].chips.forEach(function(c){
+      var b=document.createElement("button");b.className="demo-chip";b.textContent=c;
+      b.onclick=function(){wrap.remove();send(c);};
+      wrap.appendChild(b);
+    });
+    msgs.appendChild(wrap);msgs.scrollTop=msgs.scrollHeight;
+  }
+  function start(which){
+    demo=which;history=[];userCount=0;
+    document.getElementById("demo-nm").textContent=CFG[demo].nome;
+    document.getElementById("demo-ava").textContent=CFG[demo].ava;
+    msgs.innerHTML="";cta.style.display="none";inp.disabled=false;sendBtn.disabled=false;inp.value="";
+    choose.style.display="none";chat.classList.add("on");
+    bubble("bot",CFG[demo].oi);history.push({role:"assistant",content:CFG[demo].oi});
+    chips();
+    setTimeout(function(){inp.focus();},100);
+  }
+  function endCta(){cta.style.display="block";inp.disabled=true;sendBtn.disabled=true;msgs.scrollTop=msgs.scrollHeight;}
+  function send(text){
+    text=(text||inp.value).trim();
+    if(!text||busy)return;
+    busy=true;inp.value="";
+    bubble("me",text);history.push({role:"user",content:text});userCount++;
+    var typ=document.createElement("div");typ.className="demo-b bot typing";typ.innerHTML='<span class="demo-typing-dot"></span><span class="demo-typing-dot"></span><span class="demo-typing-dot"></span>';msgs.appendChild(typ);msgs.scrollTop=msgs.scrollHeight;
+    sendBtn.disabled=true;
+    fetch(WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({demo:demo,session_id:sid,messages:history.slice(-8)})})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        typ.remove();
+        var reply=(d&&d.reply)?d.reply:"Opa, tive um probleminha aqui. Pode tentar de novo?";
+        bubble("bot",reply);history.push({role:"assistant",content:reply});
+        busy=false;sendBtn.disabled=false;
+        if(userCount>=MAXU){endCta();}else{inp.focus();}
+      })
+      .catch(function(){typ.remove();bubble("bot","Sem conexão agora 😕 tenta de novo em instantes.");busy=false;sendBtn.disabled=false;});
+  }
+  var ob=document.getElementById("open-demo-btn");
+  if(ob)ob.addEventListener("click",function(e){e.preventDefault();showChoose();open();});
+  document.querySelectorAll(".js-open-demo").forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();showChoose();open();});});
+  document.querySelectorAll(".demo-card").forEach(function(c){c.addEventListener("click",function(){start(c.getAttribute("data-demo"));});});
+  document.getElementById("demo-x").addEventListener("click",close);
+  document.getElementById("demo-back").addEventListener("click",showChoose);
+  ov.addEventListener("click",function(e){if(e.target===ov)close();});
+  document.getElementById("demo-cta-plans").addEventListener("click",close);
+  sendBtn.addEventListener("click",function(){send();});
+  inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();send();}});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&ov.classList.contains("open"))close();});
+})();
+</script>
+
+<script>
+/* Reveal no scroll — fade+slide sutil. Respeita prefers-reduced-motion. */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = '.segment-card, .problem-card, .plan, .testimonial-card, .addon-box, .step, .roi-calc';
+  var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if (!els.length) return;
+  if (reduce || !('IntersectionObserver' in window)) { els.forEach(function(el){ el.classList.add('is-in'); }); return; }
+  els.forEach(function(el, i){ el.classList.add('reveal'); el.style.transitionDelay = (Math.min(i % 7, 6) * 45) + 'ms'; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+<!-- Duas trilhas restauradas 10/08/2026 (Serviços + E-commerce) — e-commerce como aba padrão -->
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    try{setLang('pt');}catch(e){}
+  });
+</script>
+</body>
+</html>
