@@ -182,6 +182,7 @@
     <button class="tab-btn" data-tab="clientes" type="button" onclick="switchTab('clientes')">🏪 Clientes</button>
     <button class="tab-btn" data-tab="custos" type="button" onclick="switchTab('custos')">💸 Custo de IA</button>
     <button class="tab-btn" data-tab="historico" type="button" onclick="switchTab('historico')">📈 Histórico</button>
+    <button class="tab-btn" data-tab="saude" type="button" onclick="switchTab('saude')">🩺 Saúde</button>
   </div></div>
 
   <main>
@@ -243,11 +244,16 @@
         <div class="card chart-card"><div class="card-title">Encaminhamentos para a equipe</div><div class="card-sub">Por mês</div><div class="chart-wrap"><canvas id="chHand"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Pedidos consultados e trocas</div><div class="card-sub">Consultas de pedido (WISMO) e trocas abertas por mês</div><div class="chart-wrap"><canvas id="chEcom"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Mensagens por mês</div><div class="card-sub">Mensagens recebidas dos clientes finais</div><div class="chart-wrap"><canvas id="chMsgs"></canvas></div></div>
-        <div class="card chart-card"><div class="card-title">Receita mensal estimada</div><div class="card-sub">Soma dos planos dos clientes ativos no fim do mês</div><div class="chart-wrap"><canvas id="chMrr"></canvas></div></div>
+        <div class="card chart-card"><div class="card-title">Receita mensal estimada</div><div class="card-sub">Planos dos clientes ativos no fim do mês + pacotes de contatos cobrados no mês</div><div class="chart-wrap"><canvas id="chMrr"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Clientes ativos por plano</div><div class="card-sub">No fim de cada mês</div><div class="chart-wrap"><canvas id="chPlans"></canvas></div></div>
         <div class="card chart-card"><div class="card-title">Novos cadastros</div><div class="card-sub">Formulários de onboarding enviados por mês</div><div class="chart-wrap"><canvas id="chOnb"></canvas></div></div>
       </div>
       <p class="note" id="histNote"></p>
+    </div>
+    <div id="tab-saude" style="display:none">
+      <div class="chips" id="healthChips"></div>
+      <div class="card" style="margin-bottom:20px"><div class="card-title">Erros nas últimas 24h</div><div class="card-sub">Workflows com execução em erro (ferramentas temporárias de teste ficam de fora)</div><div id="healthErrs" class="note">–</div></div>
+      <p class="note" id="healthNote"></p>
     </div>
   </main>
   <footer id="footTs">–</footer>
@@ -281,7 +287,7 @@ function show(which){
 }
 function switchTab(t){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===t));
-  ['geral','clientes','custos','historico'].forEach(k=>{ $('tab-'+k).style.display = k===t ? '' : 'none'; });
+  ['geral','clientes','custos','historico','saude'].forEach(k=>{ $('tab-'+k).style.display = k===t ? '' : 'none'; });
 }
 
 async function doLogin(e){
@@ -311,7 +317,7 @@ async function loadData(silent){
     const d = await res.json();
     if(!d || d.error) return false;
     render(d);
-    loadHistory();
+    loadHistory(); loadHealth();
     return true;
   }catch(err){ return false; }
 }
@@ -450,6 +456,34 @@ function updateAiCosts(H){
     if(LAST.mrr>0) el.insertAdjacentHTML('beforeend',`<div class="chip info aicost"><div class="chip-dot"></div><div>O custo de IA do mês equivale a ${(month/LAST.mrr*100).toFixed(1).replace('.',',')}% da receita mensal estimada.</div></div>`);
   }
 }
+
+const HEALTH_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-health';
+async function loadHealth(){
+  if(!savedToken) return;
+  let H; try{ const r=await fetch(HEALTH_API+'?token='+encodeURIComponent(savedToken)); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
+  if(!H || H.error) return;
+  const ch=[], now=Date.now(), ex=H.exec||{};
+  const hrs=t=>t? Math.round((now-new Date(t).getTime())/3600000) : null;
+  ch.push(ex.errors24>0 ? {t:'warn',m:ex.errors24+' execução(ões) em erro nas últimas 24h (de '+Number(ex.total24||0).toLocaleString('pt-BR')+'). Veja a lista abaixo.'} : {t:'ok',m:'Nenhum erro nas últimas 24h ('+Number(ex.total24||0).toLocaleString('pt-BR')+' execuções).'});
+  if(ex.stuck>0) ch.push({t:'warn',m:ex.stuck+' execução(ões) rodando há mais de 1 hora (podem estar travadas).'});
+  const sm=H.smoke;
+  if(sm){ const h=hrs(sm.run_at); ch.push(sm.failed>0||h>30 ? {t:'warn',m:'Teste diário: '+sm.passed+' de '+sm.total+' verificações passaram'+(h>30?', e o último foi há '+h+'h.':'.')} : {t:'ok',m:'Teste diário passou '+sm.passed+' de '+sm.total+' verificações (há '+h+'h).'}); }
+  else ch.push({t:'warn',m:'Sem registro do teste diário.'});
+  const bd=H.backup_last, today=new Date().toISOString().slice(0,10), yest=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  ch.push(bd>=yest ? {t:'ok',m:'Backup do banco em dia (último: '+bd.slice(8,10)+'/'+bd.slice(5,7)+').'} : {t:'warn',m:'Backup do banco atrasado (último: '+(bd||'nenhum')+').'});
+  if(H.anomalies24>0) ch.push({t:'warn',m:H.anomalies24+' anomalia(s) de erro detectadas nas últimas 24h.'});
+  if(H.handoff_pending>0) ch.push({t:'info',m:H.handoff_pending+' encaminhamento(s) com mais de 12h ainda em atendimento humano.'});
+  const te=(H.tokens||{}).tenants_expiring||[];
+  te.forEach(t=>ch.push({t:'warn',m:'Token de pedidos de '+t.adapter_key+' ('+t.platform_type+') vencido ou perto de vencer.'}));
+  ((H.tokens||{}).instagram||[]).forEach(i=>{ const d=Math.round((new Date(i.expires_at)-now)/864e5); ch.push(d<10 ? {t:'warn',m:'Token do Instagram @'+i.ig_username+' vence em '+d+' dias.'} : {t:'ok',m:'Token do Instagram @'+i.ig_username+' válido por mais '+d+' dias.'}); });
+  const ob=H.onboarding||{};
+  if(ob.pending_24h>0) ch.push({t:'warn',m:ob.pending_24h+' cadastro(s) parado(s) há mais de 24h sem configuração.'});
+  if(ob.setup_stuck>0) ch.push({t:'warn',m:ob.setup_stuck+' configuração(ões) de cliente travada(s).'});
+  $('healthChips').innerHTML = ch.map(c=>`<div class="chip ${c.t}"><div class="chip-dot"></div><div>${esc(c.m)}</div></div>`).join('');
+  const te2=ex.top_errors||[];
+  $('healthErrs').innerHTML = te2.length ? te2.map(e=>esc(e.name)+': '+e.n+' erro(s), último há '+hrs(e.last)+'h').join('<br>') : 'Nenhum.';
+  setText('healthNote','Atualizado em '+new Date(H.generated_at).toLocaleString('pt-BR')+'. Saldo de crédito de IA e qualidade do número na Meta ainda não aparecem aqui (não há dado local para ler).');
+}
 async function loadHistory(){
   if(!savedToken) return;
   let H; try{ const r=await fetch(HIST_API+'?token='+encodeURIComponent(savedToken)); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
@@ -487,15 +521,18 @@ async function loadHistory(){
   // receita e planos (guardados diariamente a partir de 11/10/2026)
   const mrrMap={}, planMap={atende:{},cresce:{},escala:{}};
   (H.mrr||[]).forEach(r=>{ mrrMap[r.m]=(mrrMap[r.m]||0)+Number(r.mrr||0); if(planMap[r.plan]) planMap[r.plan][r.m]=Number(r.n)||0; });
-  drawChart('chMrr',{type:'bar',data:{labels,datasets:[{data:months.map(m=>mrrMap[m]||0),backgroundColor:shade(T,months),borderRadius:6}]},
-    options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+brl0(c.parsed.y)}}}})});
+  const packMap={}; (H.packrev||[]).forEach(r=>{ packMap[r.m]=(packMap[r.m]||0)+Number(r.rev||0); });
+  drawChart('chMrr',{type:'bar',data:{labels,datasets:[
+    {label:'Planos',data:months.map(m=>mrrMap[m]||0),backgroundColor:T,borderRadius:4},
+    {label:'Pacotes de contatos',data:months.map(m=>packMap[m]||0),backgroundColor:O,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{boxWidth:12,font:{size:12}}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+brl0(c.parsed.y)}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{stacked:true,beginAtZero:true,ticks:{color:'#888',font:{size:11},callback:v=>brl0(v)},grid:{color:'rgba(17,30,29,0.07)'}}}}});
   const PC={atende:'#bbb',cresce:T,escala:O};
   drawChart('chPlans',{type:'bar',data:{labels,datasets:['atende','cresce','escala'].map(pl=>({label:pl.charAt(0).toUpperCase()+pl.slice(1),data:months.map(m=>planMap[pl][m]||0),backgroundColor:PC[pl],borderRadius:4}))},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{boxWidth:12,font:{size:12}}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{stacked:true,beginAtZero:true,ticks:{precision:0,color:'#888',font:{size:11}},grid:{color:'rgba(17,30,29,0.07)'}}}}});
   // onboardings
   const oMap={}; (H.onboardings||[]).forEach(r=>oMap[r.m]=Number(r.n)||0);
   drawChart('chOnb',{type:'bar',data:{labels,datasets:[{data:months.map(m=>oMap[m]||0),backgroundColor:shade(D,months),borderRadius:6}]},options:baseOpts({scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{precision:0}}}})});
-  setText('histNote','Receita e plano por mês começaram a ser guardados em 11/10/2026 (um registro por dia), então esses dois gráficos só têm dados a partir de outubro. Os demais começam em '+labels[0]+'. O custo de IA usa o dólar de cada dia.');
+  setText('histNote','Os planos por mês começaram a ser guardados em 11/10/2026 (um registro por dia), então planos e receita de planos só têm dados a partir de outubro; os pacotes vêm do registro de compras e têm o histórico completo. Os demais começam em '+labels[0]+'. O custo de IA usa o dólar de cada dia.');
 
   // cobertura de contatos do mês: plano + pacotes (a Tyve não bloqueia; excedente é cobrado)
   const cur=nowYM(), pk={}; (H.packs||[]).forEach(p=>{ if(p.lim) pk[p.i]=p.lim; });
