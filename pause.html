@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pausar Bot — Tyve</title>
+  <title>Pausar atendimento — Tyve</title>
   <meta name="robots" content="noindex" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -90,9 +90,9 @@
 </head>
 <body>
 <div class="card">
-  <div class="logo">TYVE</div>
+  <div class="logo">Tyve</div>
   <h1>🤚 Pausar Atendimento Automático</h1>
-  <p class="subtitle">O bot será pausado para este contato. Você vai responder diretamente no WhatsApp.</p>
+  <p class="subtitle">O agente será pausado para este contato. Você vai responder diretamente no WhatsApp.</p>
 
   <div class="info-box" id="info-box">
     <strong id="info-chat">Carregando...</strong>
@@ -109,7 +109,7 @@
     </select>
   </div>
 
-  <button class="btn" id="pause-btn" onclick="doPause()">Pausar Bot Agora</button>
+  <button class="btn" id="pause-btn" onclick="doPause()">Pausar agente agora</button>
   <div class="status" id="status"></div>
 </div>
 
@@ -154,7 +154,7 @@
       });
       const data = await res.json();
       if (data.ok) {
-        btn.textContent = '✅ Bot pausado!';
+        btn.textContent = '✅ Agente pausado!';
         infoBox.classList.add('already-paused');
         status.textContent = 'Atendimento automático pausado por ' + hours + 'h. Responda diretamente no WhatsApp.';
         status.className = 'status ok';
@@ -163,7 +163,7 @@
       }
     } catch (e) {
       btn.disabled = false;
-      btn.textContent = 'Pausar Bot Agora';
+      btn.textContent = 'Pausar agente agora';
       status.textContent = 'Erro: ' + e.message;
       status.className = 'status err';
     }

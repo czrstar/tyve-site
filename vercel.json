@@ -52,6 +52,10 @@
     {
       "source": "/guia-painel",
       "destination": "/guia-painel.pdf"
+    },
+    {
+      "source": "/guia",
+      "destination": "/guia.pdf"
     }
   ]
 }
