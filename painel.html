@@ -1691,24 +1691,33 @@ function renderDash(d) {
     const _pl = Number(LIMITS && LIMITS.plan_limit), _bal = Math.max(0, Number(LIMITS && LIMITS.pack_balance) || 0), _u = Math.max(0, Number(LIMITS && LIMITS.used != null ? LIMITS.used : d.contacts_this_month) || 0); // mesmo calculo do saldo (mes de Sao Paulo)
     const _nt = document.getElementById('contactNote'), _box = document.getElementById('contactBox');
     if (limitEl && LIMITS && isFinite(_pl) && _pl > 0) {
-      const _num = v => (v != null && isFinite(Number(v))) ? Math.max(0, Number(v)) : null; // usa o numero do servidor quando existir
+      const _num = v => (v != null && v !== '' && isFinite(Number(v))) ? Math.max(0, Number(v)) : null; // usa o numero do servidor quando existir
       const _usedPlan = Math.min(_u, _pl), _usedPack = Math.max(0, _u - _pl), _left = _num(LIMITS.pack_left) ?? Math.max(0, _bal - _usedPack), _exc = _num(LIMITS.excess) ?? Math.max(0, _u - _pl - _bal);
       const _pct = _usedPlan >= _pl ? 100 : Math.max(_usedPlan > 0 ? 1 : 0, Math.min(99, Math.floor(_usedPlan / _pl * 100)));
       const _bar = (_pct >= 100 && _left === 0) ? '#d93025' : _pct >= 80 ? 'var(--orange)' : 'var(--teal)'; // vermelho so quando nao sobra saldo
       const _act = _usedPack > 0;
       let _h = '<div class="cstats"><div class="cstat"><div class="cstat-num">' + fmt(_usedPlan) + '<span class="cstat-of"> de ' + fmt(_pl) + '</span></div>'
         + '<div class="cbar"><div class="cbar-fill" style="width:' + _pct + '%;background:' + _bar + '"></div></div>'
-        + '<div class="cstat-lbl">Plano do mês</div></div>';
+        + '<div class="cstat-lbl">Plano do mês · usados</div></div>';
       const _ptot = _num(LIMITS.pack_total), _tot = Math.max(_bal, _ptot || 0); // (01/10) total dos pacotes que formam o saldo atual: "797 de 1.000"
-      const _bpct = _left <= 0 ? 0 : _left >= _tot ? 100 : Math.max(1, Math.min(99, Math.floor(_left / _tot * 100))); // barra do saldo mostra quanto resta (esvazia com o uso)
-      if (_bal > 0) _h += '<div class="cstat' + (_act ? '' : ' cstat-idle') + '"><div class="cstat-num">' + fmt(_left) + (_ptot > 0 ? '<span class="cstat-of"> de ' + fmt(_tot) + '</span>' : '') + '</div>'
-        + '<div class="cbar" style="width:120px"><div class="cbar-fill" style="width:' + _bpct + '%;background:' + (_act ? '#5b6fd6' : 'rgba(17,30,29,0.18)') + '"></div></div>'
-        + '<div class="cstat-lbl">Saldo de pacotes'
-        + (_act ? (_left > 0 ? ' · <span style="color:var(--orange)">em uso</span>' : ' · <span style="color:#d93025">esgotado</span>') : '') + '</div></div>';
+      // (12/10) pacote mostrado como CONSUMO, igual a barra do plano ("362 de 2.000 usados"), com o saldo por extenso embaixo.
+      // Antes mostrava o saldo ("1.638 de 2.000") ao lado do plano usado ("1.200 de 1.200") e o cliente lia como usado.
+      const _mes = (function () { try { return new Date().toLocaleString('pt-BR', { month: 'long', timeZone: 'America/Sao_Paulo' }); } catch (e) { return 'este mês'; } })();
+      const _usedAll = _ptot > 0 ? Math.max(0, _tot - _left) : null; // usado de todos os pacotes (inclui meses anteriores)
+      const _upM = Math.max(0, _u - _usedPlan - _exc); // usado do pacote neste mes (o que passa do saldo aparece como 'acima')
+      if (_bal > 0) {
+        const _upct = _usedAll == null ? 0 : (_usedAll >= _tot ? 100 : (_usedAll <= 0 ? 0 : Math.max(1, Math.min(99, Math.floor(_usedAll / _tot * 100)))));
+        const _top = _usedAll != null ? fmt(_usedAll) + '<span class="cstat-of"> de ' + fmt(_tot) + '</span>' : fmt(_left) + '<span class="cstat-of"> restantes</span>';
+        const _sub = _left > 0 ? ('Restam ' + fmt(_left) + (_upM > 0 ? ' · ' + fmt(_upM) + ' usados em ' + _mes : (_usedAll > 0 ? ' · usados em meses anteriores' : ''))) : '<span style="color:#d93025">Pacotes esgotados</span>';
+        _h += '<div class="cstat' + (_act ? '' : ' cstat-idle') + '"><div class="cstat-num">' + _top + '</div>'
+          + (_usedAll != null ? '<div class="cbar" style="width:120px"><div class="cbar-fill" style="width:' + _upct + '%;background:' + (_left > 0 ? '#5b6fd6' : '#d93025') + '"></div></div>' : '')
+          + '<div class="cstat-lbl">Pacotes extras' + (_usedAll != null ? ' · usados' : '') + '</div>'
+          + '<div class="cstat-lbl">' + _sub + '</div></div>';
+      }
       if (_exc > 0) _h += '<div class="cstat"><div class="cstat-num" style="color:#d93025">' + fmt(_exc) + '</div><div class="cstat-lbl">Acima do ' + (_bal > 0 ? 'plano e do saldo' : 'plano') + '</div></div>';
       limitEl.innerHTML = _h + '</div>';
       if (_box) _box.style.textAlign = 'left';
-      if (_nt) _nt.innerHTML = _bal > 0 ? 'Plano renova dia 1º. Saldo usado só depois do plano.<i class="cinfo" role="button" tabindex="0" aria-label="Mais detalhes" title="Toque para ver detalhes" onclick="var e=this.nextElementSibling;e.style.display=e.style.display===\'block\'?\'none\':\'block\'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click()}">i</i><span style="display:none;margin-top:4px">O plano renova todo dia 1º. O saldo de pacotes só é usado depois que os contatos do plano acabam. Saldo de pacote pago não vence.</span>' : 'O contador zera todo dia 1º.';
+      if (_nt) _nt.innerHTML = _bal > 0 ? (_usedPack > 0 ? 'Em ' + _mes + ': ' + fmt(_u) + ' contatos (' + fmt(_usedPlan) + ' do plano + ' + fmt(_upM) + ' do pacote' + (_exc > 0 ? ' + ' + fmt(_exc) + ' acima' : '') + '). ' : '') + 'Plano renova dia 1º. Pacote usado só depois do plano.<i class="cinfo" role="button" tabindex="0" aria-label="Mais detalhes" title="Toque para ver detalhes" onclick="var e=this.nextElementSibling;e.style.display=e.style.display===\'block\'?\'none\':\'block\'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click()}">i</i><span style="display:none;margin-top:4px">O plano renova todo dia 1º. O saldo de pacotes só é usado depois que os contatos do plano acabam. Saldo de pacote pago não vence.</span>' : 'O contador zera todo dia 1º.';
     } else { if (_box) _box.style.textAlign = 'right'; if (_nt) _nt.textContent = 'O contador zera todo dia 1º.'; if (limitEl && !CONFIG.contact_limit) limitEl.textContent = ''; }
   } catch (e) {}
 
