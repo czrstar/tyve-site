@@ -1225,7 +1225,7 @@
     <div class="submit-card" id="submitCard" style="display:none">
       <h3>Tudo pronto! 🎉</h3>
       <p>Revisamos suas respostas e ativamos seu assistente em até 48 horas. Você será contatado pela equipe para aprovar a V1 antes de ir ao ar.</p>
-      <label id="aceiteWrap" style="display:flex;align-items:flex-start;gap:10px;text-align:left;margin:18px 0;font-size:14px;line-height:1.5;cursor:pointer;">
+      <label id="aceiteWrap" style="display:flex;align-items:flex-start;gap:10px;text-align:left;margin:18px 0;font-size:14px;line-height:1.5;cursor:pointer;color:#e5e7eb;">
         <input type="checkbox" id="aceite_termos" name="aceite_termos" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:#f84100;" />
         <span>Li e aceito os <a href="/termos.html" target="_blank" style="color:#f84100;font-weight:600;">Termos de Serviço</a> e a <a href="/privacidade" target="_blank" style="color:#f84100;font-weight:600;">Política de Privacidade</a> da Tyve.</span>
       </label>
@@ -1488,8 +1488,46 @@
     }
   }
 
+  // (12/10/2026) nao deixa avancar de secao com campo obrigatorio vazio (mesma regra do envio)
+  function missingInCard(card) {
+    const form = document.getElementById('onboardingForm');
+    function applicable(el) {
+      let n = el.parentElement;
+      while (n && n !== form) {
+        const cs = window.getComputedStyle(n);
+        if (cs.display === 'none' && !n.classList.contains('section-body')) return false;
+        n = n.parentElement;
+      }
+      return true;
+    }
+    const seen = {};
+    return Array.from(card.querySelectorAll('[required]')).filter(el => {
+      if (!applicable(el)) return false;
+      if (el.type === 'radio') {
+        if (seen[el.name]) return false;
+        seen[el.name] = true;
+        return !form.querySelector('input[name="' + el.name + '"]:checked');
+      }
+      return !(el.value || '').trim();
+    });
+  }
+
   function nextSection(btn) {
     const card = btn.closest('.section-card');
+    const miss = missingInCard(card);
+    if (miss.length) {
+      const first = miss[0];
+      const target = first.type === 'radio' ? (first.closest('.question') || first.closest('.radio-group') || first) : first;
+      target.style.outline = '2px solid #ef4444'; target.style.outlineOffset = '4px'; target.style.borderRadius = '8px';
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (first.type !== 'radio') { try { first.focus({ preventScroll: true }); } catch (_) {} }
+      let note = card.querySelector('.missing-note');
+      if (!note) { note = document.createElement('p'); note.className = 'missing-note'; note.style.cssText = 'color:#ef4444;font-size:13px;font-weight:600;margin:10px 0 0;'; btn.insertAdjacentElement('afterend', note); }
+      note.textContent = miss.length === 1 ? 'Falta preencher 1 campo obrigatório (marcado em vermelho).' : 'Faltam ' + miss.length + ' campos obrigatórios (o primeiro está marcado em vermelho).';
+      setTimeout(() => { target.style.outline = ''; target.style.outlineOffset = ''; target.style.borderRadius = ''; }, 3500);
+      return;
+    }
+    const oldNote = card.querySelector('.missing-note'); if (oldNote) oldNote.remove();
     card.classList.remove('open', 'active');
     card.classList.add('done');
     sectionState[card.id] = 'done';
