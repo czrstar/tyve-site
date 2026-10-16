@@ -12,6 +12,13 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/agendar",
+      "destination": "https://calendar.app.google/pQMruvjEWyYwHQ497",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/dashboard",
