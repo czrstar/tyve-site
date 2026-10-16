@@ -17,6 +17,11 @@
       "source": "/agendar",
       "destination": "https://calendar.app.google/pQMruvjEWyYwHQ497",
       "permanent": false
+    },
+    {
+      "source": "/agenda",
+      "destination": "https://calendar.app.google/pQMruvjEWyYwHQ497",
+      "permanent": false
     }
   ],
   "rewrites": [
