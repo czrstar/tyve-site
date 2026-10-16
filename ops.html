@@ -610,13 +610,14 @@ async function loadHistory(){
 // ───────── FICHA DO CLIENTE (só leitura) ─────────
 const FICHA_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-ficha';
 const PAINEL_URL = 'https://www.tyve.com.br/painel?token=';
-let FICHA = null, FICHA_SEQ = 0, CONV_SEQ = 0;
+let FICHA = null, FICHA_SEQ = 0, CONV_SEQ = 0, ORDER_SEQ = 0;
+function killAudChart(){ if(CHARTS.fiAud){ try{ CHARTS.fiAud.destroy(); }catch(_){} delete CHARTS.fiAud; } }
 const fmtDT = t => { if(!t) return '–'; const d=new Date(t); return isNaN(d)?'–':d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); };
 const ago = t => { if(!t) return ''; const m=Math.round((Date.now()-new Date(t).getTime())/60000); if(m<1) return 'agora'; if(m<60) return 'há '+m+' min'; const h=Math.round(m/60); if(h<48) return 'há '+h+'h'; return 'há '+Math.round(h/24)+' dias'; };
 const SRC = {ia:'Agente (IA)',ia_fallback:'Agente (IA reserva)',menu:'Menu',pedido:'Cartão de pedido',canned:'Texto fixo',troca:'Troca',faq:'FAQ',equipe:'Aviso de encaminhamento',manual_tyve:'Correção Tyve'};
 const CAT = {resposta_errada:'Resposta errada',fato_inventado:'Fato inventado',repeticao_loop:'Repetição',promessa_equipe:'Promessa pela equipe',sem_resposta_bot:'Sem resposta do bot',reclamacao_sem_equipe:'Reclamação sem equipe',vazamento:'Vazamento'};
 
-function clearFicha(){ FICHA=null; FICHA_SEQ++; CONV_SEQ++; const b=$('fiBody'); if(b) b.innerHTML=''; setText('fiMsg',''); const s=$('fiSelect'); if(s) s.value=''; }
+function clearFicha(){ killAudChart(); FICHA=null; FICHA_SEQ++; CONV_SEQ++; ORDER_SEQ++; const b=$('fiBody'); if(b) b.innerHTML=''; setText('fiMsg',''); const s=$('fiSelect'); if(s) s.value=''; }
 async function fichaCall(extra){
   const r = await opsPost(FICHA_API, extra);
   if(r.status===401){ doLogout(); return null; }
@@ -634,20 +635,37 @@ async function loadFichaList(){
 }
 async function openFicha(inst, scroll){
   if(!inst){ clearFicha(); return; }
-  const seq=++FICHA_SEQ; CONV_SEQ++;
+  const seq=++FICHA_SEQ; CONV_SEQ++; ORDER_SEQ++;
+  killAudChart(); FICHA=null; $('fiBody').innerHTML='';
   const sel=$('fiSelect'); if(sel && sel.value!==inst){ if(![...sel.options].some(o=>o.value===inst)) sel.insertAdjacentHTML('beforeend',`<option value="${esc(inst)}">${esc(inst)}</option>`); sel.value=inst; }
   if(scroll) $('fichaCard').scrollIntoView({behavior:'smooth',block:'start'});
   setText('fiMsg','Carregando ficha…');
   let F; try{ F=await fichaCall({action:'ficha', instance:inst}); }catch(e){ if(seq===FICHA_SEQ) setText('fiMsg', e.message==='locked' ? 'Acesso bloqueado por 15 minutos depois de várias senhas erradas deste IP.' : 'Não consegui carregar a ficha agora. Tente de novo.'); return; }
   if(seq!==FICHA_SEQ || !F) return;
-  if(F.error){ setText('fiMsg', F.error==='cliente_nao_encontrado' ? 'Cliente não encontrado.' : 'Erro: '+F.error); $('fiBody').innerHTML=''; return; }
+  if(F.error){ killAudChart(); setText('fiMsg', F.error==='cliente_nao_encontrado' ? 'Cliente não encontrado.' : 'Erro: '+F.error); $('fiBody').innerHTML=''; return; }
   FICHA=F; setText('fiMsg','Ficha gerada em '+fmtDT(F.generated_at)+'.');
   renderFicha(F);
 }
 function box(k,v,cls){ return `<div class="fi-box"><div class="fi-k">${esc(k)}</div><div class="fi-v ${cls||''}">${v}</div></div>`; }
 function phoneBtn(p){ return `<button class="link-btn" type="button" data-ph="${esc(p)}" onclick="searchConv(this.dataset.ph)">${esc(p)}</button>`; }
+function fichaAlerts(F){
+  const b=F.bot, act=(F.numeros||[]).find(n=>n.ativo), S=F.silencio||{}, out=[];
+  const minBot = F.ultima_resposta_bot ? (Date.now()-new Date(F.ultima_resposta_bot).getTime())/60000 : null;
+  if(!b) out.push({t:'warn',m:'Não achei o workflow do bot deste cliente.'});
+  if(b && Number(F.bot_candidatos)>1) out.push({t:'warn',m:`Achei ${F.bot_candidatos} workflows com o caminho deste bot; a ficha mostra o mais provável. Confira no n8n.`});
+  if(!b){} else if(!b.ativo) out.push({t:'warn',m:'Bot DESLIGADO'+(act?' com número ativo na Meta: mensagens que chegarem não recebem resposta do agente.':'.')});
+  else {
+    const sem=Number(S.sem_resposta)||0, c60=Number(S.chats_60m_bot)||0, fora=F.fora_horario===true;
+    const lvl = fora ? 'info' : 'warn', obs = fora ? ' Fora do horário o bot às vezes fica calado de propósito (aviso que não se repete); confira antes de agir.' : '';
+    if(c60>=3 && minBot!=null && minBot>20) out.push({t:lvl,m:`Bot possivelmente mudo: ${c60} conversas com o bot na última hora e a última resposta dele foi ${ago(F.ultima_resposta_bot)}.`+obs});
+    if(sem>=3) out.push({t:lvl,m:`${sem} conversa(s) da última hora sem resposta do bot há mais de 10 minutos (fora as que estão com a equipe e os "ok/obrigado").`+obs});
+    if(!out.length) out.push({t:'ok',m: c60 ? `Bot respondendo: ${c60} conversa(s) com o bot na última hora${sem?', '+sem+' sem resposta':', todas respondidas'}.` : 'Bot ativo. Nenhuma conversa com o bot na última hora.'});
+  }
+  return '<div class="chips">'+out.map(c=>`<div class="chip ${c.t}"><div class="chip-dot"></div><div>${esc(c.m)}</div></div>`).join('')+'</div>';
+}
 function renderFicha(F){
-  const h=[];
+  killAudChart();
+  const h=[fichaAlerts(F)];
   // 1. painel
   h.push('<div class="sec-label">Painel do cliente</div>');
   (F.paineis||[]).forEach((p,i)=>{ const url=PAINEL_URL+encodeURIComponent(p.token||'');
@@ -676,7 +694,8 @@ function renderFicha(F){
     h.push(`<div class="bar-row"><span>${num(used)} de ${num(lim)} contatos (${esc(C.billing_month||'')})</span><span>${pct}%</span></div>
       <div class="bar"><div class="bar-fill ${pct>=100?'danger':pct>=80?'warn':'safe'}" style="width:${pct}%"></div></div><div class="fi-grid">`);
     h.push(box('Limite do plano', num(C.plan_limit)));
-    h.push(box('Pacotes', num(C.pack_total)+'<div class="fi-small">'+num(C.pack_used)+' usados, sobram '+num(C.pack_left)+'</div>'));
+    const pt=Number(C.pack_total)||0, pl=Number(C.pack_left)||0;
+    h.push(box('Pacotes', pt ? num(Math.max(0,pt-pl))+' de '+num(pt)+' usados<div class="fi-small">'+num(C.pack_used)+' usados neste mês, sobram '+num(pl)+'</div>' : (Number(C.pack_used)>0 ? 'Esgotado<div class="fi-small">'+num(C.pack_used)+' usados neste mês</div>' : 'Nenhum')));
     h.push(box('Excedente', num(C.excess), Number(C.excess)>0?'bad':''));
     h.push('</div><p class="fi-small">O atendimento não é bloqueado; o excedente é cobrado.</p>');
   } else h.push('<p class="fi-small">Sem dados de contatos para este cliente.</p>');
@@ -690,16 +709,20 @@ function renderFicha(F){
   h.push('<div class="sec-label" style="margin-top:22px">Última auditoria</div>');
   if(A){
     const cnt=A.counts||{}, tot=Object.values(cnt).reduce((s,v)=>s+(Number(v)||0),0), base=Number(A.auditadas)||0;
-    h.push(`<p class="fi-small">Dia ${esc(String(A.data||'').slice(0,10).split('-').reverse().join('/'))}: ${num(base)} conversas auditadas de ${num(A.total)}, ${num(tot)} achados${base?' ('+(tot/base*100).toFixed(1).replace('.',',')+' por 100 conversas)':''}${A.alerta?', com alerta':''}.</p>`);
+    h.push(`<p class="fi-small">Auditoria de ${esc(String(A.data||'').slice(0,10).split('-').reverse().join('/'))} (conversas do dia anterior): ${num(base)} conversas auditadas de ${num(A.total)}, ${num(tot)} achados${base?' ('+(tot/base*100).toFixed(1).replace('.',',')+' por 100 conversas)':''}${A.alerta?', com alerta':''}.</p>`);
     h.push('<div class="fi-tags" style="margin-bottom:10px">'+Object.keys(cnt).filter(k=>Number(cnt[k])>0).map(k=>`<span class="fi-tag">${esc(CAT[k]||k)}: <b>${num(cnt[k])}</b></span>`).join('')+'</div>');
     const ach=A.achados||[];
     if(ach.length) h.push('<details class="fi-det"><summary>Ver '+num(ach.length)+' achados</summary><div class="tbl-wrap"><table class="fi-tbl"><thead><tr><th>Horário</th><th>Telefone</th><th>Categoria</th><th>Motivo e trecho</th></tr></thead><tbody>'+
       ach.map(f=>`<tr><td>${esc(f.horario||'')}</td><td>${f.chat_id?phoneBtn(f.chat_id):'–'}</td><td>${esc(CAT[f.categoria]||f.categoria||'')}${f.fix?'<div class="fi-small">'+esc(f.fix)+'</div>':''}</td><td><div class="fi-pre"><b>${esc(f.motivo||'')}</b>${f.trecho?'\n“'+esc(f.trecho)+'”':''}</div></td></tr>`).join('')+'</tbody></table></div></details>');
   } else h.push('<p class="fi-small">Este cliente não tem auditoria diária.</p>');
+  if((F.auditoria_hist||[]).length>1) h.push(`<div class="fi-k" style="margin-top:14px">Erros do bot por 100 conversas (últimos 14 dias)</div><div class="chart-wrap" style="height:220px"><canvas id="fiAud"></canvas></div>`);
   // 6. conversa
   h.push(`<div class="sec-label" style="margin-top:22px" id="fiConvLbl">Conversa por telefone</div>
     <form class="fi-sel" onsubmit="searchConv($('fiPhone').value);return false"><input class="fi-inp" id="fiPhone" type="tel" inputmode="numeric" autocomplete="off" placeholder="Ex.: 5511999998888" style="min-width:220px" />
     <button class="btn-sm" type="submit">Buscar</button></form>
+    <form class="fi-sel" onsubmit="searchOrder($('fiOrder').value);return false"><input class="fi-inp" id="fiOrder" type="text" inputmode="numeric" autocomplete="off" placeholder="Ou nº do pedido, ex.: 45741" style="min-width:220px" />
+    <button class="btn-sm ghost" type="submit">Buscar pedido</button></form>
+    <div id="fiOrderRes"></div>
     <p class="fi-small">Últimos 30 dias, até 300 mensagens (só na tela, some ao sair ou trocar de cliente): cliente, bot e equipe da loja em ordem de tempo. Aceita o número com ou sem 55 e com ou sem o 9.</p>
     <div id="fiConv"></div>`);
   // 7. configurações
@@ -711,6 +734,17 @@ function renderFicha(F){
     cfg.map(c=>{ const v=String(c.v==null?'':c.v); const val = v.length>160 ? `<details class="fi-det"><summary>${esc(v.slice(0,120))}… (${num(v.length)} caracteres)</summary><div class="fi-pre">${esc(v)}</div></details>` : `<div class="fi-pre">${esc(v)}</div>`;
       return `<tr data-q="${esc((c.k+' '+v).toLowerCase())}"><td><b>${esc(c.k)}</b></td><td>${val}</td></tr>`; }).join('')+'</tbody></table></div>');
   $('fiBody').innerHTML=h.join('');
+  drawAudTrend(F.auditoria_hist||[]);
+}
+function drawAudTrend(H){
+  if(H.length<2 || !$('fiAud')) return;
+  const labels=H.map(r=>String(r.data).slice(8,10)+'/'+String(r.data).slice(5,7));
+  const rate=H.map(r=>{ const a=Number(r.auditadas)||0; return a? Math.round(Number(r.achados)/a*1000)/10 : null; });
+  drawChart('fiAud',{type:'line',data:{labels,datasets:[
+    {label:'Erros por 100 conversas',data:rate,borderColor:'#f84100',backgroundColor:'rgba(248,65,0,.10)',fill:true,tension:.25,pointRadius:3},
+    {label:'Meta 4 semanas (15)',data:labels.map(()=>15),borderColor:'#00b5ae',borderDash:[6,4],pointRadius:0,fill:false},
+    {label:'Meta 8 semanas (10)',data:labels.map(()=>10),borderColor:'#888',borderDash:[2,4],pointRadius:0,fill:false}]},
+    options:baseOpts({plugins:{legend:{display:true,labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+String(c.parsed.y).replace('.',',')}}}})});
 }
 function filterCfg(q){ q=String(q||'').toLowerCase().trim(); document.querySelectorAll('#fiCfg tr').forEach(tr=>{ tr.style.display = !q || (tr.dataset.q||'').includes(q) ? '' : 'none'; }); }
 function copyText(btn){
@@ -748,6 +782,22 @@ async function searchConv(phone){
   const c=$('fiChat'); if(c) c.scrollTop=c.scrollHeight;
 }
 
+async function searchOrder(v){
+  if(!FICHA) return;
+  const d=String(v||'').replace(/\D/g,''), box=$('fiOrderRes'); if(!box) return;
+  if(d.length<3 || d.length>12){ box.innerHTML='<p class="fi-small">Digite só o número do pedido (3 a 12 dígitos).</p>'; return; }
+  const seq=++ORDER_SEQ, inst=FICHA.instance;
+  box.innerHTML='<p class="fi-small">Procurando o pedido…</p>';
+  let R; try{ R=await fichaCall({action:'pedido', instance:inst, phone:d}); }catch(e){ if(seq===ORDER_SEQ) box.innerHTML='<p class="fi-small">'+(e.message==='locked'?'Acesso bloqueado por 15 minutos.':'Não consegui buscar agora. Tente de novo.')+'</p>'; return; }
+  if(seq!==ORDER_SEQ || !R || !FICHA || FICHA.instance!==inst) return;
+  if(R.error){ box.innerHTML='<p class="fi-small">'+(R.error==='pedido_invalido'?'Número de pedido inválido.':'Erro: '+esc(R.error))+'</p>'; return; }
+  const T=R.telefones||[];
+  if(!T.length){ box.innerHTML='<p class="fi-small">Nenhuma conversa citou o pedido '+esc(R.pedido)+' nos últimos 60 dias.</p>'; return; }
+  const FT={troca:'troca',bot:'resposta do bot',cliente:'mensagem do cliente'};
+  box.innerHTML='<p class="fi-small">Pedido '+esc(R.pedido)+' citado em '+num(T.length)+' conversa(s) (60 dias):</p><div class="fi-tags" style="margin-bottom:10px">'+
+    T.map(t=>`<span class="fi-tag">${phoneBtn(t.chat_id)} · ${esc(fmtDT(t.ultima))} · ${esc((t.fontes||[]).map(f=>FT[f]||f).join(', '))}</span>`).join('')+'</div>';
+  if(T.length===1) searchConv(T[0].chat_id);
+}
 // restaura sessão da aba
 (function(){
   let s=''; try{ s=sessionStorage.getItem(SKEY)||''; }catch(_){}
