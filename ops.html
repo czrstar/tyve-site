@@ -131,6 +131,35 @@
     .chart-wrap{height:240px;position:relative}
     .chart-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted2);font-size:13px;text-align:center;padding:0 20px}
     @media(max-width:560px){.chart-grid{grid-template-columns:1fr}}
+    .fi-sel{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+    .fi-sel select,.fi-inp{padding:10px 12px;border:1.5px solid var(--border2);border-radius:10px;font:inherit;font-size:14px;background:var(--surface2);color:var(--text)}
+    .fi-sel select:focus,.fi-inp:focus{outline:none;border-color:var(--orange)}
+    .btn-sm{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--orange);color:#fff;font-weight:700;font-size:13px;border:none;font-family:var(--font);border-radius:999px;cursor:pointer}
+    .btn-sm.ghost{background:var(--surface3);color:var(--text)}
+    .btn-sm:disabled{opacity:.6;cursor:default}
+    .link-btn{background:none;border:none;color:var(--orange);font:inherit;font-weight:700;cursor:pointer;padding:0;text-decoration:underline}
+    .fi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+    .fi-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px}
+    .fi-k{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:4px}
+    .fi-v{font-size:15px;font-weight:700;word-break:break-word}
+    .fi-v.ok{color:var(--green)}.fi-v.bad{color:var(--red)}
+    .fi-link{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+    .fi-link code{font-size:13px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;word-break:break-all}
+    .fi-tags{display:flex;flex-wrap:wrap;gap:6px}
+    .fi-tag{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--surface3);color:var(--text)}
+    .fi-tag b{font-weight:700}
+    .fi-small{font-size:12px;color:var(--muted2)}
+    .fi-tbl td{padding:9px 10px;font-size:13px;vertical-align:top}
+    .fi-tbl th{padding:8px 10px}
+    .fi-pre{white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.5;max-width:640px}
+    details.fi-det summary{cursor:pointer;color:var(--muted);font-size:12.5px}
+    .chat{display:flex;flex-direction:column;gap:8px;max-height:640px;overflow:auto;background:#e9e3d9;border-radius:var(--radius-sm);padding:14px}
+    .msg{max-width:78%;padding:8px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;white-space:pre-wrap;word-break:break-word;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+    .msg.cli{align-self:flex-start;background:#fff}
+    .msg.bot{align-self:flex-end;background:#dcf5e6}
+    .msg.eq{align-self:flex-end;background:#fde7c8}
+    .msg-h{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px}
+    .chat-day{align-self:center;font-size:11px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.7);padding:2px 10px;border-radius:999px}
     footer{text-align:center;font-size:12px;color:var(--muted2);padding:0 20px 36px}
     @media(max-width:700px){nav{padding:0 16px}.hero,.tabs-bar{padding-left:16px;padding-right:16px}main{padding:24px 16px 60px}.nav-btn span{display:none}}
   </style>
@@ -211,6 +240,14 @@
           <tbody id="cliBody"></tbody>
         </table></div>
       </div>
+      <div class="card" id="fichaCard">
+        <div class="card-title">Ficha do cliente <span class="pill">só leitura</span></div>
+        <div class="card-sub">Escolha um cliente para ver painel, bot, contatos, configurações, encaminhamentos, auditoria e conversas. Nada fica salvo no navegador.</div>
+        <div class="fi-sel"><select id="fiSelect" onchange="openFicha(this.value)"><option value="">Escolha um cliente…</option></select>
+          <button class="btn-sm ghost" type="button" onclick="openFicha($('fiSelect').value)">Atualizar ficha</button></div>
+        <p class="note" id="fiMsg"></p>
+        <div id="fiBody"></div>
+      </div>
     </div>
 
     <!-- CUSTOS -->
@@ -267,6 +304,11 @@ const TEST_INSTANCES = ['INSTANCE_PLACEHOLDER','zappro-test','ecom-test','ecom-s
 const isTestInst = i => !i || TEST_INSTANCES.includes(i) || /test|teste/i.test(i);
 const SKEY = 'tyve-ops-pw';
 let savedToken = '';
+let LAST_STATUS = 0;
+function opsPost(url, extra){
+  return fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, cache:'no-store',
+    body: JSON.stringify(Object.assign({token: savedToken}, extra||{}))});
+}
 let refreshTimer = null;
 let HIST = null;
 const LAST = {};
@@ -296,14 +338,16 @@ async function doLogin(e){
   if(!pwd) return false;
   $('loginErr').style.display='none';
   show('loading');
-  savedToken = pwd;
+  savedToken = pwd; LAST_STATUS = 0;
   const ok = await loadData();
   if(ok){ try{ sessionStorage.setItem(SKEY, pwd); }catch(_){} startAuto(); }
-  else { savedToken=''; $('pwdInput').value=''; show('login'); $('loginErr').style.display='block'; }
+  else { savedToken=''; $('pwdInput').value=''; show('login');
+    $('loginErr').textContent = LAST_STATUS===429 ? 'Muitas tentativas erradas. Espere 15 minutos e tente de novo.' : 'Senha incorreta. Tente novamente.';
+    $('loginErr').style.display='block'; }
   return false;
 }
 function doLogout(){
-  savedToken=''; try{ sessionStorage.removeItem(SKEY); }catch(_){}
+  savedToken=''; clearFicha(); try{ sessionStorage.removeItem(SKEY); }catch(_){}
   if(refreshTimer){ clearInterval(refreshTimer); refreshTimer=null; }
   show('login');
 }
@@ -312,12 +356,14 @@ function startAuto(){ if(refreshTimer) clearInterval(refreshTimer); refreshTimer
 async function loadData(silent){
   if(!savedToken) return false;
   try{
-    const res = await fetch(OPS_API + '?token=' + encodeURIComponent(savedToken));
+    const res = await opsPost(OPS_API);
+    LAST_STATUS = res.status;
+    if(res.status===429) return false;          // bloqueio temporário por IP: não derruba a sessão
     if(res.status===401) { if(silent) doLogout(); return false; }
     const d = await res.json();
     if(!d || d.error) return false;
     render(d);
-    loadHistory(); loadHealth();
+    loadHistory(); loadHealth(); loadFichaList();
     return true;
   }catch(err){ return false; }
 }
@@ -380,7 +426,7 @@ function render(d){
     const nv=(c.nps_avg!=null)?parseFloat(c.nps_avg):null;
     const npsH = nv!=null ? `<span class="nps-v ${npsClass(nv)}">${nv.toFixed(1)}</span><span class="nps-r">${esc(c.nps_responses)} resp.</span>` : '<span class="zero">–</span>';
     return `<tr>
-      <td><div class="cli-name">${esc(c.client_name)}${isTest?'<span class="test-tag">Teste</span>':''}</div><div class="cli-inst">${esc(c.instance)}</div></td>
+      <td><div class="cli-name">${esc(c.client_name)}${isTest?'<span class="test-tag">Teste</span>':''}</div><div class="cli-inst">${esc(c.instance)} · <button class="link-btn" type="button" data-inst="${esc(c.instance)}" onclick="openFicha(this.dataset.inst,true)">ficha</button></div></td>
       <td><span class="plan-badge ${planClass(c.plan)}">${esc(c.plan||'–')}</span></td>
       <td><span class="s-main">${num(c.handoffs_week)}</span><div class="s-sub">${num(c.total_handoffs)} no total</div></td>
       <td><span class="s-main">${num((c.d1_week||0)+(c.d3_week||0))}</span><div class="s-sub">${num((c.d1_total||0)+(c.d3_total||0))} no total</div></td>
@@ -460,7 +506,7 @@ function updateAiCosts(H){
 const HEALTH_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-health';
 async function loadHealth(){
   if(!savedToken) return;
-  let H; try{ const r=await fetch(HEALTH_API+'?token='+encodeURIComponent(savedToken)); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
+  let H; try{ const r=await opsPost(HEALTH_API); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
   if(!H || H.error) return;
   const ch=[], now=Date.now(), ex=H.exec||{};
   const hrs=t=>t? Math.round((now-new Date(t).getTime())/3600000) : null;
@@ -490,7 +536,7 @@ async function loadHealth(){
 }
 async function loadHistory(){
   if(!savedToken) return;
-  let H; try{ const r=await fetch(HIST_API+'?token='+encodeURIComponent(savedToken)); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
+  let H; try{ const r=await opsPost(HIST_API); if(!r.ok) return; H=await r.json(); }catch(e){ return; }
   if(!H || H.error) return;
   HIST=H; updateAiCosts(H);
   const first=(H.contacts||[]).filter(r=>!isTestInst(r.i)).map(r=>r.m).sort()[0] || (H.ai||[]).filter(r=>r.brl>1).map(r=>r.m).sort()[0] || nowYM();
@@ -558,6 +604,148 @@ async function loadHistory(){
       el.insertAdjacentHTML('beforeend',`<div class="chip ${t} usage"><div class="chip-dot"></div><div>${esc(msg)}</div></div>`);
     });
   }
+}
+
+
+// ───────── FICHA DO CLIENTE (só leitura) ─────────
+const FICHA_API = 'https://n8n.tyve.com.br/webhook/tyve-ops-ficha';
+const PAINEL_URL = 'https://www.tyve.com.br/painel?token=';
+let FICHA = null, FICHA_SEQ = 0, CONV_SEQ = 0;
+const fmtDT = t => { if(!t) return '–'; const d=new Date(t); return isNaN(d)?'–':d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); };
+const ago = t => { if(!t) return ''; const m=Math.round((Date.now()-new Date(t).getTime())/60000); if(m<1) return 'agora'; if(m<60) return 'há '+m+' min'; const h=Math.round(m/60); if(h<48) return 'há '+h+'h'; return 'há '+Math.round(h/24)+' dias'; };
+const SRC = {ia:'Agente (IA)',ia_fallback:'Agente (IA reserva)',menu:'Menu',pedido:'Cartão de pedido',canned:'Texto fixo',troca:'Troca',faq:'FAQ',equipe:'Aviso de encaminhamento',manual_tyve:'Correção Tyve'};
+const CAT = {resposta_errada:'Resposta errada',fato_inventado:'Fato inventado',repeticao_loop:'Repetição',promessa_equipe:'Promessa pela equipe',sem_resposta_bot:'Sem resposta do bot',reclamacao_sem_equipe:'Reclamação sem equipe',vazamento:'Vazamento'};
+
+function clearFicha(){ FICHA=null; FICHA_SEQ++; CONV_SEQ++; const b=$('fiBody'); if(b) b.innerHTML=''; setText('fiMsg',''); const s=$('fiSelect'); if(s) s.value=''; }
+async function fichaCall(extra){
+  const r = await opsPost(FICHA_API, extra);
+  if(r.status===401){ doLogout(); return null; }
+  if(r.status===429) throw new Error('locked');
+  if(!r.ok) throw new Error('http '+r.status);
+  return r.json();
+}
+async function loadFichaList(){
+  const sel=$('fiSelect'); if(!sel) return;
+  let L; try{ L=await fichaCall({action:'list'}); }catch(e){ return; }
+  if(!Array.isArray(L)) return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Escolha um cliente…</option>'+L.map(c=>`<option value="${esc(c.instance)}">${esc(c.client_name)} (${esc(c.instance)})</option>`).join('');
+  if(cur) sel.value=cur;
+}
+async function openFicha(inst, scroll){
+  if(!inst){ clearFicha(); return; }
+  const seq=++FICHA_SEQ; CONV_SEQ++;
+  const sel=$('fiSelect'); if(sel && sel.value!==inst){ if(![...sel.options].some(o=>o.value===inst)) sel.insertAdjacentHTML('beforeend',`<option value="${esc(inst)}">${esc(inst)}</option>`); sel.value=inst; }
+  if(scroll) $('fichaCard').scrollIntoView({behavior:'smooth',block:'start'});
+  setText('fiMsg','Carregando ficha…');
+  let F; try{ F=await fichaCall({action:'ficha', instance:inst}); }catch(e){ if(seq===FICHA_SEQ) setText('fiMsg', e.message==='locked' ? 'Acesso bloqueado por 15 minutos depois de várias senhas erradas deste IP.' : 'Não consegui carregar a ficha agora. Tente de novo.'); return; }
+  if(seq!==FICHA_SEQ || !F) return;
+  if(F.error){ setText('fiMsg', F.error==='cliente_nao_encontrado' ? 'Cliente não encontrado.' : 'Erro: '+F.error); $('fiBody').innerHTML=''; return; }
+  FICHA=F; setText('fiMsg','Ficha gerada em '+fmtDT(F.generated_at)+'.');
+  renderFicha(F);
+}
+function box(k,v,cls){ return `<div class="fi-box"><div class="fi-k">${esc(k)}</div><div class="fi-v ${cls||''}">${v}</div></div>`; }
+function phoneBtn(p){ return `<button class="link-btn" type="button" data-ph="${esc(p)}" onclick="searchConv(this.dataset.ph)">${esc(p)}</button>`; }
+function renderFicha(F){
+  const h=[];
+  // 1. painel
+  h.push('<div class="sec-label">Painel do cliente</div>');
+  (F.paineis||[]).forEach((p,i)=>{ const url=PAINEL_URL+encodeURIComponent(p.token||'');
+    h.push(`<div class="fi-link"><b>${esc(p.nome)}</b> <span class="plan-badge ${planClass(p.plano)}">${esc(p.plano||'–')}</span><code id="fiUrl${i}">${esc(url)}</code>
+      <button class="btn-sm" type="button" data-url="${esc(url)}" onclick="copyText(this)">Copiar</button>
+      <a class="btn-sm ghost" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir</a></div>`); });
+  // 2. bot
+  const b=F.bot, nums=F.numeros||[], act=nums.find(n=>n.ativo);
+  h.push('<div class="sec-label" style="margin-top:18px">Bot</div><div class="fi-grid">');
+  h.push(box('Workflow', b ? esc(b.nome)+'<div class="fi-small">'+esc(b.id)+'</div>' : 'Não encontrado', b?'':'bad'));
+  h.push(box('Status', b ? (b.ativo?'Ativo':'Desligado') : '–', b&&b.ativo?'ok':'bad'));
+  h.push(box('Versão no ar', b ? esc(b.versao)+'<div class="fi-small">publicada '+esc(fmtDT(b.atualizado))+'</div>' : '–'));
+  h.push(box('Número na Meta', act ? esc(act.phone_number_id)+'<div class="fi-small">WABA '+esc(act.waba_id||'–')+'</div>' : 'Sem número ativo', act?'':'bad'));
+  h.push(box('Última msg de cliente', esc(fmtDT(F.ultima_msg_cliente))+'<div class="fi-small">'+esc(ago(F.ultima_msg_cliente))+'</div>'));
+  h.push(box('Última resposta do bot', esc(fmtDT(F.ultima_resposta_bot))+'<div class="fi-small">'+esc(ago(F.ultima_resposta_bot))+'</div>'));
+  h.push(box('Mensagens hoje', num(F.msgs_hoje)));
+  h.push(box('Com a equipe agora', num((F.modo_humano||[]).length)+'<div class="fi-small">conversas com o bot pausado</div>'));
+  h.push('</div>');
+  const modos=F.modos||{}, mk=Object.keys(modos);
+  if(mk.length) h.push('<div class="fi-k">Modos e chaves de liga/desliga</div><div class="fi-tags">'+mk.map(k=>`<span class="fi-tag">${esc(k)}: <b>${esc(modos[k])}</b></span>`).join('')+'</div>');
+  // 3. contatos
+  const C=F.contatos||{};
+  h.push('<div class="sec-label" style="margin-top:22px">Contatos do mês</div>');
+  if(C && C.effective_limit){
+    const used=Number(C.used)||0, lim=Number(C.effective_limit)||0, pct=lim?Math.min(Math.round(used/lim*100),100):0;
+    h.push(`<div class="bar-row"><span>${num(used)} de ${num(lim)} contatos (${esc(C.billing_month||'')})</span><span>${pct}%</span></div>
+      <div class="bar"><div class="bar-fill ${pct>=100?'danger':pct>=80?'warn':'safe'}" style="width:${pct}%"></div></div><div class="fi-grid">`);
+    h.push(box('Limite do plano', num(C.plan_limit)));
+    h.push(box('Pacotes', num(C.pack_total)+'<div class="fi-small">'+num(C.pack_used)+' usados, sobram '+num(C.pack_left)+'</div>'));
+    h.push(box('Excedente', num(C.excess), Number(C.excess)>0?'bad':''));
+    h.push('</div><p class="fi-small">O atendimento não é bloqueado; o excedente é cobrado.</p>');
+  } else h.push('<p class="fi-small">Sem dados de contatos para este cliente.</p>');
+  // 4. encaminhamentos
+  const E=F.encaminhamentos||[], abertos=E.filter(e=>e.aberto).length;
+  h.push(`<div class="sec-label" style="margin-top:22px">Encaminhamentos (7 dias)</div><p class="fi-small">${num(E.length)} no período, ${num(abertos)} ainda com a equipe. Clique no telefone para ver a conversa. Encaminhamento e pausa são guardados por telefone: se a mesma pessoa falou com outra loja da Tyve, pode aparecer aqui também.</p>`);
+  if(E.length) h.push('<div class="tbl-wrap"><table class="fi-tbl"><thead><tr><th>Quando</th><th>Telefone</th><th>Assunto</th><th>Com a equipe</th><th>Resumo</th></tr></thead><tbody>'+
+    E.map(e=>`<tr><td>${esc(fmtDT(e.criado))}</td><td>${phoneBtn(e.chat_id)}</td><td>${esc(e.assunto||e.tipo||'–')}${e.tipo==='urgent'?' <span class="fi-tag">urgente</span>':''}</td><td>${e.aberto?'Sim':'Não'}</td><td><div class="fi-pre">${esc(e.resumo||'')}</div></td></tr>`).join('')+'</tbody></table></div>');
+  // 5. auditoria
+  const A=F.auditoria;
+  h.push('<div class="sec-label" style="margin-top:22px">Última auditoria</div>');
+  if(A){
+    const cnt=A.counts||{}, tot=Object.values(cnt).reduce((s,v)=>s+(Number(v)||0),0), base=Number(A.auditadas)||0;
+    h.push(`<p class="fi-small">Dia ${esc(String(A.data||'').slice(0,10).split('-').reverse().join('/'))}: ${num(base)} conversas auditadas de ${num(A.total)}, ${num(tot)} achados${base?' ('+(tot/base*100).toFixed(1).replace('.',',')+' por 100 conversas)':''}${A.alerta?', com alerta':''}.</p>`);
+    h.push('<div class="fi-tags" style="margin-bottom:10px">'+Object.keys(cnt).filter(k=>Number(cnt[k])>0).map(k=>`<span class="fi-tag">${esc(CAT[k]||k)}: <b>${num(cnt[k])}</b></span>`).join('')+'</div>');
+    const ach=A.achados||[];
+    if(ach.length) h.push('<details class="fi-det"><summary>Ver '+num(ach.length)+' achados</summary><div class="tbl-wrap"><table class="fi-tbl"><thead><tr><th>Horário</th><th>Telefone</th><th>Categoria</th><th>Motivo e trecho</th></tr></thead><tbody>'+
+      ach.map(f=>`<tr><td>${esc(f.horario||'')}</td><td>${f.chat_id?phoneBtn(f.chat_id):'–'}</td><td>${esc(CAT[f.categoria]||f.categoria||'')}${f.fix?'<div class="fi-small">'+esc(f.fix)+'</div>':''}</td><td><div class="fi-pre"><b>${esc(f.motivo||'')}</b>${f.trecho?'\n“'+esc(f.trecho)+'”':''}</div></td></tr>`).join('')+'</tbody></table></div></details>');
+  } else h.push('<p class="fi-small">Este cliente não tem auditoria diária.</p>');
+  // 6. conversa
+  h.push(`<div class="sec-label" style="margin-top:22px" id="fiConvLbl">Conversa por telefone</div>
+    <form class="fi-sel" onsubmit="searchConv($('fiPhone').value);return false"><input class="fi-inp" id="fiPhone" type="tel" inputmode="numeric" autocomplete="off" placeholder="Ex.: 5511999998888" style="min-width:220px" />
+    <button class="btn-sm" type="submit">Buscar</button></form>
+    <p class="fi-small">Últimos 30 dias, até 300 mensagens (só na tela, some ao sair ou trocar de cliente): cliente, bot e equipe da loja em ordem de tempo. Aceita o número com ou sem 55 e com ou sem o 9.</p>
+    <div id="fiConv"></div>`);
+  // 7. configurações
+  const cfg=F.config||[];
+  h.push(`<div class="sec-label" style="margin-top:22px">Configurações (${num(cfg.length)})</div>
+    <input class="fi-inp" id="fiCfgQ" type="search" autocomplete="off" placeholder="Filtrar por chave ou valor" oninput="filterCfg(this.value)" style="width:100%;max-width:360px;margin-bottom:10px" />
+    <p class="fi-small">Chaves com token, senha, CPF/CNPJ ou IDs de cobrança aparecem como ••••.</p>
+    <div class="tbl-wrap"><table class="fi-tbl"><thead><tr><th>Chave</th><th>Valor</th></tr></thead><tbody id="fiCfg">`+
+    cfg.map(c=>{ const v=String(c.v==null?'':c.v); const val = v.length>160 ? `<details class="fi-det"><summary>${esc(v.slice(0,120))}… (${num(v.length)} caracteres)</summary><div class="fi-pre">${esc(v)}</div></details>` : `<div class="fi-pre">${esc(v)}</div>`;
+      return `<tr data-q="${esc((c.k+' '+v).toLowerCase())}"><td><b>${esc(c.k)}</b></td><td>${val}</td></tr>`; }).join('')+'</tbody></table></div>');
+  $('fiBody').innerHTML=h.join('');
+}
+function filterCfg(q){ q=String(q||'').toLowerCase().trim(); document.querySelectorAll('#fiCfg tr').forEach(tr=>{ tr.style.display = !q || (tr.dataset.q||'').includes(q) ? '' : 'none'; }); }
+function copyText(btn){
+  const t=btn.dataset.url||''; const done=()=>{ const o=btn.textContent; btn.textContent='Copiado'; setTimeout(()=>btn.textContent=o,1500); };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done).catch(()=>fallbackCopy(t,done)); } else fallbackCopy(t,done);
+}
+function fallbackCopy(t,done){ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(); }catch(_){} ta.remove(); }
+async function searchConv(phone){
+  if(!FICHA) return;
+  const inp=$('fiPhone'); if(inp && phone!==undefined) inp.value=phone;
+  const d=String(phone||'').replace(/\D/g,'');
+  const box=$('fiConv'); if(!box) return;
+  $('fiConvLbl').scrollIntoView({behavior:'smooth',block:'start'});
+  if(d.length<10 || d.length>13){ box.innerHTML='<p class="fi-small">Digite um telefone com DDD (10 a 13 dígitos).</p>'; return; }
+  const seq=++CONV_SEQ, inst=FICHA.instance; LAST_STATUS=0;
+  box.innerHTML='<p class="fi-small">Buscando…</p>';
+  let R; try{ R=await fichaCall({action:'conversa', instance:inst, phone:d}); }catch(e){ if(seq===CONV_SEQ) box.innerHTML='<p class="fi-small">Não consegui buscar agora. Tente de novo.</p>'; return; }
+  if(seq!==CONV_SEQ || !R || !FICHA || FICHA.instance!==inst) return;
+  if(R.error){ box.innerHTML='<p class="fi-small">'+(R.error==='telefone_invalido'?'Telefone inválido.':'Erro: '+esc(R.error))+'</p>'; return; }
+  const M=R.mensagens||[];
+  if(!M.length){ box.innerHTML='<p class="fi-small">Nenhuma mensagem desse telefone com este cliente nos últimos 30 dias (procurei '+esc((R.telefones||[]).join(' e '))+').</p>'; return; }
+  let lastDay='', out=[];
+  M.forEach(m=>{
+    const dt=new Date(m.at), day=dt.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
+    if(day!==lastDay){ out.push(`<div class="chat-day">${esc(day)}</div>`); lastDay=day; }
+    const hr=dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    let cls='cli', who='Cliente';
+    if(m.quem==='bot'){ cls='bot'; who=SRC[m.tipo]||('Bot ('+(m.tipo||'?')+')'); if(m.detalhe) who+=' · '+m.detalhe; }
+    else if(m.quem==='equipe_app'){ cls='eq'; who='Equipe da loja (app)'; }
+    else if(m.tipo && m.tipo!=='text') who+=' · '+m.tipo;
+    out.push(`<div class="msg ${cls}"><div class="msg-h">${esc(who)} · ${esc(hr)}</div>${esc(m.texto==null?'':m.texto)}</div>`);
+  });
+  const head = `<p class="fi-small">${num(M.length)} mensagens${R.truncado?' (as 300 mais recentes)':''}${R.modo_humano_ate?'. Bot pausado (com a equipe) até '+esc(fmtDT(R.modo_humano_ate)):''}.</p>`;
+  box.innerHTML = head+'<div class="chat" id="fiChat">'+out.join('')+'</div>';
+  const c=$('fiChat'); if(c) c.scrollTop=c.scrollHeight;
 }
 
 // restaura sessão da aba
