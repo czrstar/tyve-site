@@ -1943,8 +1943,28 @@ const PROACTIVE = [
   { key:'order_notif_delivered_enabled', label:'✅ Aviso de pedido entregue', desc:'Quando a transportadora confirma a entrega, o cliente recebe a confirmação. Depende do aviso de envio ligado.', ecom:true, plans:['escala'] },
   { key:'followup_d1_enabled', label:'🔁 Follow-up no dia seguinte', desc:'Quem falou com a equipe e sumiu recebe uma mensagem perguntando se resolveu.', ecom:false, plans:['cresce','escala'] },
   { key:'nps_enabled', label:'⭐ Pesquisa de satisfação (0 a 10)', desc:'Enviada no dia seguinte a cada atendimento da equipe. As notas aparecem na aba Resultados.', ecom:false, plans:['cresce','escala'] },
-  { key:'cart_recovery_enabled', label:'🛒 Recuperação de carrinho', desc:'Quem deixou produtos no carrinho recebe um lembrete no WhatsApp, com o link para finalizar, cerca de 1 hora depois. Add-on ativo.', ecom:true, plans:['atende','cresce','escala'], addon:'cart_recovery_addon' },
+  { key:'cart_recovery_enabled', label:'🛒 Recuperação de carrinho', desc:'Quem deixou produtos no carrinho recebe um lembrete no WhatsApp, com o link para finalizar. Add-on ativo.', ecom:true, plans:['atende','cresce','escala'], addon:'cart_recovery_addon' },
 ];
+// (19/10 #845) "Como funciona" da recuperacao de carrinho, embaixo do interruptor. Numeros vem da config da loja (mesmos padroes do workflow Cart Recovery).
+function cartHowHtml() {
+  const num = (v, d, lo, hi) => Math.min(hi, Math.max(lo, parseInt(v, 10) || d)); // igual ao PREP_CLIENTS: vazio, 0 ou invalido = padrao
+  const delay = num(CONFIG.cart_recovery_delay_min, 60, 30, 100000);
+  const maxH = num(CONFIG.cart_recovery_max_age_h, 24, 2, 72);
+  const cap = num(CONFIG.cart_recovery_daily_cap, 30, 1, 500);
+  const fmtMin = m => m % 60 === 0 ? (m / 60) + 'h' : m + ' min';
+  const tpl = String(CONFIG.cart_recovery_tpl_preview || '').trim();
+  const li = (t, b) => '<p style="margin:8px 0 0"><strong>' + t + ':</strong> ' + b + '</p>';
+  return '<details style="font-size:13px;color:#555;line-height:1.55;margin-top:8px"><summary style="cursor:pointer;font-weight:600;color:var(--text)">Como funciona</summary>'
+    + li('Quem recebe', String(CONFIG.cart_recovery_optin_mode || '') === 'store_attests' ? 'clientes que deixaram o carrinho no checkout e que, pela sua confirmação, aceitaram receber mensagens da loja.' : 'clientes que deixaram o carrinho no checkout e marcaram a caixinha de aceite para receber ofertas pelo WhatsApp. Sem essa caixinha marcada, ninguém recebe.')
+    + (delay < maxH * 60 ? li('Quando', 'entre ' + fmtMin(delay) + ' e ' + maxH + 'h depois do abandono, das 9h às 20h (horário de Brasília).') : '')
+    + li('Limites', 'no máximo 1 lembrete por cliente a cada 7 dias e até ' + cap + ' por dia na loja. Quem está em atendimento com a equipe não recebe.')
+    + li('Para sair', 'se o cliente responder PARE, PARAR ou algo parecido, ele sai da lista na hora e recebe uma confirmação.')
+    + li('Custo', 'cada lembrete é uma mensagem de marketing da Meta, cobrada na conta de WhatsApp da loja (referência: cerca de R$ 0,34 por envio).')
+    + li('Cuidado com o número', 'é o mesmo número do atendimento. Por isso só enviamos para quem aceitou, para proteger a qualidade e evitar bloqueios.')
+    + (tpl ? '<p style="margin:8px 0 0"><strong>Texto do lembrete:</strong></p><div style="white-space:pre-wrap;background:#f6f6f6;border-radius:8px;padding:10px 12px;margin-top:4px;color:#333">' + esc(tpl) + '</div>' : '')
+    + '<p style="margin:8px 0 0">' + (tpl ? 'Para mudar o texto' : 'Para ver ou mudar o texto do lembrete') + ', <a href="https://wa.me/5516994247541?text=Quero+mudar+o+texto+da+recupera%C3%A7%C3%A3o+de+carrinho" target="_blank" rel="noopener">fale com a gente</a>. Toda mudança precisa ser aprovada pela Meta antes de valer.</p>'
+    + '</details>';
+}
 function renderProactive() {
   const box = document.getElementById('proactiveList'), note = document.getElementById('proactiveNote'); if (!box) return;
   const plan = String(CONFIG.plan || '').toLowerCase();
@@ -1965,7 +1985,7 @@ function renderProactive() {
     if (p.key === 'order_notif_delivered_enabled' && CONFIG[p.key] == null) { const ev = String(CONFIG.order_notif_events||''); on = String(CONFIG.order_notif_enabled||'') === 'true' && !!ev && ev.split(',').map(x=>x.trim()).includes('delivered'); } // (24/09 #738) sem chave = desligado (opt-in)
     const g = tplGate(p.key);
     const gateNote = g.note ? '<div style="font-size:12px;color:' + (g.ok ? '#a16207' : '#b45309') + ';margin-top:4px">' + g.note + '</div>' : '';
-    return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + '</div></div></div>';
+    return '<div class="faq-item" style="padding:10px 0' + (g.ok ? '' : ';opacity:.7') + '"><div class="faq-row"><label class="toggle"><input type="checkbox" ' + (on && g.ok ? 'checked' : '') + (g.ok ? '' : ' disabled') + ' onchange="toggleProactive(\'' + p.key + '\',this.checked,this)" /><span class="toggle-slider"></span></label><div class="faq-content"><div class="faq-q">' + p.label + '</div><div class="faq-a" style="font-size:13px;color:#666">' + p.desc + '</div>' + gateNote + (p.key === 'cart_recovery_enabled' ? cartHowHtml() : '') + '</div></div></div>';
   }).join('') + addonPromo;
   renderAddonCard();
 }
