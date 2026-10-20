@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leads — Tyve</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Grift';src:url('/assets/fonts/Grift-ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --orange:#f84100;--orange-dim:rgba(248,65,0,0.08);--orange-glow:rgba(248,65,0,0.28);
+      --teal:#00b5ae;--teal-dim:rgba(0,181,174,0.10);
+      --bg:#f0ebe3;--surface:#fff;--surface2:#f7f4ef;--surface3:#ede9e1;
+      --border:rgba(17,30,29,0.09);--border2:rgba(17,30,29,0.16);
+      --text:#111e1d;--muted:#555;--muted2:#888;
+      --amber:#b45309;--red:#dc2626;--green:#15803d;--wa:#128c7e;
+      --radius:14px;--radius-sm:10px;
+      --font:'Grift','DM Sans',system-ui,sans-serif;--dark:#111e1d;
+    }
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+    nav{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:var(--orange);position:sticky;top:0;z-index:200}
+    .nav-left{display:flex;align-items:center;gap:14px}
+    .nav-logo img{height:28px;filter:brightness(0) invert(1);display:block}
+    .nav-tag{font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px;background:rgba(0,0,0,0.18);border:1px solid rgba(255,255,255,0.25);color:#fff;letter-spacing:.04em;text-transform:uppercase}
+    .nav-right{display:flex;align-items:center;gap:10px}
+    .nav-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.9);background:rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:7px 16px;cursor:pointer;font-family:var(--font)}
+    .nav-btn:hover{background:rgba(0,0,0,0.28);color:#fff}
+    .hero{position:relative;background:var(--dark);overflow:hidden;padding:30px 40px 26px}
+    .hero::before{content:'';position:absolute;inset:0;background-image:url('/assets/raios-tyve.svg');background-size:auto 120%;background-repeat:repeat-x;opacity:.07;pointer-events:none}
+    .hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+    .hero-eyebrow::before{content:'';width:18px;height:2px;background:var(--orange);border-radius:2px}
+    .hero h1{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.5px;color:#fff;line-height:1.15}
+    .hero-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+    .hk{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;color:#fff}
+    .hk-l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.55)}
+    .hk-v{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-top:4px}
+    .hk-v small{font-size:13px;font-weight:600;color:rgba(255,255,255,.5)}
+    .tabs-bar{background:var(--dark);border-bottom:3px solid var(--orange);padding:0 40px}
+    .tabs{display:flex;gap:2px;max-width:1100px;margin:0 auto;overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+    .tab-btn{display:flex;align-items:center;gap:7px;padding:14px 20px;border:none;border-bottom:3px solid transparent;margin-bottom:-3px;background:transparent;color:rgba(255,255,255,.55);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+    .tab-btn:hover{color:rgba(255,255,255,.9)}
+    .tab-btn.active{color:#fff;border-bottom-color:var(--orange)}
+    .badge{font-size:11px;font-weight:800;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--orange);color:#fff;display:inline-flex;align-items:center;justify-content:center}
+    main{max-width:1100px;margin:0 auto;padding:28px 40px 80px}
+    .state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;gap:16px}
+    .state h2{font-size:22px;font-weight:700}
+    .state p{color:var(--muted);max-width:420px;line-height:1.6;font-size:15px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner{width:38px;height:38px;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--orange);animation:spin .7s linear infinite}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;background:var(--orange);color:#fff;font-weight:700;font-size:14px;border:none;font-family:var(--font);border-radius:999px;cursor:pointer;box-shadow:0 4px 18px var(--orange-glow);text-decoration:none}
+    .btn:hover{filter:brightness(1.05)}
+    .btn:disabled{opacity:.55;cursor:default;box-shadow:none}
+    .btn.ghost{background:var(--surface3);color:var(--text);box-shadow:none}
+    .btn.wa{background:var(--wa);box-shadow:none}
+    .btn.dark{background:var(--dark);box-shadow:none}
+    .btn.danger{background:transparent;color:var(--red);border:1.5px solid rgba(220,38,38,.4);box-shadow:none}
+    .btn-sm{padding:8px 14px;font-size:13px}
+    .inp,textarea,select{width:100%;padding:11px 13px;border:1.5px solid var(--border2);border-radius:10px;font:inherit;font-size:14px;background:var(--surface2);color:var(--text)}
+    textarea{resize:vertical;line-height:1.5}
+    .inp:focus,textarea:focus,select:focus{outline:none;border-color:var(--orange)}
+    label.lb{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin:14px 0 6px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:18px;box-shadow:0 1px 3px rgba(17,30,29,0.06)}
+    .card-title{font-size:16px;font-weight:700;margin-bottom:4px}
+    .card-sub{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.55}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .tag{display:inline-flex;align-items:center;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--surface3);color:var(--text)}
+    .tag.o{background:var(--orange-dim);color:var(--orange)}
+    .tag.t{background:var(--teal-dim);color:#007a75}
+    .tag.g{background:rgba(21,128,61,.1);color:var(--green)}
+    .tag.r{background:rgba(220,38,38,.08);color:var(--red)}
+    .tag.a{background:rgba(180,83,9,.1);color:var(--amber)}
+    .lead-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+    .lead-name{font-size:22px;font-weight:800;letter-spacing:-.3px}
+    .lead-meta{font-size:13px;color:var(--muted);margin-top:4px;word-break:break-word}
+    .lead-meta a{color:var(--orange);font-weight:700;text-decoration:none}
+    .prog{height:8px;border-radius:999px;background:var(--surface3);overflow:hidden;margin:12px 0 4px}
+    .prog > div{height:100%;background:var(--orange);border-radius:999px;transition:width .4s}
+    .muted{color:var(--muted)}.small{font-size:12.5px}
+    .msg-ok{background:rgba(21,128,61,.08);border:1px solid rgba(21,128,61,.25);color:var(--green);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px}
+    .msg-err{background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.25);color:var(--red);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px}
+    .msg-warn{background:rgba(180,83,9,.06);border:1px solid rgba(180,83,9,.25);color:var(--amber);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);text-align:left;padding:10px;border-bottom:1px solid var(--border2);white-space:nowrap}
+    td{padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+    tr.click{cursor:pointer}tr.click:hover td{background:var(--surface2)}
+    .tbl-wrap{overflow-x:auto}
+    .funil{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+    .fb{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;text-align:left;font-family:var(--font)}
+    .fb.on{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-dim)}
+    .fb b{display:block;font-size:24px;font-weight:800}
+    .fb span{font-size:12px;color:var(--muted)}
+    .modal-bg{position:fixed;inset:0;background:rgba(17,30,29,.45);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto}
+    .modal{background:var(--surface);border-radius:var(--radius);max-width:720px;width:100%;padding:26px;position:relative}
+    .x{position:absolute;right:14px;top:12px;border:none;background:var(--surface3);width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer}
+    .ev{font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)}
+    .chk{display:flex;align-items:center;gap:8px;font-size:14px;padding:6px 0}
+    .chk input{width:18px;height:18px;accent-color:var(--orange)}
+    .seg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:4px 16px}
+    .hint{font-size:12.5px;color:var(--muted2);margin-top:6px;line-height:1.5}
+    .done-box{text-align:center;padding:40px 20px}
+    .done-box h3{font-size:20px;margin-bottom:8px}
+    footer{text-align:center;font-size:12px;color:var(--muted2);padding:0 20px 36px}
+    @media(max-width:700px){nav{padding:0 16px}.hero,.tabs-bar{padding-left:16px;padding-right:16px}main{padding:20px 16px 60px}.grid2{grid-template-columns:1fr}.nav-btn span{display:none}.card{padding:18px}}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <a class="nav-logo" href="https://tyve.com.br" target="_blank" rel="noopener"><img src="/assets/logo-tyve.svg" alt="Tyve" /></a>
+    <span class="nav-tag">Leads</span>
+  </div>
+  <div class="nav-right" id="navActions" style="display:none">
+    <button class="nav-btn" type="button" onclick="refreshAll()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 019-9 9 9 0 016.36 2.64L21 9M21 3v6h-6"/></svg><span>Atualizar</span></button>
+    <button class="nav-btn" type="button" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<main id="loginScreen">
+  <div class="state">
+    <h2>Prospecção Tyve</h2>
+    <p>Fila de lojas, funil e robô de leads. Digite a senha de acesso.</p>
+    <form style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:420px;width:100%" onsubmit="return login(event)">
+      <input class="inp" style="flex:1;min-width:200px" id="pwd" type="password" placeholder="Senha" autocomplete="current-password" />
+      <button type="submit" class="btn">Entrar</button>
+    </form>
+    <p id="loginErr" style="display:none;color:#c0392b;font-weight:600"></p>
+  </div>
+</main>
+
+<main id="loadingScreen" style="display:none"><div class="state"><div class="spinner"></div><p>Carregando…</p></div></main>
+
+<div id="app" style="display:none">
+  <section class="hero"><div class="hero-inner">
+    <div class="hero-eyebrow">Prospecção e-commerce</div>
+    <h1 id="heroTitle">Bom trabalho hoje</h1>
+    <div class="hero-kpis">
+      <div class="hk"><div class="hk-l">E-mails hoje</div><div class="hk-v" id="kEmail">0</div></div>
+      <div class="hk"><div class="hk-l">WhatsApp hoje</div><div class="hk-v" id="kWa">0</div></div>
+      <div class="hk"><div class="hk-l">Follow-ups para hoje</div><div class="hk-v" id="kFu">0</div></div>
+      <div class="hk"><div class="hk-l">Lojas na fila</div><div class="hk-v" id="kEst">0</div></div>
+      <div class="hk"><div class="hk-l">Responderam</div><div class="hk-v" id="kResp">0</div></div>
+    </div>
+  </div></section>
+  <div class="tabs-bar"><div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="hoje" onclick="tab('hoje')">Fila de hoje</button>
+    <button class="tab-btn" data-tab="follow" onclick="tab('follow')">Follow-up <span class="badge" id="bFu" style="display:none">0</span></button>
+    <button class="tab-btn" data-tab="leads" onclick="tab('leads')">Leads e funil</button>
+    <button class="tab-btn" data-tab="add" onclick="tab('add')">Adicionar loja</button>
+    <button class="tab-btn" data-tab="gerar" onclick="tab('gerar')">Gerar mais</button>
+    <button class="tab-btn" data-tab="regras" onclick="tab('regras')">Regras e textos</button>
+  </div></div>
+
+  <main>
+    <!-- HOJE -->
+    <section id="t-hoje">
+      <div class="card" style="padding:16px 20px">
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <span class="muted small">Canal:</span>
+            <select id="qCanal" style="width:auto" onchange="loadFila()"><option value="email">E-mail</option><option value="whats">Só WhatsApp (lojas sem e-mail)</option></select>
+            <select id="qSeg" style="width:auto" onchange="loadFila()"><option value="">Todos os segmentos</option></select>
+          </div>
+          <div class="small muted" id="qInfo"></div>
+        </div>
+        <div class="prog"><div id="qProg" style="width:0"></div></div>
+      </div>
+      <div id="filaBox"></div>
+    </section>
+
+    <!-- FOLLOW-UP -->
+    <section id="t-follow" style="display:none">
+      <div class="card"><div class="card-title">Follow-up do dia</div>
+        <div class="card-sub">Lojas que receberam a primeira mensagem e ainda não responderam. Um follow-up só por loja. Se a loja respondeu, marque "Respondeu" para ela sair daqui.</div>
+        <div id="fuBox"></div></div>
+    </section>
+
+    <!-- LEADS -->
+    <section id="t-leads" style="display:none">
+      <div class="funil" id="funil"></div>
+      <div class="card" style="padding:16px 20px">
+        <div class="row">
+          <input class="inp" style="flex:1;min-width:180px" id="lBusca" placeholder="Buscar por loja, site, e-mail ou Instagram" onkeydown="if(event.key==='Enter')loadLeads(0)" />
+          <select id="lSeg" style="width:auto" onchange="loadLeads(0)"><option value="">Todos os segmentos</option></select>
+          <button class="btn btn-sm" onclick="loadLeads(0)">Buscar</button>
+          <button class="btn btn-sm ghost" onclick="exportar()">Baixar planilha (CSV)</button>
+        </div>
+      </div>
+      <div class="card"><div class="tbl-wrap"><table><thead><tr><th>Loja</th><th>Segmento</th><th>Status</th><th>Contato</th><th>Atualizado</th></tr></thead><tbody id="lBody"></tbody></table></div>
+        <div class="row" style="justify-content:center;margin-top:14px"><button class="btn btn-sm ghost" id="lPrev" onclick="loadLeads(L_PAGE-1)">Anteriores</button><span class="small muted" id="lPage"></span><button class="btn btn-sm ghost" id="lNext" onclick="loadLeads(L_PAGE+1)">Próximos</button></div>
+      </div>
+    </section>
+
+    <!-- ADICIONAR -->
+    <section id="t-add" style="display:none">
+      <div class="card"><div class="card-title">Adicionar uma loja que você achou</div>
+        <div class="card-sub">Cole o site da loja. O robô confere se ela já está no funil, lê o site e diz a plataforma, o segmento, os contatos e o gancho. Leva uns 10 a 30 segundos.</div>
+        <form class="row" onsubmit="return addLoja(event)"><input class="inp" style="flex:1;min-width:220px" id="addDom" placeholder="ex.: minhaloja.com.br" /><button class="btn" id="addBtn" type="submit">Analisar</button></form>
+        <div id="addRes" style="margin-top:16px"></div>
+      </div>
+    </section>
+
+    <!-- GERAR -->
+    <section id="t-gerar" style="display:none">
+      <div class="card"><div class="card-title">Lojas prontas na fila</div>
+        <div class="card-sub">Lojas do perfil, com e-mail e WhatsApp no site, que ainda não receberam mensagem.</div>
+        <div class="row" id="segCounts"></div>
+      </div>
+      <div class="card"><div class="card-title">Pedir mais lojas ao robô</div>
+        <div class="card-sub" id="roboTxt"></div>
+        <div class="row"><input class="inp" style="width:120px" type="number" min="1" max="300" id="gQtd" value="50" /><button class="btn" onclick="gerar()">Pedir agora</button></div>
+        <div id="gRes" style="margin-top:12px"></div>
+      </div>
+    </section>
+
+    <!-- REGRAS -->
+    <section id="t-regras" style="display:none">
+      <div class="card"><div class="card-title">Perfil das lojas</div>
+        <div class="card-sub">Segmentos desligados não entram mais na fila (o que já está na fila continua). O robô só aceita lojas Shopify e Nuvemshop com WhatsApp no site.</div>
+        <label class="lb">Segmentos que entram</label><div class="seg-grid" id="rSegs"></div>
+        <label class="lb">Palavras que excluem a loja (uma por linha)</label>
+        <textarea id="rPalavras" rows="4" placeholder="ex.: atacado"></textarea>
+        <div class="hint">Se a palavra aparecer no nome ou na descrição do site, a loja fica de fora. Nutracêuticos, autopeças, pet, atacado, café, alimentos, modelismo, eletrônicos e decoração já ficam de fora sempre.</div>
+        <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarRegras()">Salvar perfil</button><span id="rMsg1" class="small"></span></div>
+      </div>
+      <div class="card"><div class="card-title">Limites por dia</div>
+        <div class="grid2">
+          <div><label class="lb">E-mails por dia</label><input class="inp" type="number" id="rEmail" min="1" max="300" /></div>
+          <div><label class="lb">WhatsApp por dia</label><input class="inp" type="number" id="rWa" min="0" max="100" /></div>
+          <div><label class="lb">Follow-up depois de quantos dias</label><input class="inp" type="number" id="rFu" min="1" max="30" /></div>
+          <div><label class="lb">Robô mantém na fila até</label><input class="inp" type="number" id="rEst" min="0" max="1000" /></div>
+        </div>
+        <div class="hint">Os limites protegem a conta de e-mail e o chip. Subir devagar.</div>
+        <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarLimites()">Salvar limites</button><span id="rMsg2" class="small"></span></div>
+      </div>
+      <div class="card"><div class="card-title">Textos das mensagens</div>
+        <div class="card-sub">Use {loja} para o nome da loja e {gancho} para o gancho de cada loja. O assunto de cada loja aparece na fila e pode ser editado lá.</div>
+        <label class="lb">Primeiro e-mail</label><textarea id="rCorpo" rows="8"></textarea>
+        <label class="lb">E-mail de follow-up</label><textarea id="rFuTxt" rows="5"></textarea>
+        <label class="lb">WhatsApp</label><textarea id="rWaTxt" rows="4"></textarea>
+        <label class="lb">Conta do Gmail que envia (opcional)</label><input class="inp" id="rConta" placeholder="ex.: ana@tyve.com.br" />
+        <div class="hint">Se você usa mais de uma conta no Gmail, coloque aqui a conta que envia a prospecção. Assim o botão abre o e-mail já nela.</div>
+        <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarModelos()">Salvar textos</button><span id="rMsg3" class="small"></span></div>
+      </div>
+    </section>
+  </main>
+  <footer>Tyve. Feita para resolver.</footer>
+</div>
+
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal"></div></div>
+
+<script>
+const API = 'https://n8n.tyve.com.br/webhook/tyve-leads';
+const SKEY = 'tyve_leads_tk';
+let TOKEN = '', RES = {}, CFG = {}, FILA = [], FI = 0, L_PAGE = 0, L_STATUS = '';
+const SEGS = {'calçados':'Calçados','moda':'Moda','fitness':'Moda fitness','praia':'Moda praia','infantil':'Moda infantil','lingerie':'Lingerie e moda íntima','semijoias':'Semijoias','acessórios':'Acessórios'};
+const STS = {novo:'Na fila',enviado:'Enviado',respondeu:'Respondeu',reuniao:'Reunião marcada',cliente:'Virou cliente',sem_interesse:'Sem interesse',nao_contatar:'Não contatar',antigo:'Lote antigo'};
+const STC = {novo:'',enviado:'t',respondeu:'o',reuniao:'o',cliente:'g',sem_interesse:'r',nao_contatar:'r',antigo:''};
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtD(s){ if(!s) return ''; const d=new Date(s); if(isNaN(d)) return esc(s); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function fmtDia(s){ if(!s) return ''; const [y,m,d]=String(s).slice(0,10).split('-'); return d+'/'+m; }
+function segNome(s){ return SEGS[s] || s || ''; }
+function platNome(p){ return ({shopify:'Shopify',nuvemshop:'Nuvemshop',woocommerce:'WooCommerce'})[p] || p || ''; }
+function firstWa(w){ const m=String(w||'').match(/\d{10,15}/); return m?m[0]:''; }
+function fmtWa(w){ const n=firstWa(w); if(!n) return ''; const s=n.startsWith('55')?n.slice(2):n; return s.length>=10?'('+s.slice(0,2)+') '+s.slice(2,-4)+'-'+s.slice(-4):n; }
+function preencher(t, l){ return String(t||'').split('{loja}').join(l.loja||l.dominio).split('{gancho}').join(l.gancho||''); }
+
+async function call(action, p){
+  const r = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, cache:'no-store', body: JSON.stringify({token:TOKEN, action, p:p||{}})});
+  if (r.status===401 || r.status===429) { const e=new Error(r.status===429?'locked':'unauth'); e.status=r.status; throw e; }
+  if (!r.ok) throw new Error('falha '+r.status);
+  const j = await r.json();
+  if (j == null) throw new Error('resposta vazia do servidor');
+  if (j.erro) throw new Error(j.erro);
+  return j;
+}
+function show(w){ $('loginScreen').style.display=w==='login'?'':'none'; $('loadingScreen').style.display=w==='loading'?'':'none'; $('app').style.display=w==='app'?'':'none'; $('navActions').style.display=w==='app'?'':'none'; }
+async function login(ev){
+  ev.preventDefault(); TOKEN=$('pwd').value; $('loginErr').style.display='none'; show('loading');
+  try { await boot(); try{sessionStorage.setItem(SKEY,TOKEN);}catch(_){} }
+  catch(e){ TOKEN=''; show('login'); $('loginErr').textContent = e.message==='locked' ? 'Muitas tentativas erradas. Espere 15 minutos e tente de novo.' : (e.status ? 'Senha incorreta. Tente novamente.' : 'Não consegui conectar agora. Tente de novo.'); $('loginErr').style.display='block'; }
+  return false;
+}
+function logout(){ TOKEN=''; try{sessionStorage.removeItem(SKEY);}catch(_){} $('pwd').value=''; show('login'); }
+async function boot(){
+  const [res, cfg] = await Promise.all([call('resumo'), call('config')]);
+  RES=res; CFG=cfg; renderResumo(); fillSegSelects(); renderRegras(); show('app'); tab(curTab());
+}
+async function refreshAll(){ try{ RES=await call('resumo'); renderResumo(); tab(curTab()); }catch(e){ handleErr(e); } }
+function handleErr(e){ if(e.status){ logout(); $('loginErr').textContent='Sua sessão caiu. Entre de novo.'; $('loginErr').style.display='block'; } else alert('Não deu certo: '+e.message); }
+function curTab(){ const b=document.querySelector('.tab-btn.active'); return b?b.dataset.tab:'hoje'; }
+function tab(t){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===t));
+  ['hoje','follow','leads','add','gerar','regras'].forEach(x=>$('t-'+x).style.display = x===t?'':'none');
+  if(t==='hoje') loadFila(); if(t==='follow') loadFollow(); if(t==='leads') loadLeads(0); if(t==='gerar') renderGerar();
+}
+function renderResumo(){
+  const L=RES.limites||{}, f=RES.funil||{};
+  $('kEmail').innerHTML = (RES.enviados_hoje_email||0)+' <small>/ '+(L.email_dia||0)+'</small>';
+  $('kWa').innerHTML = (RES.enviados_hoje_whats||0)+' <small>/ '+(L.whats_dia||0)+'</small>';
+  $('kFu').textContent = RES.followups_hoje||0;
+  $('kEst').textContent = RES.estoque||0;
+  $('kResp').textContent = (f.respondeu||0)+(f.reuniao||0)+(f.cliente||0);
+  $('bFu').style.display = RES.followups_hoje ? '' : 'none'; $('bFu').textContent = RES.followups_hoje||0;
+  const h=new Date().getHours(); $('heroTitle').textContent = (h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', Ana';
+}
+function fillSegSelects(){
+  for (const id of ['qSeg','lSeg']) { const s=$(id); const v=s.value; s.innerHTML='<option value="">Todos os segmentos</option>'+Object.entries(SEGS).map(([k,n])=>'<option value="'+esc(k)+'">'+esc(n)+'</option>').join(''); s.value=v; }
+}
+
+// ---------------- FILA
+function limiteCanal(){ const L=RES.limites||{}; return $('qCanal').value==='whats' ? [RES.enviados_hoje_whats||0, L.whats_dia||0] : [RES.enviados_hoje_email||0, L.email_dia||0]; }
+async function loadFila(){
+  $('filaBox').innerHTML='<div class="card"><div class="state" style="min-height:160px"><div class="spinner"></div></div></div>';
+  try { const j=await call('fila',{canal:$('qCanal').value, segmento:$('qSeg').value, limite:80}); FILA=j.leads||[]; FI=0; renderFila(); } catch(e){ handleErr(e); }
+}
+function renderFila(){
+  const [feitos, lim] = limiteCanal(); const canal=$('qCanal').value;
+  $('qProg').style.width = lim ? Math.min(100, feitos/lim*100)+'%' : '0';
+  $('qInfo').textContent = feitos+' de '+lim+' enviados hoje · '+FILA.length+' na fila'+($('qSeg').value?' deste segmento':'');
+  if (feitos >= lim) { $('filaBox').innerHTML='<div class="card done-box"><h3>Limite de hoje atingido</h3><p class="muted">Você enviou '+feitos+' '+(canal==='whats'?'mensagens de WhatsApp':'e-mails')+' hoje. Amanhã a fila continua daqui. Se quiser, veja os follow-ups.</p></div>'; return; }
+  const l = FILA[FI];
+  if (!l) { $('filaBox').innerHTML='<div class="card done-box"><h3>Fila vazia por aqui</h3><p class="muted">Não há mais lojas com esse filtro. Peça mais ao robô na aba "Gerar mais" ou troque o filtro.</p></div>'; return; }
+  const M=CFG.modelos||{};
+  const wa=firstWa(l.whatsapp);
+  const corpo = preencher(canal==='whats'?M.whats:M.email_corpo, l);
+  $('filaBox').innerHTML =
+   '<div class="card">'+
+   '<div class="lead-head"><div><div class="small muted">Loja '+(feitos+1)+' de hoje</div><div class="lead-name">'+esc(l.loja||l.dominio)+'</div>'+
+   '<div class="lead-meta"><a href="https://'+esc(l.dominio)+'" target="_blank" rel="noopener">'+esc(l.dominio)+'</a> · '+esc(platNome(l.plataforma))+(l.instagram?' · '+esc(l.instagram):'')+(wa?' · '+esc(fmtWa(wa)):'')+'</div></div>'+
+   '<div class="row"><span class="tag o">'+esc(segNome(l.segmento))+'</span></div></div>'+
+   '<div class="row small muted" style="margin-top:10px">Por que entrou: '+esc(l.perfil_motivo||'')+'</div>'+
+   (canal==='email' ? '<label class="lb">Para</label><input class="inp" id="fEmail" value="'+esc(l.email)+'" />'+(l.emails_alt?'<div class="hint">Outros e-mails do site: '+esc(l.emails_alt)+'</div>':'')+
+     '<label class="lb">Assunto</label><input class="inp" id="fAssunto" value="'+esc(l.assunto)+'" />' : '')+
+   '<label class="lb">Mensagem</label><textarea id="fCorpo" rows="'+(canal==='whats'?6:10)+'">'+esc(corpo)+'</textarea>'+
+   '<div class="row" style="margin-top:16px">'+
+     (canal==='email' ? '<button class="btn" onclick="abrirGmail()">Abrir no Gmail</button>' : '')+
+     (wa ? '<button class="btn wa" onclick="abrirWa()">Abrir no WhatsApp</button>' : '')+
+     '<button class="btn dark" onclick="enviado()">Enviei, próxima</button>'+
+     '<button class="btn ghost" onclick="pular()">Pular hoje</button>'+
+     '<button class="btn danger" onclick="naoContatar()">Não contatar</button>'+
+   '</div>'+
+   '<div class="hint">Abra, confira e envie por lá. Depois volte e clique em "Enviei, próxima". Uma de cada vez, para proteger a conta.</div>'+
+   '</div>';
+}
+function gmailUrl(to, su, body){ const conta=(CFG.modelos||{}).gmail_conta; return 'https://mail.google.com/mail/?'+(conta?'authuser='+encodeURIComponent(conta)+'&':'')+'view=cm&fs=1&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(su)+'&body='+encodeURIComponent(body); }
+async function salvarEdicao(l){
+  const p={id:l.id};
+  if ($('fEmail') && $('fEmail').value.trim()!==String(l.email||'')) p.email=$('fEmail').value.trim();
+  if ($('fAssunto') && $('fAssunto').value!==String(l.assunto||'')) p.assunto=$('fAssunto').value;
+  if (Object.keys(p).length>1) { try{ const j=await call('editar',p); Object.assign(l, j.lead); }catch(e){} }
+}
+async function abrirGmail(){ const l=FILA[FI]; await salvarEdicao(l); window.open(gmailUrl($('fEmail').value.trim(), $('fAssunto').value, $('fCorpo').value), '_blank', 'noopener'); }
+function abrirWa(){ const l=FILA[FI]; const n=firstWa(l.whatsapp); window.open('https://wa.me/'+n+'?text='+encodeURIComponent(($('qCanal').value==='whats'?$('fCorpo').value:preencher((CFG.modelos||{}).whats,l))), '_blank', 'noopener'); }
+async function enviado(){
+  const l=FILA[FI]; const canal=$('qCanal').value;
+  try { await salvarEdicao(l); await call('marcar',{id:l.id, o_que:'enviado', canal}); if(canal==='whats') RES.enviados_hoje_whats=(RES.enviados_hoje_whats||0)+1; else RES.enviados_hoje_email=(RES.enviados_hoje_email||0)+1; RES.estoque=Math.max(0,(RES.estoque||0)-(canal==='email'?1:0)); FILA.splice(FI,1); renderResumo(); renderFila(); window.scrollTo({top:0,behavior:'smooth'}); }
+  catch(e){ handleErr(e); }
+}
+async function pular(){ const l=FILA[FI]; try{ await call('marcar',{id:l.id,o_que:'pular'}); FILA.splice(FI,1); renderFila(); }catch(e){ handleErr(e); } }
+async function naoContatar(){ const l=FILA[FI]; if(!confirm('Tirar '+(l.loja||l.dominio)+' da prospecção de vez?')) return; try{ await call('marcar',{id:l.id,o_que:'status',status:'nao_contatar'}); FILA.splice(FI,1); RES.estoque=Math.max(0,(RES.estoque||0)-1); renderResumo(); renderFila(); }catch(e){ handleErr(e); } }
+
+// ---------------- FOLLOW-UP
+let FU=[];
+async function loadFollow(){
+  $('fuBox').innerHTML='<div class="state" style="min-height:120px"><div class="spinner"></div></div>';
+  try{ const j=await call('followups'); FU=j.leads||[]; renderFollow(); }catch(e){ handleErr(e); }
+}
+function renderFollow(){
+  if(!FU.length){ $('fuBox').innerHTML='<p class="muted">Nenhum follow-up para hoje.</p>'; return; }
+  const M=CFG.modelos||{};
+  $('fuBox').innerHTML = FU.map((l,i)=>{
+    const wa=firstWa(l.whatsapp);
+    return '<div class="card" style="background:var(--surface2);margin-bottom:12px"><div class="lead-head"><div><div class="lead-name" style="font-size:18px">'+esc(l.loja||l.dominio)+'</div>'+
+    '<div class="lead-meta">Primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(l.email||fmtWa(wa))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
+    '<div class="row" style="margin-top:12px">'+
+      (l.email?'<button class="btn btn-sm" onclick="fuGmail('+i+')">Follow-up no Gmail</button>':'')+
+      (wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">Follow-up no WhatsApp</button>':'')+
+      '<button class="btn btn-sm dark" onclick="fuFeito('+i+')">Fiz o follow-up</button>'+
+      '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'respondeu\')">Respondeu</button>'+
+      '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'sem_interesse\')">Sem interesse</button>'+
+    '</div></div>'; }).join('');
+}
+function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, 'Re: '+(l.assunto||''), preencher((CFG.modelos||{}).email_followup, l)), '_blank','noopener'); }
+function fuWa(i){ const l=FU[i]; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(preencher((CFG.modelos||{}).email_followup, l)), '_blank','noopener'); }
+async function fuFeito(i){ const l=FU[i]; try{ await call('marcar',{id:l.id,o_que:'followup',canal: l.email?'email':'whats'}); FU.splice(i,1); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); renderResumo(); renderFollow(); }catch(e){ handleErr(e); } }
+async function fuStatus(i,st){ const l=FU[i]; try{ await call('marcar',{id:l.id,o_que:'status',status:st}); FU.splice(i,1); RES=await call('resumo'); renderResumo(); renderFollow(); }catch(e){ handleErr(e); } }
+
+// ---------------- LEADS
+function renderFunil(){
+  const f=RES.funil||{}; const ord=['novo','enviado','respondeu','reuniao','cliente','sem_interesse','nao_contatar'];
+  $('funil').innerHTML = '<button class="fb'+(L_STATUS===''?' on':'')+'" onclick="setStatus(\'\')"><b>'+ord.reduce((a,k)=>a+(f[k]||0),0)+'</b><span>Todos</span></button>'+
+    ord.map(k=>'<button class="fb'+(L_STATUS===k?' on':'')+'" onclick="setStatus(\''+k+'\')"><b>'+(f[k]||0)+'</b><span>'+esc(STS[k])+'</span></button>').join('');
+}
+function setStatus(s){ L_STATUS=s; loadLeads(0); }
+let LEADS=[];
+async function loadLeads(pg){
+  if(pg<0) return; renderFunil();
+  $('lBody').innerHTML='<tr><td colspan="5" class="muted">Carregando…</td></tr>';
+  try{
+    const j=await call('leads',{status:L_STATUS, segmento:$('lSeg').value, busca:$('lBusca').value.trim(), pagina:pg});
+    LEADS=j.leads||[]; L_PAGE=pg;
+    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="5" class="muted">Nada encontrado.</td></tr>';
+    $('lPage').textContent='página '+(pg+1); $('lPrev').disabled = pg===0; $('lNext').disabled = LEADS.length<50;
+  }catch(e){ handleErr(e); }
+}
+async function openLead(id){
+  $('modal').innerHTML='<div class="state" style="min-height:160px"><div class="spinner"></div></div>'; $('modalBg').style.display='flex';
+  try{
+    const j=await call('lead',{id}); const l=j.lead; const ev=j.eventos||[];
+    $('modal').innerHTML = '<button class="x" onclick="closeModal()">×</button>'+
+     '<div class="lead-name">'+esc(l.loja||l.dominio)+'</div><div class="lead-meta"><a href="https://'+esc(l.dominio)+'" target="_blank" rel="noopener">'+esc(l.dominio)+'</a> · '+esc(platNome(l.plataforma))+' · '+esc(segNome(l.segmento))+(l.instagram?' · '+esc(l.instagram):'')+'</div>'+
+     (!l.qualificado?'<div class="msg-warn" style="margin-top:12px">Fora do perfil: '+esc(l.perfil_motivo)+'</div>':'')+
+     '<div class="grid2"><div><label class="lb">Status</label><select id="mSt">'+Object.entries(STS).filter(([k])=>k!=='antigo'||l.status==='antigo').map(([k,n])=>'<option value="'+k+'"'+(k===l.status?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></div>'+
+     '<div><label class="lb">Follow-up em</label><input class="inp" type="date" id="mFu" value="'+esc(l.followup_at||'')+'" /></div>'+
+     '<div><label class="lb">E-mail</label><input class="inp" id="mEmail" value="'+esc(l.email)+'" /></div>'+
+     '<div><label class="lb">WhatsApp</label><input class="inp" id="mWa" value="'+esc(l.whatsapp)+'" /></div></div>'+
+     '<label class="lb">Assunto</label><input class="inp" id="mAssunto" value="'+esc(l.assunto)+'" />'+
+     '<label class="lb">Gancho</label><textarea id="mGancho" rows="4">'+esc(l.gancho)+'</textarea>'+
+     '<label class="lb">Anotações</label><textarea id="mNotas" rows="3" placeholder="ex.: falou com a Júlia, pediu proposta">'+esc(l.notas)+'</textarea>'+
+     '<div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarLead('+l.id+',\''+esc(l.status)+'\')">Salvar</button><span id="mMsg" class="small"></span></div>'+
+     '<label class="lb">Histórico</label>'+(ev.length?ev.map(e=>'<div class="ev"><b>'+esc(fmtD(e.at))+'</b> · '+esc(e.acao)+(e.canal?' ('+esc(e.canal==='whats'?'WhatsApp':'e-mail')+')':'')+(e.para?' → '+esc(STS[e.para]||e.para):'')+(e.detalhe?' · '+esc(e.detalhe):'')+'</div>').join(''):'<div class="small muted">Sem histórico ainda.</div>');
+  }catch(e){ closeModal(); handleErr(e); }
+}
+function closeModal(){ $('modalBg').style.display='none'; }
+async function salvarLead(id, stAntes){
+  $('mMsg').textContent='Salvando…';
+  try{
+    await call('editar',{id, email:$('mEmail').value, whatsapp:$('mWa').value, assunto:$('mAssunto').value, gancho:$('mGancho').value, notas:$('mNotas').value, followup_at:$('mFu').value});
+    if ($('mSt').value!==stAntes) await call('marcar',{id, o_que:'status', status:$('mSt').value});
+    $('mMsg').innerHTML='<span style="color:var(--green);font-weight:700">Salvo.</span>';
+    RES=await call('resumo'); renderResumo(); loadLeads(L_PAGE);
+  }catch(e){ $('mMsg').innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>'; }
+}
+async function exportar(){
+  try{
+    const j=await call('exportar',{status:L_STATUS}); const ls=j.leads||[];
+    const cols=['loja','dominio','plataforma','segmento','email','email_origem','whatsapp','instagram','assunto','gancho','status','enviado_at','followup_at','notas'];
+    const q=v=>{ let s=String(v==null?'':v); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'; };
+    const csv='﻿'+cols.join(';')+'\n'+ls.map(l=>cols.map(c=>q(c==='status'?(STS[l[c]]||l[c]):c==='segmento'?segNome(l[c]):l[c])).join(';')).join('\n');
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='leads-tyve-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+  }catch(e){ handleErr(e); }
+}
+
+// ---------------- ADICIONAR
+async function addLoja(ev){
+  ev.preventDefault(); const d=$('addDom').value.trim(); if(!d) return false;
+  $('addBtn').disabled=true; $('addRes').innerHTML='<div class="row"><div class="spinner" style="width:22px;height:22px"></div><span class="muted">Conferindo…</span></div>';
+  try{
+    const ex=await call('existe',{dominio:d});
+    if (ex.existe){ const l=ex.lead; $('addRes').innerHTML='<div class="msg-warn">'+esc(l.loja||l.dominio)+' já está no funil, com status "'+esc(STS[l.status]||l.status)+'". <button class="btn btn-sm ghost" style="margin-left:8px" onclick="openLead('+l.id+')">Abrir</button></div>'; return false; }
+    if (ex.no_pool && ex.no_pool.status==='feito') { /* já analisada pelo robô e descartada: analisa de novo para mostrar o motivo */ }
+    $('addRes').innerHTML='<div class="row"><div class="spinner" style="width:22px;height:22px"></div><span class="muted">Lendo o site da loja…</span></div>';
+    const j=await call('analisar',{dominio:d}); const a=j.analise||{}; const l=j.lead;
+    if (a.erro){ $('addRes').innerHTML='<div class="msg-err">'+esc(a.erro)+'</div>'; return false; }
+    if (a.plataforma==='erro'){ $('addRes').innerHTML='<div class="msg-err">O site não respondeu. Confira o endereço ou tente mais tarde.</div>'; return false; }
+    const ok=a.qualificado;
+    let h='<div class="card" style="background:var(--surface2)"><div class="lead-name" style="font-size:19px">'+esc(a.loja||a.dominio)+'</div>'+
+      '<div class="lead-meta">'+esc(a.dominio)+' · '+esc(platNome(a.plataforma)||a.plataforma)+' · '+esc(a.perfil_ok?segNome(a.segmento):'fora do perfil')+'</div>'+
+      '<div class="row" style="margin-top:10px">'+(a.email?'<span class="tag g">'+esc(a.email)+'</span>':'<span class="tag r">sem e-mail no site</span>')+(firstWa(a.whatsapp)?'<span class="tag g">WhatsApp '+esc(fmtWa(a.whatsapp))+'</span>':(a.whatsapp?'<span class="tag a">'+esc(a.whatsapp)+'</span>':'<span class="tag r">sem WhatsApp no site</span>'))+(a.instagram?'<span class="tag">'+esc(a.instagram)+'</span>':'')+'</div>';
+    if (ok) h+='<div class="msg-ok" style="margin-top:14px">Entrou na fila de hoje.</div>';
+    else {
+      const why = !['shopify','nuvemshop'].includes(a.plataforma) ? 'A loja não é Shopify nem Nuvemshop ('+(platNome(a.plataforma)||a.plataforma)+').' : !a.perfil_ok ? 'Fora do perfil: '+a.perfil_motivo+'.' : 'Não achei WhatsApp no site.';
+      h+='<div class="msg-warn" style="margin-top:14px">Não entrou na fila. '+esc(why)+'</div>';
+      if (l && l.id && a.perfil_ok!==undefined) h+='<div class="row" style="margin-top:10px"><button class="btn btn-sm dark" onclick="incluir('+l.id+')">Incluir na fila mesmo assim</button></div>';
+    }
+    if (a.gancho) h+='<label class="lb">Gancho</label><div class="small" style="line-height:1.5">'+esc(a.gancho)+'</div>';
+    $('addRes').innerHTML=h+'</div>'; $('addDom').value='';
+    RES=await call('resumo'); renderResumo();
+  }catch(e){ if(e.status) handleErr(e); else $('addRes').innerHTML='<div class="msg-err">Não deu certo: '+esc(e.message)+'</div>'; }
+  finally{ $('addBtn').disabled=false; }
+  return false;
+}
+async function incluir(id){ try{ await call('incluir',{id}); $('addRes').innerHTML='<div class="msg-ok">Incluída na fila.</div>'; RES=await call('resumo'); renderResumo(); }catch(e){ handleErr(e); } }
+
+// ---------------- GERAR
+function renderGerar(){
+  const ps=RES.por_segmento||{};
+  $('segCounts').innerHTML = Object.keys(ps).length ? Object.entries(ps).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<span class="tag o" style="font-size:14px;padding:8px 14px">'+esc(segNome(k))+': <b style="margin-left:6px">'+v+'</b></span>').join('') : '<span class="muted">A fila está vazia.</span>';
+  const r=RES.robo||{}, L=RES.limites||{};
+  const ped=r.pedido_extra||0, ur=r.ultimo_run?String(r.ultimo_run).replace(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}).*$/,'$3/$2 às $4'):'ainda não rodou';
+  $('roboTxt').innerHTML = 'O robô roda no computador do Renato, de hora em hora, sempre que ele estiver ligado. A cada rodada ele repõe a fila até ter '+(L.estoque_alvo||0)+' lojas prontas. Se precisar de mais agora, peça aqui: o pedido é atendido na próxima rodada (em até 1 hora, com o computador ligado). Hoje ele acha em média 1 loja boa a cada 100 sites lidos.<br><br>'+
+    'Pedido em andamento: <b>'+ped+'</b> '+(ped===1?'loja':'lojas')+' · Última rodada: <b>'+esc(ur)+'</b>'+(r.analisados_ultimo_run?' ('+r.analisados_ultimo_run+' sites lidos, '+(r.achados_ultimo_run||0)+' do perfil)':'')+
+    ' · Sites ainda não lidos na base: <b>'+(RES.pool_restante||0).toLocaleString('pt-BR')+'</b>'+((RES.pool_restante||0)<3000?'<br><span style="color:var(--amber);font-weight:700">A base de sites está acabando. Avise o Renato para carregar uma base nova.</span>':'');
+}
+async function gerar(){
+  const n=parseInt($('gQtd').value,10)||50;
+  try{ const j=await call('gerar',{quantos:n}); RES.robo=j.robo; renderGerar(); $('gRes').innerHTML='<div class="msg-ok">Pedido registrado. O robô vai buscar até '+(j.robo.pedido_extra)+' '+(j.robo.pedido_extra===1?'loja nova':'lojas novas')+'. Pode continuar trabalhando: elas vão aparecendo na fila aos poucos.</div>'; }catch(e){ handleErr(e); }
+}
+
+// ---------------- REGRAS
+function renderRegras(){
+  const R=CFG.regras||{}, L=CFG.limites||{}, M=CFG.modelos||{}; const off=R.segmentos_off||[];
+  $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
+  $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
+  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rEst').value=L.estoque_alvo;
+  $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rWaTxt').value=M.whats||''; $('rConta').value=M.gmail_conta||'';
+}
+function okMsg(id, t){ $(id).innerHTML='<span style="color:var(--green);font-weight:700">'+esc(t)+'</span>'; setTimeout(()=>{$(id).textContent='';},3000); }
+function errMsg(id, e){ $(id).innerHTML='<span style="color:var(--red);font-weight:700">'+esc(e.message||e)+'</span>'; }
+async function salvarRegras(){
+  const off=[...document.querySelectorAll('#rSegs input')].filter(i=>!i.checked).map(i=>i.dataset.seg);
+  const pal=$('rPalavras').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,100);
+  try{ CFG=await call('config_salvar',{k:'regras', v:Object.assign({}, CFG.regras||{}, {plataformas:(CFG.regras||{}).plataformas||['shopify','nuvemshop'], segmentos_off:off, palavras_excluir:pal})}); okMsg('rMsg1','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg1',e); }
+}
+async function salvarLimites(){
+  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, estoque_alvo:+$('rEst').value};
+  try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
+}
+async function salvarModelos(){
+  const v={email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, whats:$('rWaTxt').value, gmail_conta:$('rConta').value.trim()};
+  try{ CFG=await call('config_salvar',{k:'modelos', v}); okMsg('rMsg3','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg3',e); }
+}
+
+(function(){ let t=''; try{ t=sessionStorage.getItem(SKEY)||''; }catch(_){}
+  if (t) { TOKEN=t; show('loading'); boot().catch(()=>{ TOKEN=''; try{sessionStorage.removeItem(SKEY);}catch(_){} show('login'); }); } })();
+</script>
+</body>
+</html>
