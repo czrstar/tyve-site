@@ -247,7 +247,9 @@
         <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarLimites()">Salvar limites</button><span id="rMsg2" class="small"></span></div>
       </div>
       <div class="card"><div class="card-title">Textos das mensagens</div>
-        <div class="card-sub">Use {loja} para o nome da loja e {gancho} para o gancho de cada loja. O assunto de cada loja aparece na fila e pode ser editado lá.</div>
+        <div class="card-sub">Use {loja} para o nome da loja, {gancho} para o gancho de cada loja e {saudacao} para "bom dia" ou "boa tarde" (conforme a hora de Brasília). O assunto aparece na fila e pode ser editado lá antes de enviar.</div>
+        <label class="lb">Assunto do primeiro e-mail</label><input class="inp" id="rAssunto" placeholder="ex.: Pergunta rápida sobre o atendimento da {loja}" />
+        <div class="hint">Preenchido, vale para todas as lojas da fila (e o follow-up responde com "Re: " e esse assunto). Vazio, cada loja usa o assunto sugerido pelo robô.</div>
         <label class="lb">Primeiro e-mail</label><textarea id="rCorpo" rows="8"></textarea>
         <label class="lb">2º e-mail (primeiro follow-up)</label><textarea id="rFuTxt" rows="5"></textarea>
         <label class="lb">3º e-mail (último follow-up)</label><textarea id="rFu2Txt" rows="5"></textarea>
@@ -279,7 +281,12 @@ function segNome(s){ return SEGS[s] || s || ''; }
 function platNome(p){ return ({shopify:'Shopify',nuvemshop:'Nuvemshop',woocommerce:'WooCommerce'})[p] || p || ''; }
 function firstWa(w){ const m=String(w||'').match(/\d{10,15}/); return m?m[0]:''; }
 function fmtWa(w){ const n=firstWa(w); if(!n) return ''; const s=n.startsWith('55')?n.slice(2):n; return s.length>=10?'('+s.slice(0,2)+') '+s.slice(2,-4)+'-'+s.slice(-4):n; }
-function preencher(t, l){ return String(t||'').split('{loja}').join(l.loja||l.dominio).split('{gancho}').join(l.gancho||''); }
+function horaBR(){ try{ return parseInt(new Intl.DateTimeFormat('pt-BR',{hour:'numeric',hourCycle:'h23',timeZone:'America/Sao_Paulo'}).format(new Date()),10); }catch(_){ return new Date().getHours(); } }
+function saudacao(){ return horaBR() < 12 ? 'bom dia' : 'boa tarde'; }
+function foraHorarioWa(){ const h=horaBR(); return h < 9 || h >= 18; }
+const AVISO_WA='<div class="msg-warn" style="margin-top:12px">Fora do horário do WhatsApp (9h às 18h de Brasília). Melhor deixar o WhatsApp para amanhã.</div>';
+function preencher(t, l){ return String(t||'').split('{loja}').join(l.loja||l.dominio).split('{gancho}').join(l.gancho||'').split('{saudacao}').join(saudacao()); }
+function assuntoPadrao(l){ const M=CFG.modelos||{}; return M.assunto ? preencher(M.assunto, l) : (l.assunto||''); }
 
 async function call(action, p){
   const r = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, cache:'no-store', body: JSON.stringify({token:TOKEN, action, p:p||{}})});
@@ -347,7 +354,8 @@ function renderFila(){
    '<div class="row"><span class="tag o">'+esc(segNome(l.segmento))+'</span></div></div>'+
    '<div class="row small muted" style="margin-top:10px">Por que entrou: '+esc(l.perfil_motivo||'')+'</div>'+
    (canal==='email' ? '<label class="lb">Para</label><input class="inp" id="fEmail" value="'+esc(l.email)+'" />'+(l.emails_alt?'<div class="hint">Outros e-mails do site: '+esc(l.emails_alt)+'</div>':'')+
-     '<label class="lb">Assunto</label><input class="inp" id="fAssunto" value="'+esc(l.assunto)+'" />' : '')+
+     '<label class="lb">Assunto</label><input class="inp" id="fAssunto" value="'+esc(assuntoPadrao(l))+'" />' : '')+
+   ((canal==='whats' && foraHorarioWa()) ? AVISO_WA : '')+
    '<label class="lb">Mensagem</label><textarea id="fCorpo" rows="'+(canal==='whats'?6:10)+'">'+esc(corpo)+'</textarea>'+
    '<div class="row" style="margin-top:16px">'+
      (canal==='email' ? '<button class="btn" onclick="abrirGmail()">Abrir no Gmail</button>' : '')+
@@ -385,7 +393,7 @@ async function loadFollow(){
 function renderFollow(){
   if(!FU.length){ $('fuBox').innerHTML='<p class="muted">Nenhum follow-up para hoje.</p>'; return; }
   const M=CFG.modelos||{};
-  $('fuBox').innerHTML = FU.map((l,i)=>{
+  $('fuBox').innerHTML = (foraHorarioWa() && FU.some(l=>l.canal==='whats') ? AVISO_WA : '') + FU.map((l,i)=>{
     const wa=firstWa(l.whatsapp);
     return '<div class="card" style="background:var(--surface2);margin-bottom:12px"><div class="lead-head"><div><div class="lead-name" style="font-size:18px">'+esc(l.loja||l.dominio)+'</div>'+
     '<div class="lead-meta"><b>'+esc(fuEtapa(l))+'</b> · primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(l.email||fmtWa(wa))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
@@ -399,7 +407,7 @@ function renderFollow(){
 }
 function fuEtapa(l){ return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
 function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0)>=1 && M.email_followup2) ? M.email_followup2 : M.email_followup, l); }
-function fuAssunto(l){ return l.assunto ? 'Re: '+l.assunto : 'Atendimento no WhatsApp da '+(l.loja||l.dominio); }
+function fuAssunto(l){ const a=l.assunto||assuntoPadrao(l); return a ? 'Re: '+a : 'Atendimento no WhatsApp da '+(l.loja||l.dominio); }
 function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, fuAssunto(l), fuTexto(l)), '_blank','noopener'); }
 function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(M.whats_followup ? preencher(M.whats_followup, l) : fuTexto(l)), '_blank','noopener'); }
 let FU_OCUPADO=false;
@@ -523,7 +531,7 @@ function renderRegras(){
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
   $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo;
-  $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
+  $('rAssunto').value=M.assunto||''; $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
 }
 function okMsg(id, t){ $(id).innerHTML='<span style="color:var(--green);font-weight:700">'+esc(t)+'</span>'; setTimeout(()=>{$(id).textContent='';},3000); }
 function errMsg(id, e){ $(id).innerHTML='<span style="color:var(--red);font-weight:700">'+esc(e.message||e)+'</span>'; }
@@ -537,7 +545,7 @@ async function salvarLimites(){
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
 async function salvarModelos(){
-  const v={email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, gmail_conta:$('rConta').value.trim()};
+  const v={assunto:$('rAssunto').value.trim(), email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, gmail_conta:$('rConta').value.trim()};
   try{ CFG=await call('config_salvar',{k:'modelos', v}); okMsg('rMsg3','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg3',e); }
 }
 
