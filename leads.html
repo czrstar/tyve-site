@@ -399,7 +399,8 @@ function renderFollow(){
 }
 function fuEtapa(l){ return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
 function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0)>=1 && M.email_followup2) ? M.email_followup2 : M.email_followup, l); }
-function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, 'Re: '+(l.assunto||''), fuTexto(l)), '_blank','noopener'); }
+function fuAssunto(l){ return l.assunto ? 'Re: '+l.assunto : 'Atendimento no WhatsApp da '+(l.loja||l.dominio); }
+function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, fuAssunto(l), fuTexto(l)), '_blank','noopener'); }
 function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(M.whats_followup ? preencher(M.whats_followup, l) : fuTexto(l)), '_blank','noopener'); }
 let FU_OCUPADO=false;
 async function fuFeito(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
