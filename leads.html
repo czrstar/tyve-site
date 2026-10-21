@@ -252,6 +252,7 @@
         <label class="lb">2º e-mail (primeiro follow-up)</label><textarea id="rFuTxt" rows="5"></textarea>
         <label class="lb">3º e-mail (último follow-up)</label><textarea id="rFu2Txt" rows="5"></textarea>
         <label class="lb">WhatsApp</label><textarea id="rWaTxt" rows="4"></textarea>
+        <label class="lb">Follow-up no WhatsApp</label><textarea id="rWaFuTxt" rows="4"></textarea>
         <label class="lb">Conta do Gmail que envia (opcional)</label><input class="inp" id="rConta" placeholder="ex.: ana@tyve.com.br" />
         <div class="hint">Se você usa mais de uma conta no Gmail, coloque aqui a conta que envia a prospecção. Assim o botão abre o e-mail já nela.</div>
         <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarModelos()">Salvar textos</button><span id="rMsg3" class="small"></span></div>
@@ -399,9 +400,19 @@ function renderFollow(){
 function fuEtapa(l){ return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
 function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0)>=1 && M.email_followup2) ? M.email_followup2 : M.email_followup, l); }
 function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, 'Re: '+(l.assunto||''), fuTexto(l)), '_blank','noopener'); }
-function fuWa(i){ const l=FU[i]; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(fuTexto(l)), '_blank','noopener'); }
-async function fuFeito(i){ const l=FU[i]; try{ await call('marcar',{id:l.id,o_que:'followup',canal: l.email?'email':'whats'}); FU.splice(i,1); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); renderResumo(); renderFollow(); }catch(e){ handleErr(e); } }
-async function fuStatus(i,st){ const l=FU[i]; try{ await call('marcar',{id:l.id,o_que:'status',status:st}); FU.splice(i,1); RES=await call('resumo'); renderResumo(); renderFollow(); }catch(e){ handleErr(e); } }
+function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(M.whats_followup ? preencher(M.whats_followup, l) : fuTexto(l)), '_blank','noopener'); }
+let FU_OCUPADO=false;
+async function fuFeito(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
+  document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
+  try{ await call('marcar',{id:l.id,o_que:'followup',canal: l.canal==='whats' ? 'whats' : (l.email?'email':'whats')});
+       FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); renderResumo(); }
+  catch(e){ handleErr(e); }
+  finally{ FU_OCUPADO=false; renderFollow(); } }
+async function fuStatus(i,st){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
+  document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
+  try{ await call('marcar',{id:l.id,o_que:'status',status:st}); FU=FU.filter(x=>x.id!==l.id); RES=await call('resumo'); renderResumo(); }
+  catch(e){ handleErr(e); }
+  finally{ FU_OCUPADO=false; renderFollow(); } }
 
 // ---------------- LEADS
 function renderFunil(){
@@ -511,7 +522,7 @@ function renderRegras(){
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
   $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo;
-  $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rConta').value=M.gmail_conta||'';
+  $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
 }
 function okMsg(id, t){ $(id).innerHTML='<span style="color:var(--green);font-weight:700">'+esc(t)+'</span>'; setTimeout(()=>{$(id).textContent='';},3000); }
 function errMsg(id, e){ $(id).innerHTML='<span style="color:var(--red);font-weight:700">'+esc(e.message||e)+'</span>'; }
@@ -525,7 +536,7 @@ async function salvarLimites(){
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
 async function salvarModelos(){
-  const v={email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, gmail_conta:$('rConta').value.trim()};
+  const v={email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, gmail_conta:$('rConta').value.trim()};
   try{ CFG=await call('config_salvar',{k:'modelos', v}); okMsg('rMsg3','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg3',e); }
 }
 
