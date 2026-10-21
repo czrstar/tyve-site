@@ -26,6 +26,10 @@
   ],
   "rewrites": [
     {
+      "source": "/c/:code([0-9a-f]{14})",
+      "destination": "https://n8n.tyve.com.br/webhook/tyve-c?c=:code"
+    },
+    {
       "source": "/dashboard",
       "destination": "/painel"
     },
