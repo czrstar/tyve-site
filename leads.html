@@ -183,7 +183,8 @@
     <!-- FOLLOW-UP -->
     <section id="t-follow" style="display:none">
       <div class="card"><div class="card-title">Follow-up do dia</div>
-        <div class="card-sub">Lojas que receberam a primeira mensagem e ainda não responderam. Por e-mail são dois follow-ups (o 2º e o 3º e-mail); por WhatsApp, um só. Se a loja respondeu, marque "Respondeu" para ela sair daqui.</div>
+        <div class="card-sub">Lojas que receberam a primeira mensagem e ainda não responderam. O follow-up sai no mesmo canal do primeiro contato. Por e-mail são dois follow-ups (o 2º e o 3º e-mail); por WhatsApp, um só. Se a loja respondeu, marque "Respondeu" para ela sair daqui.</div>
+        <div class="row" style="margin:6px 0 14px"><select id="fuCanal" style="width:auto" onchange="loadFollow()"><option value="email">E-mail</option><option value="whats">WhatsApp</option></select><span class="small muted" id="fuInfo"></span></div>
         <div id="fuBox"></div></div>
     </section>
 
@@ -388,18 +389,22 @@ async function naoContatar(){ const l=FILA[FI]; if(!confirm('Tirar '+(l.loja||l.
 let FU=[];
 async function loadFollow(){
   $('fuBox').innerHTML='<div class="state" style="min-height:120px"><div class="spinner"></div></div>';
-  try{ const j=await call('followups'); FU=j.leads||[]; renderFollow(); }catch(e){ handleErr(e); }
+  fuOpcoes(); const seq=++FU_SEQ, canal=$('fuCanal').value;
+  try{ const j=await call('followups',{canal}); if(seq!==FU_SEQ) return; FU=(j.leads||[]).filter(l=>(l.canal==='whats'?'whats':'email')===canal); renderFollow(); }catch(e){ if(seq===FU_SEQ) handleErr(e); }
 }
+function fuOpcoes(){ const o=$('fuCanal').options; o[0].textContent='E-mail ('+(RES.followups_hoje_email||0)+')'; o[1].textContent='WhatsApp ('+(RES.followups_hoje_whats||0)+')'; }
 function renderFollow(){
-  if(!FU.length){ $('fuBox').innerHTML='<p class="muted">Nenhum follow-up para hoje.</p>'; return; }
+  const canalFu=$('fuCanal').value;
+  $('fuInfo').textContent = FU.length ? FU.length+' para hoje' : '';
+  if(!FU.length){ $('fuBox').innerHTML='<p class="muted">Nenhum follow-up '+(canalFu==='whats'?'de WhatsApp':'de e-mail')+' para hoje.</p>'; return; }
   const M=CFG.modelos||{};
-  $('fuBox').innerHTML = (foraHorarioWa() && FU.some(l=>l.canal==='whats') ? AVISO_WA : '') + FU.map((l,i)=>{
+  $('fuBox').innerHTML = (canalFu==='whats' && foraHorarioWa() ? AVISO_WA : '') + FU.map((l,i)=>{
     const wa=firstWa(l.whatsapp);
     return '<div class="card" style="background:var(--surface2);margin-bottom:12px"><div class="lead-head"><div><div class="lead-name" style="font-size:18px">'+esc(l.loja||l.dominio)+'</div>'+
     '<div class="lead-meta"><b>'+esc(fuEtapa(l))+'</b> · primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(l.email||fmtWa(wa))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
     '<div class="row" style="margin-top:12px">'+
-      (l.email?'<button class="btn btn-sm" onclick="fuGmail('+i+')">Follow-up no Gmail</button>':'')+
-      (wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">Follow-up no WhatsApp</button>':'')+
+      (canalFu==='email' && l.email?'<button class="btn btn-sm" onclick="fuGmail('+i+')">Follow-up no Gmail</button>':'')+
+      (canalFu==='whats' && wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">Follow-up no WhatsApp</button>':'')+
       '<button class="btn btn-sm dark" onclick="fuFeito('+i+')">Fiz o follow-up</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'respondeu\')">Respondeu</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'sem_interesse\')">Sem interesse</button>'+
@@ -410,16 +415,17 @@ function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0
 function fuAssunto(l){ const a=l.assunto||assuntoPadrao(l); return a ? 'Re: '+a : 'Atendimento no WhatsApp da '+(l.loja||l.dominio); }
 function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, fuAssunto(l), fuTexto(l)), '_blank','noopener'); }
 function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(M.whats_followup ? preencher(M.whats_followup, l) : fuTexto(l)), '_blank','noopener'); }
-let FU_OCUPADO=false;
+let FU_OCUPADO=false, FU_SEQ=0;
 async function fuFeito(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
   document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
-  try{ await call('marcar',{id:l.id,o_que:'followup',canal: l.canal==='whats' ? 'whats' : (l.email?'email':'whats')});
-       FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); renderResumo(); }
+  const canalL = l.canal==='whats' ? 'whats' : 'email';
+  try{ await call('marcar',{id:l.id,o_que:'followup',canal: canalL});
+       FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); const kc='followups_hoje_'+canalL; RES[kc]=Math.max(0,(RES[kc]||0)-1); fuOpcoes(); renderResumo(); }
   catch(e){ handleErr(e); }
   finally{ FU_OCUPADO=false; renderFollow(); } }
 async function fuStatus(i,st){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
   document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
-  try{ await call('marcar',{id:l.id,o_que:'status',status:st}); FU=FU.filter(x=>x.id!==l.id); RES=await call('resumo'); renderResumo(); }
+  try{ await call('marcar',{id:l.id,o_que:'status',status:st}); FU=FU.filter(x=>x.id!==l.id); RES=await call('resumo'); renderResumo(); fuOpcoes(); }
   catch(e){ handleErr(e); }
   finally{ FU_OCUPADO=false; renderFollow(); } }
 
