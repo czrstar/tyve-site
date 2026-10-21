@@ -177,6 +177,7 @@
         </div>
         <div class="prog"><div id="qProg" style="width:0"></div></div>
       </div>
+      <div id="gmailAviso"></div>
       <div id="filaBox"></div>
     </section>
 
@@ -185,6 +186,7 @@
       <div class="card"><div class="card-title">Follow-up do dia</div>
         <div class="card-sub">Lojas que receberam a primeira mensagem e ainda não responderam. O follow-up sai no mesmo canal do primeiro contato. Por e-mail são dois follow-ups (o 2º e o 3º e-mail); por WhatsApp, um só. Se a loja respondeu, marque "Respondeu" para ela sair daqui.</div>
         <div class="row" style="margin:6px 0 14px"><select id="fuCanal" style="width:auto" onchange="loadFollow()"><option value="email">E-mail</option><option value="whats">WhatsApp</option></select><span class="small muted" id="fuInfo"></span></div>
+        <div id="gmailAvisoFu"></div>
         <div id="fuBox"></div></div>
     </section>
 
@@ -228,6 +230,12 @@
 
     <!-- REGRAS -->
     <section id="t-regras" style="display:none">
+      <div class="card"><div class="card-title">Rascunhos no Gmail</div>
+        <div class="card-sub">Com o Gmail conectado, toda manhã (seg a sex, 7h30) a ferramenta cria no seu Gmail os rascunhos do dia: os follow-ups de e-mail (respondendo na conversa original) e os primeiros e-mails da fila, até o limite de e-mails do dia. Você revisa e envia um por um pelo Gmail; a cada 10 minutos ela confere o que foi enviado, marca como Enviado e agenda o próximo follow-up. A ferramenta nunca envia nada sozinha.</div>
+        <div id="gmailBox"></div>
+        <div class="row" style="margin-top:12px"><button class="btn btn-sm" id="gmailGerar" onclick="gmailGerar()">Criar os rascunhos de hoje agora</button>
+          <label class="chk"><input type="checkbox" id="gmailAtivo" onchange="gmailAtivo()" /> Ligado</label><span id="gMsg" class="small"></span></div>
+      </div>
       <div class="card"><div class="card-title">Perfil das lojas</div>
         <div class="card-sub">Segmentos desligados não entram mais na fila (o que já está na fila continua). O robô só aceita lojas Shopify e Nuvemshop com WhatsApp no site.</div>
         <label class="lb">Segmentos que entram</label><div class="seg-grid" id="rSegs"></div>
@@ -256,6 +264,8 @@
         <label class="lb">3º e-mail (último follow-up)</label><textarea id="rFu2Txt" rows="5"></textarea>
         <label class="lb">WhatsApp</label><textarea id="rWaTxt" rows="4"></textarea>
         <label class="lb">Follow-up no WhatsApp</label><textarea id="rWaFuTxt" rows="4"></textarea>
+        <label class="lb">Assinatura dos rascunhos (HTML)</label><textarea id="rAssin" rows="4" placeholder="Cole aqui o HTML da sua assinatura oficial"></textarea>
+        <div class="hint">Vai no fim dos rascunhos que a ferramenta cria no seu Gmail. No botão "Abrir no Gmail" não dá para levar a assinatura com logo: insira pelo ícone de caneta do Gmail. Nos textos, [texto](https://link) vira um link clicável nos rascunhos.</div>
         <label class="lb">Conta do Gmail que envia (opcional)</label><input class="inp" id="rConta" placeholder="ex.: ana@tyve.com.br" />
         <div class="hint">Se você usa mais de uma conta no Gmail, coloque aqui a conta que envia a prospecção. Assim o botão abre o e-mail já nela.</div>
         <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarModelos()">Salvar textos</button><span id="rMsg3" class="small"></span></div>
@@ -286,7 +296,7 @@ function horaBR(){ try{ return parseInt(new Intl.DateTimeFormat('pt-BR',{hour:'n
 function saudacao(){ return horaBR() < 12 ? 'bom dia' : 'boa tarde'; }
 function foraHorarioWa(){ const h=horaBR(); return h < 9 || h >= 18; }
 const AVISO_WA='<div class="msg-warn" style="margin-top:12px">Fora do horário do WhatsApp (9h às 18h de Brasília). Melhor deixar o WhatsApp para amanhã.</div>';
-function preencher(t, l){ return String(t||'').split('{loja}').join(l.loja||l.dominio).split('{gancho}').join(l.gancho||'').split('{saudacao}').join(saudacao()); }
+function preencher(t, l){ return String(t||'').split('{loja}').join(l.loja||l.dominio).split('{gancho}').join(l.gancho||'').split('{saudacao}').join(saudacao()).replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, '$1 ($2)'); }
 function assuntoPadrao(l){ const M=CFG.modelos||{}; return M.assunto ? preencher(M.assunto, l) : (l.assunto||''); }
 
 async function call(action, p){
@@ -326,7 +336,22 @@ function renderResumo(){
   $('kEst').textContent = RES.estoque||0;
   $('kResp').textContent = (f.respondeu||0)+(f.reuniao||0)+(f.cliente||0);
   $('bFu').style.display = RES.followups_hoje ? '' : 'none'; $('bFu').textContent = RES.followups_hoje||0;
+  avisoGmail();
   const h=new Date().getHours(); $('heroTitle').textContent = (h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', Ana';
+}
+function avisoGmail(){
+  const g=RES.gmail||{}, n=RES.rascunhos||0, al=RES.rascunhos_alerta||[];
+  let h='';
+  if (g.conectado && n) h+='<div class="msg-ok" style="margin-bottom:14px">Há '+n+' '+(n===1?'rascunho pronto':'rascunhos prontos')+' no seu Gmail (pasta Rascunhos). Revise e envie por lá: a ferramenta marca como enviado sozinha em até 10 minutos. Essas lojas não aparecem aqui.</div>';
+  if (al.length) h+='<div class="msg-warn" style="margin-bottom:14px">Rascunho no Gmail de loja que já mudou de status (não envie; apague no Gmail): '+al.map(x=>esc(x.loja)+' ('+esc(STS[x.status]||x.status)+')').join(', ')+'.</div>';
+  if (g.ativo && g.erro) h+='<div class="msg-warn" style="margin-bottom:14px">Rascunhos no Gmail: '+esc(g.erro)+'</div>';
+  const av=RES.gmail_avisos||[], grupo=k=>av.filter(x=>x.aviso===k).map(x=>esc(x.loja)).join(', ');
+  if (grupo('respondeu')) h+='<div class="msg-warn" style="margin-bottom:14px">Estas lojas responderam no Gmail, então não criei follow-up para elas. Confira a resposta e mude o status em Leads e funil: '+grupo('respondeu')+'.</div>';
+  if (grupo('voltou')) h+='<div class="msg-warn" style="margin-bottom:14px">O e-mail destas lojas voltou (endereço não existe), então parei os e-mails. Tente o WhatsApp ou corrija o e-mail na ficha: '+grupo('voltou')+'.</div>';
+  if (grupo('invalido')) h+='<div class="msg-warn" style="margin-bottom:14px">E-mail inválido, sem rascunho (corrija na ficha): '+grupo('invalido')+'.</div>';
+  if (g.erro_lote) h+='<div class="msg-warn" style="margin-bottom:14px">'+esc(g.erro_lote)+'</div>';
+  if ($('gmailAviso')) $('gmailAviso').innerHTML=h;
+  if ($('gmailAvisoFu')) $('gmailAvisoFu').innerHTML=h;
 }
 function fillSegSelects(){
   for (const id of ['qSeg','lSeg']) { const s=$(id); const v=s.value; s.innerHTML='<option value="">Todos os segmentos</option>'+Object.entries(SEGS).map(([k,n])=>'<option value="'+esc(k)+'">'+esc(n)+'</option>').join(''); s.value=v; }
@@ -537,6 +562,7 @@ function renderRegras(){
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
   $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo;
+  renderGmail(); $('rAssin').value=M.assinatura_html||'';
   $('rAssunto').value=M.assunto||''; $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
 }
 function okMsg(id, t){ $(id).innerHTML='<span style="color:var(--green);font-weight:700">'+esc(t)+'</span>'; setTimeout(()=>{$(id).textContent='';},3000); }
@@ -550,8 +576,17 @@ async function salvarLimites(){
   const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, estoque_alvo:+$('rEst').value};
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
+function renderGmail(){
+  const g=RES.gmail||{};
+  $('gmailBox').innerHTML = g.conectado
+    ? '<div class="msg-ok">Conectado: '+esc(g.conta||'')+(g.ultimo_sync?' · última conferência '+esc(g.ultimo_sync):'')+(g.ultimo_lote_dia?' · último lote '+esc(fmtDia(g.ultimo_lote_dia))+(g.ultimo_lote_qtd!=null?' ('+esc(g.ultimo_lote_qtd)+' rascunhos)':''):'')+'</div>'
+    : '<div class="msg-warn">Gmail ainda não conectado'+(g.erro?': '+esc(g.erro):'')+'. Peça ao Renato o link de conexão; é só abrir logada em '+esc(g.conta_esperada||'ana@tyve.com.br')+' e aprovar.</div>';
+  $('gmailAtivo').checked=!!g.ativo; $('gmailGerar').disabled=!g.conectado;
+}
+async function gmailGerar(){ try{ await call('gmail_gerar',{}); okMsg('gMsg','Pedido feito: os rascunhos aparecem no seu Gmail em até 10 minutos.'); }catch(e){ if(e.status) handleErr(e); else errMsg('gMsg',e); } }
+async function gmailAtivo(){ try{ RES.gmail=await call('gmail_ativo',{ativo:$('gmailAtivo').checked}); renderGmail(); okMsg('gMsg','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('gMsg',e); } }
 async function salvarModelos(){
-  const v={assunto:$('rAssunto').value.trim(), email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, gmail_conta:$('rConta').value.trim()};
+  const v={assunto:$('rAssunto').value.trim(), email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, assinatura_html:$('rAssin').value.trim(), gmail_conta:$('rConta').value.trim()};
   try{ CFG=await call('config_salvar',{k:'modelos', v}); okMsg('rMsg3','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg3',e); }
 }
 
