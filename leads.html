@@ -347,8 +347,8 @@ function avisoGmail(){
   if (g.ativo && g.erro) h+='<div class="msg-warn" style="margin-bottom:14px">Rascunhos no Gmail: '+esc(g.erro)+'</div>';
   const av=RES.gmail_avisos||[], grupo=k=>av.filter(x=>x.aviso===k).map(x=>esc(x.loja)).join(', ');
   if (grupo('respondeu')) h+='<div class="msg-warn" style="margin-bottom:14px">Estas lojas responderam no Gmail, então não criei follow-up para elas. Confira a resposta e mude o status em Leads e funil: '+grupo('respondeu')+'.</div>';
-  if (grupo('voltou')) h+='<div class="msg-warn" style="margin-bottom:14px">O e-mail destas lojas voltou (endereço não existe), então parei os e-mails. Tente o WhatsApp ou corrija o e-mail na ficha: '+grupo('voltou')+'.</div>';
-  if (grupo('invalido')) h+='<div class="msg-warn" style="margin-bottom:14px">E-mail inválido, sem rascunho (corrija na ficha): '+grupo('invalido')+'.</div>';
+  if (grupo('voltou')) h+='<div class="msg-warn" style="margin-bottom:14px">O e-mail destas lojas voltou (endereço não existe), então parei os e-mails. As que têm WhatsApp já aparecem para você no WhatsApp (Hoje ou Follow-ups). Ou corrija o e-mail na ficha: '+grupo('voltou')+'.</div>';
+  if (grupo('invalido')) h+='<div class="msg-warn" style="margin-bottom:14px">E-mail inválido, sem rascunho. As que têm WhatsApp já aparecem para você no WhatsApp; nas outras, corrija o e-mail na ficha: '+grupo('invalido')+'.</div>';
   if (g.erro_lote) h+='<div class="msg-warn" style="margin-bottom:14px">'+esc(g.erro_lote)+'</div>';
   if ($('gmailAviso')) $('gmailAviso').innerHTML=h;
   if ($('gmailAvisoFu')) $('gmailAvisoFu').innerHTML=h;
@@ -415,7 +415,7 @@ let FU=[];
 async function loadFollow(){
   $('fuBox').innerHTML='<div class="state" style="min-height:120px"><div class="spinner"></div></div>';
   fuOpcoes(); const seq=++FU_SEQ, canal=$('fuCanal').value;
-  try{ const j=await call('followups',{canal}); if(seq!==FU_SEQ) return; FU=(j.leads||[]).filter(l=>(l.canal==='whats'?'whats':'email')===canal); renderFollow(); }catch(e){ if(seq===FU_SEQ) handleErr(e); }
+  try{ const j=await call('followups',{canal}); if(seq!==FU_SEQ) return; FU=(j.leads||[]).filter(l=>((l.canal==='whats'||fuReinicio(l))?'whats':'email')===canal); renderFollow(); }catch(e){ if(seq===FU_SEQ) handleErr(e); }
 }
 function fuOpcoes(){ const o=$('fuCanal').options; o[0].textContent='E-mail ('+(RES.followups_hoje_email||0)+')'; o[1].textContent='WhatsApp ('+(RES.followups_hoje_whats||0)+')'; }
 function renderFollow(){
@@ -426,24 +426,28 @@ function renderFollow(){
   $('fuBox').innerHTML = (canalFu==='whats' && foraHorarioWa() ? AVISO_WA : '') + FU.map((l,i)=>{
     const wa=firstWa(l.whatsapp);
     return '<div class="card" style="background:var(--surface2);margin-bottom:12px"><div class="lead-head"><div><div class="lead-name" style="font-size:18px">'+esc(l.loja||l.dominio)+'</div>'+
-    '<div class="lead-meta"><b>'+esc(fuEtapa(l))+'</b> · primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(l.email||fmtWa(wa))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
+    '<div class="lead-meta"><b>'+esc(fuEtapa(l))+'</b> · primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(canalFu==='whats' ? fmtWa(wa) : (l.email||fmtWa(wa)))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
     '<div class="row" style="margin-top:12px">'+
       (canalFu==='email' && l.email?'<button class="btn btn-sm" onclick="fuGmail('+i+')">Follow-up no Gmail</button>':'')+
-      (canalFu==='whats' && wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">Follow-up no WhatsApp</button>':'')+
-      '<button class="btn btn-sm dark" onclick="fuFeito('+i+')">Fiz o follow-up</button>'+
+      (canalFu==='whats' && wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">'+(fuReinicio(l)?'Mandar no WhatsApp':'Follow-up no WhatsApp')+'</button>':'')+
+      '<button class="btn btn-sm dark" onclick="fuFeito('+i+')">'+(fuReinicio(l)?'Mandei':'Fiz o follow-up')+'</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'respondeu\')">Respondeu</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'sem_interesse\')">Sem interesse</button>'+
     '</div></div>'; }).join('');
 }
-function fuEtapa(l){ return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
+// e-mail que voltou ou é inválido: a loja aparece no WhatsApp para o primeiro contato por lá
+function fuReinicio(l){ return l.canal!=='whats' && (l.gmail_aviso==='voltou' || l.gmail_aviso==='invalido'); }
+function fuEtapa(l){ if(fuReinicio(l)) return 'O e-mail '+(l.gmail_aviso==='voltou'?'voltou':'é inválido')+': primeira mensagem pelo WhatsApp';
+  return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
 function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0)>=1 && M.email_followup2) ? M.email_followup2 : M.email_followup, l); }
 function fuAssunto(l){ const a=l.assunto||assuntoPadrao(l); return a ? 'Re: '+a : 'Atendimento no WhatsApp da '+(l.loja||l.dominio); }
 function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, fuAssunto(l), fuTexto(l)), '_blank','noopener'); }
-function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(M.whats_followup ? preencher(M.whats_followup, l) : fuTexto(l)), '_blank','noopener'); }
+function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; const mod = fuReinicio(l) ? M.whats : M.whats_followup;
+  window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(mod ? preencher(mod, l) : fuTexto(l)), '_blank','noopener'); }
 let FU_OCUPADO=false, FU_SEQ=0;
 async function fuFeito(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
   document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
-  const canalL = l.canal==='whats' ? 'whats' : 'email';
+  const canalL = (l.canal==='whats' || fuReinicio(l)) ? 'whats' : 'email';
   try{ await call('marcar',{id:l.id,o_que:'followup',canal: canalL});
        FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); const kc='followups_hoje_'+canalL; RES[kc]=Math.max(0,(RES[kc]||0)-1); fuOpcoes(); renderResumo(); }
   catch(e){ handleErr(e); }
