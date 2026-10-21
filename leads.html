@@ -183,7 +183,7 @@
     <!-- FOLLOW-UP -->
     <section id="t-follow" style="display:none">
       <div class="card"><div class="card-title">Follow-up do dia</div>
-        <div class="card-sub">Lojas que receberam a primeira mensagem e ainda não responderam. Um follow-up só por loja. Se a loja respondeu, marque "Respondeu" para ela sair daqui.</div>
+        <div class="card-sub">Lojas que receberam a primeira mensagem e ainda não responderam. Por e-mail são dois follow-ups (o 2º e o 3º e-mail); por WhatsApp, um só. Se a loja respondeu, marque "Respondeu" para ela sair daqui.</div>
         <div id="fuBox"></div></div>
     </section>
 
@@ -239,7 +239,8 @@
         <div class="grid2">
           <div><label class="lb">E-mails por dia</label><input class="inp" type="number" id="rEmail" min="1" max="300" /></div>
           <div><label class="lb">WhatsApp por dia</label><input class="inp" type="number" id="rWa" min="0" max="100" /></div>
-          <div><label class="lb">Follow-up depois de quantos dias</label><input class="inp" type="number" id="rFu" min="1" max="30" /></div>
+          <div><label class="lb">2º e-mail quantos dias depois do 1º</label><input class="inp" type="number" id="rFu" min="1" max="30" /></div>
+          <div><label class="lb">3º e-mail quantos dias depois do 2º</label><input class="inp" type="number" id="rFu2" min="1" max="30" /></div>
           <div><label class="lb">Robô mantém na fila até</label><input class="inp" type="number" id="rEst" min="0" max="1000" /></div>
         </div>
         <div class="hint">Os limites protegem a conta de e-mail e o chip. Subir devagar.</div>
@@ -248,7 +249,8 @@
       <div class="card"><div class="card-title">Textos das mensagens</div>
         <div class="card-sub">Use {loja} para o nome da loja e {gancho} para o gancho de cada loja. O assunto de cada loja aparece na fila e pode ser editado lá.</div>
         <label class="lb">Primeiro e-mail</label><textarea id="rCorpo" rows="8"></textarea>
-        <label class="lb">E-mail de follow-up</label><textarea id="rFuTxt" rows="5"></textarea>
+        <label class="lb">2º e-mail (primeiro follow-up)</label><textarea id="rFuTxt" rows="5"></textarea>
+        <label class="lb">3º e-mail (último follow-up)</label><textarea id="rFu2Txt" rows="5"></textarea>
         <label class="lb">WhatsApp</label><textarea id="rWaTxt" rows="4"></textarea>
         <label class="lb">Conta do Gmail que envia (opcional)</label><input class="inp" id="rConta" placeholder="ex.: ana@tyve.com.br" />
         <div class="hint">Se você usa mais de uma conta no Gmail, coloque aqui a conta que envia a prospecção. Assim o botão abre o e-mail já nela.</div>
@@ -385,7 +387,7 @@ function renderFollow(){
   $('fuBox').innerHTML = FU.map((l,i)=>{
     const wa=firstWa(l.whatsapp);
     return '<div class="card" style="background:var(--surface2);margin-bottom:12px"><div class="lead-head"><div><div class="lead-name" style="font-size:18px">'+esc(l.loja||l.dominio)+'</div>'+
-    '<div class="lead-meta">Primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(l.email||fmtWa(wa))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
+    '<div class="lead-meta"><b>'+esc(fuEtapa(l))+'</b> · primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(l.email||fmtWa(wa))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
     '<div class="row" style="margin-top:12px">'+
       (l.email?'<button class="btn btn-sm" onclick="fuGmail('+i+')">Follow-up no Gmail</button>':'')+
       (wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">Follow-up no WhatsApp</button>':'')+
@@ -394,8 +396,10 @@ function renderFollow(){
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'sem_interesse\')">Sem interesse</button>'+
     '</div></div>'; }).join('');
 }
-function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, 'Re: '+(l.assunto||''), preencher((CFG.modelos||{}).email_followup, l)), '_blank','noopener'); }
-function fuWa(i){ const l=FU[i]; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(preencher((CFG.modelos||{}).email_followup, l)), '_blank','noopener'); }
+function fuEtapa(l){ return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
+function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0)>=1 && M.email_followup2) ? M.email_followup2 : M.email_followup, l); }
+function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, 'Re: '+(l.assunto||''), fuTexto(l)), '_blank','noopener'); }
+function fuWa(i){ const l=FU[i]; window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(fuTexto(l)), '_blank','noopener'); }
 async function fuFeito(i){ const l=FU[i]; try{ await call('marcar',{id:l.id,o_que:'followup',canal: l.email?'email':'whats'}); FU.splice(i,1); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); renderResumo(); renderFollow(); }catch(e){ handleErr(e); } }
 async function fuStatus(i,st){ const l=FU[i]; try{ await call('marcar',{id:l.id,o_que:'status',status:st}); FU.splice(i,1); RES=await call('resumo'); renderResumo(); renderFollow(); }catch(e){ handleErr(e); } }
 
@@ -448,7 +452,7 @@ async function salvarLead(id, stAntes){
 async function exportar(){
   try{
     const j=await call('exportar',{status:L_STATUS}); const ls=j.leads||[];
-    const cols=['loja','dominio','plataforma','segmento','email','email_origem','whatsapp','instagram','assunto','gancho','status','enviado_at','followup_at','notas'];
+    const cols=['loja','dominio','plataforma','segmento','email','email_origem','whatsapp','instagram','assunto','gancho','status','enviado_at','followup_at','followup_n','notas'];
     const q=v=>{ let s=String(v==null?'':v); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'; };
     const csv='﻿'+cols.join(';')+'\n'+ls.map(l=>cols.map(c=>q(c==='status'?(STS[l[c]]||l[c]):c==='segmento'?segNome(l[c]):l[c])).join(';')).join('\n');
     const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='leads-tyve-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
@@ -506,8 +510,8 @@ function renderRegras(){
   const R=CFG.regras||{}, L=CFG.limites||{}, M=CFG.modelos||{}; const off=R.segmentos_off||[];
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
-  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rEst').value=L.estoque_alvo;
-  $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rWaTxt').value=M.whats||''; $('rConta').value=M.gmail_conta||'';
+  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo;
+  $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rConta').value=M.gmail_conta||'';
 }
 function okMsg(id, t){ $(id).innerHTML='<span style="color:var(--green);font-weight:700">'+esc(t)+'</span>'; setTimeout(()=>{$(id).textContent='';},3000); }
 function errMsg(id, e){ $(id).innerHTML='<span style="color:var(--red);font-weight:700">'+esc(e.message||e)+'</span>'; }
@@ -517,11 +521,11 @@ async function salvarRegras(){
   try{ CFG=await call('config_salvar',{k:'regras', v:Object.assign({}, CFG.regras||{}, {plataformas:(CFG.regras||{}).plataformas||['shopify','nuvemshop'], segmentos_off:off, palavras_excluir:pal})}); okMsg('rMsg1','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg1',e); }
 }
 async function salvarLimites(){
-  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, estoque_alvo:+$('rEst').value};
+  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, estoque_alvo:+$('rEst').value};
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
 async function salvarModelos(){
-  const v={email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, whats:$('rWaTxt').value, gmail_conta:$('rConta').value.trim()};
+  const v={email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, gmail_conta:$('rConta').value.trim()};
   try{ CFG=await call('config_salvar',{k:'modelos', v}); okMsg('rMsg3','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg3',e); }
 }
 
