@@ -195,13 +195,20 @@
       <div class="funil" id="funil"></div>
       <div class="card" style="padding:16px 20px">
         <div class="row">
-          <input class="inp" style="flex:1;min-width:180px" id="lBusca" placeholder="Buscar por loja, site, e-mail ou Instagram" onkeydown="if(event.key==='Enter')loadLeads(0)" />
-          <select id="lSeg" style="width:auto" onchange="loadLeads(0)"><option value="">Todos os segmentos</option></select>
-          <button class="btn btn-sm" onclick="loadLeads(0)">Buscar</button>
+          <input class="inp" style="flex:1;min-width:180px" id="lBusca" placeholder="Buscar por loja, site, e-mail ou Instagram" onkeydown="if(event.key==='Enter')filtroMudou()" />
+          <select id="lCanal" style="width:auto" onchange="filtroMudou()"><option value="">E-mail e WhatsApp</option><option value="email">Só e-mail</option><option value="whats">Só WhatsApp</option></select>
+          <select id="lSeg" style="width:auto" onchange="filtroMudou()"><option value="">Todos os segmentos</option></select>
+          <button class="btn btn-sm" onclick="filtroMudou()">Buscar</button>
           <button class="btn btn-sm ghost" onclick="exportar()">Baixar planilha (CSV)</button>
         </div>
       </div>
-      <div class="card"><div class="tbl-wrap"><table><thead><tr><th>Loja</th><th>Segmento</th><th>Status</th><th>Contato</th><th>Atualizado</th></tr></thead><tbody id="lBody"></tbody></table></div>
+      <div class="card" id="lLote" style="display:none;padding:12px 20px"><div class="row">
+          <b id="lLoteN"></b>
+          <select id="lLoteSt" style="width:auto"><option value="">Mudar status para…</option><option value="enviado">Enviado</option><option value="email_ruim">E-mail não encontrado</option><option value="respondeu">Respondeu</option><option value="reuniao">Reunião marcada</option><option value="cliente">Virou cliente</option><option value="sem_interesse">Sem interesse</option><option value="nao_contatar">Não contatar</option><option value="novo">Na fila</option></select>
+          <button class="btn btn-sm" id="lLoteBtn" onclick="aplicarLote()">Aplicar</button>
+          <button class="btn btn-sm ghost" onclick="limparSel()">Limpar seleção</button>
+          <span id="lLoteMsg" class="small"></span></div></div>
+      <div class="card"><div class="tbl-wrap"><table><thead><tr><th style="width:32px"><input type="checkbox" id="lTodos" onclick="selTodos(this.checked)" title="Selecionar todas desta página" /></th><th>Loja</th><th>Segmento</th><th>Status</th><th>Contato</th><th>Atualizado</th></tr></thead><tbody id="lBody"></tbody></table></div>
         <div class="row" style="justify-content:center;margin-top:14px"><button class="btn btn-sm ghost" id="lPrev" onclick="loadLeads(L_PAGE-1)">Anteriores</button><span class="small muted" id="lPage"></span><button class="btn btn-sm ghost" id="lNext" onclick="loadLeads(L_PAGE+1)">Próximos</button></div>
       </div>
     </section>
@@ -459,22 +466,52 @@ async function fuStatus(i,st){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) retu
   finally{ FU_OCUPADO=false; renderFollow(); } }
 
 // ---------------- LEADS
+let L_FUNIL=null;
 function renderFunil(){
-  const f=RES.funil||{}; const ord=['novo','enviado','respondeu','reuniao','cliente','sem_interesse','nao_contatar'];
+  const f=L_FUNIL||RES.funil||{}; const ord=['novo','enviado','respondeu','reuniao','cliente','sem_interesse','nao_contatar'];
   $('funil').innerHTML = '<button class="fb'+(L_STATUS===''?' on':'')+'" onclick="setStatus(\'\')"><b>'+ord.reduce((a,k)=>a+(f[k]||0),0)+'</b><span>Todos</span></button>'+
     ord.map(k=>'<button class="fb'+(L_STATUS===k?' on':'')+'" onclick="setStatus(\''+k+'\')"><b>'+(f[k]||0)+'</b><span>'+esc(STS[k])+'</span></button>').join('');
 }
-function setStatus(s){ L_STATUS=s; loadLeads(0); }
+function setStatus(s){ L_STATUS=s; filtroMudou(); }
+// trocou o filtro: a seleção da alteração em massa recomeça, para não mexer em loja que não está na tela
+function filtroMudou(){ SEL.clear(); renderSel(); loadLeads(0); }
 let LEADS=[];
+let L_SEQ=0; const SEL=new Set();
+function emailRuim(l){ return l.gmail_aviso==='voltou' || l.gmail_aviso==='invalido'; }
 async function loadLeads(pg){
-  if(pg<0) return; renderFunil();
-  $('lBody').innerHTML='<tr><td colspan="5" class="muted">Carregando…</td></tr>';
+  if(pg<0) return; renderFunil(); const seq=++L_SEQ;
+  $('lBody').innerHTML='<tr><td colspan="6" class="muted">Carregando…</td></tr>';
   try{
-    const j=await call('leads',{status:L_STATUS, segmento:$('lSeg').value, busca:$('lBusca').value.trim(), pagina:pg});
-    LEADS=j.leads||[]; L_PAGE=pg;
-    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="5" class="muted">Nada encontrado.</td></tr>';
-    $('lPage').textContent='página '+(pg+1); $('lPrev').disabled = pg===0; $('lNext').disabled = LEADS.length<50;
+    const j=await call('leads',{status:L_STATUS, canal:$('lCanal').value, segmento:$('lSeg').value, busca:$('lBusca').value.trim(), pagina:pg});
+    if(seq!==L_SEQ) return;
+    LEADS=j.leads||[]; L_PAGE=pg; L_FUNIL=j.funil||null; renderFunil();
+    $('lTodos').checked = LEADS.length>0 && LEADS.every(l=>SEL.has(l.id));
+    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td onclick="event.stopPropagation()"><input type="checkbox" '+(SEL.has(l.id)?'checked ':'')+'onclick="selUm('+l.id+',this.checked)" /></td><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(emailRuim(l)?' <span class="tag r">E-mail não encontrado</span>':'')+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="6" class="muted">Nada encontrado.</td></tr>';
+    renderSel(); $('lPage').textContent='página '+(pg+1); $('lPrev').disabled = pg===0; $('lNext').disabled = LEADS.length<50;
   }catch(e){ handleErr(e); }
+}
+function selUm(id,on){ if(on) SEL.add(id); else SEL.delete(id); $('lTodos').checked = LEADS.length>0 && LEADS.every(l=>SEL.has(l.id)); renderSel(); }
+function selTodos(on){ LEADS.forEach(l=>{ if(on) SEL.add(l.id); else SEL.delete(l.id); }); loadLeadsMarcar(); renderSel(); }
+function loadLeadsMarcar(){ document.querySelectorAll('#lBody input[type=checkbox]').forEach((c,i)=>{ const l=LEADS[i]; if(l) c.checked=SEL.has(l.id); }); }
+function limparSel(){ SEL.clear(); $('lTodos').checked=false; loadLeadsMarcar(); renderSel(); }
+function renderSel(){ $('lLote').style.display = SEL.size ? '' : 'none'; $('lLoteN').textContent = SEL.size+(SEL.size===1?' loja selecionada':' lojas selecionadas'); }
+let LOTE_OCUPADO=false;
+async function aplicarLote(){
+  const st=$('lLoteSt').value; if(!st||!SEL.size||LOTE_OCUPADO) return;
+  const nome = st==='email_ruim' ? 'E-mail não encontrado' : STS[st];
+  if(!confirm('Mudar '+SEL.size+(SEL.size===1?' loja':' lojas')+' para "'+nome+'"?'+(st==='nao_contatar'?' Elas saem da prospecção de vez.':''))) return;
+  LOTE_OCUPADO=true; $('lLoteBtn').disabled=true; $('lLoteMsg').textContent='Salvando…';
+  try{
+    const ids=[...SEL]; let ok=0, erros=[];
+    for(let i=0;i<ids.length;i+=200){
+      const r=await call('marcar_lote', st==='email_ruim' ? {ids:ids.slice(i,i+200), o_que:'email_ruim'} : {ids:ids.slice(i,i+200), o_que:'status', status:st});
+      ok+=r.ok||0; erros=erros.concat(r.erros||[]);
+    }
+    SEL.clear(); erros.forEach(e=>SEL.add(e.id));
+    $('lLoteMsg').innerHTML='<span style="color:var(--green);font-weight:700">'+ok+(ok===1?' loja atualizada.':' lojas atualizadas.')+'</span>'+(erros.length?' <span style="color:var(--red)">Não deu em '+erros.length+': '+erros.map(e=>esc(e.loja||e.id)+' ('+esc(e.erro)+')').join('; ')+'</span>':'');
+    RES=await call('resumo'); renderResumo(); loadLeads(L_PAGE);
+  }catch(e){ if(e.status) handleErr(e); else $('lLoteMsg').innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>'; }
+  finally{ LOTE_OCUPADO=false; $('lLoteBtn').disabled=false; }
 }
 async function openLead(id){
   $('modal').innerHTML='<div class="state" style="min-height:160px"><div class="spinner"></div></div>'; $('modalBg').style.display='flex';
@@ -483,7 +520,9 @@ async function openLead(id){
     $('modal').innerHTML = '<button class="x" onclick="closeModal()">×</button>'+
      '<div class="lead-name">'+esc(l.loja||l.dominio)+'</div><div class="lead-meta"><a href="https://'+esc(l.dominio)+'" target="_blank" rel="noopener">'+esc(l.dominio)+'</a> · '+esc(platNome(l.plataforma))+' · '+esc(segNome(l.segmento))+(l.instagram?' · '+esc(l.instagram):'')+'</div>'+
      (!l.qualificado?'<div class="msg-warn" style="margin-top:12px">Fora do perfil: '+esc(l.perfil_motivo)+'</div>':'')+
-     '<div class="grid2"><div><label class="lb">Status</label><select id="mSt">'+Object.entries(STS).filter(([k])=>k!=='antigo'||l.status==='antigo').map(([k,n])=>'<option value="'+k+'"'+(k===l.status?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></div>'+
+     (emailRuim(l)?'<div class="msg-warn" style="margin-top:12px">E-mail não encontrado: esta loja não recebe mais e-mails'+(l.whatsapp?' e aparece para você no WhatsApp':'')+'. Para voltar aos e-mails, troque o endereço abaixo e salve.</div>':'')+
+     '<div class="grid2"><div><label class="lb">Status</label><select id="mSt">'+Object.entries(STS).filter(([k])=>k!=='antigo'||l.status==='antigo').map(([k,n])=>'<option value="'+k+'"'+(k===l.status?' selected':'')+'>'+esc(n)+'</option>').join('')+
+       ((l.status==='novo'||l.status==='enviado')&&!emailRuim(l)?'<option value="email_ruim">E-mail não encontrado</option>':'')+'</select></div>'+
      '<div><label class="lb">Follow-up em</label><input class="inp" type="date" id="mFu" value="'+esc(l.followup_at||'')+'" /></div>'+
      '<div><label class="lb">E-mail</label><input class="inp" id="mEmail" value="'+esc(l.email)+'" /></div>'+
      '<div><label class="lb">WhatsApp</label><input class="inp" id="mWa" value="'+esc(l.whatsapp)+'" /></div></div>'+
@@ -499,14 +538,15 @@ async function salvarLead(id, stAntes){
   $('mMsg').textContent='Salvando…';
   try{
     await call('editar',{id, email:$('mEmail').value, whatsapp:$('mWa').value, assunto:$('mAssunto').value, gancho:$('mGancho').value, notas:$('mNotas').value, followup_at:$('mFu').value});
-    if ($('mSt').value!==stAntes) await call('marcar',{id, o_que:'status', status:$('mSt').value});
+    if ($('mSt').value==='email_ruim') await call('marcar',{id, o_que:'email_ruim'});
+    else if ($('mSt').value!==stAntes) await call('marcar',{id, o_que:'status', status:$('mSt').value});
     $('mMsg').innerHTML='<span style="color:var(--green);font-weight:700">Salvo.</span>';
     RES=await call('resumo'); renderResumo(); loadLeads(L_PAGE);
   }catch(e){ $('mMsg').innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>'; }
 }
 async function exportar(){
   try{
-    const j=await call('exportar',{status:L_STATUS}); const ls=j.leads||[];
+    const j=await call('exportar',{status:L_STATUS, canal:$('lCanal').value, segmento:$('lSeg').value}); const ls=j.leads||[];
     const cols=['loja','dominio','plataforma','segmento','email','email_origem','whatsapp','instagram','assunto','gancho','status','enviado_at','followup_at','followup_n','notas'];
     const q=v=>{ let s=String(v==null?'':v); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'; };
     const csv='﻿'+cols.join(';')+'\n'+ls.map(l=>cols.map(c=>q(c==='status'?(STS[l[c]]||l[c]):c==='segmento'?segNome(l[c]):l[c])).join(';')).join('\n');
