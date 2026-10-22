@@ -177,7 +177,7 @@
         </div>
         <div class="prog"><div id="qProg" style="width:0"></div></div>
       </div>
-      <div id="gmailAviso"></div>
+      <div id="gmailAviso"></div><div id="contatoAviso"></div>
       <div id="filaBox"></div>
     </section>
 
@@ -343,7 +343,7 @@ function renderResumo(){
   $('kEst').textContent = RES.estoque||0;
   $('kResp').textContent = (f.respondeu||0)+(f.reuniao||0)+(f.cliente||0);
   $('bFu').style.display = RES.followups_hoje ? '' : 'none'; $('bFu').textContent = RES.followups_hoje||0;
-  avisoGmail();
+  avisoGmail(); avisoContato();
   const h=new Date().getHours(); $('heroTitle').textContent = (h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', Ana';
 }
 function avisoGmail(){
@@ -395,6 +395,7 @@ function renderFila(){
      (wa ? '<button class="btn wa" onclick="abrirWa()">Abrir no WhatsApp</button>' : '')+
      '<button class="btn dark" onclick="enviado()">Enviei, próxima</button>'+
      '<button class="btn ghost" onclick="pular()">Pular hoje</button>'+
+     (canal==='whats' && wa ? '<button class="btn ghost" onclick="semWhats()">Não está no WhatsApp</button>' : '')+
      '<button class="btn danger" onclick="naoContatar()">Não contatar</button>'+
    '</div>'+
    '<div class="hint">Abra, confira e envie por lá. Depois volte e clique em "Enviei, próxima". Uma de cada vez, para proteger a conta.</div>'+
@@ -415,6 +416,24 @@ async function enviado(){
   catch(e){ handleErr(e); }
 }
 async function pular(){ const l=FILA[FI]; try{ await call('marcar',{id:l.id,o_que:'pular'}); FILA.splice(FI,1); renderFila(); }catch(e){ handleErr(e); } }
+let SW_OCUPADO=false;
+async function semWhats(){ const l=FILA[FI]; if(!l||SW_OCUPADO) return;
+  if(!confirm('O número '+fmtWa(firstWa(l.whatsapp))+' de '+(l.loja||l.dominio)+' não é WhatsApp? A loja sai da fila do WhatsApp e o robô procura outro contato no site.')) return;
+  SW_OCUPADO=true;
+  try{ const r=await call('marcar',{id:l.id,o_que:'sem_whats'}); const n=r.lead||{};
+       // se a loja tinha outro número, continua na fila com ele; senão sai e vai para a busca de contato
+       if (n.whatsapp && !n.wa_aviso) { FILA[FI]=n; } else FILA.splice(FI,1);
+       RES=await call('resumo'); renderResumo(); avisoContato(); renderFila(); }
+  catch(e){ handleErr(e); }
+  finally{ SW_OCUPADO=false; } }
+function avisoContato(){
+  const sc=RES.sem_contato||[]; const proc=sc.filter(x=>x.aviso==='procurar'), busc=sc.filter(x=>x.aviso==='rebuscar');
+  let h='';
+  if (busc.length) h+='<div class="msg-ok" style="margin-bottom:14px">O robô está procurando outro contato no site de '+busc.length+(busc.length===1?' loja':' lojas')+' (na próxima rodada dele, de hora em hora com o Mac do Renato ligado): '+busc.map(x=>esc(x.loja)).join(', ')+'.</div>';
+  if (proc.length) h+='<div class="msg-warn" style="margin-bottom:14px">O robô não achou outro WhatsApp nem e-mail no site destas lojas. Procure à mão (Instagram, Google) e ponha o contato na ficha; ao salvar, ela volta para a fila do canal certo: '+
+    proc.map(x=>'<a href="#" onclick="openLead('+Number(x.id)+');return false">'+esc(x.loja)+'</a>'+(x.instagram?' ('+esc(x.instagram)+')':'')).join(', ')+'.</div>';
+  if ($('contatoAviso')) $('contatoAviso').innerHTML=h;
+}
 async function naoContatar(){ const l=FILA[FI]; if(!confirm('Tirar '+(l.loja||l.dominio)+' da prospecção de vez?')) return; try{ await call('marcar',{id:l.id,o_que:'status',status:'nao_contatar'}); FILA.splice(FI,1); RES.estoque=Math.max(0,(RES.estoque||0)-1); renderResumo(); renderFila(); }catch(e){ handleErr(e); } }
 
 // ---------------- FOLLOW-UP
@@ -486,7 +505,7 @@ async function loadLeads(pg){
     if(seq!==L_SEQ) return;
     LEADS=j.leads||[]; L_PAGE=pg; L_FUNIL=j.funil||null; renderFunil();
     $('lTodos').checked = LEADS.length>0 && LEADS.every(l=>SEL.has(l.id));
-    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td onclick="event.stopPropagation()"><input type="checkbox" '+(SEL.has(l.id)?'checked ':'')+'onclick="selUm('+l.id+',this.checked)" /></td><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(emailRuim(l)?' <span class="tag r">E-mail não encontrado</span>':'')+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="6" class="muted">Nada encontrado.</td></tr>';
+    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td onclick="event.stopPropagation()"><input type="checkbox" '+(SEL.has(l.id)?'checked ':'')+'onclick="selUm('+l.id+',this.checked)" /></td><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(emailRuim(l)?' <span class="tag r">E-mail não encontrado</span>':'')+(l.wa_aviso==='procurar'?' <span class="tag r">Procurar contato</span>':l.wa_aviso==='rebuscar'?' <span class="tag">Robô procurando contato</span>':'')+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="6" class="muted">Nada encontrado.</td></tr>';
     renderSel(); $('lPage').textContent='página '+(pg+1); $('lPrev').disabled = pg===0; $('lNext').disabled = LEADS.length<50;
   }catch(e){ handleErr(e); }
 }
@@ -513,16 +532,18 @@ async function aplicarLote(){
   }catch(e){ if(e.status) handleErr(e); else $('lLoteMsg').innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>'; }
   finally{ LOTE_OCUPADO=false; $('lLoteBtn').disabled=false; }
 }
+let M_WA_ORIG='';
 async function openLead(id){
   $('modal').innerHTML='<div class="state" style="min-height:160px"><div class="spinner"></div></div>'; $('modalBg').style.display='flex';
   try{
-    const j=await call('lead',{id}); const l=j.lead; const ev=j.eventos||[];
+    const j=await call('lead',{id}); const l=j.lead; const ev=j.eventos||[]; M_WA_ORIG=String(l.whatsapp||'');
     $('modal').innerHTML = '<button class="x" onclick="closeModal()">×</button>'+
      '<div class="lead-name">'+esc(l.loja||l.dominio)+'</div><div class="lead-meta"><a href="https://'+esc(l.dominio)+'" target="_blank" rel="noopener">'+esc(l.dominio)+'</a> · '+esc(platNome(l.plataforma))+' · '+esc(segNome(l.segmento))+(l.instagram?' · '+esc(l.instagram):'')+'</div>'+
      (!l.qualificado?'<div class="msg-warn" style="margin-top:12px">Fora do perfil: '+esc(l.perfil_motivo)+'</div>':'')+
      (emailRuim(l)?'<div class="msg-warn" style="margin-top:12px">E-mail não encontrado: esta loja não recebe mais e-mails'+(l.whatsapp?' e aparece para você no WhatsApp':'')+'. Para voltar aos e-mails, troque o endereço abaixo e salve.</div>':'')+
      '<div class="grid2"><div><label class="lb">Status</label><select id="mSt">'+Object.entries(STS).filter(([k])=>k!=='antigo'||l.status==='antigo').map(([k,n])=>'<option value="'+k+'"'+(k===l.status?' selected':'')+'>'+esc(n)+'</option>').join('')+
-       ((l.status==='novo'||l.status==='enviado')&&!emailRuim(l)?'<option value="email_ruim">E-mail não encontrado</option>':'')+'</select></div>'+
+       ((l.status==='novo'||l.status==='enviado')&&!emailRuim(l)?'<option value="email_ruim">E-mail não encontrado</option>':'')+
+       (l.status==='novo'&&l.whatsapp?'<option value="sem_whats">Não está no WhatsApp</option>':'')+'</select></div>'+
      '<div><label class="lb">Follow-up em</label><input class="inp" type="date" id="mFu" value="'+esc(l.followup_at||'')+'" /></div>'+
      '<div><label class="lb">E-mail</label><input class="inp" id="mEmail" value="'+esc(l.email)+'" /></div>'+
      '<div><label class="lb">WhatsApp</label><input class="inp" id="mWa" value="'+esc(l.whatsapp)+'" /></div></div>'+
@@ -537,9 +558,17 @@ function closeModal(){ $('modalBg').style.display='none'; }
 async function salvarLead(id, stAntes){
   $('mMsg').textContent='Salvando…';
   try{
-    await call('editar',{id, email:$('mEmail').value, whatsapp:$('mWa').value, assunto:$('mAssunto').value, gancho:$('mGancho').value, notas:$('mNotas').value, followup_at:$('mFu').value});
-    if ($('mSt').value==='email_ruim') await call('marcar',{id, o_que:'email_ruim'});
+    const ed={id, email:$('mEmail').value, whatsapp:$('mWa').value, assunto:$('mAssunto').value, gancho:$('mGancho').value, notas:$('mNotas').value, followup_at:$('mFu').value};
+    if ($('mSt').value==='sem_whats') {
+      // primeiro marca o número que estava na ficha; se ela digitou um número novo, ele entra depois
+      await call('marcar',{id, o_que:'sem_whats'});
+      if (ed.whatsapp.trim()===M_WA_ORIG.trim()) delete ed.whatsapp;
+      await call('editar',ed);
+    } else {
+      await call('editar',ed);
+      if ($('mSt').value==='email_ruim') await call('marcar',{id, o_que:'email_ruim'});
     else if ($('mSt').value!==stAntes) await call('marcar',{id, o_que:'status', status:$('mSt').value});
+    }
     $('mMsg').innerHTML='<span style="color:var(--green);font-weight:700">Salvo.</span>';
     RES=await call('resumo'); renderResumo(); loadLeads(L_PAGE);
   }catch(e){ $('mMsg').innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>'; }
