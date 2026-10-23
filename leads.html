@@ -355,6 +355,7 @@ function avisoGmail(){
   const av=RES.gmail_avisos||[], grupo=k=>av.filter(x=>x.aviso===k).map(x=>esc(x.loja)).join(', ');
   if (grupo('respondeu')) h+='<div class="msg-warn" style="margin-bottom:14px">Estas lojas responderam no Gmail, então não criei follow-up para elas. Confira a resposta e mude o status em Leads e funil: '+grupo('respondeu')+'.</div>';
   if (grupo('voltou')) h+='<div class="msg-warn" style="margin-bottom:14px">O e-mail destas lojas voltou (endereço não existe), então parei os e-mails. As que têm WhatsApp já aparecem para você no WhatsApp (Hoje ou Follow-ups). Ou corrija o e-mail na ficha: '+grupo('voltou')+'.</div>';
+  if (grupo('sem_envio')) h+='<div class="msg-warn" style="margin-bottom:14px">Não achei no seu Gmail o 1º e-mail para estas lojas, então não criei o follow-up delas. Se o 1º e-mail não saiu, mude para Na fila (dá para fazer em massa em Leads e funil) e ele entra nos rascunhos. Se saiu por outra conta, registre o follow-up à mão: '+grupo('sem_envio')+'.</div>';
   if (grupo('invalido')) h+='<div class="msg-warn" style="margin-bottom:14px">E-mail inválido, sem rascunho. As que têm WhatsApp já aparecem para você no WhatsApp; nas outras, corrija o e-mail na ficha: '+grupo('invalido')+'.</div>';
   if (g.erro_lote) h+='<div class="msg-warn" style="margin-bottom:14px">'+esc(g.erro_lote)+'</div>';
   if ($('gmailAviso')) $('gmailAviso').innerHTML=h;
