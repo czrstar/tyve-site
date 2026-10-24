@@ -259,6 +259,8 @@
           <div><label class="lb">3º e-mail quantos dias depois do 2º</label><input class="inp" type="number" id="rFu2" min="1" max="30" /></div>
           <div><label class="lb">Robô mantém na fila até</label><input class="inp" type="number" id="rEst" min="0" max="1000" /></div>
         </div>
+        <label class="row small" style="margin-top:12px;gap:8px"><input type="checkbox" id="rEmailSab" /> E-mail no sábado (rascunhos às 7h30, como nos dias úteis)</label>
+        <label class="row small" style="margin-top:6px;gap:8px"><input type="checkbox" id="rWaFds" /> WhatsApp no fim de semana (sábado e domingo: Fila de hoje e Follow-up do WhatsApp)</label>
         <div class="hint">Os limites protegem a conta de e-mail e o chip. Subir devagar.</div>
         <div class="row" style="margin-top:14px"><button class="btn btn-sm" onclick="salvarLimites()">Salvar limites</button><span id="rMsg2" class="small"></span></div>
       </div>
@@ -369,7 +371,7 @@ function fillSegSelects(){
 function limiteCanal(){ const L=RES.limites||{}; return $('qCanal').value==='whats' ? [RES.enviados_hoje_whats||0, L.whats_dia||0] : [RES.enviados_hoje_email||0, L.email_dia||0]; }
 async function loadFila(){
   $('filaBox').innerHTML='<div class="card"><div class="state" style="min-height:160px"><div class="spinner"></div></div></div>';
-  try { const j=await call('fila',{canal:$('qCanal').value, segmento:$('qSeg').value, limite:80}); FILA=j.leads||[]; FI=0; renderFila(); } catch(e){ handleErr(e); }
+  try { const j=await call('fila',{canal:$('qCanal').value, segmento:$('qSeg').value, limite:80}); if($('qCanal').value==='whats') RES.whats_pausado=!!j.whats_pausado; FILA=j.leads||[]; FI=0; renderFila(); } catch(e){ handleErr(e); }
 }
 function renderFila(){
   const [feitos, lim] = limiteCanal(); const canal=$('qCanal').value;
@@ -377,6 +379,7 @@ function renderFila(){
   $('qInfo').textContent = feitos+' de '+lim+' enviados hoje · '+FILA.length+' na fila'+($('qSeg').value?' deste segmento':'');
   if (feitos >= lim) { $('filaBox').innerHTML='<div class="card done-box"><h3>Limite de hoje atingido</h3><p class="muted">Você enviou '+feitos+' '+(canal==='whats'?'mensagens de WhatsApp':'e-mails')+' hoje. Amanhã a fila continua daqui. Se quiser, veja os follow-ups.</p></div>'; return; }
   const l = FILA[FI];
+  if (!l && canal==='whats' && RES.whats_pausado) { $('filaBox').innerHTML='<div class="card done-box"><h3>WhatsApp pausado no fim de semana</h3><p class="muted">No sábado e no domingo a fila do WhatsApp não mostra lojas novas; ela volta na segunda. Responder quem já está conversando com você continua normal. Dá para mudar em Regras e textos.</p></div>'; return; }
   if (!l) { $('filaBox').innerHTML='<div class="card done-box"><h3>Fila vazia por aqui</h3><p class="muted">Não há mais lojas com esse filtro. Peça mais ao robô na aba "Gerar mais" ou troque o filtro.</p></div>'; return; }
   const M=CFG.modelos||{};
   const wa=firstWa(l.whatsapp);
@@ -442,12 +445,13 @@ let FU=[];
 async function loadFollow(){
   $('fuBox').innerHTML='<div class="state" style="min-height:120px"><div class="spinner"></div></div>';
   fuOpcoes(); const seq=++FU_SEQ, canal=$('fuCanal').value;
-  try{ const j=await call('followups',{canal}); if(seq!==FU_SEQ) return; FU=(j.leads||[]).filter(l=>((l.canal==='whats'||fuReinicio(l))?'whats':'email')===canal); renderFollow(); }catch(e){ if(seq===FU_SEQ) handleErr(e); }
+  try{ const j=await call('followups',{canal}); if(seq!==FU_SEQ) return; if(canal==='whats') RES.whats_pausado=!!j.whats_pausado; FU=(j.leads||[]).filter(l=>((l.canal==='whats'||fuReinicio(l))?'whats':'email')===canal); renderFollow(); }catch(e){ if(seq===FU_SEQ) handleErr(e); }
 }
 function fuOpcoes(){ const o=$('fuCanal').options; o[0].textContent='E-mail ('+(RES.followups_hoje_email||0)+')'; o[1].textContent='WhatsApp ('+(RES.followups_hoje_whats||0)+')'; }
 function renderFollow(){
   const canalFu=$('fuCanal').value;
   $('fuInfo').textContent = FU.length ? FU.length+' para hoje' : '';
+  if(!FU.length && canalFu==='whats' && RES.whats_pausado){ $('fuBox').innerHTML='<p class="muted">Follow-up do WhatsApp pausado no fim de semana: o que venceria hoje aparece na segunda. Dá para mudar em Regras e textos.</p>'; return; }
   if(!FU.length){ $('fuBox').innerHTML='<p class="muted">Nenhum follow-up '+(canalFu==='whats'?'de WhatsApp':'de e-mail')+' para hoje.</p>'; return; }
   const M=CFG.modelos||{};
   $('fuBox').innerHTML = (canalFu==='whats' && foraHorarioWa() ? AVISO_WA : '') + FU.map((l,i)=>{
@@ -635,7 +639,7 @@ function renderRegras(){
   const R=CFG.regras||{}, L=CFG.limites||{}, M=CFG.modelos||{}; const off=R.segmentos_off||[];
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
-  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo;
+  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo; $('rEmailSab').checked = L.email_sabado!==false; $('rWaFds').checked = L.whats_fim_semana===true;
   renderGmail(); $('rAssin').value=M.assinatura_html||'';
   $('rAssunto').value=M.assunto||''; $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
 }
@@ -647,7 +651,7 @@ async function salvarRegras(){
   try{ CFG=await call('config_salvar',{k:'regras', v:Object.assign({}, CFG.regras||{}, {plataformas:(CFG.regras||{}).plataformas||['shopify','nuvemshop'], segmentos_off:off, palavras_excluir:pal})}); okMsg('rMsg1','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg1',e); }
 }
 async function salvarLimites(){
-  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, estoque_alvo:+$('rEst').value};
+  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, estoque_alvo:+$('rEst').value, email_sabado:$('rEmailSab').checked, whats_fim_semana:$('rWaFds').checked};
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
 function renderGmail(){
