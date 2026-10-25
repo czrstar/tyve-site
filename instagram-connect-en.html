@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tyve — Connect Instagram</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #f84100;
+      --teal: #00e8df;
+      --dark: #111e1d;
+      --font: 'Grift', 'DM Sans', sans-serif;
+    }
+    @font-face { font-family: 'Grift'; src: url('/assets/fonts/Grift-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Grift'; src: url('/assets/fonts/Grift-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+    @font-face { font-family: 'Grift'; src: url('/assets/fonts/Grift-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+
+    body { font-family: var(--font); background: var(--dark); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+
+    nav {
+      background: var(--orange); height: 64px; display: flex; align-items: center;
+      padding: 0 24px; position: sticky; top: 0; z-index: 100;
+    }
+    nav img { height: 28px; }
+
+    .page {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 48px 24px;
+      position: relative; overflow: hidden;
+    }
+    .page::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('/assets/raios-tyve.svg') repeat-x center center;
+      background-size: auto 55%;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card { position: relative; z-index: 1; }
+
+    .card {
+      background: #1a2d2c; border: 1.5px solid rgba(255,255,255,.1);
+      border-radius: 24px; padding: 48px 40px; max-width: 480px; width: 100%;
+      text-align: center;
+    }
+
+    .ig-icon {
+      width: 64px; height: 64px; border-radius: 16px; margin: 0 auto 24px;
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ig-icon svg { width: 36px; height: 36px; fill: white; }
+
+    h1 { font-size: 26px; font-weight: 700; margin-bottom: 12px; }
+    .subtitle { color: rgba(255,255,255,.55); font-size: 15px; line-height: 1.6; margin-bottom: 32px; }
+
+    .steps { text-align: left; margin-bottom: 32px; display: flex; flex-direction: column; gap: 12px; }
+    .step { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%; background: rgba(248,65,0,.2);
+      border: 1.5px solid var(--orange); color: var(--orange); font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-txt { font-size: 14px; color: rgba(255,255,255,.7); line-height: 1.5; }
+
+    .btn-connect {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 16px; border-radius: 12px;
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #fff; font-family: var(--font); font-size: 16px; font-weight: 700;
+      border: none; cursor: pointer; text-decoration: none;
+      transition: opacity .15s ease;
+    }
+    .btn-connect:hover { opacity: .88; }
+    .btn-connect svg { width: 22px; height: 22px; fill: white; }
+
+    .notice {
+      margin-top: 20px; font-size: 12px; color: rgba(255,255,255,.3);
+      line-height: 1.5;
+    }
+
+    #error-msg {
+      display: none; background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.4);
+      border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #fca5a5;
+      margin-bottom: 20px; text-align: left;
+    }
+
+    .tip { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%;
+      border:1px solid var(--teal); color:var(--teal); font-size:11px; font-weight:700; cursor:help; position:relative; margin-left:4px; vertical-align:middle; }
+    .tip:hover::after, .tip:focus::after { content: attr(data-tip); position:absolute; left:50%; bottom:130%; transform:translateX(-50%);
+      width:240px; background:#fff; color:#111e1d; font-size:12px; font-weight:400; line-height:1.4; padding:8px 10px; border-radius:8px; z-index:10; text-align:left; }
+    .perms { margin-top:24px; text-align:left; background:rgba(0,232,223,.06); border:1px solid rgba(0,232,223,.25); border-radius:12px; padding:14px 16px; }
+    .perms-title { font-size:13px; font-weight:700; color:var(--teal); margin-bottom:8px; }
+    .perm { font-size:12.5px; color:rgba(255,255,255,.75); line-height:1.5; margin-bottom:6px; }
+    .perm-no { font-size:12px; color:rgba(255,255,255,.45); margin-top:4px; }
+    footer { text-align: center; padding: 24px; font-size: 12px; color: rgba(255,255,255,.2); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <img src="/assets/logo-tyve.svg" alt="Tyve" />
+</nav>
+
+<div class="page">
+  <div class="card">
+
+    <div class="ig-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    </div>
+
+    <h1>Connect your Instagram</h1>
+    <p class="subtitle">Connect your business's Instagram professional account so the Tyve AI assistant can automatically reply to the direct messages your customers send you.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-txt">Click the button below and log in with your Instagram professional account (Business or Creator). <span class="tip" tabindex="0" data-tip="You log in directly on Instagram. Tyve never sees your password.">i</span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-txt">Allow Tyve to access your profile and your direct messages. <span class="tip" tabindex="0" data-tip="Instagram shows a consent screen listing exactly what Tyve can access. You can remove access at any time in Instagram Settings &gt; Apps and websites.">i</span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-txt">Done. You come back to Tyve and see the connected account. From then on, the assistant replies to new DMs. <span class="tip" tabindex="0" data-tip="Tyve only replies to people who message your account first. It never starts conversations.">i</span></div>
+      </div>
+    </div>
+
+    <div id="error-msg"></div>
+
+    <a id="btn-connect" class="btn-connect" href="#" onclick="startInstagramAuth(event)" title="Opens the official Instagram login page">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+      Connect with Instagram
+    </a>
+
+    <div class="perms">
+      <div class="perms-title">What Tyve will access</div>
+      <div class="perm"><b>Profile info</b> (instagram_business_basic): your account ID and username, to show which account is connected and route messages to the right business.</div>
+      <div class="perm"><b>Direct messages</b> (instagram_business_manage_messages): receive the DMs customers send to your account and send the assistant's replies in the same conversation.</div>
+      <div class="perm-no">Tyve does not post, comment, or read your media, followers or insights.</div>
+    </div>
+    <p class="notice">You can disconnect at any time in Instagram Settings &gt; Apps and websites. Read our <a href="/privacidade" style="color:var(--teal)">Privacy Policy</a> and <a href="/privacidade#exclusao-de-dados" style="color:var(--teal)">data deletion instructions</a>.</p>
+  </div>
+</div>
+
+<footer>Tyve &copy; 2026 · Not affiliated with Meta, Instagram or Facebook</footer>
+
+<script>
+  var IG_APP_ID = '1348049423903737';
+  var REDIRECT_URI = 'https://tyve.com.br/instagram-callback';
+  var SCOPES = 'instagram_business_basic,instagram_business_manage_messages';
+
+  function getInstanceSlug() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get('instance') || 'default';
+  }
+
+  function startInstagramAuth(e) {
+    e.preventDefault();
+
+    if (IG_APP_ID === 'IG_APP_ID_PLACEHOLDER') {
+      showError('Setup pending. Please contact the Tyve team.');
+      return;
+    }
+
+    var instance = getInstanceSlug();
+    var state = encodeURIComponent('en:' + instance);
+
+    var authUrl = 'https://www.instagram.com/oauth/authorize' +
+      '?client_id=' + IG_APP_ID +
+      '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+      '&response_type=code' +
+      '&scope=' + SCOPES +
+      '&state=' + state;
+
+    window.location.href = authUrl;
+  }
+
+  function showError(msg) {
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  // Show error if redirected back with error params
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('error')) {
+      showError('Authorization was denied. You can try again with the button below.');
+    }
+  })();
+</script>
+
+</body>
+</html>

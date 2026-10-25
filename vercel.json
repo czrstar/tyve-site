@@ -67,6 +67,10 @@
       "destination": "/instagram-connect"
     },
     {
+      "source": "/connect-instagram",
+      "destination": "/instagram-connect-en"
+    },
+    {
       "source": "/painel/resultados",
       "destination": "/painel"
     },

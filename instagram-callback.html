@@ -70,30 +70,52 @@
     if (details) document.getElementById('details').textContent = details;
   }
 
-  function showSuccess(username) {
+  function showSuccess(username, igId) {
     setIcon('success', '✅');
-    setContent(
-      'Instagram conectado!',
-      username ? '@' + username + ' está conectado. O agente Tyve já pode responder suas DMs.' : 'Sua conta Instagram foi conectada com sucesso.',
-      'A ativação pode levar até 5 minutos.'
-    );
+    setContent(T.okTitle(username), T.okMsg(username), T.okId(igId));
     var card = document.getElementById('card');
     var btn = document.createElement('a');
     btn.href = 'https://wa.me/5516994247541';
     btn.className = 'btn';
-    btn.textContent = 'Falar com a equipe Tyve';
+    btn.textContent = T.contact;
     card.appendChild(btn);
   }
 
   function showError(msg) {
     setIcon('error', '❌');
-    setContent('Erro na conexão', msg, 'Tente novamente ou entre em contato com a Tyve.');
+    setContent(T.errTitle, msg, T.errDetails);
     var card = document.getElementById('card');
     var btn = document.createElement('a');
-    btn.href = '/conectar-instagram';
+    btn.href = T.retryUrl;
     btn.className = 'btn';
-    btn.textContent = 'Tentar novamente';
+    btn.textContent = T.retry;
     card.appendChild(btn);
+  }
+
+  // Idioma: a pagina em ingles (/connect-instagram) manda state 'en:<instancia>'
+  var RAW_STATE = new URLSearchParams(window.location.search).get('state') || '';
+  try { RAW_STATE = decodeURIComponent(RAW_STATE); } catch (e) {}
+  var EN = RAW_STATE.indexOf('en:') === 0;
+  var T = EN ? {
+    pageTitle: 'Tyve — Connecting Instagram...', loadingTitle: 'Connecting your account...', loadingMsg: 'Please wait while we finish connecting to Instagram.',
+    okTitle: function(u){ return u ? 'Instagram connected: @' + u : 'Instagram connected'; },
+    okMsg: function(u){ return u ? 'Tyve will now automatically reply to the direct messages that customers send to @' + u + '.' : 'Your Instagram account was connected.'; },
+    okId: function(id){ return id ? 'Instagram account ID: ' + id : ''; },
+    contact: 'Contact the Tyve team', errTitle: 'Connection error', errDetails: 'Please try again or contact Tyve.', retry: 'Try again', retryUrl: '/connect-instagram',
+    denied: 'Authorization was denied on Instagram. Please try again and allow access to messages.', noCode: 'Authorization code not found. Please start again.',
+    generic: 'Could not complete the connection. Please try again.', network: 'Could not complete the connection. Check your internet connection and try again.'
+  } : {
+    pageTitle: 'Tyve — Conectando Instagram...', loadingTitle: 'Conectando sua conta...', loadingMsg: 'Aguarde enquanto finalizamos a conexão com o Instagram.',
+    okTitle: function(u){ return 'Instagram conectado!'; },
+    okMsg: function(u){ return u ? '@' + u + ' está conectado. O agente Tyve já pode responder suas DMs.' : 'Sua conta Instagram foi conectada com sucesso.'; },
+    okId: function(id){ return 'A ativação pode levar até 5 minutos.'; },
+    contact: 'Falar com a equipe Tyve', errTitle: 'Erro na conexão', errDetails: 'Tente novamente ou entre em contato com a Tyve.', retry: 'Tentar novamente', retryUrl: '/conectar-instagram',
+    denied: 'Autorização negada pelo Instagram. Por favor, tente novamente e autorize o acesso às mensagens.', noCode: 'Código de autorização não encontrado. Por favor, tente o processo novamente.',
+    generic: 'Erro ao processar a conexão. Por favor, tente novamente.', network: 'Não foi possível completar a conexão. Verifique sua conexão e tente novamente.'
+  };
+  if (EN) {
+    document.documentElement.lang = 'en'; document.title = T.pageTitle;
+    document.getElementById('title').textContent = T.loadingTitle; document.getElementById('msg').textContent = T.loadingMsg;
   }
 
   async function handleCallback() {
@@ -101,21 +123,20 @@
 
     // Error case — user denied
     if (params.get('error')) {
-      showError('Autorização negada pelo Instagram. Por favor, tente novamente e autorize o acesso às mensagens.');
+      showError(T.denied);
       return;
     }
 
     // Extract code — strip trailing #_ if present
     var code = params.get('code');
     if (!code) {
-      showError('Código de autorização não encontrado. Por favor, tente o processo novamente.');
+      showError(T.noCode);
       return;
     }
     code = code.replace(/#_$/, '');
 
     // Extract instance_slug from state
-    var state = params.get('state') || 'default';
-    var instanceSlug = decodeURIComponent(state);
+    var instanceSlug = (EN ? RAW_STATE.slice(3) : RAW_STATE) || 'default';
 
     try {
       var resp = await fetch(N8N_TOKEN_EXCHANGE_URL, {
@@ -131,12 +152,12 @@
       var data = await resp.json();
 
       if (data.success) {
-        showSuccess(data.ig_username);
+        showSuccess(data.ig_username, data.ig_id);
       } else {
-        showError(data.error || 'Erro ao processar a conexão. Por favor, tente novamente.');
+        showError(data.error || T.generic);
       }
     } catch (err) {
-      showError('Não foi possível completar a conexão. Verifique sua conexão e tente novamente.');
+      showError(T.network);
       console.error(err);
     }
   }
