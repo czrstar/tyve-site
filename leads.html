@@ -204,7 +204,7 @@
       </div>
       <div class="card" id="lLote" style="display:none;padding:12px 20px"><div class="row">
           <b id="lLoteN"></b>
-          <select id="lLoteSt" style="width:auto"><option value="">Mudar status para…</option><option value="enviado">Enviado</option><option value="email_ruim">E-mail não encontrado</option><option value="respondeu">Respondeu</option><option value="reuniao">Reunião marcada</option><option value="cliente">Virou cliente</option><option value="sem_interesse">Sem interesse</option><option value="nao_contatar">Não contatar</option><option value="novo">Na fila</option></select>
+          <select id="lLoteSt" style="width:auto"><option value="">Mudar status para…</option><option value="enviado">Enviado</option><option value="email_ruim">E-mail não encontrado</option><option value="respondeu">Respondeu</option><option value="reuniao">Reunião marcada</option><option value="teste">Em teste grátis</option><option value="cliente">Virou cliente</option><option value="sem_interesse">Sem interesse</option><option value="nao_contatar">Não contatar</option><option value="novo">Na fila</option></select>
           <button class="btn btn-sm" id="lLoteBtn" onclick="aplicarLote()">Aplicar</button>
           <button class="btn btn-sm ghost" onclick="limparSel()">Limpar seleção</button>
           <span id="lLoteMsg" class="small"></span></div></div>
@@ -291,8 +291,8 @@ const API = 'https://n8n.tyve.com.br/webhook/tyve-leads';
 const SKEY = 'tyve_leads_tk';
 let TOKEN = '', RES = {}, CFG = {}, FILA = [], FI = 0, L_PAGE = 0, L_STATUS = '';
 const SEGS = {'calçados':'Calçados','moda':'Moda','fitness':'Moda fitness','praia':'Moda praia','infantil':'Moda infantil','lingerie':'Lingerie e moda íntima','semijoias':'Semijoias','acessórios':'Acessórios'};
-const STS = {novo:'Na fila',enviado:'Enviado',respondeu:'Respondeu',reuniao:'Reunião marcada',cliente:'Virou cliente',sem_interesse:'Sem interesse',nao_contatar:'Não contatar',antigo:'Lote antigo'};
-const STC = {novo:'',enviado:'t',respondeu:'o',reuniao:'o',cliente:'g',sem_interesse:'r',nao_contatar:'r',antigo:''};
+const STS = {novo:'Na fila',enviado:'Enviado',respondeu:'Respondeu',reuniao:'Reunião marcada',teste:'Em teste grátis',cliente:'Virou cliente',sem_interesse:'Sem interesse',nao_contatar:'Não contatar',antigo:'Lote antigo'};
+const STC = {novo:'',enviado:'t',respondeu:'o',reuniao:'o',teste:'g',cliente:'g',sem_interesse:'r',nao_contatar:'r',antigo:''};
 const $ = id => document.getElementById(id);
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function fmtD(s){ if(!s) return ''; const d=new Date(s); if(isNaN(d)) return esc(s); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
@@ -343,7 +343,7 @@ function renderResumo(){
   $('kWa').innerHTML = (RES.enviados_hoje_whats||0)+' <small>/ '+(L.whats_dia||0)+'</small>';
   $('kFu').textContent = RES.followups_hoje||0;
   $('kEst').textContent = RES.estoque||0;
-  $('kResp').textContent = (f.respondeu||0)+(f.reuniao||0)+(f.cliente||0);
+  $('kResp').textContent = (f.respondeu||0)+(f.reuniao||0)+(f.teste||0)+(f.cliente||0);
   $('bFu').style.display = RES.followups_hoje ? '' : 'none'; $('bFu').textContent = RES.followups_hoje||0;
   avisoGmail(); avisoContato();
   const h=new Date().getHours(); $('heroTitle').textContent = (h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', Ana';
@@ -492,7 +492,7 @@ async function fuStatus(i,st){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) retu
 // ---------------- LEADS
 let L_FUNIL=null;
 function renderFunil(){
-  const f=L_FUNIL||RES.funil||{}; const ord=['novo','enviado','respondeu','reuniao','cliente','sem_interesse','nao_contatar'];
+  const f=L_FUNIL||RES.funil||{}; const ord=['novo','enviado','respondeu','reuniao','teste','cliente','sem_interesse','nao_contatar'];
   $('funil').innerHTML = '<button class="fb'+(L_STATUS===''?' on':'')+'" onclick="setStatus(\'\')"><b>'+ord.reduce((a,k)=>a+(f[k]||0),0)+'</b><span>Todos</span></button>'+
     ord.map(k=>'<button class="fb'+(L_STATUS===k?' on':'')+'" onclick="setStatus(\''+k+'\')"><b>'+(f[k]||0)+'</b><span>'+esc(STS[k])+'</span></button>').join('');
 }
