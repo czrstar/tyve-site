@@ -257,6 +257,7 @@
           <div><label class="lb">WhatsApp por dia</label><input class="inp" type="number" id="rWa" min="0" max="100" /></div>
           <div><label class="lb">2º e-mail quantos dias depois do 1º</label><input class="inp" type="number" id="rFu" min="1" max="30" /></div>
           <div><label class="lb">3º e-mail quantos dias depois do 2º</label><input class="inp" type="number" id="rFu2" min="1" max="30" /></div>
+          <div><label class="lb">Follow-ups de e-mail por dia</label><input class="inp" type="number" id="rFuDia" min="0" max="300" /></div>
           <div><label class="lb">Robô mantém na fila até</label><input class="inp" type="number" id="rEst" min="0" max="1000" /></div>
         </div>
         <label class="row small" style="margin-top:12px;gap:8px"><input type="checkbox" id="rEmailSab" /> E-mail no sábado (rascunhos às 7h30, como nos dias úteis)</label>
@@ -454,12 +455,14 @@ function renderFollow(){
   if(!FU.length && canalFu==='whats' && RES.whats_pausado){ $('fuBox').innerHTML='<p class="muted">Follow-up do WhatsApp pausado no fim de semana: o que venceria hoje aparece na segunda. Dá para mudar em Regras e textos.</p>'; return; }
   if(!FU.length){ $('fuBox').innerHTML='<p class="muted">Nenhum follow-up '+(canalFu==='whats'?'de WhatsApp':'de e-mail')+' para hoje.</p>'; return; }
   const M=CFG.modelos||{};
-  $('fuBox').innerHTML = (canalFu==='whats' && foraHorarioWa() ? AVISO_WA : '') + FU.map((l,i)=>{
+  const g=RES.gmail||{};
+  const topoEmail = (canalFu==='email' && g.conectado) ? '<div class="card" style="background:var(--surface2);margin-bottom:12px;padding:14px 16px"><div class="row" style="justify-content:space-between;gap:10px"><div class="small">Estes follow-ups ainda não viraram rascunho no seu Gmail. Crie os rascunhos para eles saírem já com a sua assinatura e na mesma conversa (até o limite de follow-ups do dia).</div><button class="btn btn-sm" onclick="fuGerarRascunhos(this)">Criar rascunhos no Gmail</button></div><div class="small muted" style="margin-top:6px">Follow-ups de e-mail hoje: '+(RES.enviados_hoje_fu_email||0)+' de '+((RES.limites||{}).followup_dia!=null?(RES.limites||{}).followup_dia:50)+'.</div><div id="fuGerMsg" class="small" style="margin-top:6px"></div></div>' : '';
+  $('fuBox').innerHTML = (canalFu==='whats' && foraHorarioWa() ? AVISO_WA : '') + topoEmail + FU.map((l,i)=>{
     const wa=firstWa(l.whatsapp);
     return '<div class="card" style="background:var(--surface2);margin-bottom:12px"><div class="lead-head"><div><div class="lead-name" style="font-size:18px">'+esc(l.loja||l.dominio)+'</div>'+
     '<div class="lead-meta"><b>'+esc(fuEtapa(l))+'</b> · primeira mensagem por '+(l.canal==='whats'?'WhatsApp':'e-mail')+' em '+esc(fmtD(l.enviado_at))+' · '+esc(canalFu==='whats' ? fmtWa(wa) : (l.email||fmtWa(wa)))+'</div></div><span class="tag o">'+esc(segNome(l.segmento))+'</span></div>'+
     '<div class="row" style="margin-top:12px">'+
-      (canalFu==='email' && l.email?'<button class="btn btn-sm" onclick="fuGmail('+i+')">Follow-up no Gmail</button>':'')+
+      (canalFu==='email' && l.email?'<button class="btn btn-sm ghost" onclick="fuGmail('+i+')" title="Abre um e-mail novo no Gmail, sem a assinatura. Prefira Criar rascunhos no Gmail.">Follow-up no Gmail (sem assinatura)</button>':'')+
       (canalFu==='whats' && wa?'<button class="btn btn-sm wa" onclick="fuWa('+i+')">'+(fuReinicio(l)?'Mandar no WhatsApp':'Follow-up no WhatsApp')+'</button>':'')+
       '<button class="btn btn-sm dark" onclick="fuFeito('+i+')">'+(fuReinicio(l)?'Mandei':'Fiz o follow-up')+'</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'respondeu\')">Respondeu</button>'+
@@ -472,6 +475,9 @@ function fuEtapa(l){ if(fuReinicio(l)) return 'O e-mail '+(l.gmail_aviso==='volt
   return l.canal==='whats' ? 'Follow-up no WhatsApp' : ((l.followup_n||0)>=1 ? '3º e-mail (último)' : '2º e-mail'); }
 function fuTexto(l){ const M=CFG.modelos||{}; return preencher(((l.followup_n||0)>=1 && M.email_followup2) ? M.email_followup2 : M.email_followup, l); }
 function fuAssunto(l){ const a=l.assunto||assuntoPadrao(l); return a ? 'Re: '+a : 'Atendimento no WhatsApp da '+(l.loja||l.dominio); }
+async function fuGerarRascunhos(btn){ btn.disabled=true;
+  try{ await call('gmail_gerar',{}); $('fuGerMsg').innerHTML='<span style="color:var(--green);font-weight:700">Pedido feito: os rascunhos aparecem no seu Gmail em até 10 minutos, com a assinatura. Depois de criados, essas lojas saem desta lista.</span>'; }
+  catch(e){ btn.disabled=false; if(e.status) handleErr(e); else $('fuGerMsg').innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>'; } }
 function fuGmail(i){ const l=FU[i]; window.open(gmailUrl(l.email, fuAssunto(l), fuTexto(l)), '_blank','noopener'); }
 function fuWa(i){ const l=FU[i]; const M=CFG.modelos||{}; const mod = fuReinicio(l) ? M.whats : M.whats_followup;
   window.open('https://wa.me/'+firstWa(l.whatsapp)+'?text='+encodeURIComponent(mod ? preencher(mod, l) : fuTexto(l)), '_blank','noopener'); }
@@ -480,7 +486,7 @@ async function fuFeito(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; 
   document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
   const canalL = (l.canal==='whats' || fuReinicio(l)) ? 'whats' : 'email';
   try{ await call('marcar',{id:l.id,o_que:'followup',canal: canalL});
-       FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); const kc='followups_hoje_'+canalL; RES[kc]=Math.max(0,(RES[kc]||0)-1); fuOpcoes(); renderResumo(); }
+       FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); const kc='followups_hoje_'+canalL; RES[kc]=Math.max(0,(RES[kc]||0)-1); if(canalL==='email') RES.enviados_hoje_fu_email=(RES.enviados_hoje_fu_email||0)+1; else RES.enviados_hoje_whats=(RES.enviados_hoje_whats||0)+1; fuOpcoes(); renderResumo(); }
   catch(e){ handleErr(e); }
   finally{ FU_OCUPADO=false; renderFollow(); } }
 async function fuStatus(i,st){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
@@ -639,7 +645,7 @@ function renderRegras(){
   const R=CFG.regras||{}, L=CFG.limites||{}, M=CFG.modelos||{}; const off=R.segmentos_off||[];
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
-  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rEst').value=L.estoque_alvo; $('rEmailSab').checked = L.email_sabado!==false; $('rWaFds').checked = L.whats_fim_semana===true;
+  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rFuDia').value=(L.followup_dia!=null?L.followup_dia:50); $('rEst').value=L.estoque_alvo; $('rEmailSab').checked = L.email_sabado!==false; $('rWaFds').checked = L.whats_fim_semana===true;
   renderGmail(); $('rAssin').value=M.assinatura_html||'';
   $('rAssunto').value=M.assunto||''; $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
 }
@@ -651,7 +657,8 @@ async function salvarRegras(){
   try{ CFG=await call('config_salvar',{k:'regras', v:Object.assign({}, CFG.regras||{}, {plataformas:(CFG.regras||{}).plataformas||['shopify','nuvemshop'], segmentos_off:off, palavras_excluir:pal})}); okMsg('rMsg1','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg1',e); }
 }
 async function salvarLimites(){
-  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, estoque_alvo:+$('rEst').value, email_sabado:$('rEmailSab').checked, whats_fim_semana:$('rWaFds').checked};
+  if(!(+$('rFuDia').value>=1)){ alert('Follow-ups de e-mail por dia precisa ser pelo menos 1.'); return; }
+  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, followup_dia:+$('rFuDia').value, estoque_alvo:+$('rEst').value, email_sabado:$('rEmailSab').checked, whats_fim_semana:$('rWaFds').checked};
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
 function renderGmail(){
