@@ -197,6 +197,7 @@
         <div class="row">
           <input class="inp" style="flex:1;min-width:180px" id="lBusca" placeholder="Buscar por loja, site, e-mail ou Instagram" onkeydown="if(event.key==='Enter')filtroMudou()" />
           <select id="lCanal" style="width:auto" onchange="filtroMudou()"><option value="">E-mail e WhatsApp</option><option value="email">Só e-mail</option><option value="whats">Só WhatsApp</option></select>
+          <select id="lAviso" style="width:auto" onchange="filtroMudou()"><option value="">Aviso do teste: todos</option><option value="fila">Vão receber o aviso</option><option value="enviado">Receberam o aviso</option><option value="fora">Fora do aviso</option></select>
           <select id="lSeg" style="width:auto" onchange="filtroMudou()"><option value="">Todos os segmentos</option></select>
           <button class="btn btn-sm" onclick="filtroMudou()">Buscar</button>
           <button class="btn btn-sm ghost" onclick="exportar()">Baixar planilha (CSV)</button>
@@ -258,6 +259,7 @@
           <div><label class="lb">2º e-mail quantos dias depois do 1º</label><input class="inp" type="number" id="rFu" min="1" max="30" /></div>
           <div><label class="lb">3º e-mail quantos dias depois do 2º</label><input class="inp" type="number" id="rFu2" min="1" max="30" /></div>
           <div><label class="lb">Follow-ups de e-mail por dia</label><input class="inp" type="number" id="rFuDia" min="0" max="300" /></div>
+          <div><label class="lb">Avisos do teste grátis por dia</label><input class="inp" type="number" id="rAvDia" min="0" max="50" /></div>
           <div><label class="lb">Robô mantém na fila até</label><input class="inp" type="number" id="rEst" min="0" max="1000" /></div>
         </div>
         <label class="row small" style="margin-top:12px;gap:8px"><input type="checkbox" id="rEmailSab" /> E-mail no sábado (rascunhos às 7h30, como nos dias úteis)</label>
@@ -272,6 +274,8 @@
         <label class="lb">Primeiro e-mail</label><textarea id="rCorpo" rows="8"></textarea>
         <label class="lb">2º e-mail (primeiro follow-up)</label><textarea id="rFuTxt" rows="5"></textarea>
         <label class="lb">3º e-mail (último follow-up)</label><textarea id="rFu2Txt" rows="5"></textarea>
+        <label class="lb">Aviso do teste grátis (para quem terminou a sequência sem responder)</label><textarea id="rAvTxt" rows="5" placeholder="Vazio: o aviso não sai. Preenchido: vira rascunho às 7h30, na mesma conversa, até o limite de avisos do dia."></textarea>
+        <div class="hint" id="rAvInfo"></div>
         <label class="lb">WhatsApp</label><textarea id="rWaTxt" rows="4"></textarea>
         <label class="lb">Follow-up no WhatsApp</label><textarea id="rWaFuTxt" rows="4"></textarea>
         <label class="lb">Assinatura dos rascunhos (HTML)</label><textarea id="rAssin" rows="4" placeholder="Cole aqui o HTML da sua assinatura oficial"></textarea>
@@ -512,11 +516,11 @@ async function loadLeads(pg){
   if(pg<0) return; renderFunil(); const seq=++L_SEQ;
   $('lBody').innerHTML='<tr><td colspan="6" class="muted">Carregando…</td></tr>';
   try{
-    const j=await call('leads',{status:L_STATUS, canal:$('lCanal').value, segmento:$('lSeg').value, busca:$('lBusca').value.trim(), pagina:pg});
+    const j=await call('leads',{status:L_STATUS, canal:$('lCanal').value, aviso:$('lAviso').value, segmento:$('lSeg').value, busca:$('lBusca').value.trim(), pagina:pg});
     if(seq!==L_SEQ) return;
     LEADS=j.leads||[]; L_PAGE=pg; L_FUNIL=j.funil||null; renderFunil();
     $('lTodos').checked = LEADS.length>0 && LEADS.every(l=>SEL.has(l.id));
-    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td onclick="event.stopPropagation()"><input type="checkbox" '+(SEL.has(l.id)?'checked ':'')+'onclick="selUm('+l.id+',this.checked)" /></td><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(emailRuim(l)?' <span class="tag r">E-mail não encontrado</span>':'')+(l.wa_aviso==='procurar'?' <span class="tag r">Procurar contato</span>':l.wa_aviso==='rebuscar'?' <span class="tag">Robô procurando contato</span>':'')+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="6" class="muted">Nada encontrado.</td></tr>';
+    $('lBody').innerHTML = LEADS.length ? LEADS.map((l,i)=>'<tr class="click" onclick="openLead('+l.id+')"><td onclick="event.stopPropagation()"><input type="checkbox" '+(SEL.has(l.id)?'checked ':'')+'onclick="selUm('+l.id+',this.checked)" /></td><td><b>'+esc(l.loja||l.dominio)+'</b><div class="small muted">'+esc(l.dominio)+'</div></td><td>'+esc(segNome(l.segmento))+'</td><td><span class="tag '+(STC[l.status]||'')+'">'+esc(STS[l.status]||l.status)+'</span>'+(emailRuim(l)?' <span class="tag r">E-mail não encontrado</span>':'')+(l.wa_aviso==='procurar'?' <span class="tag r">Procurar contato</span>':l.wa_aviso==='rebuscar'?' <span class="tag">Robô procurando contato</span>':'')+(l.aviso_teste==='enviado'?' <span class="tag">Aviso do teste enviado</span>':'')+(l.status==='enviado'&&!l.followup_feito&&l.followup_at?'<div class="small muted">follow-up '+esc(fmtDia(l.followup_at))+'</div>':'')+'</td><td class="small">'+esc(l.email||'')+'<div class="muted">'+esc(fmtWa(l.whatsapp))+'</div></td><td class="small muted">'+esc(fmtD(l.updated_at))+'</td></tr>').join('') : '<tr><td colspan="6" class="muted">Nada encontrado.</td></tr>';
     renderSel(); $('lPage').textContent='página '+(pg+1); $('lPrev').disabled = pg===0; $('lNext').disabled = LEADS.length<50;
   }catch(e){ handleErr(e); }
 }
@@ -558,6 +562,7 @@ async function openLead(id){
      '<div><label class="lb">Follow-up em</label><input class="inp" type="date" id="mFu" value="'+esc(l.followup_at||'')+'" /></div>'+
      '<div><label class="lb">E-mail</label><input class="inp" id="mEmail" value="'+esc(l.email)+'" /></div>'+
      '<div><label class="lb">WhatsApp</label><input class="inp" id="mWa" value="'+esc(l.whatsapp)+'" /></div></div>'+
+     avisoFicha(l)+
      '<label class="lb">Assunto</label><input class="inp" id="mAssunto" value="'+esc(l.assunto)+'" />'+
      '<label class="lb">Gancho</label><textarea id="mGancho" rows="4">'+esc(l.gancho)+'</textarea>'+
      '<label class="lb">Anotações</label><textarea id="mNotas" rows="3" placeholder="ex.: falou com a Júlia, pediu proposta">'+esc(l.notas)+'</textarea>'+
@@ -565,11 +570,24 @@ async function openLead(id){
      '<label class="lb">Histórico</label>'+(ev.length?ev.map(e=>'<div class="ev"><b>'+esc(fmtD(e.at))+'</b> · '+esc(e.acao)+(e.canal?' ('+esc(e.canal==='whats'?'WhatsApp':'e-mail')+')':'')+(e.para?' → '+esc(STS[e.para]||e.para):'')+(e.detalhe?' · '+esc(e.detalhe):'')+'</div>').join(''):'<div class="small muted">Sem histórico ainda.</div>');
   }catch(e){ closeModal(); handleErr(e); }
 }
+// aviso do teste grátis na ficha (29/10)
+function avisoNome(l){ return l.aviso_teste==='enviado' ? 'enviado' : l.aviso_teste==='fora' ? 'tirado' : l.aviso_teste==='sem_conversa' ? 'sem conversa no Gmail' : l.gmail_draft_tipo==='aviso' ? 'rascunho pronto' : l.aviso_fila ? 'na fila' : ''; }
+let M_AV_FORA=null;
+function avisoFicha(l){
+  M_AV_FORA=null;
+  if(l.aviso_teste==='enviado') return '<div class="small" style="margin-top:10px">Aviso do teste grátis: <b>enviado em '+esc(fmtD(l.aviso_teste_at))+'</b>.</div>';
+  if(l.aviso_teste==='sem_conversa') return '<div class="small muted" style="margin-top:10px">Aviso do teste grátis: não sai, porque não há e-mail enviado para essa loja no seu Gmail.</div>';
+  if(l.gmail_draft_tipo==='aviso') return '<div class="small" style="margin-top:10px">Aviso do teste grátis: <b>rascunho pronto no seu Gmail</b>. Para não mandar, apague o rascunho lá.</div>';
+  if(!l.aviso_fila && l.aviso_teste!=='fora') return '';
+  M_AV_FORA = l.aviso_teste==='fora';
+  return '<label class="row small" style="margin-top:10px;gap:8px"><input type="checkbox" id="mAvFora"'+(M_AV_FORA?' checked':'')+' /> Não mandar o aviso do teste grátis para esta loja</label>';
+}
 function closeModal(){ $('modalBg').style.display='none'; }
 async function salvarLead(id, stAntes){
   $('mMsg').textContent='Salvando…';
   try{
     const ed={id, email:$('mEmail').value, whatsapp:$('mWa').value, assunto:$('mAssunto').value, gancho:$('mGancho').value, notas:$('mNotas').value, followup_at:$('mFu').value};
+    if(M_AV_FORA!==null && $('mAvFora') && $('mAvFora').checked!==M_AV_FORA) ed.aviso_fora=$('mAvFora').checked;
     if ($('mSt').value==='sem_whats') {
       // primeiro marca o número que estava na ficha; se ela digitou um número novo, ele entra depois
       await call('marcar',{id, o_que:'sem_whats'});
@@ -586,10 +604,10 @@ async function salvarLead(id, stAntes){
 }
 async function exportar(){
   try{
-    const j=await call('exportar',{status:L_STATUS, canal:$('lCanal').value, segmento:$('lSeg').value}); const ls=j.leads||[];
-    const cols=['loja','dominio','plataforma','segmento','email','email_origem','whatsapp','instagram','assunto','gancho','status','enviado_at','followup_at','followup_n','notas'];
+    const j=await call('exportar',{status:L_STATUS, canal:$('lCanal').value, aviso:$('lAviso').value, segmento:$('lSeg').value}); const ls=j.leads||[];
+    const cols=['loja','dominio','plataforma','segmento','email','email_origem','whatsapp','instagram','assunto','gancho','status','enviado_at','followup_at','followup_n','aviso_teste','aviso_teste_at','notas'];
     const q=v=>{ let s=String(v==null?'':v); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'; };
-    const csv='﻿'+cols.join(';')+'\n'+ls.map(l=>cols.map(c=>q(c==='status'?(STS[l[c]]||l[c]):c==='segmento'?segNome(l[c]):l[c])).join(';')).join('\n');
+    const csv='﻿'+cols.join(';')+'\n'+ls.map(l=>cols.map(c=>q(c==='status'?(STS[l[c]]||l[c]):c==='segmento'?segNome(l[c]):c==='aviso_teste'?avisoNome(l):l[c])).join(';')).join('\n');
     const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='leads-tyve-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
   }catch(e){ handleErr(e); }
 }
@@ -645,9 +663,9 @@ function renderRegras(){
   const R=CFG.regras||{}, L=CFG.limites||{}, M=CFG.modelos||{}; const off=R.segmentos_off||[];
   $('rSegs').innerHTML=Object.entries(SEGS).map(([k,n])=>'<label class="chk"><input type="checkbox" data-seg="'+esc(k)+'"'+(off.includes(k)?'':' checked')+' /> '+esc(n)+'</label>').join('');
   $('rPalavras').value=(R.palavras_excluir||[]).join('\n');
-  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rFuDia').value=(L.followup_dia!=null?L.followup_dia:50); $('rEst').value=L.estoque_alvo; $('rEmailSab').checked = L.email_sabado!==false; $('rWaFds').checked = L.whats_fim_semana===true;
+  $('rEmail').value=L.email_dia; $('rWa').value=L.whats_dia; $('rFu').value=L.followup_dias; $('rFu2').value=L.followup2_dias||4; $('rFuDia').value=(L.followup_dia!=null?L.followup_dia:50); $('rAvDia').value=(L.aviso_dia!=null?L.aviso_dia:10); $('rEst').value=L.estoque_alvo; $('rEmailSab').checked = L.email_sabado!==false; $('rWaFds').checked = L.whats_fim_semana===true;
   renderGmail(); $('rAssin').value=M.assinatura_html||'';
-  $('rAssunto').value=M.assunto||''; $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
+  $('rAssunto').value=M.assunto||''; $('rCorpo').value=M.email_corpo||''; $('rFuTxt').value=M.email_followup||''; $('rFu2Txt').value=M.email_followup2||''; $('rAvTxt').value=M.email_aviso_teste||''; $('rAvInfo').textContent='Aviso do teste grátis: '+(RES.aviso_fila||0)+' lojas na fila, '+(RES.aviso_enviados||0)+' já receberam. Mesmas regras dos follow-ups: só responde numa conversa que existe e não manda para quem respondeu.'; $('rWaTxt').value=M.whats||''; $('rWaFuTxt').value=M.whats_followup||''; $('rConta').value=M.gmail_conta||'';
 }
 function okMsg(id, t){ $(id).innerHTML='<span style="color:var(--green);font-weight:700">'+esc(t)+'</span>'; setTimeout(()=>{$(id).textContent='';},3000); }
 function errMsg(id, e){ $(id).innerHTML='<span style="color:var(--red);font-weight:700">'+esc(e.message||e)+'</span>'; }
@@ -658,7 +676,8 @@ async function salvarRegras(){
 }
 async function salvarLimites(){
   if(!(+$('rFuDia').value>=1)){ alert('Follow-ups de e-mail por dia precisa ser pelo menos 1.'); return; }
-  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, followup_dia:+$('rFuDia').value, estoque_alvo:+$('rEst').value, email_sabado:$('rEmailSab').checked, whats_fim_semana:$('rWaFds').checked};
+  if(!(+$('rAvDia').value>=0 && +$('rAvDia').value<=50)){ alert('Avisos do teste grátis por dia vai de 0 a 50.'); return; }
+  const v={email_dia:+$('rEmail').value, whats_dia:+$('rWa').value, followup_dias:+$('rFu').value, followup2_dias:+$('rFu2').value, followup_dia:+$('rFuDia').value, aviso_dia:+$('rAvDia').value, estoque_alvo:+$('rEst').value, email_sabado:$('rEmailSab').checked, whats_fim_semana:$('rWaFds').checked};
   try{ CFG=await call('config_salvar',{k:'limites', v}); RES.limites=CFG.limites; renderResumo(); okMsg('rMsg2','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg2',e); }
 }
 function renderGmail(){
@@ -671,7 +690,7 @@ function renderGmail(){
 async function gmailGerar(){ try{ await call('gmail_gerar',{}); okMsg('gMsg','Pedido feito: os rascunhos aparecem no seu Gmail em até 10 minutos.'); }catch(e){ if(e.status) handleErr(e); else errMsg('gMsg',e); } }
 async function gmailAtivo(){ try{ RES.gmail=await call('gmail_ativo',{ativo:$('gmailAtivo').checked}); renderGmail(); okMsg('gMsg','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('gMsg',e); } }
 async function salvarModelos(){
-  const v={assunto:$('rAssunto').value.trim(), email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, assinatura_html:$('rAssin').value.trim(), gmail_conta:$('rConta').value.trim()};
+  const v={assunto:$('rAssunto').value.trim(), email_corpo:$('rCorpo').value, email_followup:$('rFuTxt').value, email_followup2:$('rFu2Txt').value, email_aviso_teste:$('rAvTxt').value, whats:$('rWaTxt').value, whats_followup:$('rWaFuTxt').value, assinatura_html:$('rAssin').value.trim(), gmail_conta:$('rConta').value.trim()};
   try{ CFG=await call('config_salvar',{k:'modelos', v}); okMsg('rMsg3','Salvo.'); }catch(e){ if(e.status) handleErr(e); else errMsg('rMsg3',e); }
 }
 
