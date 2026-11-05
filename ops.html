@@ -301,7 +301,9 @@ const OPS_API   = 'https://n8n.tyve.com.br/webhook/tyve-ops-dashboard';
 const AI_BUDGET = 400;                       // R$/mês — referência visual
 const PRICES    = { atende: 497, cresce: 797, escala: 1097 };  // e-commerce, mensal (R$)
 const TEST_INSTANCES = ['INSTANCE_PLACEHOLDER','zappro-test','ecom-test','ecom-shopify','shp-tyve-app-review','agaya-de-joias'];
-const isTestInst = i => !i || TEST_INSTANCES.includes(i) || /test|teste/i.test(i);
+// Cliente ativo = flag billing_active no client_config (a API manda client.billing_active). BILL guarda instancias e nomes dos pagantes; null = API antiga sem o campo (usa a regra antiga).
+let BILL = null;
+const isTestInst = i => !i || (BILL ? !BILL.has(i) : (TEST_INSTANCES.includes(i) || /test|teste/i.test(i)));
 const SKEY = 'tyve-ops-pw';
 let savedToken = '';
 let LAST_STATUS = 0;
@@ -388,8 +390,10 @@ const daysInMonth = () => new Date(new Date().getFullYear(), new Date().getMonth
 
 function render(d){
   const all = d.clients||[];
-  const real = all.filter(c=>!TEST_INSTANCES.includes(c.instance));
-  const test = all.filter(c=> TEST_INSTANCES.includes(c.instance) && c.instance!=='INSTANCE_PLACEHOLDER' && c.instance!=='zappro-test');
+  const hasFlag = all.length>0 && all.every(c=>typeof c.billing_active==='boolean');
+  const real = all.filter(c=> hasFlag ? c.billing_active : !TEST_INSTANCES.includes(c.instance));
+  const test = all.filter(c=> (hasFlag ? !c.billing_active : TEST_INSTANCES.includes(c.instance)) && c.instance!=='INSTANCE_PLACEHOLDER' && c.instance!=='zappro-test');
+  BILL = hasFlag ? new Set(real.flatMap(c=>[c.instance,c.client_name])) : null;
 
   // KPIs
   setText('kClients', real.length);
