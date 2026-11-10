@@ -222,7 +222,7 @@
       <div class="sec-label">Números principais</div>
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-icon">🏪</div><div class="kpi-label">Clientes ativos</div><div class="kpi-value orange" id="kClients">–</div><div class="kpi-sub" id="kPlans">–</div></div>
-        <div class="kpi-card"><div class="kpi-icon">💰</div><div class="kpi-label">Receita mensal (estimada)</div><div class="kpi-value teal" id="kMrr">–</div><div class="kpi-sub">Soma dos planos dos clientes ativos</div></div>
+        <div class="kpi-card"><div class="kpi-icon">💰</div><div class="kpi-label">Receita mensal (estimada)</div><div class="kpi-value teal" id="kMrr">–</div><div class="kpi-sub" id="kMrrSub">Soma dos planos dos clientes ativos</div></div>
         <div class="kpi-card"><div class="kpi-icon">🔁</div><div class="kpi-label">Encaminhamentos na semana<span id="kHandTrend"></span></div><div class="kpi-value" id="kHand">–</div><div class="kpi-sub" id="kHandMonth">–</div></div>
         <div class="kpi-card"><div class="kpi-icon">🙋</div><div class="kpi-label">Conversas com a equipe</div><div class="kpi-value amber" id="kHuman">–</div><div class="kpi-sub">Agente pausado agora (todas as lojas, inclui testes)</div></div>
         <div class="kpi-card"><div class="kpi-icon">📨</div><div class="kpi-label">Follow-ups na semana</div><div class="kpi-value" id="kFollow">–</div><div class="kpi-sub">Mensagem do dia seguinte</div></div>
@@ -399,8 +399,13 @@ function render(d){
   setText('kClients', real.length);
   const ps = real.map(c=>String(c.plan||'').toLowerCase()).filter(Boolean).reduce((a,p)=>{a[p]=(a[p]||0)+1;return a;},{});
   setText('kPlans', Object.entries(ps).map(([p,c])=>c+'× '+p).join(' · ') || 'Sem clientes');
-  const mrr = real.reduce((s,c)=>s+(PRICES[String(c.plan||'').toLowerCase()]||0),0);
+  // Receita: com dados do Asaas (asaas_mrr = assinaturas ativas, asaas_extras_mes = pacotes/avulsos pagos no mes) usa o real; sem eles, preco de tabela do plano.
+  const hasAsaas = real.length>0 && real.every(c=>c.asaas_mrr!=null);
+  const subs = real.reduce((s,c)=>s+(c.asaas_mrr!=null ? Number(c.asaas_mrr) : (PRICES[String(c.plan||'').toLowerCase()]||0)),0);
+  const extras = hasAsaas ? real.reduce((s,c)=>s+(Number(c.asaas_extras_mes)||0),0) : 0;
+  const mrr = subs + extras;
   setText('kMrr', brl0(mrr));
+  setText('kMrrSub', hasAsaas ? ('Asaas: '+brl0(subs)+' de assinaturas + '+brl0(extras)+' de pacotes pagos no mês') : 'Soma dos planos dos clientes ativos (tabela)');
   const hw = real.reduce((s,c)=>s+(c.handoffs_week||0),0);
   const hm = real.reduce((s,c)=>s+(c.handoffs_month||0),0);
   setText('kHand', num(hw));
