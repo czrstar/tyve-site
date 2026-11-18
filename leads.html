@@ -473,6 +473,7 @@ function renderFollow(){
       '<button class="btn btn-sm dark" onclick="fuFeito('+i+')">'+(fuReinicio(l)?'Mandei':'Fiz o follow-up')+'</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'respondeu\')">Respondeu</button>'+
       '<button class="btn btn-sm ghost" onclick="fuStatus('+i+',\'sem_interesse\')">Sem interesse</button>'+
+      (canalFu==='whats' && wa?'<button class="btn btn-sm ghost" onclick="fuSemWa('+i+')" title="O número não tem WhatsApp. Se a loja tiver outro número, ele aparece aqui no lugar.">Não está no WhatsApp</button>':'')+
     '</div></div>'; }).join('');
 }
 // e-mail que voltou ou é inválido: a loja aparece no WhatsApp para o primeiro contato por lá
@@ -493,6 +494,15 @@ async function fuFeito(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; 
   const canalL = (l.canal==='whats' || fuReinicio(l)) ? 'whats' : 'email';
   try{ await call('marcar',{id:l.id,o_que:'followup',canal: canalL});
        FU=FU.filter(x=>x.id!==l.id); RES.followups_hoje=Math.max(0,(RES.followups_hoje||0)-1); const kc='followups_hoje_'+canalL; RES[kc]=Math.max(0,(RES[kc]||0)-1); if(canalL==='email') RES.enviados_hoje_fu_email=(RES.enviados_hoje_fu_email||0)+1; else if(fuReinicio(l)) RES.enviados_hoje_whats=(RES.enviados_hoje_whats||0)+1; else RES.enviados_hoje_fu_whats=(RES.enviados_hoje_fu_whats||0)+1; fuOpcoes(); renderResumo(); }
+  catch(e){ handleErr(e); }
+  finally{ FU_OCUPADO=false; renderFollow(); } }
+// 18/11: "Não está no WhatsApp" também no Follow-up. Com outro número, a loja continua com ele; sem, sai da lista
+async function fuSemWa(i){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return;
+  if(!confirm('Marcar '+fmtWa(firstWa(l.whatsapp))+' como sem WhatsApp?')) return; FU_OCUPADO=true;
+  document.querySelectorAll('#fuBox button').forEach(b=>b.disabled=true);
+  try{ const r=await call('marcar',{id:l.id,o_que:'sem_whats'}); const n=r.lead||{};
+       if(n.whatsapp) FU[i]=n; else FU=FU.filter(x=>x.id!==l.id);
+       RES=await call('resumo'); renderResumo(); fuOpcoes(); }
   catch(e){ handleErr(e); }
   finally{ FU_OCUPADO=false; renderFollow(); } }
 async function fuStatus(i,st){ if(FU_OCUPADO) return; const l=FU[i]; if(!l) return; FU_OCUPADO=true;
@@ -560,7 +570,7 @@ async function openLead(id){
      (emailRuim(l)?'<div class="msg-warn" style="margin-top:12px">E-mail não encontrado: esta loja não recebe mais e-mails'+(l.whatsapp?' e aparece para você no WhatsApp':'')+'. Para voltar aos e-mails, troque o endereço abaixo e salve.</div>':'')+
      '<div class="grid2"><div><label class="lb">Status</label><select id="mSt">'+Object.entries(STS).filter(([k])=>k!=='antigo'||l.status==='antigo').map(([k,n])=>'<option value="'+k+'"'+(k===l.status?' selected':'')+'>'+esc(n)+'</option>').join('')+
        ((l.status==='novo'||l.status==='enviado')&&!emailRuim(l)?'<option value="email_ruim">E-mail não encontrado</option>':'')+
-       (l.status==='novo'&&l.whatsapp?'<option value="sem_whats">Não está no WhatsApp</option>':'')+'</select></div>'+
+       ((l.status==='novo'||l.status==='enviado')&&l.whatsapp?'<option value="sem_whats">Não está no WhatsApp</option>':'')+'</select></div>'+
      '<div><label class="lb">Follow-up em</label><input class="inp" type="date" id="mFu" value="'+esc(l.followup_at||'')+'" /></div>'+
      '<div><label class="lb">E-mail</label><input class="inp" id="mEmail" value="'+esc(l.email)+'" /></div>'+
      '<div><label class="lb">WhatsApp</label><input class="inp" id="mWa" value="'+esc(l.whatsapp)+'" /></div></div>'+
